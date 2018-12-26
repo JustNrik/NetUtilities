@@ -4,9 +4,12 @@ namespace System.Reflection
 {
     public static class New<T>
     {
+        /// <summary>
+        /// Get's the instance of a generic type with a parameterless ctor. Performs much better than Activator.CreateInstance()
+        /// </summary>
         public static readonly Func<T> Instance = CreateInstance();
 
-        static Func<T> CreateInstance()
+        private static Func<T> CreateInstance()
         {
             var t = typeof(T);
             if (t == typeof(string))
@@ -15,7 +18,7 @@ namespace System.Reflection
             if (t.HasDefaultConstructor())
                 return Expression.Lambda<Func<T>>(Expression.New(t)).Compile();
 
-            throw new Exception("No paramerteless ctro found.");
+            throw new Exception("No paramerteless ctor found.");
         }
     }
 }
