@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace System.Linq
 {
@@ -21,24 +22,20 @@ namespace System.Linq
             }
         }
 
-        private static readonly object _lock = new object();
         public static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (key == null) throw new ArgumentNullException(nameof(key));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (source is IReadOnlyDictionary<TKey, TValue>) throw new InvalidOperationException($"{nameof(source)} is a readonly Dictionary");
+            if (source is ReadOnlyDictionary<TKey, TValue>) throw new InvalidOperationException($"{nameof(source)} is a Read-Only Dictionary");
 
-            lock (_lock)
+            if (source.ContainsKey(key))
             {
-                if (source.ContainsKey(key))
-                {
-                    source[key] = value;
-                }
-                else
-                {
-                    source.Add(key, value);
-                }
+                source[key] = value;
+            }
+            else
+            {
+                source.Add(key, value);
             }
         }
 
@@ -47,20 +44,11 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (key == null) throw new ArgumentNullException(nameof(key));
             if (value == null) throw new ArgumentNullException(nameof(value));
-            if (source is IReadOnlyDictionary<TKey, TValue>) throw new InvalidOperationException($"{nameof(source)} is a readonly Dictionary");
+            if (source is ReadOnlyDictionary<TKey, TValue>) throw new InvalidOperationException($"{nameof(source)} is a Read-Only Dictionary");
+            if (source.TryGetValue(key, out var val)) return val;
 
-            lock (_lock)
-            {
-                if (source.TryGetValue(key, out var val))
-                {
-                    return val;
-                }
-                else
-                {
-                    source.Add(key, value);
-                    return value;
-                }
-            }
+            source.Add(key, value);
+            return value;
         }
     }
 }

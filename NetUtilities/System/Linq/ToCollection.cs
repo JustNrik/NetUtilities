@@ -29,10 +29,30 @@ namespace System.Linq
             return source.ToDictionary(x => x.key, x => x.value, comparer);
         }
 
-        public static ReadOnlyDictionary<TKey, TValue> ToReadOnlyDictionary<TKey, TValue>(this IDictionary<TKey, TValue> source)
+        /// <summary>
+        /// Creates a Read-Only Dictionary from the dictionary provided.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static ReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> source)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
             return new ReadOnlyDictionary<TKey, TValue>(source);
+        }
+
+        /// <summary>
+        /// Returns the Dictionary as an IReadOnlyDictionary
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this Dictionary<TKey, TValue> source)
+        {
+            if (source is null) throw new ArgumentException(nameof(source));
+            return source;
         }
     }
 }
