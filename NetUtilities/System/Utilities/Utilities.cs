@@ -1,5 +1,8 @@
 ﻿namespace System.Utilities
 {
+    /// <summary>
+    /// Utilities
+    /// </summary>
     public static partial class Utilities
     {
         /// <summary>

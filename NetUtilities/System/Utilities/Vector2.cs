@@ -1,5 +1,8 @@
 ﻿namespace System.Utilities
 {
+    /// <summary>
+    /// Vector2
+    /// </summary>
     public struct Vector2 : IEquatable<Vector2>, IFormattable
     {
         public double X { get; set; }
