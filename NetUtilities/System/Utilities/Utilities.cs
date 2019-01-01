@@ -1,4 +1,4 @@
-﻿namespace System
+﻿namespace System.Utilities
 {
     public static partial class Utilities
     {
