@@ -31,7 +31,7 @@ namespace System.Diagnostics
             proc.StartInfo.WindowStyle = windowStyle;
             proc.StartInfo.WorkingDirectory = workingDirectory;
             WaitForProcessExit = waitForProcessExit;
-            return proc.Shell(ref executing)
+            return proc.Shell(ref executing);
         }
 
         /// <summary>
