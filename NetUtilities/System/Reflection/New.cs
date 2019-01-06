@@ -18,7 +18,7 @@ namespace System.Reflection
             if (t.HasDefaultConstructor())
                 return Expression.Lambda<Func<T>>(Expression.New(t)).Compile();
 
-            throw new Exception("No paramerteless ctor found.");
+            throw new Exception("No parameterless constructor found.");
         }
     }
 }
