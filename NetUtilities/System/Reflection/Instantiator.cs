@@ -2,12 +2,12 @@
 
 namespace System.Reflection
 {
-    public static class New<T>
+    public static class Instantiator<T>
     {
         /// <summary>
         /// Get's the instance of a generic type with a parameterless ctor. Performs much better than Activator.CreateInstance()
         /// </summary>
-        public static readonly Func<T> Instance = CreateInstance();
+        public static readonly Func<T> GetInstance = CreateInstance();
 
         private static Func<T> CreateInstance()
         {
