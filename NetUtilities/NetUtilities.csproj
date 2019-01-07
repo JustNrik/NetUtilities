@@ -2,7 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>NetUtilities</AssemblyName>
     <LangVersion>latest</LangVersion>
+    <Company>JustNrik</Company>
+    <Authors>JustNrik</Authors>
+    <PackageTags>NetUtilities</PackageTags>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/JustNrik/NetUtilities/</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/JustNrik/NetUtilities/</PackageProjectUrl>
+    <PackageLicenseUrl>https://github.com/JustNrik/NetUtilities/blob/master/LICENSE</PackageLicenseUrl>
+    <Copyright>Copyright (c) 2018-2019</Copyright>
+    <Description>A bunch of extension methods that may be useful for someone.</Description>
+    <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
+    <Version>1.0.0</Version>
   </PropertyGroup>
 
 </Project>
