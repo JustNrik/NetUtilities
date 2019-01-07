@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netcoreapp2.0;netcoreapp2.1;netcoreapp2.2:net47</TargetFrameworks>
     <AssemblyName>NetUtilities</AssemblyName>
     <LangVersion>latest</LangVersion>
     <Company>JustNrik</Company>
@@ -15,7 +15,6 @@
     <Description>A bunch of extension methods that may be useful for someone.</Description>
     <PackageReleaseNotes>Initial release.</PackageReleaseNotes>
     <Version>1.0.0</Version>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
 </Project>
