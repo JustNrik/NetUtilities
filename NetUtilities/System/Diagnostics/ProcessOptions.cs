@@ -16,6 +16,6 @@ namespace System.Diagnostics
 
         /// <summary>
         /// Gets if the target process is executing (has not been actually started yet), or is being executed (started). False if it was started.
-        public bool Executing { get; private set; } = true;
+        public bool Executing { get; internal set; } = true;
     }
 }
