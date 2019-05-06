@@ -8,7 +8,7 @@ namespace System
         IEnumerable, IEnumerable<char>, 
         IComparable, IComparable<string>, IComparable<MutableString>, 
         IEquatable<string>, IEquatable<MutableString>,
-        IEqualityComparer ,IEqualityComparer<string>, IEqualityComparer<MutableString>
+        IEqualityComparer, IEqualityComparer<string>, IEqualityComparer<MutableString>
     {
         private readonly StringBuilder _builder;
 
@@ -21,13 +21,25 @@ namespace System
         public MutableString(int capacity, int maxCapacity)
             => _builder = new StringBuilder(capacity, maxCapacity);
 
+        public MutableString(int capacity)
+            => _builder = new StringBuilder(capacity);
+
+        public MutableString(string value, int capacity)
+            => _builder = new StringBuilder(value, capacity);
+
+        public MutableString(StringBuilder builder)
+            => _builder = builder;
+
+        public MutableString(string value, int startIndex, int capacity, int length)
+            => _builder = new StringBuilder(value, startIndex, length, capacity);
+
         public override string ToString()
             => _builder.ToString();
 
-        public static MutableString operator +(MutableString MutableString, string value)
+        public static MutableString operator +(MutableString mutableString, string value)
         {
-            MutableString._builder.Append(value);
-            return MutableString;
+            mutableString._builder.Append(value);
+            return mutableString;
         }
 
         public static string operator +(string value, MutableString MutableString)
@@ -118,5 +130,50 @@ namespace System
 
         public static bool operator !=(MutableString left, MutableString right)
             => !left.Equals(right);
+
+        public MutableString Insert(int index, object value)
+        {
+            _builder.Insert(index, value);
+            return this;
+        }
+
+        public MutableString Remove(int startIndex, int length)
+        {
+            _builder.Remove(startIndex, length);
+            return this;
+        }
+
+        public MutableString Replace(char oldChar, char newChar)
+        {
+            Replace(oldChar, newChar, 0, _builder.Length);
+            return this;
+        }
+
+        public MutableString Replace(char oldChar, char newChar, int startIndex, int count)
+        {
+            _builder.Replace(oldChar, newChar, startIndex, count);
+            return this;
+        }
+
+        public MutableString Replace(string oldStr, string newStr)
+        {
+            Replace(oldStr, newStr, 0, _builder.Length);
+            return this;
+        }
+
+        public MutableString Replace(string oldStr, string newStr, int startIndex, int count)
+        {
+            _builder.Replace(oldStr, newStr, startIndex, count);
+            return this;
+        }
+
+        public MutableString AppendFormat(string format, params object[] args)
+        {
+            _builder.AppendFormat(format, args);
+            return this;
+        }
+
+        public char[] ToCharArray() 
+            => _builder.ToString().ToCharArray();
     }
 }
