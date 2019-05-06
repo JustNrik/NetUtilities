@@ -41,18 +41,5 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             return new ReadOnlyDictionary<TKey, TValue>(source);
         }
-
-        /// <summary>
-        /// Returns the Dictionary as an IReadOnlyDictionary
-        /// </summary>
-        /// <typeparam name="TKey"></typeparam>
-        /// <typeparam name="TValue"></typeparam>
-        /// <param name="source"></param>
-        /// <returns></returns>
-        public static IReadOnlyDictionary<TKey, TValue> AsReadOnly<TKey, TValue>(this Dictionary<TKey, TValue> source)
-        {
-            if (source is null) throw new ArgumentException(nameof(source));
-            return source;
-        }
     }
 }
