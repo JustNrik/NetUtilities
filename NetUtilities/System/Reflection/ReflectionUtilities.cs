@@ -13,5 +13,11 @@
 
         public static bool HasDefaultConstructor(this Type t)
             => t.IsValueType || !(t.GetConstructor(Type.EmptyTypes) is null);
+
+        public static readonly Collections.Generic.Dictionary<Type, Delegate> TryParseDelegates
+            = new Collections.Generic.Dictionary<Type, Delegate>()
+            {
+                {typeof(char), char.TryParse }
+            };
     }
 }

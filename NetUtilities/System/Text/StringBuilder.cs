@@ -8,6 +8,12 @@
             return condition ? builder.Append(text) : builder;
         }
 
+        public static StringBuilder AppendIf(this StringBuilder builder, bool condition, char c)
+        {
+            if (builder is null) throw new ArgumentNullException(nameof(builder));
+            return condition ? builder.Append(c) : builder;
+        }
+
         public static StringBuilder AppendIf(this StringBuilder builder, bool condition, string text, int startIndex, int count)
         {
             if (builder is null) throw new ArgumentNullException(nameof(builder));

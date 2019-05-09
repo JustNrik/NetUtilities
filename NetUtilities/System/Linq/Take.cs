@@ -16,7 +16,9 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (predicate is null) throw new ArgumentNullException(nameof(predicate));
 
-            return _(); IEnumerable<TSource> _()
+            return TakeUntilIterator();
+
+            IEnumerable<TSource> TakeUntilIterator()
             {
                 foreach (var item in source)
                 {
@@ -40,7 +42,9 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (predicate is null) throw new ArgumentNullException(nameof(predicate));
 
-            return _(); IEnumerable<TSource> _()
+            return TakeWhileIterator();
+
+            IEnumerable<TSource> TakeWhileIterator()
             {
                 foreach (var item in source)
                 {

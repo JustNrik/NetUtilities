@@ -16,7 +16,9 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (predicate is null) throw new ArgumentNullException(nameof(predicate));
 
-            return _(); IEnumerable<TSource> _()
+            return SkipWhileIterator();
+
+            IEnumerable<TSource> SkipWhileIterator()
             {
                 using (var enumerator = source.GetEnumerator())
                 {
@@ -38,7 +40,9 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (predicate is null) throw new ArgumentNullException(nameof(predicate));
 
-            return _(); IEnumerable<TSource> _()
+            return SkipUntilIterator();
+
+            IEnumerable<TSource> SkipUntilIterator()
             {
                 using (var enumerator = source.GetEnumerator())
                 {

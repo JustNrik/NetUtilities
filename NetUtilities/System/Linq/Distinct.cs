@@ -14,17 +14,17 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             if (selector is null) throw new ArgumentNullException(nameof(selector));
 
-            return DistinctIterator(source, selector, comparer);
-        }
+            return DistinctIterator();
 
-        private static IEnumerable<TSource> DistinctIterator<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey> comparer)
-        {
-            var keys = new HashSet<TKey>(comparer);
-            foreach (var item in source)
+            IEnumerable<TSource> DistinctIterator()
             {
-                if (keys.Add(selector(item)))
+                var keys = new HashSet<TKey>(comparer);
+                foreach (var item in source)
                 {
-                    yield return item;
+                    if (keys.Add(selector(item)))
+                    {
+                        yield return item;
+                    }
                 }
             }
         }

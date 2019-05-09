@@ -4,13 +4,39 @@ using System.Text;
 
 namespace System
 {
+    /// <summary>
+    /// This class is a handy wrapper of <seealso cref="System.Text.StringBuilder"/> class for string manipulation with minimal cost.
+    /// </summary>
     public class MutableString : 
         IEnumerable, IEnumerable<char>, 
+        ICollection, ICollection<char>,
         IComparable, IComparable<string>, IComparable<MutableString>, 
-        IEquatable<string>, IEquatable<MutableString>,
-        IEqualityComparer, IEqualityComparer<string>, IEqualityComparer<MutableString>
+        IEquatable<string>, IEquatable<MutableString>
     {
         private readonly StringBuilder _builder;
+        public int Length
+        {
+            get => _builder.Length;
+            set => _builder.Length = value;
+        }
+
+        public int Capacity
+        {
+            get => _builder.Capacity;
+            set => _builder.Capacity = value;
+        }
+
+        public int MaxCapacity => _builder.MaxCapacity;
+
+        int ICollection<char>.Count => Length;
+
+        bool ICollection<char>.IsReadOnly => false;
+
+        int ICollection.Count => Length;
+
+        bool ICollection.IsSynchronized => false;
+
+        object ICollection.SyncRoot => this;
 
         public MutableString()
             => _builder = new StringBuilder();
@@ -71,11 +97,11 @@ namespace System
 
         int IComparable.CompareTo(object obj)
             => obj switch
-        {
-            string str => ((IComparable<string>)this).CompareTo(str),
-            MutableString mutable => ((IComparable<string>)this).CompareTo(mutable.ToString()),
-            _ => 0
-        };
+            {
+                string str => ((IComparable<string>)this).CompareTo(str),
+                MutableString mutable => ((IComparable<string>)this).CompareTo(mutable.ToString()),
+                _ => throw new ArgumentException(nameof(obj))
+            };
 
         int IComparable<string>.CompareTo(string other)
             => _builder.ToString().CompareTo(other);
@@ -98,32 +124,14 @@ namespace System
 
         public override bool Equals(object obj)
             => obj switch
-        {
-            string str => Equals(str),
-            MutableString mutable => Equals(mutable),
-            _ => false
-        };
+            {
+                string str => Equals(str),
+                MutableString mutable => Equals(mutable),
+                _ => false
+            };
 
         public override int GetHashCode()
             => _builder.GetHashCode();
-
-        bool IEqualityComparer<string>.Equals(string x, string y)
-            => x.Equals(y);
-
-        int IEqualityComparer<string>.GetHashCode(string obj)
-            => obj.GetHashCode();
-
-        bool IEqualityComparer<MutableString>.Equals(MutableString x, MutableString y)
-            => x.Equals(y);
-
-        int IEqualityComparer<MutableString>.GetHashCode(MutableString obj)
-            => obj.GetHashCode();
-
-        bool IEqualityComparer.Equals(object x, object y)
-            => x.Equals(y);
-
-        int IEqualityComparer.GetHashCode(object obj)
-            => obj.GetHashCode();
 
         public static bool operator ==(MutableString left, MutableString right)
             => left.Equals(right);
@@ -144,10 +152,8 @@ namespace System
         }
 
         public MutableString Replace(char oldChar, char newChar)
-        {
-            Replace(oldChar, newChar, 0, _builder.Length);
-            return this;
-        }
+            => Replace(oldChar, newChar, 0, _builder.Length);
+
 
         public MutableString Replace(char oldChar, char newChar, int startIndex, int count)
         {
@@ -156,10 +162,8 @@ namespace System
         }
 
         public MutableString Replace(string oldStr, string newStr)
-        {
-            Replace(oldStr, newStr, 0, _builder.Length);
-            return this;
-        }
+            => Replace(oldStr, newStr, 0, _builder.Length);
+
 
         public MutableString Replace(string oldStr, string newStr, int startIndex, int count)
         {
@@ -175,5 +179,43 @@ namespace System
 
         public char[] ToCharArray() 
             => _builder.ToString().ToCharArray();
+
+        public IEnumerable<char> AsEnumerable()
+            => this;
+
+        void ICollection<char>.Add(char item)
+            => _builder.Append(item);
+
+        public MutableString Clear()
+        {
+            _builder.Clear();
+            return this;
+        }
+
+        void ICollection<char>.Clear() 
+            => Clear();
+
+        public bool Contains(char item)
+        {
+            for (int x = 0; x < Length; x++)
+            {
+                if (this[x] == item)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool Contains(string item)
+            => ToString().Contains(item);
+
+        void ICollection<char>.CopyTo(char[] array, int arrayIndex)
+            => throw new NotSupportedException();
+
+        bool ICollection<char>.Remove(char item)
+            => throw new NotSupportedException();
+
+        void ICollection.CopyTo(Array array, int index)
+            => throw new NotSupportedException();
     }
 }

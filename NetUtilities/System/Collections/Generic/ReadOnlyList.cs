@@ -27,7 +27,7 @@ namespace System.Collections.Generic
         public int Count
             => _list.Count;
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator()
+        public IEnumerator<T> GetEnumerator()
             => _list.GetEnumerator();
 
         public int IndexOf(T item)
@@ -36,7 +36,7 @@ namespace System.Collections.Generic
         public bool Contains(T item)
             => _list.Contains(item);
 
-        public IEnumerator GetEnumerator()
+        IEnumerator IEnumerable.GetEnumerator()
             => _list.GetEnumerator();
 
         void ICollection<T>.Add(T item)

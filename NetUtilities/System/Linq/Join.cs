@@ -13,7 +13,6 @@ namespace System.Linq
         public static string Join(this IEnumerable<string> source, string separator)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
-
             return string.Join(separator ?? string.Empty, source);
         }
 
