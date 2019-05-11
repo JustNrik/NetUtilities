@@ -2,6 +2,9 @@
 
 namespace System
 {
+    /// <summary>
+    /// Represents a 24-bit unsigned integer
+    /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 3, Pack = 1)]
     public readonly struct UInt24 : IEquatable<UInt24>, IComparable<UInt24>, IConvertible, IComparable, IFormattable
     {
