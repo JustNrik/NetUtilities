@@ -11,13 +11,7 @@
             return !(attribute is null);
         }
 
-        public static bool HasDefaultConstructor(this Type t)
-            => t.IsValueType || !(t.GetConstructor(Type.EmptyTypes) is null);
-
-        public static readonly Collections.Generic.Dictionary<Type, Delegate> TryParseDelegates
-            = new Collections.Generic.Dictionary<Type, Delegate>()
-            {
-                {typeof(char), char.TryParse }
-            };
+        public static bool HasDefaultConstructor(this Type type)
+            => type.IsValueType || !(type.GetConstructor(Type.EmptyTypes) is null);
     }
 }
