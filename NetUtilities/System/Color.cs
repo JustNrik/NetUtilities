@@ -6,15 +6,15 @@ namespace System
     {
         private readonly UInt24 _value;
         public byte R => (byte)(_value >> 16);
-        public byte G => (byte)((_value >> 8) & 0xFF);
-        public byte B => (byte)(_value & 0xFF);
+        public byte G => (byte)(_value >> 8);
+        public byte B => (byte)_value;
 
         public Color(byte r, byte g, byte b)
-            => _value = (UInt24)(r << 16 | g << 8 | b);
+            => _value = (UInt24)((uint)r << 16 | (uint)g << 8 | b);
         public Color(uint value)
         {
             if (value > UInt24.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(value));
+                throw new ArgumentOutOfRangeException(nameof(value), "The value must be in the [0, 255] range");
 
             _value = (UInt24)value;
         }
@@ -26,33 +26,29 @@ namespace System
         public Color(int r, int g, int b)
         {
             if (r < 0 || r > 255)
-                throw new ArgumentOutOfRangeException(nameof(r));
+                throw new ArgumentOutOfRangeException(nameof(r), "The value must be in the [0, 255] range");
 
             if (g < 0 || g > 255)
-                throw new ArgumentOutOfRangeException(nameof(g));
+                throw new ArgumentOutOfRangeException(nameof(g), "The value must be in the [0, 255] range");
 
             if (b < 0 || b > 255)
-                throw new ArgumentOutOfRangeException(nameof(b));
+                throw new ArgumentOutOfRangeException(nameof(b), "The value must be in the [0, 255] range");
 
-            _value = (UInt24)(r << 16 | g << 8 | b);
+            _value = (UInt24)((uint)r << 16 | (uint)g << 8 | (uint)b);
         }
 
         public Color(float r, float g, float b)
         {
             if (r < 0f || r > 1f)
-                throw new ArgumentOutOfRangeException(nameof(r));
+                throw new ArgumentOutOfRangeException(nameof(r), "The value must be in the [0, 1] range");
 
             if (g < 0f || g > 1f)
-                throw new ArgumentOutOfRangeException(nameof(g));
+                throw new ArgumentOutOfRangeException(nameof(g), "The value must be in the [0, 1] range");
 
             if (b < 0f || b > 1f)
-                throw new ArgumentOutOfRangeException(nameof(b));
+                throw new ArgumentOutOfRangeException(nameof(b), "The value must be in the [0, 1] range");
 
-            var red = (byte)(r * 255f);
-            var green = (byte)(g * 255f);
-            var blue = (byte)(b * 255f);
-
-            _value = (UInt24)(red << 16 | green << 8 | blue);
+            _value = (UInt24)(((uint)(r * 255f) << 16) | ((uint)(g * 255f) << 8) | (uint)(b * 255f));
         }
 
         public Color Combine(Color other)
@@ -64,7 +60,7 @@ namespace System
 
         #region other things
         public override bool Equals(object obj)
-            => obj is Color color ? Equals(color) : false;
+            => obj is Color color && color._value == _value;
         public override int GetHashCode()
             => _value;
         public override string ToString()

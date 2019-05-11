@@ -7,34 +7,54 @@ namespace System.Linq
     public static partial class LinqUtilities
     {
         /// <summary>
-        /// Bulks the collection into an <see cref="IEnumerable{T}"/> by an specific amount.
+        /// Bulks the collection into an <see cref="IEnumerable{IEnumerable{TSource}}"/> by an specific amount.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
+        /// <typeparam name="TSource"></typeparam>
         /// <param name="source"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static IEnumerable<T[]> BulkBy<T>(this IEnumerable<T> source, int count)
+        public static IEnumerable<IEnumerable<TSource>> BulkBy<TSource>(this IEnumerable<TSource> source, int size)
+        {
+            return BulkBy(source, size, x => x);
+        }
+
+        public static IEnumerable<TResult> BulkBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
         {
             if (source is null) throw new ArgumentNullException(nameof(source));
-            if (count <= 0) throw new ArgumentOutOfRangeException(nameof(count));
+            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size));
+            if (selector is null) throw new ArgumentNullException(nameof(selector));
 
-            var c = source.Count();
-            var pivot = c / count;
+            return BulkByIterator();
 
-            if (c % count != 0)
-                pivot++;
-
-            var length = 0;
-
-            for (int x = 0; x < pivot; x++)
+            IEnumerable<TResult> BulkByIterator()
             {
-                yield return InnerBulkBy(count).ToArray();
-                length += count;
-            }
+                TSource[] bucket = null;
+                var count = 0;
 
-            IEnumerable<T> InnerBulkBy(int count)
-            {
-                return source.Skip(length).Take(count);
+                foreach (var item in source)
+                {
+                    if (bucket is null)
+                        bucket = new TSource[size];
+
+
+                    bucket[count++] = item;
+
+                    if (count != size)
+                        continue;
+ 
+
+                    yield return selector(bucket);
+
+                    bucket = null;
+                    count = 0;
+                }
+
+                // Return the last bucket with all remaining elements
+                if (!(bucket is null) && count > 0)
+                {
+                    Array.Resize(ref bucket, count);
+                    yield return selector(bucket);
+                }
             }
         }
     }
