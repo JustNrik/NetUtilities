@@ -7,7 +7,7 @@ namespace System
     /// <summary>
     /// This class is a handy wrapper of <seealso cref="System.Text.StringBuilder"/> class for string manipulation with minimal cost.
     /// </summary>
-    public class MutableString : 
+    public sealed class MutableString : 
         IEnumerable, IEnumerable<char>, 
         ICollection, ICollection<char>,
         IComparable, IComparable<string>, IComparable<MutableString>, 

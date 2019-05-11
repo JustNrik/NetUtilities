@@ -3,7 +3,7 @@ namespace System.Diagnostics
     /// <summary>
     /// Extra options for the <see cref="Process" /> component.
     /// </summary>
-    public class ProcessOptions
+    public sealed class ProcessOptions
     {
         /// <summary>
         /// Instucts the <see cref="Process" /> <keyword cref="object" /> to wait until the executed process terminates.

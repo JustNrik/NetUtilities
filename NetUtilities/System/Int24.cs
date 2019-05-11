@@ -28,7 +28,7 @@ namespace System
             _short = (short)(value >> 8);
         }
 
-        private static void EnsureRange(in int value)
+        private static void EnsureRange(int value)
         {
             if (value < MinValue || value > MaxValue)
                 throw new OverflowException(nameof(value));

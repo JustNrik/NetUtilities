@@ -41,5 +41,11 @@ namespace System.Linq
             if (source is null) throw new ArgumentNullException(nameof(source));
             return new ReadOnlyDictionary<TKey, TValue>(source);
         }
+
+        public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
+        {
+            if (source is null) throw new ArgumentNullException(nameof(source));
+            return new ReadOnlyList<T>(source);
+        }
     }
 }
