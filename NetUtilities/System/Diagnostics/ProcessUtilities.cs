@@ -3,8 +3,8 @@ namespace System.Diagnostics
     public static partial class ProcessUtilities
     {
         /// <summary>
-        /// Extension for a Shell() Function that Allows Overloading of the Working directory Variable.
-        /// It must be a String but can be variables that returns strings.
+        /// Extension for a Shell() function that allows overloading of the working directory variable.
+        /// It must be a <see cref="string"/> but can be variables that returns strings.
         /// </summary>
         /// <param name="proc">The <see cref="Process" /> component for which is used to execute the target process.</param>
         /// <param name="fileName">Process file name to execute.</param>
@@ -31,8 +31,8 @@ namespace System.Diagnostics
         }
 
         /// <summary>
-        /// Extension for a Shell() Function that Allows Overloading of the Working directory Variable.
-        /// It must be a String but can be variables that returns strings.
+        /// Extension for a Shell() function that allows overloading of the working directory variable.
+        /// It must be a <see cref="string"/> but can be variables that returns strings.
         /// </summary>
         /// <param name="proc">The <see cref="Process" /> component for which is used to execute the target process.</param>
         /// <param name="options">The options for which to also include for the <see cref="Process" /> component.</param>

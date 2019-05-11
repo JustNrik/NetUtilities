@@ -122,6 +122,14 @@ namespace System
             => right == left;
         public static bool operator !=(int left, Int24 right)
             => !(right == left);
+        public static Int24 operator &(Int24 left, Int24 right)
+            => new Int24((int)left & right);
+        public static Int24 operator |(Int24 left, Int24 right)
+            => new Int24((int)left | right);
+        public static Int24 operator ^(Int24 left, Int24 right)
+            => new Int24((int)left ^ right);
+        public static Int24 operator ~(Int24 int24)
+            => new Int24(~(int)int24 & MaxValue);
         #endregion
         #region casts
         // explicit = Narrowing

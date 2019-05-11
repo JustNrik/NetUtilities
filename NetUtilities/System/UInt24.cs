@@ -35,7 +35,7 @@ namespace System
             => ((int)this).ToString();
 
         public override int GetHashCode()
-            => (int)this;
+            => this;
 
         public override bool Equals(object obj)
             => obj is Int24 i24 ? Equals(i24) : false;
@@ -45,7 +45,7 @@ namespace System
             => _byte == other._byte && _ushort == other._ushort;
 
         public int CompareTo(UInt24 other)
-            => ((int)this).CompareTo((int)other);
+            => ((int)this).CompareTo(other);
 
         int IComparable.CompareTo(object obj)
             => obj is UInt24 u24 ? CompareTo(u24) : throw new ArgumentException(nameof(obj));
@@ -113,6 +113,14 @@ namespace System
             => right == left;
         public static bool operator !=(UInt24 left, Int24 right)
             => right != left;
+        public static UInt24 operator &(UInt24 left, UInt24 right)
+            => new UInt24((uint)left & right);
+        public static UInt24 operator |(UInt24 left, UInt24 right)
+            => new UInt24((uint)left | right);
+        public static UInt24 operator ^(UInt24 left, UInt24 right)
+            => new UInt24((uint)left ^ right);
+        public static UInt24 operator ~(UInt24 int24)
+            => new UInt24(~(uint)int24 & MaxValue);
         #endregion
         #region casts
         // explicit = Narrowing

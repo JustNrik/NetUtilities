@@ -86,8 +86,17 @@ namespace System
         public static implicit operator MutableString(string value)
             => new MutableString(value);
 
-        //public static implicit operator ReadOnlySpan<char>(MutableString mutable)
-        //    => new ReadOnlySpan<char>(mutable.ToString());
+        public static implicit operator ReadOnlySpan<char>(MutableString mutable)
+            => mutable.ToString();
+
+        public static explicit operator Span<char>(MutableString mutable)
+            => new Span<char>(mutable.ToCharArray());
+
+        public static explicit operator ReadOnlyMemory<char>(MutableString mutable)
+            => new ReadOnlyMemory<char>(mutable.ToCharArray());
+
+        public static explicit operator Memory<char>(MutableString mutable)
+            => new Memory<char>(mutable.ToCharArray());
 
         IEnumerator<char> IEnumerable<char>.GetEnumerator()
             => ToString().GetEnumerator();
