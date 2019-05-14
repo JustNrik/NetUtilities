@@ -1,0 +1,346 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NetUtilities</name>
+    </assembly>
+    <members>
+        <member name="M:System.Collections.Generic.DictionaryUtilities.Deconstruct``2(System.Collections.Generic.KeyValuePair{``0,``1},``0@,``1@)">
+            <summary>
+            Deconstructor for <see cref="T:System.Collections.Generic.KeyValuePair`2"/> which will allow you to use Tuples in a foreach loop.
+            </summary>
+            <example>
+              <code language="cs">
+              foreach (var (key, value) in dictionary) 
+              {
+                  // your logic here.
+              }
+              </code>
+              <code language="vb">
+              For Each (key, value) In dictionary
+                  ' your logic here.
+              Next
+              </code>
+            </example>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="kvp"></param>
+            <param name="key"></param>
+            <param name="value"></param>
+        </member>
+        <member name="T:System.Collections.Generic.ReadOnlyList`1">
+            <summary>
+            A true readonly generic List which provides most of <see cref="T:System.Collections.Generic.List`1"/> methods.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from an <see cref="T:System.Collections.Generic.IEnumerable`1"/>
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="sequence"></param>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Int32)">
+            <summary>
+            Returns the element stored in the given index.
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException"></exception>
+            <param name="index"></param>
+            <returns></returns>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.IsReadOnly">
+            <summary>
+            Returns true.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.Count">
+            <summary>
+            Returns the amount of element in the current instace.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetEnumerator">
+            <summary>
+            Gets the enumerator for the current instance.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0,System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Gets the index of the provided item, you can optionally provide as well the starting index and the count of indexes.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <param name="item"></param>
+            <param name="index"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Contains(`0)">
+            <summary>
+            Returns true if the list contains the provided element. otherwise false.
+            </summary>
+            <param name="item"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Find(System.Predicate{`0})">
+            <summary>
+            Finds the first element that matches the given predicate, or the default value if no matching element is found.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLast(System.Predicate{`0})">
+            <summary>
+            Finds the first element that matches the given predicate, or the default value if no matching element is found.
+            (This method iterates from last to first)
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindAll(System.Predicate{`0},System.Nullable{System.Int32})">
+            <summary>
+            Finds all the elements that matches the given predicate. 
+            You may as well limit the amount of elements that can be returned. 
+            The number of elements in the returning collection is not guaranteed to be the same of maxCount if provided.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="predicate"></param>
+            <param name="maxCount"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Predicate{`0},System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Finds the index of the first element that matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <param name="predicate"></param>
+            <param name="startIndex"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Predicate{`0},System.Int32,System.Nullable{System.Int32})">
+            <summary>
+            Finds the index of the first element that matches the given predicate.
+            (This method iterates from last to first)
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <param name="predicate"></param>
+            <param name="startIndex"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(`0)">
+            <inheritdoc />
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(`0,System.Collections.Generic.IComparer{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(System.Int32,System.Int32,`0,System.Collections.Generic.IComparer{`0})">
+            <inheritdoc />
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.ConvertAll``1(System.Converter{`0,``0})">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all members of the current list converted into the target type.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <typeparam name="TOut"></typeparam>
+            <param name="converter"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Exists(System.Predicate{`0})">
+            <summary>
+            Returns true if an element of the list matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Int32,System.Int32)">
+            <summary>
+            Gets the given amount of members from the given index
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <param name="index"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Any(System.Predicate{`0})">
+            <summary>
+            Returns true if any of the elements matches the predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.All(System.Predicate{`0})">
+            <summary>
+            Returns true if all elements matches the predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.ForEach(System.Action{`0})">
+            <summary>
+            Executes an action for each element in the list.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <param name="action"></param>
+        </member>
+        <member name="T:System.Diagnostics.ProcessOptions">
+            <summary>
+            Extra options for the <see cref="T:System.Diagnostics.Process" /> component.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
+            <summary>
+            Instucts the <see cref="T:System.Diagnostics.Process" /> <keyword cref="T:System.Object" /> to wait until the executed process terminates.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.ProcessOptions.Executing">
+            <summary>
+            Gets if the target process is executing (has not been actually started yet), or is being executed (started). False if it was started.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.ProcessUtilities.Shell(System.Diagnostics.Process,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Diagnostics.ProcessWindowStyle,System.String,System.Diagnostics.ProcessOptions)">
+            <summary>
+            Extension for a Shell() function that allows overloading of the working directory variable.
+            It must be a <see cref="T:System.String"/> but can be variables that returns strings.
+            </summary>
+            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
+            <param name="fileName">Process file name to execute.</param>
+            <param name="arguments">Commands to pass to the process file to execute.</param>
+            <param name="redirectStandardOutput">redirects stdout of the target process.</param>
+            <param name="redirectStandardError">redirects stderr of the target process.</param>
+            <param name="useShellExecute">uses shell execute instead.</param>
+            <param name="createNoWindow">Creates no new window for the process.</param>
+            <param name="windowStyle">Window style for the target process.</param>
+            <param name="workingDirectory">Working directory for the target process.</param>
+            <param name="options"> The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
+            <returns>empty string, process stdout data, process stderr data.</returns>
+        </member>
+        <member name="M:System.Diagnostics.ProcessUtilities.Shell(System.Diagnostics.Process,System.Diagnostics.ProcessOptions)">
+            <summary>
+            Extension for a Shell() function that allows overloading of the working directory variable.
+            It must be a <see cref="T:System.String"/> but can be variables that returns strings.
+            </summary>
+            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
+            <param name="options">The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
+            <returns>empty string, process stdout data, process stderr data.</returns>
+        </member>
+        <member name="T:System.Int24">
+            <summary>
+            Represents a 24-bit signed integer
+            </summary>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.BulkBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Bulks the collection into a collection of collection by an specific amount.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="source"></param>
+            <param name="size"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.BulkBy``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+            Bulks the collection into a collection of collection by an specific amount.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"></exception>
+            <exception cref="T:System.ArgumentOutOfRangeException"></exception>
+            <typeparam name="TSource"></typeparam>
+            <typeparam name="TResult"></typeparam>
+            <param name="source"></param>
+            <param name="size"></param>
+            <param name="selector"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Invokes an action for each element in the sequence.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="source"></param>
+            <param name="action"></param>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Joins the sequence of strings into a single string.
+            </summary>
+            <param name="source"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.Char},System.String)">
+            <summary>
+            Joins the sequence of chars into a single string.
+            </summary>
+            <param name="source"></param>
+            <param name="separator"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.SkipWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Skips all the elements while the predicate is True.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="source"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Skips all the elements until the predicate is True
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="source"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Takes all elements until the predicate is True.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="source"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.TakeWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Takes all elements while the predicate is True.
+            </summary>
+            <typeparam name="TSource"></typeparam>
+            <param name="source"></param>
+            <param name="predicate"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToReadOnly``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Creates a Read-Only Dictionary from the dictionary provided.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="source"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.MutableString">
+            <summary>
+            This class is a handy wrapper of <see cref="T:System.Text.StringBuilder"/> class for string manipulation with minimal cost.
+            </summary>
+        </member>
+        <member name="F:System.Reflection.Instantiator`1.GetInstance">
+            <summary>
+            Get's the instance of a generic type with a parameterless ctor. Performs much better than Activator.CreateInstance()
+            </summary>
+        </member>
+        <member name="T:System.UInt24">
+            <summary>
+            Represents a 24-bit unsigned integer
+            </summary>
+        </member>
+    </members>
+</doc>

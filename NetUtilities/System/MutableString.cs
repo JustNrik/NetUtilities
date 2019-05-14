@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
-
+using Inline = System.Runtime.CompilerServices.MethodImplAttribute;
+using static System.Runtime.CompilerServices.MethodImplOptions;
 namespace System
 {
     /// <summary>
-    /// This class is a handy wrapper of <seealso cref="System.Text.StringBuilder"/> class for string manipulation with minimal cost.
+    /// This class is a handy wrapper of <see cref="StringBuilder"/> class for string manipulation with minimal cost.
     /// </summary>
     public sealed class MutableString : 
         IEnumerable, IEnumerable<char>, 
@@ -14,19 +16,28 @@ namespace System
         IEquatable<string>, IEquatable<MutableString>
     {
         private readonly StringBuilder _builder;
+
         public int Length
         {
+            [Inline(AggressiveInlining)]
             get => _builder.Length;
+            [Inline(AggressiveInlining)]
             set => _builder.Length = value;
         }
 
         public int Capacity
         {
+            [Inline(AggressiveInlining)]
             get => _builder.Capacity;
+            [Inline(AggressiveInlining)]
             set => _builder.Capacity = value;
         }
 
-        public int MaxCapacity => _builder.MaxCapacity;
+        public int MaxCapacity
+        {
+            [Inline(AggressiveInlining)]
+            get => _builder.MaxCapacity;
+        }
 
         int ICollection<char>.Count => Length;
 
@@ -38,27 +49,35 @@ namespace System
 
         object ICollection.SyncRoot => this;
 
+        [Inline(AggressiveInlining)]
         public MutableString()
             => _builder = new StringBuilder();
 
+        [Inline(AggressiveInlining)]
         public MutableString(string value)
             => _builder = new StringBuilder(value);
 
+        [Inline(AggressiveInlining)]
         public MutableString(int capacity, int maxCapacity)
             => _builder = new StringBuilder(capacity, maxCapacity);
 
+        [Inline(AggressiveInlining)]
         public MutableString(int capacity)
             => _builder = new StringBuilder(capacity);
 
+        [Inline(AggressiveInlining)]
         public MutableString(string value, int capacity)
             => _builder = new StringBuilder(value, capacity);
 
+        [Inline(AggressiveInlining)]
         public MutableString(StringBuilder builder)
             => _builder = builder;
 
+        [Inline(AggressiveInlining)]
         public MutableString(string value, int startIndex, int capacity, int length)
             => _builder = new StringBuilder(value, startIndex, length, capacity);
 
+        [Inline(AggressiveInlining)]
         public override string ToString()
             => _builder.ToString();
 
@@ -127,7 +146,9 @@ namespace System
 
         public char this[int index]
         {
+            [Inline(AggressiveInlining)]
             get => _builder[index];
+            [Inline(AggressiveInlining)]
             set => _builder[index] = value;
         }
 
@@ -186,6 +207,7 @@ namespace System
             return this;
         }
 
+        [Inline(AggressiveInlining)]
         public char[] ToCharArray() 
             => _builder.ToString().ToCharArray();
 
@@ -215,16 +237,65 @@ namespace System
             return false;
         }
 
+        public string this[Range range]
+            => ToString()[range];
         public bool Contains(string item)
-            => ToString().Contains(item);
+            => IndexOf(item) != -1;
+
+        public int IndexOf(char item, int startIndex = 0, int? length = null)
+        {
+            length ??= Length;
+
+            if (startIndex >= Length || 
+                startIndex + length >= Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
+            if (length == 0) return -1;
+
+            int index = startIndex;
+
+            for (int counter = 1; counter <= length; counter++, index++)
+            {
+                if (item == this[index])
+                    return index;
+            }
+
+            return -1;
+        }
+
+        public int IndexOf(string item, int startIndex = 0, int? length = null)
+        {
+            length ??= Length;
+            var str = ToString();
+            return str.IndexOf(item, startIndex, length.Value);
+        }
+
+        public int[] IndexesOf(char value, int startIndex = 0, int? length = null)
+        {
+            if (Length == 0) return new int[0];
+
+            int currentIndex;
+            int count = 0;
+            var result = new List<int>(Length);
+
+            currentIndex = IndexOf(value, startIndex, length ?? Length);
+
+            while (currentIndex != -1)
+            {
+                count++;
+                result.Add(currentIndex);
+                currentIndex = IndexOf(value, currentIndex + 1);
+            }
+
+            return result.ToArray();
+        }
 
         void ICollection<char>.CopyTo(char[] array, int arrayIndex)
-            => throw new NotSupportedException();
+            => ((ICollection<char>)ToCharArray()).CopyTo(array, arrayIndex);
 
         bool ICollection<char>.Remove(char item)
             => throw new NotSupportedException();
 
         void ICollection.CopyTo(Array array, int index)
-            => throw new NotSupportedException();
+            => ToCharArray().CopyTo(array, index);
     }
 }

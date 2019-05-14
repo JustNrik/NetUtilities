@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-
+#nullable enable
 namespace System
 {
-    public readonly struct ScopedAction : IDisposable, IAsyncDisposable
+    public readonly ref struct ScopedAction
     {
         private readonly Action _undoAction;
 
@@ -15,20 +15,18 @@ namespace System
             startAction();
         }
 
-        void IDisposable.Dispose()
-        {
-            if (!(_undoAction is null))
-                _undoAction();
-        }
+        public void Dispose()
+            => _undoAction();
 
-        ValueTask IAsyncDisposable.DisposeAsync()
+
+        public ValueTask DisposeAsync()
         {
-            ((IDisposable)this).Dispose();
+            _undoAction();
             return new ValueTask();
         }
     }
 
-    public readonly struct ScopedAction<T> : IDisposable, IAsyncDisposable
+    public readonly ref struct ScopedAction<T>
     {
         private readonly Action<T> _undoAction;
         private readonly T _obj;
@@ -44,15 +42,13 @@ namespace System
             startAction(obj);
         }
 
-        void IDisposable.Dispose()
-        {
-            if (!(_undoAction is null || _obj is null))
-                _undoAction(_obj);
-        }
+        public void Dispose()
+            => _undoAction(_obj);
 
-        ValueTask IAsyncDisposable.DisposeAsync()
+
+        public ValueTask DisposeAsync()
         {
-            ((IDisposable)this).Dispose();
+            _undoAction(_obj);
             return new ValueTask();
         }
     }
