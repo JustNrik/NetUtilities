@@ -2,14 +2,14 @@
 #nullable enable
 namespace System
 {
-    public readonly ref struct ScopedAction
+    public readonly ref struct ActionScope
     {
         private readonly Action _undoAction;
 
-        public static ScopedAction CreateScope(Action startAction, Action undoAction)
-            => new ScopedAction(startAction, undoAction);
+        public static ActionScope Create(Action startAction, Action undoAction)
+            => new ActionScope(startAction, undoAction);
 
-        private ScopedAction(Action startAction, Action undoAction)
+        private ActionScope(Action startAction, Action undoAction)
         {
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
             if (undoAction is null) throw new ArgumentNullException(nameof(undoAction));
@@ -28,15 +28,15 @@ namespace System
         }
     }
 
-    public readonly ref struct ScopedAction<T>
+    public readonly ref struct ActionScope<T>
     {
         private readonly Action<T> _undoAction;
         private readonly T _obj;
 
-        public static ScopedAction<T> CreateScope(T obj, Action<T> startAction, Action<T> undoAction)
-            => new ScopedAction<T>(ref obj, startAction, undoAction);
+        public static ActionScope<T> Create(T obj, Action<T> startAction, Action<T> undoAction)
+            => new ActionScope<T>(ref obj, startAction, undoAction);
 
-        private ScopedAction(ref T obj, Action<T> startAction, Action<T> undoAction)
+        private ActionScope(ref T obj, Action<T> startAction, Action<T> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
@@ -57,16 +57,16 @@ namespace System
         }
     }
 
-    public readonly ref struct ScopedAction<T1, T2>
+    public readonly ref struct ActionScope<T1, T2>
     {
         private readonly Action<T1, T2> _undoAction;
         private readonly T1 _obj;
         private readonly T2 _obj2;
 
-        public static ScopedAction<T1, T2> CreateScope(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
-            => new ScopedAction<T1, T2>(ref obj, ref obj2, startAction, undoAction);
+        public static ActionScope<T1, T2> Create(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
+            => new ActionScope<T1, T2>(ref obj, ref obj2, startAction, undoAction);
 
-        private ScopedAction(ref T1 obj, ref T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
+        private ActionScope(ref T1 obj, ref T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
@@ -89,17 +89,17 @@ namespace System
 
     }
 
-    public readonly ref struct ScopedAction<T1, T2, T3>
+    public readonly ref struct ActionScope<T1, T2, T3>
     {
         private readonly Action<T1, T2, T3> _undoAction;
         private readonly T1 _obj;
         private readonly T2 _obj2;
         private readonly T3 _obj3;
 
-        public static ScopedAction<T1, T2, T3> CreateScope(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
-            => new ScopedAction<T1, T2, T3>(ref obj, ref obj2, ref obj3, startAction, undoAction);
+        public static ActionScope<T1, T2, T3> Create(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
+            => new ActionScope<T1, T2, T3>(ref obj, ref obj2, ref obj3, startAction, undoAction);
 
-        private ScopedAction(ref T1 obj, ref T2 obj2, ref T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
+        private ActionScope(ref T1 obj, ref T2 obj2, ref T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));

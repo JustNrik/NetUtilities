@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 #nullable enable
 namespace System
 {
-    public readonly ref struct Scope
+    public readonly ref struct BindedScope
     {
         private readonly Action _undoAction;
-        public Scope(Action undoFunc) 
+        public BindedScope(Action undoFunc) 
             => _undoAction = undoFunc;
         private static Action CreateAction<TResult>(object? obj, MemberInfo? memberInfo, TResult newValue)
         {
@@ -28,18 +28,18 @@ namespace System
             }
         }
 
-        public static Scope CreateScope<TResult>(Expression<Func<TResult>> propertyFunc, TResult newValue)
+        public static BindedScope Create<TResult>(Expression<Func<TResult>> propertyFunc, TResult newValue)
         {
             var memberInfo = (propertyFunc.Body as MemberExpression)?.Member;
             var undoFunc = CreateAction(null, memberInfo, newValue);
-            return new Scope(undoFunc);
+            return new BindedScope(undoFunc);
         }
 
-        public static Scope CreateScope<T, TResult>(T obj, Expression<Func<T, TResult>> propertyFunc, TResult newValue)
+        public static BindedScope Create<T, TResult>(T obj, Expression<Func<T, TResult>> propertyFunc, TResult newValue)
         {
             var memberInfo = (propertyFunc.Body as MemberExpression)?.Member;
             var undoFunc = CreateAction(null, memberInfo, newValue);
-            return new Scope(undoFunc);
+            return new BindedScope(undoFunc);
         }
 
         public void Dispose()
