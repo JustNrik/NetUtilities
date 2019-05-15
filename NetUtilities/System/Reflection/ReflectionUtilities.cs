@@ -1,4 +1,5 @@
-﻿namespace System.Reflection
+﻿#nullable enable
+namespace System.Reflection
 {
     public static partial class ReflectionUtilities
     {

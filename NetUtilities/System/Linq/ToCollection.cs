@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-
+#nullable enable
 namespace System.Linq
 {
     public static partial class LinqUtilities

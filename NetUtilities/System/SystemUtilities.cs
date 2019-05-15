@@ -1,5 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
-
+#nullable enable
 namespace System
 {
     public static class SystemUtilities
@@ -25,7 +25,7 @@ namespace System
                 end++;
             }
 
-            return input[start..end];
+            return input[(start..end)!];
         }
 
         public static MutableString SubstringBetween(this MutableString input, char leftBound, char rightBound, bool includeBounds = false)

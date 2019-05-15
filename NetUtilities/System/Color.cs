@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+#nullable enable
 namespace System
 {
     [StructLayout(LayoutKind.Sequential, Size = 3, Pack = 1)]

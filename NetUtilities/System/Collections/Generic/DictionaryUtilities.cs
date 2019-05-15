@@ -1,4 +1,5 @@
-﻿namespace System.Collections.Generic
+﻿#nullable enable
+namespace System.Collections.Generic
 {
     public static class DictionaryUtilities
     {

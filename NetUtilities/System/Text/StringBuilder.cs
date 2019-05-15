@@ -1,4 +1,5 @@
-﻿namespace System.Text
+﻿#nullable enable
+namespace System.Text
 {
     public static class StringBuilderUtils
     {

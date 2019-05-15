@@ -1,12 +1,15 @@
 ﻿using System.Threading.Tasks;
-
+#nullable enable
 namespace System
 {
     public readonly ref struct ScopedAction
     {
         private readonly Action _undoAction;
 
-        public ScopedAction(Action startAction, Action undoAction)
+        public static ScopedAction CreateScope(Action startAction, Action undoAction)
+            => new ScopedAction(startAction, undoAction);
+
+        private ScopedAction(Action startAction, Action undoAction)
         {
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
             if (undoAction is null) throw new ArgumentNullException(nameof(undoAction));
@@ -30,7 +33,10 @@ namespace System
         private readonly Action<T> _undoAction;
         private readonly T _obj;
 
-        public ScopedAction(T obj, Action<T> startAction, Action<T> undoAction)
+        public static ScopedAction<T> CreateScope(T obj, Action<T> startAction, Action<T> undoAction)
+            => new ScopedAction<T>(ref obj, startAction, undoAction);
+
+        private ScopedAction(ref T obj, Action<T> startAction, Action<T> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
@@ -57,7 +63,10 @@ namespace System
         private readonly T1 _obj;
         private readonly T2 _obj2;
 
-        public ScopedAction(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
+        public static ScopedAction<T1, T2> CreateScope(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
+            => new ScopedAction<T1, T2>(ref obj, ref obj2, startAction, undoAction);
+
+        private ScopedAction(ref T1 obj, ref T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
@@ -87,7 +96,10 @@ namespace System
         private readonly T2 _obj2;
         private readonly T3 _obj3;
 
-        public ScopedAction(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
+        public static ScopedAction<T1, T2, T3> CreateScope(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
+            => new ScopedAction<T1, T2, T3>(ref obj, ref obj2, ref obj3, startAction, undoAction);
+
+        private ScopedAction(ref T1 obj, ref T2 obj2, ref T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));

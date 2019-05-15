@@ -1,5 +1,5 @@
 ﻿using static System.Console;
-
+#nullable enable
 namespace System
 {
     public static class ConsoleUtilities

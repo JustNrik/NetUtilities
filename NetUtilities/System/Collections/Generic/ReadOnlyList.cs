@@ -1,5 +1,5 @@
 ﻿using System.Linq;
-
+#nullable enable
 namespace System.Collections.Generic
 {
     /// <summary>
@@ -88,7 +88,7 @@ namespace System.Collections.Generic
                     return element;
             }
 
-            return default;
+            return default!;
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace System.Collections.Generic
                     return element;
             }
 
-            return default;
+            return default!;
         }
 
         /// <summary>

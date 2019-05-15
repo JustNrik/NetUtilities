@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
+#nullable enable
 namespace System.Linq
 {
     public static partial class LinqUtilities
@@ -37,7 +37,7 @@ namespace System.Linq
 
             IEnumerable<TResult> BulkByIterator()
             {
-                TSource[] bucket = null;
+                TSource[]? bucket = null;
                 var count = 0;
 
                 foreach (var item in source)

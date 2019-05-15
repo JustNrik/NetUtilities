@@ -1,3 +1,4 @@
+#nullable enable
 namespace System.Diagnostics
 {
     /// <summary>

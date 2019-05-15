@@ -1,4 +1,5 @@
-﻿namespace System.Threading.Tasks
+﻿#nullable enable
+namespace System.Threading.Tasks
 {
     public static partial class TasksUtilities
     {

@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using System.Text;
 using Inline = System.Runtime.CompilerServices.MethodImplAttribute;
 using static System.Runtime.CompilerServices.MethodImplOptions;
+#nullable enable
 namespace System
 {
     /// <summary>
@@ -238,7 +238,7 @@ namespace System
         }
 
         public string this[Range range]
-            => ToString()[range];
+            => ToString()[range!];
         public bool Contains(string item)
             => IndexOf(item) != -1;
 

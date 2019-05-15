@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Xml.Serialization;
-
+#nullable enable
 namespace System.Xml
 {
     public static class XmlConvert
