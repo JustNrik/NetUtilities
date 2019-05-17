@@ -28,17 +28,17 @@ namespace System
             }
         }
 
-        public static BindedScope Create<TResult>(Expression<Func<TResult>> propertyFunc, TResult newValue)
+        public static BindedScope Create<TValue>(Expression<Func<TValue>> propertyFunc, TValue newValue)
         {
             var memberInfo = (propertyFunc.Body as MemberExpression)?.Member;
             var undoFunc = CreateAction(null, memberInfo, newValue);
             return new BindedScope(undoFunc);
         }
 
-        public static BindedScope Create<T, TResult>(T obj, Expression<Func<T, TResult>> propertyFunc, TResult newValue)
+        public static BindedScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> propertyFunc, TValue newValue)
         {
             var memberInfo = (propertyFunc.Body as MemberExpression)?.Member;
-            var undoFunc = CreateAction(null, memberInfo, newValue);
+            var undoFunc = CreateAction(obj, memberInfo, newValue);
             return new BindedScope(undoFunc);
         }
 

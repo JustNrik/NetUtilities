@@ -69,6 +69,7 @@ namespace System
         private ActionScope(ref T1 obj, ref T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
+            if (obj2 is null) throw new ArgumentNullException(nameof(obj2));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
             if (undoAction is null) throw new ArgumentNullException(nameof(undoAction));
 
@@ -102,6 +103,8 @@ namespace System
         private ActionScope(ref T1 obj, ref T2 obj2, ref T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
         {
             if (obj is null) throw new ArgumentNullException(nameof(obj));
+            if (obj2 is null) throw new ArgumentNullException(nameof(obj2));
+            if (obj3 is null) throw new ArgumentNullException(nameof(obj3));
             if (startAction is null) throw new ArgumentNullException(nameof(startAction));
             if (undoAction is null) throw new ArgumentNullException(nameof(undoAction));
 
