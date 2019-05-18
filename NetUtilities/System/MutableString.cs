@@ -60,8 +60,8 @@ namespace System
         public MutableString(StringBuilder? builder)
             => _builder = builder ?? new StringBuilder();
 
-        public MutableString(string value, int startIndex, int capacity, int length)
-            => _builder = new StringBuilder(value, startIndex, length, capacity);
+        public MutableString(string? value, int startIndex, int capacity, int count)
+            => _builder = new StringBuilder(value, startIndex, count, capacity);
         #endregion
         #region explicit interface implementation
         int ICollection<char>.Count 
@@ -234,9 +234,10 @@ namespace System
             return this;
         }
 
-        public MutableString Remove(int startIndex, int length)
+        public MutableString Remove(int startIndex, int count)
         {
-            _builder.Remove(startIndex, length);
+            EnsureRange(startIndex, count);
+            _builder.Remove(startIndex, count);
             return this;
         }
 
@@ -245,6 +246,7 @@ namespace System
 
         public MutableString Replace(char oldChar, char newChar, int startIndex, int count)
         {
+            EnsureRange(startIndex, count);
             _builder.Replace(oldChar, newChar, startIndex, count);
             return this;
         }
@@ -254,6 +256,7 @@ namespace System
 
         public MutableString Replace(string? oldStr, string? newStr, int startIndex, int count)
         {
+            EnsureRange(startIndex, count);
             _builder.Replace(oldStr, newStr, startIndex, count);
             return this;
         }
@@ -296,16 +299,15 @@ namespace System
         public int IndexOf(char item, int startIndex)
             => IndexOf(item, startIndex, Length - startIndex);
 
-        public int IndexOf(char item, int startIndex, int length)
+        public int IndexOf(char item, int startIndex, int count)
         {
-            if (startIndex >= Length || 
-                startIndex + length > Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
-            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
-            if (length == 0) return -1;
+            EnsureRange(startIndex, count);
+
+            if (count == 0) return -1;
 
             int index = startIndex;
 
-            for (int counter = 1; counter <= length; counter++, index++)
+            for (int counter = 1; counter <= count; counter++, index++)
             {
                 if (item == this[index])
                     return index;
@@ -330,6 +332,8 @@ namespace System
 
         public int[] IndexesOf(char value, int startIndex, int count)
         {
+            EnsureRange(startIndex, count);
+
             if (count == 0) return new int[0];
 
             var currentIndex = IndexOf(value, startIndex, count);
@@ -435,16 +439,15 @@ namespace System
         public int LastIndexOf(char item, int startIndex)
             => LastIndexOf(item, startIndex, Length - startIndex);
 
-        public int LastIndexOf(char item, int startIndex, int length)
+        public int LastIndexOf(char item, int startIndex, int count)
         {
-            if (startIndex >= Length || 
-                startIndex + length >= Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
-            if (length < 0) throw new ArgumentOutOfRangeException(nameof(length));
-            if (length == 0) return -1;
+            EnsureRange(startIndex, count);
+
+            if (count == 0) return -1;
 
             int index = Length - 1;
 
-            for (int counter = 1; counter <= length; counter++, index--)
+            for (int counter = 1; counter <= count; counter++, index--)
             {
                 if (item == this[index])
                     return index;
@@ -531,6 +534,12 @@ namespace System
         #region static methods
         public static bool IsNullOrEmpty(MutableString? input)
             => input is null || input.Length == 0;
+
+        private void EnsureRange(int startIndex, int count)
+        {
+            if (startIndex < 0 || startIndex > Length || startIndex + count > Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+        }
         #endregion
     }
 }
