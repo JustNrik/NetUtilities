@@ -9,9 +9,9 @@ namespace System
     /// This class is a handy wrapper of <see cref="StringBuilder"/> class for string manipulation with minimal cost.
     /// </summary>
     public sealed class MutableString :
-        IEnumerable, IEnumerable<char>, 
+        IEnumerable, IEnumerable<char>,
         ICollection, ICollection<char>,
-        IComparable, IComparable<string>, IComparable<MutableString>, 
+        IComparable, IComparable<string>, IComparable<MutableString>,
         IEquatable<string>, IEquatable<MutableString>
     {
         #region fields and properties
@@ -35,8 +35,37 @@ namespace System
             set => _builder[index] = value;
         }
 
+        public char this[Index index]
+        {
+            get => _builder[index.IsFromEnd ? Length - index.Value : index.Value];
+            set => _builder[index.IsFromEnd ? Length - index.Value : index.Value] = value;
+        }
+
+        private readonly object _lock = new object();
+
         public string this[Range range]
-            => ToString()[range!];
+        {
+            get
+            {
+                lock (_lock)
+                {
+                    (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
+                    return Substring(tuple.Offset, tuple.Length);
+                }
+            }
+            set
+            {
+                lock (_lock)
+                {
+                    (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
+
+                    EnsureRange(tuple.Offset, tuple.Length);
+
+                    for (int index = 0; index < tuple.Length; index++, tuple.Offset++)
+                        this[tuple.Offset] = value[index];
+                }
+            }
+        }
 
         public int MaxCapacity
             => _builder.MaxCapacity;
@@ -64,19 +93,19 @@ namespace System
             => _builder = new StringBuilder(value, startIndex, count, capacity);
         #endregion
         #region explicit interface implementation
-        int ICollection<char>.Count 
+        int ICollection<char>.Count
             => Length;
 
-        bool ICollection<char>.IsReadOnly 
+        bool ICollection<char>.IsReadOnly
             => false;
 
-        int ICollection.Count 
+        int ICollection.Count
             => Length;
 
-        bool ICollection.IsSynchronized 
+        bool ICollection.IsSynchronized
             => false;
 
-        object ICollection.SyncRoot 
+        object ICollection.SyncRoot
             => this;
 
         IEnumerator<char> IEnumerable<char>.GetEnumerator()
@@ -181,9 +210,22 @@ namespace System
             => new Memory<char>(mutable.ToCharArray());
         #endregion
         #region instace methods
+        #region override from System.Object
         public override string ToString()
             => _builder.ToString();
 
+        public override bool Equals(object obj)
+            => obj switch
+        {
+            MutableString mutable => Equals(mutable),
+            string immutable => Equals(immutable),
+            _ => false
+        };
+
+        public override int GetHashCode()
+            => _builder.GetHashCode();
+        #endregion
+        #region Append
         public MutableString Append(char item)
         {
             _builder.Append(item);
@@ -202,6 +244,54 @@ namespace System
             return this;
         }
 
+        public MutableString AppendFormat(string? format, params object[]? args)
+        {
+            _builder.AppendFormat(format, args);
+            return this;
+        }
+
+        public MutableString AppendFormat(IFormatProvider provider, string? format, params object[]? args)
+        {
+            _builder.AppendFormat(provider, format, args);
+            return this;
+        }
+
+        public MutableString AppendJoin(char separator, params object[] values)
+        {
+            _builder.AppendJoin(separator, values);
+            return this;
+        }
+
+        public MutableString AppendJoin(char separator, params string[] values)
+        {
+            _builder.AppendJoin(separator, values);
+            return this;
+        }
+
+        public MutableString AppendJoin(string separator, params object[] values)
+        {
+            _builder.AppendJoin(separator, values);
+            return this;
+        }
+
+        public MutableString AppendJoin(string separator, params string[] values)
+        {
+            _builder.AppendJoin(separator, values);
+            return this;
+        }
+
+        public MutableString AppendJoin<T>(char separator, IEnumerable<T> values)
+        {
+            _builder.AppendJoin(separator, values);
+            return this;
+        }
+
+        public MutableString AppendJoin<T>(string separator, IEnumerable<T> values)
+        {
+            _builder.AppendJoin(separator, values);
+            return this;
+        }
+
         public MutableString AppendLine(char item)
             => Append(item + Environment.NewLine);
 
@@ -210,30 +300,22 @@ namespace System
 
         public MutableString AppendLine(object? item)
             => Append(item + Environment.NewLine);
-
+        #endregion
+        #region Equals
         public bool Equals(string other)
             => other.Equals(this);
 
         public bool Equals(MutableString other)
-            => ((string)other).Equals(this);
-
-        public override bool Equals(object obj)
-            => obj switch
-            {
-                string str => Equals(str),
-                MutableString mutable => Equals(mutable),
-                _ => false
-            };
-
-        public override int GetHashCode()
-            => _builder.GetHashCode();
-
+            => other.Equals((string)this);
+        #endregion
+        #region Insert
         public MutableString Insert(int index, object? value)
         {
             _builder.Insert(index, value);
             return this;
         }
-
+        #endregion
+        #region Remove
         public MutableString Remove(int startIndex, int count)
         {
             EnsureRange(startIndex, count);
@@ -241,115 +323,11 @@ namespace System
             return this;
         }
 
-        public MutableString Replace(char oldChar, char newChar)
-            => Replace(oldChar, newChar, 0, _builder.Length);
-
-        public MutableString Replace(char oldChar, char newChar, int startIndex, int count)
-        {
-            EnsureRange(startIndex, count);
-            _builder.Replace(oldChar, newChar, startIndex, count);
-            return this;
-        }
-
-        public MutableString Replace(string? oldStr, string? newStr)
-            => Replace(oldStr, newStr, 0, _builder.Length);
-
-        public MutableString Replace(string? oldStr, string? newStr, int startIndex, int count)
-        {
-            EnsureRange(startIndex, count);
-            _builder.Replace(oldStr, newStr, startIndex, count);
-            return this;
-        }
-
-        public MutableString AppendFormat(string? format, params object[]? args)
-        {
-            _builder.AppendFormat(format, args);
-            return this;
-        }
-
-        public char[] ToCharArray() 
-            => _builder.ToString().ToCharArray();
-
-        public IEnumerable<char> AsEnumerable()
-            => this;
-
         public MutableString RemoveAll()
         {
             _builder.Clear();
             return this;
         }
-
-        public bool Contains(char item)
-        {
-            for (int x = 0; x < Length; x++)
-            {
-                if (this[x] == item)
-                    return true;
-            }
-
-            return false;
-        }
-
-        public bool Contains(string? item)
-            => IndexOf(item) != -1;
-
-        public int IndexOf(char item)
-            => IndexOf(item, 0, Length);
-
-        public int IndexOf(char item, int startIndex)
-            => IndexOf(item, startIndex, Length - startIndex);
-
-        public int IndexOf(char item, int startIndex, int count)
-        {
-            EnsureRange(startIndex, count);
-
-            if (count == 0) return -1;
-
-            int index = startIndex;
-
-            for (int counter = 1; counter <= count; counter++, index++)
-            {
-                if (item == this[index])
-                    return index;
-            }
-
-            return -1;
-        }
-
-        public int IndexOf(string? item)
-            => IndexOf(item, 0, Length);
-
-        public int IndexOf(string? item, int startIndex)
-            => IndexOf(item, startIndex, Length - startIndex);
-        public int IndexOf(string? item, int startIndex, int count)
-            => ((string)this).IndexOf(item, startIndex, count);
-
-        public int[] IndexesOf(char item)
-            => IndexesOf(item, 0, Length);
-
-        public int[] IndexesOf(char item, int startIndex)
-            => IndexesOf(item, startIndex, Length - startIndex);
-
-        public int[] IndexesOf(char value, int startIndex, int count)
-        {
-            EnsureRange(startIndex, count);
-
-            if (count == 0) return new int[0];
-
-            var currentIndex = IndexOf(value, startIndex, count);
-            var result = new List<int>(Length);
-
-            while (currentIndex != -1)
-            {
-                result.Add(currentIndex);
-                currentIndex = IndexOf(value, currentIndex + 1);
-            }
-
-            return result.ToArray();
-        }
-
-        public void CopyTo(char[]? array, int arrayIndex)
-            => ((ICollection)this).CopyTo(array, arrayIndex);
 
         public MutableString Remove(char item)
         {
@@ -418,12 +396,114 @@ namespace System
             Remove(item);
             return true;
         }
+        #endregion
+        #region Replace
+        public MutableString Replace(char oldChar, char newChar)
+            => Replace(oldChar, newChar, 0, _builder.Length);
+
+        public MutableString Replace(char oldChar, char newChar, int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+            _builder.Replace(oldChar, newChar, startIndex, count);
+            return this;
+        }
+
+        public MutableString Replace(string? oldStr, string? newStr)
+            => Replace(oldStr, newStr, 0, _builder.Length);
+
+        public MutableString Replace(string? oldStr, string? newStr, int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+            _builder.Replace(oldStr, newStr, startIndex, count);
+            return this;
+        }
+        #endregion
+        #region Others
+        public char[] ToCharArray()
+            => ToString().ToCharArray(); // Tested and this is faster than creating the array manually
+
+        public IEnumerable<char> AsEnumerable()
+            => this;
+
+        public void CopyTo(char[]? array, int arrayIndex)
+            => ((ICollection)this).CopyTo(array, arrayIndex);
+        #endregion
+        #region Contains
+        public bool Contains(char item)
+        {
+            for (int x = 0; x < Length; x++)
+            {
+                if (this[x] == item)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public bool Contains(string? item)
+            => IndexOf(item) != -1;
+        #endregion
+        #region IndexOf
+        public int IndexOf(char item)
+            => IndexOf(item, 0, Length);
+
+        public int IndexOf(char item, int startIndex)
+            => IndexOf(item, startIndex, Length - startIndex);
+
+        public int IndexOf(char item, int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+
+            if (count == 0) return -1;
+
+            int index = startIndex;
+
+            for (int counter = 1; counter <= count; counter++, index++)
+            {
+                if (item == this[index])
+                    return index;
+            }
+
+            return -1;
+        }
+
+        public int IndexOf(string? item)
+            => IndexOf(item, 0, Length);
+
+        public int IndexOf(string? item, int startIndex)
+            => IndexOf(item, startIndex, Length - startIndex);
+        public int IndexOf(string? item, int startIndex, int count)
+            => ((string)this).IndexOf(item, startIndex, count);
+
+        public int[] IndexesOf(char item)
+            => IndexesOf(item, 0, Length);
+
+        public int[] IndexesOf(char item, int startIndex)
+            => IndexesOf(item, startIndex, Length - startIndex);
+
+        public int[] IndexesOf(char value, int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+
+            if (count == 0) return new int[0];
+
+            var currentIndex = IndexOf(value, startIndex, count);
+            var result = new List<int>(Length);
+
+            while (currentIndex != -1)
+            {
+                result.Add(currentIndex);
+                currentIndex = IndexOf(value, currentIndex + 1);
+            }
+
+            return result.ToArray();
+        }
 
         public int IndexOfAny(params char[]? chars)
         {
             if (chars is null) throw new ArgumentNullException(nameof(chars));
             if (chars.Length == 0) return -1;
-            
+
             foreach (var c in chars)
             {
                 var index = IndexOf(c);
@@ -432,6 +512,7 @@ namespace System
 
             return -1;
         }
+
 
         public int LastIndexOf(char item)
             => LastIndexOf(item, 0, Length);
@@ -469,16 +550,19 @@ namespace System
 
             return -1;
         }
-
+        #endregion
+        #region StartsWith
         public bool StartsWith(char value)
             => value == this[0];
+
         public bool EndsWith(char value)
             => value == this[Length - 1];
+
         public bool StartsWith(string? value)
         {
-            if (string.IsNullOrEmpty(value)) return IsNullOrEmpty(this);
-            if (value.Length > Length) return false;
-            if (value.Length > Length) return value == this;
+            if (value is null || value.Length > Length) return false;
+            if (value.Length == 0) return Length == 0;
+            if (value.Length == Length) return value == this;
 
             for (int index = 0; index < value.Length; index++)
             {
@@ -491,8 +575,8 @@ namespace System
 
         public bool EndsWith(string? value)
         {
-            if (string.IsNullOrEmpty(value)) return IsNullOrEmpty(this);
-            if (value.Length > Length) return false;
+            if (value is null || value.Length > Length) return false;
+            if (value.Length == 0) return Length == 0;
             if (value.Length == Length) return value == this;
 
             for (int index = Length - value.Length; index < Length; index++)
@@ -503,7 +587,8 @@ namespace System
 
             return true;
         }
-
+        #endregion
+        #region Split
         public MutableString[] Split(char separator)
             => (this / separator).Select(SystemUtilities.ToMutable).ToArray();
 
@@ -518,7 +603,8 @@ namespace System
 
         public MutableString[] Split(string[] separator, StringSplitOptions options)
             => ((string)this).Split(separator, options).Select(SystemUtilities.ToMutable).ToArray();
-
+        #endregion
+        #region Padding
         public MutableString PadLeft(int totalWidth)
             => PadLeft(totalWidth, ' ');
 
@@ -531,14 +617,58 @@ namespace System
         public MutableString PadRight(int totalWidth, char paddingChar)
             => totalWidth <= Length ? this : Insert(Length, new string(paddingChar, totalWidth - Length));
         #endregion
+        #region Substring
+        public string Substring(int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+
+            var chars = new char[count];
+            var index = 0;
+
+            for (int counter = 1; counter <= count; counter++, index++, startIndex++)
+                chars[index] = this[startIndex];
+
+            return new string(chars);
+        }
+        #endregion
+        #region Slice
+        public MutableString Slice(int startIndex)
+            => Slice(startIndex, Length - startIndex); // I don't want to needlessly call range overload
+
+        public MutableString Slice(Range range)
+        {
+            (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
+            return Slice(tuple.Offset, tuple.Length);
+        }
+
+        public MutableString Slice(int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+            
+            if (startIndex > 0) _builder.Remove(0, startIndex);
+            _builder.Remove(count, Length - count);
+
+            return this;
+        }
+        #endregion
+        #endregion
         #region static methods
         public static bool IsNullOrEmpty(MutableString? input)
             => input is null || input.Length == 0;
+
+        public static bool IsNullOrWhiteSpace(MutableString? input)
+            => IsNullOrEmpty(input) || input.All(char.IsWhiteSpace);
 
         private void EnsureRange(int startIndex, int count)
         {
             if (startIndex < 0 || startIndex > Length || startIndex + count > Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+        }
+
+        private void EnsureRange(Range range)
+        {
+            (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
+            EnsureRange(tuple.Offset, tuple.Length);
         }
         #endregion
     }
