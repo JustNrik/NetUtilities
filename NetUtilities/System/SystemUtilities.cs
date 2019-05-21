@@ -49,17 +49,17 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static MutableString SubstringBetween(this MutableString? input, char leftBound, char rightBound, bool includeBounds = false)
+        public static string SubstringBetween(this MutableString? input, char leftBound, char rightBound, bool includeBounds = false)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
 
             var start = input.IndexOf(leftBound) + 1;
 
-            if (start == 0) return new MutableString();
+            if (start == 0) return string.Empty;
 
             var end = input.IndexOf(rightBound, start);
 
-            if (end == -1 || start > end) return new MutableString();
+            if (end == -1 || start > end) return string.Empty;
 
             if (includeBounds)
             {
@@ -67,20 +67,13 @@ namespace System
                 end++;
             }
 
-            var result = new MutableString(end - start + 1);
-
-            for (int index = start; index < end; index++)
-            {
-                result += input[index];
-            }
-
-            return result;
+            return input[start..end];
         }
 
         // I tested this against Math.Log method, this eye-cancer thing is by far the fastest.
         // Inlining it makes it 3 times faster. (enjoy these seven nanoseconds)
         /// <summary>
-        /// Gets the amount of difits in the provided number.
+        /// Gets the amount of digits in the provided number.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

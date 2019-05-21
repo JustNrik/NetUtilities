@@ -37,8 +37,8 @@ namespace System
 
         public char this[Index index]
         {
-            get => _builder[index.IsFromEnd ? Length - index.Value : index.Value];
-            set => _builder[index.IsFromEnd ? Length - index.Value : index.Value] = value;
+            get => _builder[index.GetOffset(Length)];
+            set => _builder[index.GetOffset(Length)] = value;
         }
 
         private readonly object _lock = new object();
@@ -49,20 +49,21 @@ namespace System
             {
                 lock (_lock)
                 {
-                    (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
-                    return Substring(tuple.Offset, tuple.Length);
+                    return Substring(range);
                 }
             }
             set
             {
                 lock (_lock)
                 {
-                    (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
+                    var (startIndex, count) = range.GetOffsetAndLength(Length);
 
-                    EnsureRange(tuple.Offset, tuple.Length);
+                    EnsureRange(startIndex, count);
 
-                    for (int index = 0; index < tuple.Length; index++, tuple.Offset++)
-                        this[tuple.Offset] = value[index];
+                    if (value.Length != count) throw new IndexOutOfRangeException();
+
+                    for (int index = 0; index < count; index++, startIndex++)
+                        this[startIndex] = value[index];
                 }
             }
         }
@@ -316,6 +317,12 @@ namespace System
         }
         #endregion
         #region Remove
+        public MutableString Remove(Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Remove(startIndex, count);
+        }
+
         public MutableString Remove(int startIndex, int count)
         {
             EnsureRange(startIndex, count);
@@ -401,6 +408,12 @@ namespace System
         public MutableString Replace(char oldChar, char newChar)
             => Replace(oldChar, newChar, 0, _builder.Length);
 
+        public MutableString Replace(char oldChar, char newChar, Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Replace(oldChar, newChar, startIndex, count);
+        }
+
         public MutableString Replace(char oldChar, char newChar, int startIndex, int count)
         {
             EnsureRange(startIndex, count);
@@ -410,6 +423,12 @@ namespace System
 
         public MutableString Replace(string? oldStr, string? newStr)
             => Replace(oldStr, newStr, 0, _builder.Length);
+
+        public MutableString Replace(string? oldStr, string? newStr, Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Replace(oldStr, newStr, startIndex, count);
+        }
 
         public MutableString Replace(string? oldStr, string? newStr, int startIndex, int count)
         {
@@ -430,10 +449,24 @@ namespace System
         #endregion
         #region Contains
         public bool Contains(char item)
+            => Contains(item, 0, Length);
+
+        public bool Contains(char item, int startIndex)
+            => Contains(item, startIndex..Length);
+
+        public bool Contains(char item, Range range)
         {
-            for (int x = 0; x < Length; x++)
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Contains(item, startIndex, count);
+        }
+
+        public bool Contains(char item, int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+
+            for (int x = 1; x <= count; x++, startIndex++)
             {
-                if (this[x] == item)
+                if (this[startIndex] == item)
                     return true;
             }
 
@@ -441,14 +474,29 @@ namespace System
         }
 
         public bool Contains(string? item)
-            => IndexOf(item) != -1;
+            => IndexOf(item, 0, Length) != -1;
+
+        public bool Contains(string? item, int startIndex)
+            => IndexOf(item, startIndex, Length) != -1;
+
+        public bool Contains(string? item, int startIndex, int count)
+            => IndexOf(item, startIndex, count) != -1;
+
+        public bool Contains(string? item, Range range)
+            => IndexOf(item, range) != -1;
         #endregion
         #region IndexOf
         public int IndexOf(char item)
             => IndexOf(item, 0, Length);
 
         public int IndexOf(char item, int startIndex)
-            => IndexOf(item, startIndex, Length - startIndex);
+            => IndexOf(item, startIndex..Length);
+
+        public int IndexOf(char item, Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return IndexOf(item, startIndex, count);
+        }
 
         public int IndexOf(char item, int startIndex, int count)
         {
@@ -472,6 +520,13 @@ namespace System
 
         public int IndexOf(string? item, int startIndex)
             => IndexOf(item, startIndex, Length - startIndex);
+
+        public int IndexOf(string? item, Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return IndexOf(item, startIndex, count);
+        }
+
         public int IndexOf(string? item, int startIndex, int count)
             => ((string)this).IndexOf(item, startIndex, count);
 
@@ -479,7 +534,13 @@ namespace System
             => IndexesOf(item, 0, Length);
 
         public int[] IndexesOf(char item, int startIndex)
-            => IndexesOf(item, startIndex, Length - startIndex);
+            => IndexesOf(item, startIndex..Length);
+
+        public int[] IndexesOf(char item, Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return IndexesOf(item, startIndex, count);
+        }
 
         public int[] IndexesOf(char value, int startIndex, int count)
         {
@@ -518,7 +579,13 @@ namespace System
             => LastIndexOf(item, 0, Length);
 
         public int LastIndexOf(char item, int startIndex)
-            => LastIndexOf(item, startIndex, Length - startIndex);
+            => LastIndexOf(item, startIndex..Length);
+
+        public int LastIndexOf(char item, Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return LastIndexOf(item, startIndex, count);
+        }
 
         public int LastIndexOf(char item, int startIndex, int count)
         {
@@ -618,27 +685,29 @@ namespace System
             => totalWidth <= Length ? this : Insert(Length, new string(paddingChar, totalWidth - Length));
         #endregion
         #region Substring
+        public string Substring(int startIndex)
+            => Substring(startIndex..Length);
+
         public string Substring(int startIndex, int count)
         {
             EnsureRange(startIndex, count);
+            return _builder.ToString(startIndex, count);
+        }
 
-            var chars = new char[count];
-            var index = 0;
-
-            for (int counter = 1; counter <= count; counter++, index++, startIndex++)
-                chars[index] = this[startIndex];
-
-            return new string(chars);
+        public string Substring(Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Substring(startIndex, count);
         }
         #endregion
         #region Slice
         public MutableString Slice(int startIndex)
-            => Slice(startIndex, Length - startIndex); // I don't want to needlessly call range overload
+            => Slice(startIndex..Length);
 
         public MutableString Slice(Range range)
         {
-            (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
-            return Slice(tuple.Offset, tuple.Length);
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Slice(startIndex, count);
         }
 
         public MutableString Slice(int startIndex, int count)
@@ -651,11 +720,94 @@ namespace System
             return this;
         }
         #endregion
+        #region Trim
+        public MutableString Trim()
+            => Trim(' ');
+
+        public MutableString Trim(char trimChar)
+        {
+            TrimStart(trimChar);
+            return TrimEnd(trimChar);
+        }
+
+        public MutableString Trim(params char[]? chars)
+        {
+            if (chars is null) throw new ArgumentNullException(nameof(chars));
+            if (chars.Length == 0) return this;
+
+            foreach (var c in chars)
+                Trim(c);
+
+            return this;
+        }
+
+        public MutableString TrimStart()
+            => TrimStart(' ');
+
+        public MutableString TrimStart(char trimChar)
+        {
+            var index = 0;
+
+            while (this[index] == trimChar)
+                index++;
+
+            if (index > 0) Remove(0, index);
+
+            return this;
+        }
+
+        public MutableString TrimStart(params char[]? chars)
+        {
+            if (chars is null) throw new ArgumentNullException(nameof(chars));
+            if (chars.Length == 0) return this;
+
+            foreach (var c in chars)
+                TrimStart(c);
+
+            return this;
+        }
+
+        public MutableString TrimEnd()
+            => TrimEnd(' ');
+
+        public MutableString TrimEnd(char trimChar)
+        {
+            var index = Length - 1;
+
+            while (this[index] == trimChar)
+                index--;
+
+            if (index < Length) Remove(++index..Length);
+
+            return this;
+        }
+
+        public MutableString TrimEnd(params char[]? chars)
+        {
+            if (chars is null) throw new ArgumentNullException(nameof(chars));
+            if (chars.Length == 0) return this;
+
+            foreach (var c in chars)
+                TrimEnd(c);
+
+            return this;
+        }
+        #endregion
         #endregion
         #region static methods
+        /// <summary>
+        /// Returns true if the <see cref="MutableString"/> is null or empty.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static bool IsNullOrEmpty(MutableString? input)
             => input is null || input.Length == 0;
 
+        /// <summary>
+        /// Returns true if the <see cref="MutableString"/> is null, empty or consists only of white-spaces characters.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static bool IsNullOrWhiteSpace(MutableString? input)
             => IsNullOrEmpty(input) || input.All(char.IsWhiteSpace);
 
@@ -665,11 +817,6 @@ namespace System
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
         }
 
-        private void EnsureRange(Range range)
-        {
-            (int Offset, int Length) tuple = range.GetOffsetAndLength(Length);
-            EnsureRange(tuple.Offset, tuple.Length);
-        }
         #endregion
     }
 }

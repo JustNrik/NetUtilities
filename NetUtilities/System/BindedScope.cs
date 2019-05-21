@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 #nullable enable
 namespace System
@@ -7,9 +8,15 @@ namespace System
     public readonly ref struct BindedScope
     {
         private readonly Action _undoAction;
-        public BindedScope(Action undoFunc) 
-            => _undoAction = undoFunc;
-        private static Action CreateAction<TResult>(object? obj, MemberInfo? memberInfo, TResult newValue)
+        private readonly CancellationTokenSource _cts;
+
+        private BindedScope(Action undoAction)
+        {
+            _undoAction = undoAction;
+            _cts = new CancellationTokenSource();
+        }
+
+        private static Action CreateAction<TResult>(object? obj, MemberInfo? memberInfo, ref TResult newValue)
         {
             TResult oldValue;
 
@@ -28,26 +35,37 @@ namespace System
             }
         }
 
-        public static BindedScope Create<TValue>(Expression<Func<TValue>> propertyFunc, TValue newValue)
+        public static BindedScope Create<TValue>(Expression<Func<TValue>> expression, TValue newValue)
         {
-            var memberInfo = (propertyFunc.Body as MemberExpression)?.Member;
-            var undoFunc = CreateAction(null, memberInfo, newValue);
+            var memberInfo = (expression.Body as MemberExpression)?.Member;
+            var undoFunc = CreateAction(null, memberInfo, ref newValue);
             return new BindedScope(undoFunc);
         }
 
-        public static BindedScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> propertyFunc, TValue newValue)
+        public static BindedScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> expression, TValue newValue)
         {
-            var memberInfo = (propertyFunc.Body as MemberExpression)?.Member;
-            var undoFunc = CreateAction(obj, memberInfo, newValue);
+            var memberInfo = (expression.Body as MemberExpression)?.Member;
+            var undoFunc = CreateAction(obj, memberInfo, ref newValue);
             return new BindedScope(undoFunc);
         }
+
+        public void Cancel()
+            => _cts.Cancel();
 
         public void Dispose()
-            => _undoAction();
+        {
+            if (!_cts.IsCancellationRequested)
+                _undoAction();
+
+            _cts.Dispose();
+        }
 
         public ValueTask DisposeAsync()
         {
-            _undoAction();
+            if (!_cts.IsCancellationRequested)
+                _undoAction();
+
+            _cts.Dispose();
             return new ValueTask();
         }
     }
