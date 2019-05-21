@@ -45,26 +45,17 @@ namespace System
 
         public string this[Range range]
         {
-            get
-            {
-                lock (_lock)
-                {
-                    return Substring(range);
-                }
-            }
+            get => Substring(range);
             set
             {
-                lock (_lock)
-                {
-                    var (startIndex, count) = range.GetOffsetAndLength(Length);
+                var (startIndex, count) = range.GetOffsetAndLength(Length);
 
-                    EnsureRange(startIndex, count);
+                EnsureRange(startIndex, count);
 
-                    if (value.Length != count) throw new IndexOutOfRangeException();
+                if (value.Length != count) throw new IndexOutOfRangeException();
 
-                    for (int index = 0; index < count; index++, startIndex++)
-                        this[startIndex] = value[index];
-                }
+                for (int index = 0; index < count; index++, startIndex++)
+                    this[startIndex] = value[index];
             }
         }
 
@@ -110,10 +101,10 @@ namespace System
             => this;
 
         IEnumerator<char> IEnumerable<char>.GetEnumerator()
-            => ToString().GetEnumerator();
+            => new MutableStringEnumerator(this);
 
         IEnumerator IEnumerable.GetEnumerator()
-            => ToString().GetEnumerator();
+            => new MutableStringEnumerator(this);
 
         int IComparable.CompareTo(object obj)
             => obj switch
@@ -313,6 +304,24 @@ namespace System
         public MutableString Insert(int index, object? value)
         {
             _builder.Insert(index, value);
+            return this;
+        }
+
+        public MutableString Insert(int index, ReadOnlySpan<char> value)
+        {
+            _builder.Insert(index, value);
+            return this;
+        }
+
+        public MutableString Insert(int index, string? value, int count)
+        {
+            _builder.Insert(index, value, count);
+            return this;
+        }
+
+        public MutableString Insert(int index, char[]? value, int startIndex, int count)
+        {
+            _builder.Insert(index, value, startIndex, count);
             return this;
         }
         #endregion
@@ -676,13 +685,13 @@ namespace System
             => PadLeft(totalWidth, ' ');
 
         public MutableString PadLeft(int totalWidth, char paddingChar)
-            => totalWidth <= Length ? this : Insert(0, new string(paddingChar, totalWidth - Length));
+            => totalWidth <= Length ? this : Insert(0, new string(paddingChar, totalWidth - Length).AsSpan());
 
         public MutableString PadRight(int totalWidth)
             => PadRight(totalWidth, ' ');
 
         public MutableString PadRight(int totalWidth, char paddingChar)
-            => totalWidth <= Length ? this : Insert(Length, new string(paddingChar, totalWidth - Length));
+            => totalWidth <= Length ? this : Insert(Length, new string(paddingChar, totalWidth - Length).AsSpan());
         #endregion
         #region Substring
         public string Substring(int startIndex)
@@ -818,5 +827,60 @@ namespace System
         }
 
         #endregion
+
+        private struct MutableStringEnumerator : IEnumerator<char>, ICloneable
+        {
+            private readonly MutableString _string;
+            private int _index;
+            private char _current;
+
+            public MutableStringEnumerator(MutableString mutableString)
+            {
+                _string = mutableString;
+                _index = -1;
+                _current = default;
+            }
+            public char Current
+            {
+                get
+                {
+                    if (_index == -1)
+                        throw new InvalidOperationException("Enumeration hasn't started");
+                    if (_index > _string.Length)
+                        throw new InvalidOperationException("Enumeration ended already");
+
+                    return _current;
+                }
+            }
+
+            object IEnumerator.Current
+                => Current;
+
+            public void Dispose()
+            {
+            }
+
+            public bool MoveNext()
+            {
+                if (_index < _string.Length - 1)
+                {
+                    _index++;
+                    _current = _string[_index];
+                    return true;
+                }
+
+                _index = _string.Length;
+                return false;
+            }
+
+            public void Reset()
+            {
+                _index = -1;
+                _current = default;
+            }
+
+            object ICloneable.Clone()
+                => MemberwiseClone();
+        }
     }
 }
