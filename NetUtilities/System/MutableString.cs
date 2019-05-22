@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 #nullable enable
 namespace System
 {
@@ -41,8 +42,6 @@ namespace System
             set => _builder[index.GetOffset(Length)] = value;
         }
 
-        private readonly object _lock = new object();
-
         public string this[Range range]
         {
             get => Substring(range);
@@ -58,6 +57,9 @@ namespace System
                     this[startIndex] = value[index];
             }
         }
+
+        public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
+            => Regex.Matches(this, pattern, options);
 
         public int MaxCapacity
             => _builder.MaxCapacity;
@@ -302,6 +304,12 @@ namespace System
         #endregion
         #region Insert
         public MutableString Insert(int index, object? value)
+        {
+            _builder.Insert(index, value);
+            return this;
+        }
+
+        public MutableString Insert(int index, string? value)
         {
             _builder.Insert(index, value);
             return this;

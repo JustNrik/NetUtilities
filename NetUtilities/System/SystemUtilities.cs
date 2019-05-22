@@ -19,11 +19,11 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string SubstringBetween(this string? input, char leftBound, char rightBound, bool includeBounds = false)
+        public static string SubstringBetween(this string? input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
 
-            var start = input.IndexOf(leftBound) + 1;
+            var start = input.IndexOf(leftBound, startIndex) + 1;
 
             if (start == 0) return string.Empty;
 
@@ -48,11 +48,11 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string SubstringBetween(this MutableString? input, char leftBound, char rightBound, bool includeBounds = false)
+        public static string SubstringBetween(this MutableString? input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
             if (input is null) throw new ArgumentNullException(nameof(input));
 
-            var start = input.IndexOf(leftBound) + 1;
+            var start = input.IndexOf(leftBound, startIndex) + 1;
 
             if (start == 0) return string.Empty;
 
