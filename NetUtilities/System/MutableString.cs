@@ -58,8 +58,30 @@ namespace System
             }
         }
 
+        private readonly Dictionary<string, Regex> _regexes =
+            new Dictionary<string, Regex>();
+
         public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
-            => Regex.Matches(this, pattern, options);
+        {
+            get
+            {
+                if ((options & RegexOptions.Compiled) == RegexOptions.Compiled)
+                {
+                    if (_regexes.TryGetValue(pattern, out var regex))
+                    {
+                        return regex.Matches(this);
+                    }
+                    else
+                    {
+                        regex = new Regex(pattern, options);
+                        _regexes.Add(pattern, regex);
+                        return regex.Matches(this);
+                    }
+                }
+
+                return Regex.Matches(this, pattern, options);
+            }
+        }
 
         public int MaxCapacity
             => _builder.MaxCapacity;
