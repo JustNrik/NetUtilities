@@ -17,11 +17,20 @@ namespace System
     {
         #region fields and properties
         private readonly StringBuilder _builder;
+        private string _current = string.Empty;
+        private bool _isModified = false;
 
         public int Length
         {
             get => _builder.Length;
-            set => _builder.Length = value;
+            set
+            {
+                if (value == _builder.Length)
+                    return;
+
+                _builder.Length = value;
+                _isModified = true;
+            }
         }
 
         public int Capacity
@@ -30,16 +39,14 @@ namespace System
             set => _builder.Capacity = value;
         }
 
-        public char this[int index]
-        {
-            get => _builder[index];
-            set => _builder[index] = value;
-        }
-
         public char this[Index index]
         {
             get => _builder[index.GetOffset(Length)];
-            set => _builder[index.GetOffset(Length)] = value;
+            set
+            {
+                _builder[index.GetOffset(Length)] = value;
+                _isModified = true;
+            }
         }
 
         public string this[Range range]
@@ -55,28 +62,30 @@ namespace System
 
                 for (int index = 0; index < count; index++, startIndex++)
                     this[startIndex] = value[index];
+
+                _isModified = true;
             }
         }
 
         private readonly Dictionary<string, Regex> _regexes =
             new Dictionary<string, Regex>();
 
+        //public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
+        //    => Regex.Matches(this, pattern, options);
+
         public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
         {
             get
             {
-                if ((options & RegexOptions.Compiled) == RegexOptions.Compiled)
+                if (options.HasFlag(RegexOptions.Compiled))
                 {
-                    if (_regexes.TryGetValue(pattern, out var regex))
-                    {
-                        return regex.Matches(this);
-                    }
-                    else
+                    if (!_regexes.TryGetValue(pattern, out var regex))
                     {
                         regex = new Regex(pattern, options);
                         _regexes.Add(pattern, regex);
-                        return regex.Matches(this);
                     }
+
+                    return regex.Matches(this);
                 }
 
                 return Regex.Matches(this, pattern, options);
@@ -228,7 +237,15 @@ namespace System
         #region instace methods
         #region override from System.Object
         public override string ToString()
-            => _builder.ToString();
+        {
+            if (_isModified)
+            {
+                _current = _builder.ToString();
+                _isModified = false;
+            }
+
+            return _current;
+        }
 
         public override bool Equals(object obj)
             => obj switch
@@ -245,77 +262,97 @@ namespace System
         public MutableString Append(char item)
         {
             _builder.Append(item);
+            _isModified = true;
             return this;
         }
 
         public MutableString Append(string? item)
         {
             _builder.Append(item);
+            _isModified = true;
             return this;
         }
 
         public MutableString Append(object? item)
         {
             _builder.Append(item);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendFormat(string? format, params object[]? args)
         {
             _builder.AppendFormat(format, args);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendFormat(IFormatProvider provider, string? format, params object[]? args)
         {
             _builder.AppendFormat(provider, format, args);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendJoin(char separator, params object[] values)
         {
             _builder.AppendJoin(separator, values);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendJoin(char separator, params string[] values)
         {
             _builder.AppendJoin(separator, values);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendJoin(string separator, params object[] values)
         {
             _builder.AppendJoin(separator, values);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendJoin(string separator, params string[] values)
         {
             _builder.AppendJoin(separator, values);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendJoin<T>(char separator, IEnumerable<T> values)
         {
             _builder.AppendJoin(separator, values);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendJoin<T>(string separator, IEnumerable<T> values)
         {
             _builder.AppendJoin(separator, values);
+            _isModified = true;
             return this;
         }
 
         public MutableString AppendLine(char item)
-            => Append(item + Environment.NewLine);
+        {
+            _isModified = true;
+            return Append(item + Environment.NewLine);
+        }
 
         public MutableString AppendLine(string? item)
-            => Append(item + Environment.NewLine);
+        {
+            _isModified = true;
+            return Append(item + Environment.NewLine);
+        }
 
         public MutableString AppendLine(object? item)
-            => Append(item + Environment.NewLine);
+        {
+            _isModified = true;
+            return Append(item + Environment.NewLine);
+        }
         #endregion
         #region Equals
         public bool Equals(string other)
@@ -328,30 +365,35 @@ namespace System
         public MutableString Insert(int index, object? value)
         {
             _builder.Insert(index, value);
+            _isModified = true;
             return this;
         }
 
         public MutableString Insert(int index, string? value)
         {
             _builder.Insert(index, value);
+            _isModified = true;
             return this;
         }
 
         public MutableString Insert(int index, ReadOnlySpan<char> value)
         {
             _builder.Insert(index, value);
+            _isModified = true;
             return this;
         }
 
         public MutableString Insert(int index, string? value, int count)
         {
             _builder.Insert(index, value, count);
+            _isModified = true;
             return this;
         }
 
         public MutableString Insert(int index, char[]? value, int startIndex, int count)
         {
             _builder.Insert(index, value, startIndex, count);
+            _isModified = true;
             return this;
         }
         #endregion
@@ -366,12 +408,14 @@ namespace System
         {
             EnsureRange(startIndex, count);
             _builder.Remove(startIndex, count);
+            _isModified = true;
             return this;
         }
 
         public MutableString RemoveAll()
         {
             _builder.Clear();
+            _isModified = true;
             return this;
         }
 
@@ -381,6 +425,8 @@ namespace System
 
             while ((index = IndexOf(item, index)) != -1)
                 _builder.Remove(index, 1);
+
+            _isModified = true;
 
             return this;
         }
@@ -405,42 +451,31 @@ namespace System
             while ((index = IndexOf(item, index)) != -1)
                 _builder.Remove(index, item.Length);
 
+            _isModified = true;
 
             return this;
         }
 
         public bool TryRemove(char c)
         {
-            if (!Contains(c)) return false;
             Remove(c);
-            return true;
+            return _isModified;
         }
 
         public bool TryRemove(params char[]? chars)
         {
             if (chars is null || chars.Length == 0) return false;
 
-            int count = 0;
-
             foreach (var c in chars)
-            {
-                if (!Contains(c))
-                    continue;
-
                 Remove(c);
-                count++;
-            }
 
-            return count == 0;
+            return _isModified;
         }
 
         public bool TryRemove(string? item)
         {
-            if (!Contains(item))
-                return false;
-
             Remove(item);
-            return true;
+            return _isModified;
         }
         #endregion
         #region Replace
@@ -457,6 +492,7 @@ namespace System
         {
             EnsureRange(startIndex, count);
             _builder.Replace(oldChar, newChar, startIndex, count);
+            _isModified = true;
             return this;
         }
 
@@ -473,6 +509,7 @@ namespace System
         {
             EnsureRange(startIndex, count);
             _builder.Replace(oldStr, newStr, startIndex, count);
+            _isModified = true;
             return this;
         }
         #endregion
@@ -695,33 +732,45 @@ namespace System
         }
         #endregion
         #region Split
-        public MutableString[] Split(char separator)
-            => (this / separator).Select(SystemUtilities.ToMutable).ToArray();
+        public string[] Split(char separator)
+            => this / separator;
 
-        public MutableString[] Split(string separator)
-            => (this / separator).Select(SystemUtilities.ToMutable).ToArray();
+        public string[] Split(string separator)
+            => this / separator;
 
-        public MutableString[] Split(char separator, StringSplitOptions options)
-            => ((string)this).Split(separator, options).Select(SystemUtilities.ToMutable).ToArray();
+        public string[] Split(char separator, StringSplitOptions options)
+            => ((string)this).Split(separator, options);
 
-        public MutableString[] Split(params char[] separator)
-            => ((string)this).Split(separator).Select(SystemUtilities.ToMutable).ToArray();
+        public string[] Split(params char[] separator)
+            => ((string)this).Split(separator);
 
-        public MutableString[] Split(string[] separator, StringSplitOptions options)
-            => ((string)this).Split(separator, options).Select(SystemUtilities.ToMutable).ToArray();
+        public string[] Split(string[] separator, StringSplitOptions options)
+            => ((string)this).Split(separator, options);
         #endregion
         #region Padding
         public MutableString PadLeft(int totalWidth)
             => PadLeft(totalWidth, ' ');
 
         public MutableString PadLeft(int totalWidth, char paddingChar)
-            => totalWidth <= Length ? this : Insert(0, new string(paddingChar, totalWidth - Length).AsSpan());
+        {
+            if (totalWidth <= Length)
+                return this;
+
+            _isModified = true;
+            return Insert(0, new string(paddingChar, totalWidth - Length).AsSpan());
+        }
 
         public MutableString PadRight(int totalWidth)
             => PadRight(totalWidth, ' ');
 
         public MutableString PadRight(int totalWidth, char paddingChar)
-            => totalWidth <= Length ? this : Insert(Length, new string(paddingChar, totalWidth - Length).AsSpan());
+        {
+            if (totalWidth <= Length)
+                return this;
+
+            _isModified = true;
+            return Insert(Length, new string(paddingChar, totalWidth - Length).AsSpan());
+        }
         #endregion
         #region Substring
         public string Substring(int startIndex)
@@ -755,6 +804,8 @@ namespace System
             
             if (startIndex > 0) _builder.Remove(0, startIndex);
             _builder.Remove(count, Length - count);
+
+            _isModified = true;
 
             return this;
         }
@@ -792,6 +843,8 @@ namespace System
 
             if (index > 0) Remove(0, index);
 
+            _isModified = true;
+
             return this;
         }
 
@@ -817,6 +870,8 @@ namespace System
                 index--;
 
             if (index < Length) Remove(++index..Length);
+
+            _isModified = true;
 
             return this;
         }
