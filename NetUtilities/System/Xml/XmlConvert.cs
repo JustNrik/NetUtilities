@@ -33,7 +33,7 @@ namespace System.Xml
         /// <returns></returns>
         public static T DeserializeObject<T>(string input)
         {
-            if (string.IsNullOrEmpty(input) || string.IsNullOrWhiteSpace(input))
+            if (string.IsNullOrWhiteSpace(input))
                 throw new InvalidOperationException("The input is not deserializable, it's null, empty or consists only of white-spaces");
 
             using var stringReader = new StringReader(input);
@@ -48,8 +48,8 @@ namespace System.Xml
         /// <typeparam name="T"></typeparam>
         /// <param name="element"></param>
         /// <returns></returns>
-        public static T ToObject<T>(this XElement element)
-            => DeserializeObject<T>(element.ToString());
+        public static T ToObject<T>(this XNode node)
+            => DeserializeObject<T>(node.ToString());
 
         /// <summary>
         /// Extension method for <see cref="SerializeObject{T}(T)"/>

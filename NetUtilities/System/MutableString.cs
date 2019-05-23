@@ -18,8 +18,12 @@ namespace System
         #region fields and properties
         private readonly StringBuilder _builder;
         private string _current = string.Empty;
-        private bool _isModified = false;
+        private bool _isModified = true;
 
+        /// <summary>
+        /// Gets or sets the Length of the builder in the current instance.
+        /// </summary>
+        /// <exception cref="IndexOutOfRangeException"/>
         public int Length
         {
             get => _builder.Length;
@@ -33,12 +37,21 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// Gets or sets the Capacity of the builder in the current instance.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException"/>
         public int Capacity
         {
             get => _builder.Capacity;
             set => _builder.Capacity = value;
         }
 
+        /// <summary>
+        /// Gets or sets a <see cref="char"/> in the specified <see cref="Index"/>.
+        /// </summary>
+        /// <param name="index"/>
+        /// <returns/>
         public char this[Index index]
         {
             get => _builder[index.GetOffset(Length)];
@@ -49,6 +62,13 @@ namespace System
             }
         }
 
+        /// <summary>
+        /// Gets or sets a <see cref="string"/> in the specified <see cref="Range"/>.
+        /// The input string must have the same length of the string you want to edit, otherwise an <see cref="IndexOutOfRangeException"/> will be thrown.
+        /// </summary>
+        /// <exception cref="IndexOutOfRangeException"/>
+        /// <param name="range"/>
+        /// <returns/>
         public string this[Range range]
         {
             get => Substring(range);
@@ -67,31 +87,28 @@ namespace System
             }
         }
 
-        private readonly Dictionary<string, Regex> _regexes =
-            new Dictionary<string, Regex>();
+        /// <summary>
+        /// Returns a <see cref="MatchCollection"/> with the provided pattern.
+        /// </summary>
+        /// <param name="pattern"/>
+        /// <param name="options"/>
+        /// <returns/>
+        public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
+            => Regex.Matches(this, pattern, options);
 
-        //public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
-        //    => Regex.Matches(this, pattern, options);
+        /// <summary>
+        /// Returns a <see cref="string"/> with the replacement applied on the pattern given. This method doesn't mutate the current instance.
+        /// </summary>
+        /// <param name="pattern"/>
+        /// <param name="replacement"/>
+        /// <param name="options"/>
+        /// <returns/>
+        public string this[[RegexPattern]string pattern, string replacement, RegexOptions options = RegexOptions.None]
+            => Regex.Replace(this, pattern, replacement, options);
 
-        public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
-        {
-            get
-            {
-                if (options.HasFlag(RegexOptions.Compiled))
-                {
-                    if (!_regexes.TryGetValue(pattern, out var regex))
-                    {
-                        regex = new Regex(pattern, options);
-                        _regexes.Add(pattern, regex);
-                    }
-
-                    return regex.Matches(this);
-                }
-
-                return Regex.Matches(this, pattern, options);
-            }
-        }
-
+        /// <summary>
+        /// Returns the maximun capacity of the builder.
+        /// </summary>
         public int MaxCapacity
             => _builder.MaxCapacity;
         #endregion
@@ -167,36 +184,26 @@ namespace System
         #endregion
         #region operators
         public static bool operator ==(MutableString left, MutableString right)
-            => left.Equals(right);
+            => left.Equals(right); // I know this will throw null ref, I won't fix it. use is null instead like a sane person.
 
         public static bool operator !=(MutableString left, MutableString right)
-            => !left.Equals(right);
+            => !left.Equals(right); // I know this will throw null ref, I won't fix it. use is null instead like a sane person.
+
         public static MutableString operator +(MutableString mutableString, string value)
-        {
-            mutableString._builder.Append(value);
-            return mutableString;
-        }
+            => mutableString.Append(value);
 
         public static MutableString operator +(MutableString mutableString, char value)
-        {
-            mutableString._builder.Append(value);
-            return mutableString;
-        }
+            => mutableString.Append(value);
 
         public static string operator +(object value, MutableString mutableString)
             => mutableString.Insert(0, value);
 
         public static MutableString operator -(MutableString mutableString, char value)
-        {
-            mutableString.Remove(value);
-            return mutableString;
-        }
+             => mutableString.Remove(value);
+
 
         public static MutableString operator -(MutableString mutableString, string value)
-        {
-            mutableString.Remove(value);
-            return mutableString;
-        }
+             => mutableString.Remove(value);
 
         public static MutableString operator *(MutableString mutableString, int value)
         {
@@ -204,7 +211,7 @@ namespace System
 
             string str = mutableString;
             for (int x = 1; x < value; x++)
-                mutableString._builder.Append(str);
+                mutableString.Append(str);
 
             return mutableString;
         }
@@ -247,7 +254,7 @@ namespace System
             return _current;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj switch
         {
             MutableString mutable => Equals(mutable),
@@ -287,49 +294,49 @@ namespace System
             return this;
         }
 
-        public MutableString AppendFormat(IFormatProvider provider, string? format, params object[]? args)
+        public MutableString AppendFormat(IFormatProvider? provider, string? format, params object[]? args)
         {
             _builder.AppendFormat(provider, format, args);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(char separator, params object[] values)
+        public MutableString AppendJoin(char separator, params object[]? values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(char separator, params string[] values)
+        public MutableString AppendJoin(char separator, params string[]? values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(string separator, params object[] values)
+        public MutableString AppendJoin(string separator, params object[]? values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(string separator, params string[] values)
+        public MutableString AppendJoin(string separator, params string[]? values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin<T>(char separator, IEnumerable<T> values)
+        public MutableString AppendJoin<T>(char separator, IEnumerable<T>? values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin<T>(string separator, IEnumerable<T> values)
+        public MutableString AppendJoin<T>(string? separator, IEnumerable<T>? values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
@@ -356,10 +363,10 @@ namespace System
         #endregion
         #region Equals
         public bool Equals(string other)
-            => other.Equals(this);
+            => other?.Equals(this) ?? false;
 
         public bool Equals(MutableString other)
-            => other.Equals((string)this);
+            => ((string)other)?.Equals(this) ?? false;
         #endregion
         #region Insert
         public MutableString Insert(int index, object? value)
@@ -772,6 +779,45 @@ namespace System
             return Insert(Length, new string(paddingChar, totalWidth - Length).AsSpan());
         }
         #endregion
+        #region Regex
+        public bool ContainsPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        {
+            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            return Regex.IsMatch(this, pattern, options);
+        }
+
+        public MutableString ReplacePattern([RegexPattern]string? pattern, string? replacement, RegexOptions options = RegexOptions.None)
+        {
+            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+
+            replacement ??= string.Empty;
+
+            if (_isModified)
+                _current = _builder.ToString();
+
+            _current = Regex.Replace(_current, pattern, replacement, options);
+            _isModified = false;
+            return this;
+        }
+
+        public Match GetMatch([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        {
+            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            return Regex.Match(this, pattern, options);
+        }
+
+        public MatchCollection GetMatches([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        {
+            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            return Regex.Matches(this, pattern, options);
+        }
+
+        public string[] SplitPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        {
+            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            return Regex.Split(this, pattern, options);
+        }
+        #endregion
         #region Substring
         public string Substring(int startIndex)
             => Substring(startIndex..Length);
@@ -912,7 +958,6 @@ namespace System
         }
 
         #endregion
-
         private struct MutableStringEnumerator : IEnumerator<char>, ICloneable
         {
             private readonly MutableString _string;

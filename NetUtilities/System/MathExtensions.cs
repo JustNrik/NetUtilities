@@ -44,11 +44,10 @@ namespace System
             {
                 if (q % 2 == 1)
                 {
-                    // detects the 1s in the binary expression of power
-                    prod = current * prod; // picks up the relevant power
+                    prod = current * prod; 
                     q--;
                 }
-                current *= current; // value^i -> value^(2*i)
+                current *= current; 
                 q /= 2;
             }
 
@@ -177,9 +176,6 @@ namespace System
             return count - result;
         }
 
-
-        // I tested this against Math.Log method, this eye-cancer thing is by far the fastest.
-        // Inlining it makes it 3 times faster. (enjoy these seven nanoseconds)
         /// <summary>
         /// Gets the amount of digits in the provided number.
         /// </summary>

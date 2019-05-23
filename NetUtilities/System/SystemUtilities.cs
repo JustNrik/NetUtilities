@@ -3,6 +3,7 @@ namespace System
 {
     public static class SystemUtilities
     {
+        public interface ITest { }
         /// <summary>
         /// Creates a <see cref="string"/> with the providen array
         /// </summary>
