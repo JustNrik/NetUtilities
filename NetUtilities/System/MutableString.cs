@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using JetBrains.Annotations;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -93,7 +94,7 @@ namespace System
         /// <param name="pattern"/>
         /// <param name="options"/>
         /// <returns/>
-        public MatchCollection this[string pattern, RegexOptions options = RegexOptions.None]
+        public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
             => Regex.Matches(this, pattern, options);
 
         /// <summary>
@@ -103,7 +104,7 @@ namespace System
         /// <param name="replacement"/>
         /// <param name="options"/>
         /// <returns/>
-        public string this[string pattern, string replacement, RegexOptions options = RegexOptions.None]
+        public string this[[RegexPattern]string pattern, string replacement, RegexOptions options = RegexOptions.None]
             => Regex.Replace(this, pattern, replacement, options);
 
         /// <summary>
@@ -780,13 +781,13 @@ namespace System
         }
         #endregion
         #region Regex
-        public bool ContainsPattern(string? pattern, RegexOptions options = RegexOptions.None)
+        public bool ContainsPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
             if (pattern is null) throw new ArgumentNullException(nameof(pattern));
             return Regex.IsMatch(this, pattern, options);
         }
 
-        public MutableString ReplacePattern(string? pattern, string? replacement, RegexOptions options = RegexOptions.None)
+        public MutableString ReplacePattern([RegexPattern]string? pattern, string? replacement, RegexOptions options = RegexOptions.None)
         {
             if (pattern is null) throw new ArgumentNullException(nameof(pattern));
 
@@ -800,19 +801,19 @@ namespace System
             return this;
         }
 
-        public Match GetMatch(string? pattern, RegexOptions options = RegexOptions.None)
+        public Match GetMatch([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
             if (pattern is null) throw new ArgumentNullException(nameof(pattern));
             return Regex.Match(this, pattern, options);
         }
 
-        public MatchCollection GetMatches(string? pattern, RegexOptions options = RegexOptions.None)
+        public MatchCollection GetMatches([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
             if (pattern is null) throw new ArgumentNullException(nameof(pattern));
             return Regex.Matches(this, pattern, options);
         }
 
-        public string[] SplitPattern(string? pattern, RegexOptions options = RegexOptions.None)
+        public string[] SplitPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
             if (pattern is null) throw new ArgumentNullException(nameof(pattern));
             return Regex.Split(this, pattern, options);

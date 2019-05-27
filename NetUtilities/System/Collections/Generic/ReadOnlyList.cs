@@ -5,7 +5,7 @@ namespace System.Collections.Generic
     /// <summary>
     /// A true readonly generic List which provides most of <see cref="List{T}"/> methods.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T">The generic type of this instance</typeparam>
     public sealed class ReadOnlyList<T> : IReadOnlyList<T>
     {
         private readonly List<T> _list;
@@ -13,8 +13,8 @@ namespace System.Collections.Generic
         /// <summary>
         /// Creates a <see cref="ReadOnlyList{T}"/> from an <see cref="IEnumerable{T}"/>
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="sequence"></param>
+        /// <exception cref="ArgumentNullException"/>
+        /// <param name="sequence"/>
         public ReadOnlyList(IEnumerable<T> sequence)
         {
             if (sequence is null) throw new ArgumentNullException(nameof(sequence));
@@ -24,47 +24,49 @@ namespace System.Collections.Generic
         /// <summary>
         /// Returns the element stored in the given index.
         /// </summary>
-        /// <exception cref="IndexOutOfRangeException"></exception>
-        /// <param name="index"></param>
-        /// <returns></returns>
+        /// <exception cref="IndexOutOfRangeException"/>
+        /// <param name="index"/>
+        /// <returns/>
         public T this[int index] 
             => _list[index];
 
         /// <summary>
         /// Returns true.
         /// </summary>
+        /// <returns/>
         public bool IsReadOnly
             => true;
 
         /// <summary>
         /// Returns the amount of element in the current instace.
         /// </summary>
+        /// <returns/>
         public int Count
             => _list.Count;
 
         /// <summary>
         /// Gets the enumerator for the current instance.
         /// </summary>
-        /// <returns></returns>
+        /// <returns/>
         public IEnumerator<T> GetEnumerator()
             => _list.GetEnumerator();
 
         /// <summary>
         /// Gets the index of the provided item, you can optionally provide as well the starting index and the count of indexes.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="item"></param>
-        /// <param name="index"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        /// <param name="item"/>
+        /// <param name="index"/>
+        /// <param name="count"/>
+        /// <returns/>
         public int IndexOf(T item, int index = 0, int? count = null)
             => _list.IndexOf(item, index, count ?? Count);
 
         /// <summary>
         /// Returns true if the list contains the provided element. otherwise false.
         /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item"/>
+        /// <returns/>
         public bool Contains(T item)
             => _list.Contains(item);
 
@@ -74,43 +76,21 @@ namespace System.Collections.Generic
         /// <summary>
         /// Finds the first element that matches the given predicate, or the default value if no matching element is found.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"/>
+        /// <param name="predicate"/>
+        /// <returns/>
         public T Find(Predicate<T> predicate)
-        {
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
-
-            for (int x = 0; x < Count; x++)
-            {
-                var element = this[x];
-                if (predicate(element))
-                    return element;
-            }
-
-            return default!;
-        }
+            => _list.Find(predicate);
 
         /// <summary>
         /// Finds the first element that matches the given predicate, or the default value if no matching element is found.
         /// (This method iterates from last to first)
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"/>
+        /// <param name="predicate"/>
+        /// <returns/>
         public T FindLast(Predicate<T> predicate)
-        {
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
-
-            for (int x = Count - 1; x >= 0; x--)
-            {
-                var element = this[x];
-                if (predicate(element))
-                    return element;
-            }
-
-            return default!;
-        }
+            => _list.FindLast(predicate);
 
         /// <summary>
         /// Finds all the elements that matches the given predicate. 
@@ -121,68 +101,51 @@ namespace System.Collections.Generic
         /// <param name="predicate"></param>
         /// <param name="maxCount"></param>
         /// <returns></returns>
-        public ReadOnlyList<T> FindAll(Predicate<T> predicate, int? maxCount = null)
-        {
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
-
-            var capacity = maxCount ?? Count;
-            var list = new List<T>(capacity);
-
-            for (int x = 0; x < Count; x++)
-            {
-                var element = this[x];
-
-                if (predicate(element))
-                {
-                    list.Add(element);
-                    if (list.Count == capacity)
-                        break;
-                }
-            }
-
-            return list.ToReadOnlyList();
-        }
+        public ReadOnlyList<T> FindAll(Predicate<T> predicate)
+            => _list.FindAll(predicate).ToReadOnlyList();
 
         /// <summary>
         /// Finds the index of the first element that matches the given predicate.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="predicate"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public int FindIndex(Predicate<T> predicate, int startIndex = 0, int? count = null)
-        {
-            count ??= Count;
+        /// <exception cref="ArgumentNullException"/>
+        /// <param name="predicate"/>
+        /// <returns/>
+        public int FindIndex(Predicate<T> match)
+            => _list.FindIndex(match);
 
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
-            if (startIndex < 0 || startIndex >= Count || count <= 0 || count > Count)
-                throw new ArgumentOutOfRangeException(nameof(startIndex));
+        /// <summary>
+        /// Finds the index of the first element that matches the given predicate starting from the given index.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        /// <param name="startIndex"/>
+        /// <param name="predicate"/>
+        /// <returns/>
+        public int FindIndex(int startIndex, Predicate<T> predicate)
+            => _list.FindIndex(startIndex, predicate);
 
-            var index = startIndex;
-
-            for (int counter = 1; counter <= count; counter++, index++)
-            {
-                var element = this[index];
-
-                if (predicate(element))
-                    return index;
-            }
-
-            return -1;
-        }
+        /// <summary>
+        /// Finds the index of the first element that matches the given predicate starting from the given index and number of elements.
+        /// </summary>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        /// <param name="startIndex"/>
+        /// <param name="count"/>
+        /// <param name="predicate"/>
+        /// <returns/>
+        public int FindIndex(int startIndex, int count, Predicate<T> predicate)
+            => _list.FindIndex(startIndex, count, predicate);
 
         /// <summary>
         /// Finds the index of the first element that matches the given predicate.
         /// (This method iterates from last to first)
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="predicate"></param>
-        /// <param name="startIndex"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
+        /// <param name="predicate"/>
+        /// <param name="startIndex"/>
+        /// <param name="count"/>
+        /// <returns/>
         public int FindLastIndex(Predicate<T> predicate, int startIndex = 0, int? count = null)
         {
             count ??= Count;
@@ -220,7 +183,7 @@ namespace System.Collections.Generic
         /// Returns a <see cref="ReadOnlyList{TOut}"/> with all members of the current list converted into the target type.
         /// </summary>
         /// <exception cref="ArgumentNullException"></exception>
-        /// <typeparam name="TOut"></typeparam>
+        /// <typeparam name="TOut">The output generic type of the <see cref="ReadOnlyList{T}"/></typeparam>
         /// <param name="converter"></param>
         /// <returns></returns>
         public ReadOnlyList<TOut> ConvertAll<TOut>(Converter<T, TOut> converter)
