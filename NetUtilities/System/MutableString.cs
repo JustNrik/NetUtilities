@@ -13,6 +13,7 @@ namespace System
     public sealed class MutableString :
         IEnumerable, IEnumerable<char>,
         ICollection, ICollection<char>,
+        IList<char>,
         IComparable, IComparable<string>, IComparable<MutableString>,
         IEquatable<string>, IEquatable<MutableString>
     {
@@ -64,6 +65,17 @@ namespace System
         }
 
         /// <summary>
+        /// Gets or sets a <see cref="char"/> in the specified index.
+        /// </summary>
+        /// <param name="index"/>
+        /// <returns/>
+        public char this[int index]
+        {
+            get => _builder[index];
+            set => _builder[index] = value;
+        }
+
+        /// <summary>
         /// Gets or sets a <see cref="string"/> in the specified <see cref="Range"/>.
         /// The input string must have the same length of the string you want to edit, otherwise an <see cref="IndexOutOfRangeException"/> will be thrown.
         /// </summary>
@@ -106,6 +118,18 @@ namespace System
         /// <returns/>
         public string this[[RegexPattern]string pattern, string replacement, RegexOptions options = RegexOptions.None]
             => Regex.Replace(this, pattern, replacement, options);
+
+        /// <summary>
+        /// Returns a <see cref="string"/> delimited with the characters provided. <see cref="string.Empty"/> if not found. 
+        /// You can optionally provide the start index and whether to include the bounds or not.
+        /// </summary>
+        /// <param name="leftBound"/>
+        /// <param name="rightBound"/>
+        /// <param name="startIndex"/>
+        /// <param name="includeBounds"/>
+        /// <returns/>
+        public string[] this[char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false]
+            => this.SubstringsBetween(leftBound, rightBound, startIndex, includeBounds);
 
         /// <summary>
         /// Returns the maximun capacity of the builder.
@@ -182,6 +206,12 @@ namespace System
 
         void ICollection.CopyTo(Array array, int index)
             => ToCharArray().CopyTo(array, index);
+
+        void IList<char>.Insert(int index, char item)
+            => Insert(index, item);
+
+        void IList<char>.RemoveAt(int index)
+            => RemoveAt(index);
         #endregion
         #region operators
         public static bool operator ==(MutableString left, MutableString right)
@@ -384,6 +414,13 @@ namespace System
             return this;
         }
 
+        public MutableString Insert(int index, char value)
+        {
+            _builder.Insert(index, value);
+            _isModified = true;
+            return this;
+        }
+
         public MutableString Insert(int index, ReadOnlySpan<char> value)
         {
             _builder.Insert(index, value);
@@ -411,6 +448,12 @@ namespace System
             var (startIndex, count) = range.GetOffsetAndLength(Length);
             return Remove(startIndex, count);
         }
+
+        public MutableString RemoveAt(int index)
+            => Remove(index, 1);
+
+        public MutableString RemoveAt(Index index)
+            => Remove(index.GetOffset(Length), 1);
 
         public MutableString Remove(int startIndex, int count)
         {
@@ -971,6 +1014,7 @@ namespace System
                 _index = -1;
                 _current = default;
             }
+
             public char Current
             {
                 get
