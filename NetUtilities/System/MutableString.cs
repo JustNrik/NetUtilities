@@ -106,8 +106,8 @@ namespace System
         /// <param name="pattern"/>
         /// <param name="options"/>
         /// <returns/>
-        public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
-            => Regex.Matches(this, pattern, options);
+        public MatchCollection this[[RegexPattern]string? pattern, RegexOptions options = RegexOptions.None]
+            => GetMatches(pattern, options);
 
         /// <summary>
         /// Returns a <see cref="string"/> with the replacement applied on the pattern given. This method doesn't mutate the current instance.
@@ -120,7 +120,7 @@ namespace System
             => Regex.Replace(this, pattern, replacement, options);
 
         /// <summary>
-        /// Returns a <see cref="string"/> delimited with the characters provided. <see cref="string.Empty"/> if not found. 
+        /// Returns a <see cref="string"/>[] delimited with the characters provided. An empty array if not found. 
         /// You can optionally provide the start index and whether to include the bounds or not.
         /// </summary>
         /// <param name="leftBound"/>
