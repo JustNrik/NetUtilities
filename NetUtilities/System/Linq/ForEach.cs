@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetUtilities;
+using System.Collections.Generic;
 #nullable enable
 namespace System.Linq
 {
@@ -12,13 +13,11 @@ namespace System.Linq
         /// <param name="action"></param>
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-            if (action is null) throw new ArgumentNullException(nameof(action));
+            Ensure.NotNull(source, nameof(source));
+            Ensure.NotNull(action, nameof(action));
 
             foreach (T element in source)
-            {
                 action(element);
-            }
         }
     }
 }

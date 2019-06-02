@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetUtilities;
+using System.Collections.Generic;
 #nullable enable
 namespace System.Linq
 {
@@ -6,14 +7,14 @@ namespace System.Linq
     {
         public static IEnumerable<TSource> Flatten<TSource>(this IEnumerable<IEnumerable<TSource>> source)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
+            Ensure.NotNull(source, nameof(source));
             return source.SelectMany(x => x);
         }
 
         public static IEnumerable<TSource> Flatten<TSource>(this IEnumerable<IEnumerable<TSource>> source, Func<IEnumerable<TSource>, IEnumerable<TSource>> selector)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-            if (selector is null) throw new ArgumentNullException(nameof(selector));
+            Ensure.NotNull(source, nameof(source));
+            Ensure.NotNull(selector, nameof(selector));
             return source.SelectMany(selector);
         }
     }

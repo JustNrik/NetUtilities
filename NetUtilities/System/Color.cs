@@ -14,10 +14,14 @@ namespace System
             => _value = (UInt24)((uint)r << 16 | (uint)g << 8 | b);
         public Color(uint value)
         {
-            if (value > UInt24.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(value), "The value must be in the [0, 255] range");
-
+            ThrowIfOutOfRange(value);
             _value = (UInt24)value;
+        }
+
+        private static void ThrowIfOutOfRange(uint value)
+        {
+            if (value > UInt24.MaxValue)
+                throw new ArgumentOutOfRangeException(nameof(value), $"The value must be lower than {UInt24.MaxValue}");
         }
 
         public Color(UInt24 value)
@@ -26,28 +30,30 @@ namespace System
             => _value = color._value;
         public Color(int r, int g, int b)
         {
-            if (r < 0 || r > 255)
-                throw new ArgumentOutOfRangeException(nameof(r), "The value must be in the [0, 255] range");
-
-            if (g < 0 || g > 255)
-                throw new ArgumentOutOfRangeException(nameof(g), "The value must be in the [0, 255] range");
-
-            if (b < 0 || b > 255)
-                throw new ArgumentOutOfRangeException(nameof(b), "The value must be in the [0, 255] range");
+            ThrowIfOutOfRangeInt(r, nameof(r));
+            ThrowIfOutOfRangeInt(g, nameof(g));
+            ThrowIfOutOfRangeInt(b, nameof(b));
 
             _value = (UInt24)((uint)r << 16 | (uint)g << 8 | (uint)b);
         }
 
+        private static void ThrowIfOutOfRangeSingle(float f, string name)
+        {
+            if (f < 0 || f > 1)
+                throw new ArgumentOutOfRangeException(name, "The value must be in the [0.0, 1.0] range");
+        }
+
+        private static void ThrowIfOutOfRangeInt(int i, string name)
+        {
+            if (i < 0 || i > 255)
+                throw new ArgumentOutOfRangeException(name, "The value must be in the [0, 255] range");
+        }
+
         public Color(float r, float g, float b)
         {
-            if (r < 0f || r > 1f)
-                throw new ArgumentOutOfRangeException(nameof(r), "The value must be in the [0, 1] range");
-
-            if (g < 0f || g > 1f)
-                throw new ArgumentOutOfRangeException(nameof(g), "The value must be in the [0, 1] range");
-
-            if (b < 0f || b > 1f)
-                throw new ArgumentOutOfRangeException(nameof(b), "The value must be in the [0, 1] range");
+            ThrowIfOutOfRangeSingle(r, nameof(r));
+            ThrowIfOutOfRangeSingle(g, nameof(g));
+            ThrowIfOutOfRangeSingle(b, nameof(b));
 
             _value = (UInt24)(((uint)(r * 255f) << 16) | ((uint)(g * 255f) << 8) | (uint)(b * 255f));
         }

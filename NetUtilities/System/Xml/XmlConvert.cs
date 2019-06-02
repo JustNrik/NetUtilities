@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using NetUtilities;
+using System.IO;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 #nullable enable
@@ -15,8 +16,7 @@ namespace System.Xml
         /// <returns></returns>
         public static string SerializeObject<T>(T obj)
         {
-            if (obj is null)
-                throw new ArgumentNullException(nameof(obj));
+            Ensure.NotNull(obj, nameof(obj));
 
             using var stringWriter = new StringWriter();
             var serializer = new XmlSerializer(typeof(T));
@@ -33,12 +33,17 @@ namespace System.Xml
         /// <returns></returns>
         public static T DeserializeObject<T>(string input)
         {
-            if (string.IsNullOrWhiteSpace(input))
-                throw new InvalidOperationException("The input is not deserializable, it's null, empty or consists only of white-spaces");
+            ThrowIfNullOrWhiteSpace(input);
 
             using var stringReader = new StringReader(input);
             var serializer = new XmlSerializer(typeof(T));
             return (T)serializer.Deserialize(stringReader);
+        }
+
+        private static void ThrowIfNullOrWhiteSpace(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                throw new InvalidOperationException("The input is not deserializable, it's null, empty or consists only of white-spaces");
         }
 
         /// <summary>

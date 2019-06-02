@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using NetUtilities;
+using System.Linq;
 #nullable enable
 namespace System.Collections.Generic
 {
@@ -17,7 +18,7 @@ namespace System.Collections.Generic
         /// <param name="sequence"/>
         public ReadOnlyList(IEnumerable<T> sequence)
         {
-            if (sequence is null) throw new ArgumentNullException(nameof(sequence));
+            Ensure.NotNull(sequence, nameof(sequence));
             _list = sequence.ToList();
         }
 
@@ -150,9 +151,9 @@ namespace System.Collections.Generic
         {
             count ??= Count;
 
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
-            if (startIndex < 0 || startIndex >= Count) throw new ArgumentOutOfRangeException(nameof(startIndex));
-            if (count <= 0 || count > Count) throw new ArgumentOutOfRangeException(nameof(count));
+            Ensure.NotNull(predicate, nameof(predicate));
+            Ensure.IndexInRange(startIndex, count.Value);
+            Ensure.ValidCount(startIndex, count.Value, Count);
 
             var index = startIndex + count.Value - 1;
 
@@ -207,8 +208,8 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public ReadOnlyList<T> GetRange(int index, int count)
         {
-            if (index < 0 || index >= Count) throw new ArgumentOutOfRangeException(nameof(index));
-            if (index + count >= Count) throw new ArgumentOutOfRangeException(nameof(count));
+            Ensure.IndexInRange(index, count);
+            Ensure.ValidCount(index, count, Count);
 
             var list = new List<T>(count);
 
@@ -221,6 +222,12 @@ namespace System.Collections.Generic
             return list.ToReadOnlyList();
         }
 
+        public ReadOnlyList<T> GetRange(Range range)
+        {
+            var (index, count) = range.GetOffsetAndLength(Count);
+            return GetRange(index, count);
+        }
+
         /// <summary>
         /// Returns true if any of the elements matches the predicate.
         /// </summary>
@@ -229,7 +236,7 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public bool Any(Predicate<T> predicate)
         {
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
+            Ensure.NotNull(predicate, nameof(predicate));
 
             for (int index = 0; index < Count; index++)
             {
@@ -248,7 +255,7 @@ namespace System.Collections.Generic
         /// <returns></returns>
         public bool All(Predicate<T> predicate)
         {
-            if (predicate is null) throw new ArgumentNullException(nameof(predicate));
+            Ensure.NotNull(predicate, nameof(predicate));
 
             for (int index = 0; index < Count; index++)
             {
@@ -266,7 +273,7 @@ namespace System.Collections.Generic
         /// <param name="action"></param>
         public void ForEach(Action<T> action)
         {
-            if (action is null) throw new ArgumentNullException(nameof(action));
+            Ensure.NotNull(action, nameof(action));
 
             for (int index = 0; index < Count; index++)
             {

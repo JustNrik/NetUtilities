@@ -89,8 +89,8 @@ namespace System
 
             var result = new string[indexes.Length];
 
-            foreach (var index in indexes)
-                result[index] = input.SubstringBetween(leftBound, rightBound, index, includeBounds);
+            for (int resultIndex = 0; resultIndex < indexes.Length; resultIndex++)
+                result[resultIndex] = input.SubstringBetween(leftBound, rightBound, indexes[resultIndex], includeBounds);
 
             return result;
         }
@@ -113,8 +113,8 @@ namespace System
 
             var result = new string[indexes.Length];
 
-            foreach (var index in indexes)
-                result[index] = input.SubstringBetween(leftBound, rightBound, index, includeBounds);
+            for (int resultIndex = 0; resultIndex < indexes.Length; resultIndex++)
+                result[resultIndex] = input.SubstringBetween(leftBound, rightBound, indexes[resultIndex], includeBounds);
 
             return result;
         }

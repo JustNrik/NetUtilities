@@ -16,7 +16,7 @@ namespace System
             _cts = new CancellationTokenSource();
         }
 
-        private static Action CreateAction<TResult>(object? obj, MemberInfo? memberInfo, ref TResult newValue)
+        private static Action CreateAction<TResult>(object? obj, MemberInfo? memberInfo, TResult newValue)
         {
             TResult oldValue;
 
@@ -38,14 +38,14 @@ namespace System
         public static BindedScope Create<TValue>(Expression<Func<TValue>> expression, TValue newValue)
         {
             var memberInfo = (expression.Body as MemberExpression)?.Member;
-            var undoFunc = CreateAction(null, memberInfo, ref newValue);
+            var undoFunc = CreateAction(null, memberInfo, newValue);
             return new BindedScope(undoFunc);
         }
 
         public static BindedScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> expression, TValue newValue)
         {
             var memberInfo = (expression.Body as MemberExpression)?.Member;
-            var undoFunc = CreateAction(obj, memberInfo, ref newValue);
+            var undoFunc = CreateAction(obj, memberInfo, newValue);
             return new BindedScope(undoFunc);
         }
 

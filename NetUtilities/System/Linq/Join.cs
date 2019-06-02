@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetUtilities;
+using System.Collections.Generic;
 #nullable enable
 namespace System.Linq
 {
@@ -12,7 +13,7 @@ namespace System.Linq
         /// <returns></returns>
         public static string Join(this IEnumerable<string> source, string separator)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
+            Ensure.NotNull(source, nameof(source));
             return string.Join(separator ?? string.Empty, source);
         }
 
@@ -24,8 +25,7 @@ namespace System.Linq
         /// <returns></returns>
         public static string Join(this IEnumerable<char> source, string separator)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-
+            Ensure.NotNull(source, nameof(source));
             return string.Join(separator ?? string.Empty, source);
         }
     }

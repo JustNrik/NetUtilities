@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NetUtilities;
+using System;
 using System.Collections.Generic;
 using System.Text;
 #nullable enable
@@ -29,9 +30,9 @@ namespace System.Linq
         /// <returns></returns>
         public static IEnumerable<TResult> BulkBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-            if (size <= 0) throw new ArgumentOutOfRangeException(nameof(size));
-            if (selector is null) throw new ArgumentNullException(nameof(selector));
+            Ensure.NotNull(source, nameof(source));
+            Ensure.NotNull(selector, nameof(selector));
+            Ensure.Positive(size, nameof(size));
 
             return BulkByIterator();
 

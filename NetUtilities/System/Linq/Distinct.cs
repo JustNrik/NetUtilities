@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using NetUtilities;
+using System.Collections.Generic;
 #nullable enable
 namespace System.Linq
 {
@@ -11,8 +12,8 @@ namespace System.Linq
 
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey>? comparer)
         {
-            if (source is null) throw new ArgumentNullException(nameof(source));
-            if (selector is null) throw new ArgumentNullException(nameof(selector));
+            Ensure.NotNull(source, nameof(source));
+            Ensure.NotNull(selector, nameof(selector));
 
             return DistinctIterator();
 
