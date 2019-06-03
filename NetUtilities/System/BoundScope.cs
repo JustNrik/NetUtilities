@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 #nullable enable
 namespace System
 {
-    public readonly ref struct BindedScope
+    public readonly ref struct BoundScope
     {
         private readonly Action _undoAction;
         private readonly CancellationTokenSource _cts;
 
-        private BindedScope(Action undoAction)
+        private BoundScope(Action undoAction)
         {
             _undoAction = undoAction;
             _cts = new CancellationTokenSource();
@@ -35,18 +35,18 @@ namespace System
             }
         }
 
-        public static BindedScope Create<TValue>(Expression<Func<TValue>> expression, TValue newValue)
+        public static BoundScope Create<TValue>(Expression<Func<TValue>> expression, TValue newValue)
         {
             var memberInfo = (expression.Body as MemberExpression)?.Member;
             var undoFunc = CreateAction(null, memberInfo, newValue);
-            return new BindedScope(undoFunc);
+            return new BoundScope(undoFunc);
         }
 
-        public static BindedScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> expression, TValue newValue)
+        public static BoundScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> expression, TValue newValue)
         {
             var memberInfo = (expression.Body as MemberExpression)?.Member;
             var undoFunc = CreateAction(obj, memberInfo, newValue);
-            return new BindedScope(undoFunc);
+            return new BoundScope(undoFunc);
         }
 
         public void Cancel()
