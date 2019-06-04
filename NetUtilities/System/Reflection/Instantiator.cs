@@ -1,24 +1,29 @@
 ﻿using System.Linq.Expressions;
+using System.Reflection.Emit;
 #nullable enable
 namespace System.Reflection
 {
     public static class Instantiator<T>
     {
         /// <summary>
-        /// Get's the instance of a generic type with a parameterless ctor. Performs much better than Activator.CreateInstance()
+        /// Gets the instance of a generic type with a parameterless constructor. Performs much better than <see cref="Activator.CreateInstance{T}"/>
         /// </summary>
-        public static readonly Func<T> GetInstance = CreateInstance();
+        /// <exception cref="InvalidOperationException">Thrown when a parameterless constructor is not found.</exception>
+        public static T GetInstance()
+            => _instanceDelegate();
+
+        private static readonly Func<T> _instanceDelegate = CreateInstance();
 
         private static Func<T> CreateInstance()
         {
-            var t = typeof(T);
-            if (t == typeof(string))
+            var type = typeof(T);
+            if (type == typeof(string))
                 return Expression.Lambda<Func<T>>(Expression.Constant(string.Empty)).Compile();
 
-            if (t.HasDefaultConstructor())
-                return Expression.Lambda<Func<T>>(Expression.New(t)).Compile();
+            if (type.HasDefaultConstructor())
+                return Expression.Lambda<Func<T>>(Expression.New(type)).Compile();
 
-            throw new Exception("No parameterless constructor found.");
+            throw new InvalidOperationException("No parameterless constructor found.");
         }
     }
 }

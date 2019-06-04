@@ -35,10 +35,7 @@ namespace System
 
         public ValueTask DisposeAsync()
         {
-            if (!_cts.IsCancellationRequested)
-                _undoAction();
-
-            _cts.Dispose();
+            Dispose();
             return new ValueTask();
         }
     }
@@ -77,10 +74,7 @@ namespace System
 
         public ValueTask DisposeAsync()
         {
-            if (!_cts.IsCancellationRequested)
-                _undoAction(_obj);
-
-            _cts.Dispose();
+            Dispose();
             return new ValueTask();
         }
     }
@@ -122,10 +116,7 @@ namespace System
 
         public ValueTask DisposeAsync()
         {
-            if (!_cts.IsCancellationRequested)
-                _undoAction(_obj, _obj2);
-
-            _cts.Dispose();
+            Dispose();
             return new ValueTask();
         }
 
@@ -171,10 +162,7 @@ namespace System
 
         public ValueTask DisposeAsync()
         {
-            if (!_cts.IsCancellationRequested)
-                _undoAction(_obj, _obj2, _obj3);
-
-            _cts.Dispose();
+            Dispose();
             return new ValueTask();
         }
     }

@@ -1,4 +1,5 @@
 ﻿using JetBrains.Annotations;
+using NetUtilities;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -90,14 +91,19 @@ namespace System
                 var (startIndex, count) = range.GetOffsetAndLength(Length);
 
                 EnsureRange(startIndex, count);
-
-                if (value.Length != count) throw new IndexOutOfRangeException();
+                EnsureLength(value.Length, count);
 
                 for (int index = 0; index < count; index++, startIndex++)
                     this[startIndex] = value[index];
 
                 _isModified = true;
             }
+        }
+
+        private static void EnsureLength(int length, int count)
+        {
+            if (length != count)
+                throw new InvalidOperationException("You cannot assign a string with a length bigger than the range you provided. Use Insert instead.");
         }
 
         /// <summary>
@@ -484,8 +490,8 @@ namespace System
 
         public MutableString Remove(params char[]? chars)
         {
-            if (chars is null) throw new ArgumentNullException(nameof(chars));
-            if (chars.Length == 0) return this;
+            Ensure.NotNull(chars, nameof(chars));
+            if (chars!.Length == 0) return this;
 
             foreach (var c in chars)
                 Remove(c);
@@ -562,6 +568,38 @@ namespace System
             _builder.Replace(oldStr, newStr, startIndex, count);
             _isModified = true;
             return this;
+        }
+        #endregion
+        #region Reverse
+        /// <summary>
+        /// Reverse the current <see cref="MutableString"/>
+        /// </summary>
+        /// <returns></returns>
+        public MutableString Reverse()
+            => Reverse(0, Length - 1);
+
+        public MutableString Reverse(int startIndex)
+            => Reverse(startIndex, Length - startIndex - 1);
+
+        public MutableString Reverse(int startIndex, int count)
+        {
+            EnsureRange(startIndex, count);
+
+            for (int begin = startIndex, end = startIndex + count; begin < end; begin++, end--)
+            {
+                var beginChar = this[begin];
+                var endChar = this[end];
+                this[begin] = endChar;
+                this[end] = beginChar;
+            }
+
+            return this;
+        }
+
+        public MutableString Reverse(Range range)
+        {
+            var (startIndex, count) = range.GetOffsetAndLength(Length);
+            return Reverse(startIndex, count);
         }
         #endregion
         #region Others
@@ -689,8 +727,8 @@ namespace System
 
         public int IndexOfAny(params char[]? chars)
         {
-            if (chars is null) throw new ArgumentNullException(nameof(chars));
-            if (chars.Length == 0) return -1;
+            Ensure.NotNull(chars, nameof(chars));
+            if (chars!.Length == 0) return -1;
 
             foreach (var c in chars)
             {
@@ -733,8 +771,8 @@ namespace System
 
         public int LastIndexOfAny(params char[]? chars)
         {
-            if (chars is null) throw new ArgumentNullException(nameof(chars));
-            if (chars.Length == 0) return -1;
+            Ensure.NotNull(chars, nameof(chars));
+            if (chars!.Length == 0) return -1;
 
             foreach (var c in chars)
             {
@@ -743,6 +781,36 @@ namespace System
             }
 
             return -1;
+        }
+        #endregion
+        #region Indent
+        /// <summary>
+        /// Jumps to the next line and adds many amount of chars in the beginning of the line.
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
+        public MutableString Indent(int count, char indent = ' ')
+        {
+            Ensure.ZeroOrPositive(count, nameof(count));
+
+            _builder.AppendLine();
+            _builder.Append(new string(indent, count));
+            _isModified = true;
+            return this;
+        }
+        #endregion
+        #region RangeOf
+        /// <summary>
+        /// Returns the range in which the matching input is found. Returns null if not found.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public Range? RangeOf(string? input)
+        {
+            if (input is null || input.Length == 0) return null;
+            var startIndex = input.Length == 1 ? IndexOf(input[0]) : IndexOf(input);
+            if (startIndex == -1) return null;
+            return new Range(startIndex, startIndex + input.Length);
         }
         #endregion
         #region StartsWith
@@ -826,13 +894,13 @@ namespace System
         #region Regex
         public bool ContainsPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
-            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            Ensure.NotNull(pattern, nameof(pattern));
             return Regex.IsMatch(this, pattern, options);
         }
 
         public MutableString ReplacePattern([RegexPattern]string? pattern, string? replacement, RegexOptions options = RegexOptions.None)
         {
-            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            Ensure.NotNull(pattern, nameof(pattern));
 
             replacement ??= string.Empty;
 
@@ -846,19 +914,19 @@ namespace System
 
         public Match GetMatch([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
-            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            Ensure.NotNull(pattern, nameof(pattern));
             return Regex.Match(this, pattern, options);
         }
 
         public MatchCollection GetMatches([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
-            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            Ensure.NotNull(pattern, nameof(pattern));
             return Regex.Matches(this, pattern, options);
         }
 
         public string[] SplitPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
-            if (pattern is null) throw new ArgumentNullException(nameof(pattern));
+            Ensure.NotNull(pattern, nameof(pattern));
             return Regex.Split(this, pattern, options);
         }
         #endregion

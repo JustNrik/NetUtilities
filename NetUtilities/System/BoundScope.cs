@@ -62,10 +62,7 @@ namespace System
 
         public ValueTask DisposeAsync()
         {
-            if (!_cts.IsCancellationRequested)
-                _undoAction();
-
-            _cts.Dispose();
+            Dispose();
             return new ValueTask();
         }
     }
