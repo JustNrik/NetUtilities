@@ -146,5 +146,16 @@ namespace System
 
         public static MutableString ToMutable(this string? value)
             => new MutableString(value);
+
+        public static string Reverse(this string? str)
+        {
+            if (str is null) throw new ArgumentNullException(nameof(str));
+
+            return string.Create(str.Length, str, (span, state) =>
+            {
+                for (int i = 0, j = span.Length - 1; i < span.Length; i++, j--)
+                    span[i] = state[j];
+            });
+        }
     }
 }
