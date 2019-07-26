@@ -102,7 +102,7 @@ namespace System
         public static Color Blue = new Color(0xFF);
         public static Color Teal = new Color(0xFFFF);
         public static Color Yellow = new Color(0xFFFF00);
-        public static Color Fucsia = new Color(0xFF00FF);
+        public static Color Magenta = new Color(0xFF00FF);
         #endregion
         #region casts
         public static explicit operator UInt24(Color color)

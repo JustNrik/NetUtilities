@@ -27,7 +27,7 @@ namespace System
             _ushort = (ushort)(value >> 8);
         }
 
-        private static void EnsureRange(in uint value)
+        private static void EnsureRange(uint value)
         {
             if (value > MaxValue)
                 throw new OverflowException(nameof(value));
