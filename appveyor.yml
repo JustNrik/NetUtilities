@@ -3,9 +3,10 @@ branches:
   only:
   - master
 max_jobs: 15
-image: Visual Studio 2019 Preview
+image: Visual Studio 2019
 configuration: Release
 platform: Any CPU
+
 before_build:
 - ps: nuget restore
 build:
@@ -14,7 +15,6 @@ build:
   publish_nuget_symbols: true
   parallel: true
   verbosity: minimal
-test: off
 deploy:
 - provider: NuGet
   api_key:
