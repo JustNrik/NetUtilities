@@ -8,23 +8,23 @@ namespace System
     [StructLayout(LayoutKind.Sequential, Size = 3, Pack = 1)]
     public readonly struct UInt24 : IEquatable<UInt24>, IComparable<UInt24>, IConvertible, IComparable, IFormattable
     {
-        private readonly byte _byte;
-        private readonly ushort _ushort;
+        internal readonly uint _value;
 
         public const uint MaxValue = 0xFFFFFF;
         public const uint MinValue = 0;
 
-        public UInt24(byte value)
+        public UInt24(Int24 value) : this(unchecked((uint)value._value))
         {
-            _byte = value;
-            _ushort = 0;
         }
+
+        public UInt24(int value) : this(unchecked((uint)value))
+        {
+        }
+
         public UInt24(uint value)
         {
             EnsureRange(value);
-
-            _byte = (byte)(value & 0xFF);
-            _ushort = (ushort)(value >> 8);
+            _value = value;
         }
 
         private static void EnsureRange(uint value)
@@ -35,125 +35,132 @@ namespace System
 
         #region overrided from System.Object
         public override string ToString()
-            => ((int)this).ToString();
+            => _value.ToString();
 
         public override int GetHashCode()
-            => this;
+            => unchecked((int)_value);
 
         public override bool Equals(object obj)
-            => obj is Int24 i24 ? Equals(i24) : false;
+            => _value.Equals(obj);
         #endregion
         #region interfaces implementation
         public bool Equals(UInt24 other)
-            => _byte == other._byte && _ushort == other._ushort;
+            => _value == other._value;
 
         public int CompareTo(UInt24 other)
-            => ((int)this).CompareTo(other);
+            => _value.CompareTo(other._value);
 
         int IComparable.CompareTo(object obj)
-            => obj is UInt24 u24 ? CompareTo(u24) : throw new ArgumentException(nameof(obj));
+            => obj is UInt24 uInt24 ? _value.CompareTo(uInt24._value) : throw new ArgumentException(nameof(obj));
 
         public string ToString(string format, IFormatProvider formatProvider)
-            => ((int)this).ToString(format, formatProvider);
+            => _value.ToString(format, formatProvider);
 
         TypeCode IConvertible.GetTypeCode()
             => TypeCode.UInt32;
 
         bool IConvertible.ToBoolean(IFormatProvider provider)
-            => Convert.ToBoolean((int)this, provider);
+            => Convert.ToBoolean(_value, provider);
 
         byte IConvertible.ToByte(IFormatProvider provider)
-            => Convert.ToByte((int)this, provider);
+            => Convert.ToByte(_value, provider);
 
         char IConvertible.ToChar(IFormatProvider provider)
-            => Convert.ToChar((int)this, provider);
+            => Convert.ToChar(_value, provider);
 
         DateTime IConvertible.ToDateTime(IFormatProvider provider)
-            => Convert.ToDateTime((int)this, provider);
+            => Convert.ToDateTime(_value, provider);
 
         decimal IConvertible.ToDecimal(IFormatProvider provider)
-            => Convert.ToDecimal((int)this, provider);
+            => Convert.ToDecimal(_value, provider);
 
         double IConvertible.ToDouble(IFormatProvider provider)
-            => Convert.ToDouble((int)this, provider);
+            => Convert.ToDouble(_value, provider);
 
         short IConvertible.ToInt16(IFormatProvider provider)
-            => Convert.ToInt16((int)this, provider);
+            => Convert.ToInt16(_value, provider);
 
         int IConvertible.ToInt32(IFormatProvider provider)
-            => Convert.ToInt32((int)this, provider);
+            => Convert.ToInt32(_value, provider);
 
         long IConvertible.ToInt64(IFormatProvider provider)
-            => Convert.ToInt64((int)this, provider);
+            => Convert.ToInt64(_value, provider);
 
         sbyte IConvertible.ToSByte(IFormatProvider provider)
-            => Convert.ToSByte((int)this, provider);
+            => Convert.ToSByte(_value, provider);
 
         float IConvertible.ToSingle(IFormatProvider provider)
-            => Convert.ToSingle((int)this, provider);
+            => Convert.ToSingle(_value, provider);
 
         string IConvertible.ToString(IFormatProvider provider)
-            => Convert.ToString((int)this, provider);
+            => Convert.ToString(_value, provider);
 
         object IConvertible.ToType(Type conversionType, IFormatProvider provider)
             => throw new NotSupportedException();
 
         ushort IConvertible.ToUInt16(IFormatProvider provider)
-            => Convert.ToUInt16((int)this, provider);
+            => Convert.ToUInt16(_value, provider);
 
         uint IConvertible.ToUInt32(IFormatProvider provider)
-            => Convert.ToUInt32((int)this, provider);
+            => Convert.ToUInt32(_value, provider);
 
         ulong IConvertible.ToUInt64(IFormatProvider provider)
-            => Convert.ToUInt64((int)this, provider);
+            => Convert.ToUInt64(_value, provider);
         #endregion
         #region operators
         public static bool operator ==(UInt24 left, UInt24 right)
-            => left.Equals(right);
+            => left._value == right._value;
         public static bool operator !=(UInt24 left, UInt24 right)
-            => !(left == right);
+            => left._value != right._value;
         public static bool operator ==(UInt24 left, Int24 right)
-            => right == left;
+            => left._value == right._value;
         public static bool operator !=(UInt24 left, Int24 right)
-            => right != left;
+            => left._value == right._value;
+        public static bool operator ==(UInt24 left, ulong right)
+            => left._value == right;
+        public static bool operator !=(UInt24 left, ulong right)
+            => left._value != right;
+        public static bool operator ==(ulong left, UInt24 right)
+            => left == right._value;
+        public static bool operator !=(ulong left, UInt24 right)
+            => left != right._value;
+        public static bool operator ==(UInt24 left, long right)
+            => left._value == right;
+        public static bool operator !=(UInt24 left, long right)
+            => left._value != right;
+        public static bool operator ==(long left, UInt24 right)
+            => left == right._value;
+        public static bool operator !=(long left, UInt24 right)
+            => left != right._value;
         public static UInt24 operator &(UInt24 left, UInt24 right)
-            => new UInt24((uint)left & right);
+            => new UInt24(left._value & right._value);
         public static UInt24 operator |(UInt24 left, UInt24 right)
-            => new UInt24((uint)left | right);
+            => new UInt24(left._value | right._value);
         public static UInt24 operator ^(UInt24 left, UInt24 right)
-            => new UInt24((uint)left ^ right);
-        public static UInt24 operator ~(UInt24 int24)
-            => new UInt24(~(uint)int24 & MaxValue);
+            => new UInt24(left._value ^ right._value);
+        public static UInt24 operator ~(UInt24 uInt24)
+            => new UInt24(~uInt24._value & MaxValue);
         #endregion
         #region casts
-        // explicit = Narrowing
-        // implicit = Widening
-
-        // narrowing casts
-        public static explicit operator byte(UInt24 uInt24)
-            => uInt24._ushort == 0 ? uInt24._byte : throw new InvalidCastException(nameof(uInt24));
-        public static explicit operator sbyte(UInt24 uInt24)
-            => (sbyte)(int)uInt24;
-        public static explicit operator short(UInt24 uInt24)
-            => (short)(int)uInt24;
-        public static explicit operator ushort(UInt24 uInt24)
-            => (ushort)(int)uInt24;
-        public static explicit operator Int24(UInt24 uInt24)
-            => new Int24(uInt24);
-
         // widening casts
         public static implicit operator int(UInt24 uInt24)
-            => uInt24._byte | (uInt24._ushort << 8);
+            => (int)uInt24._value;
         public static implicit operator uint(UInt24 uInt24)
-            => (uint)(uInt24._byte | (uInt24._ushort << 8));
+            => uInt24._value;
         public static implicit operator long(UInt24 uInt24)
-            => uInt24;
-
-        // UInt24 narrowing casts
-        public static implicit operator UInt24(sbyte int8)
-            => new UInt24((uint)int8);
-        public static implicit operator UInt24(short int16)
-            => new UInt24((uint)int16);
+            => uInt24._value;
+        // narrowing casts from UInt24
+        public static explicit operator byte(UInt24 uInt24)
+            => (byte)uInt24._value;
+        public static explicit operator sbyte(UInt24 uInt24)
+            => (sbyte)uInt24._value;
+        public static explicit operator short(UInt24 uInt24)
+            => (short)uInt24._value;
+        public static explicit operator ushort(UInt24 uInt24)
+            => (ushort)uInt24._value;
+        public static explicit operator Int24(UInt24 uInt24)
+            => new Int24(uInt24);
+        // narrowing casts to UInt24
         public static explicit operator UInt24(Int24 int24)
             => new UInt24((uint)int24);
         public static explicit operator UInt24(int int32)
@@ -164,12 +171,6 @@ namespace System
             => new UInt24((uint)int64);
         public static explicit operator UInt24(ulong uInt64)
             => new UInt24((uint)uInt64);
-
-        // UInt24 widening casts
-        public static implicit operator UInt24(byte uInt8)
-            => new UInt24(uInt8);
-        public static implicit operator UInt24(ushort uInt16)
-            => new UInt24(uInt16);
         #endregion
     }
 }
