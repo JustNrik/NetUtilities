@@ -26,7 +26,7 @@ namespace System
         /// <summary>
         /// Gets or sets the Length of the builder in the current instance.
         /// </summary>
-        /// <exception cref="IndexOutOfRangeException"/>
+        /// <exception cref="ArgumentOutOfRangeException"/>
         public int Length
         {
             get => _builder.Length;
@@ -112,7 +112,7 @@ namespace System
         /// <param name="pattern"/>
         /// <param name="options"/>
         /// <returns/>
-        public MatchCollection this[[RegexPattern]string? pattern, RegexOptions options = RegexOptions.None]
+        public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
             => GetMatches(pattern, options);
 
         /// <summary>

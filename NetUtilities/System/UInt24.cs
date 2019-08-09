@@ -140,6 +140,14 @@ namespace System
             => new UInt24(left._value ^ right._value);
         public static UInt24 operator ~(UInt24 uInt24)
             => new UInt24(~uInt24._value & MaxValue);
+        public static UInt24 operator +(UInt24 left, UInt24 right)
+            => new UInt24(left._value + right._value);
+        public static UInt24 operator -(UInt24 left, UInt24 right)
+            => new UInt24(left._value - right._value);
+        public static UInt24 operator /(UInt24 left, UInt24 right)
+            => new UInt24(left._value / right._value);
+        public static UInt24 operator *(UInt24 left, UInt24 right)
+            => new UInt24(left._value * right._value);
         #endregion
         #region casts
         // widening casts

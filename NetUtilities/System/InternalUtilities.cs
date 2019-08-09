@@ -5,10 +5,12 @@ namespace NetUtilities
 {
     public static class Ensure
     {
-        public static void NotNull(object obj, string name)
+        public static T NotNull<T>(T obj, string name)
         {
             if (obj is null)
                 throw new ArgumentNullException(name);
+
+            return obj;
         }
 
         public static void ZeroOrPositive(int number, string name)

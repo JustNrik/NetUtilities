@@ -15,9 +15,8 @@ namespace System
         private ActionScope(Action startAction, Action undoAction)
         {
             Ensure.NotNull(startAction, nameof(startAction));
-            Ensure.NotNull(undoAction, nameof(undoAction));
 
-            _undoAction = undoAction;
+            _undoAction = Ensure.NotNull(undoAction, nameof(undoAction));
             _cts = new CancellationTokenSource();
             startAction();
         }
@@ -47,9 +46,9 @@ namespace System
         private readonly T _obj;
 
         public static ActionScope<T> Create(T obj, Action<T> startAction, Action<T> undoAction)
-            => new ActionScope<T>(ref obj, startAction, undoAction);
+            => new ActionScope<T>(obj, startAction, undoAction);
 
-        private ActionScope(ref T obj, Action<T> startAction, Action<T> undoAction)
+        private ActionScope(T obj, Action<T> startAction, Action<T> undoAction)
         {
             Ensure.NotNull(obj, nameof(obj));
             Ensure.NotNull(startAction, nameof(startAction));
@@ -87,9 +86,9 @@ namespace System
         private readonly T2 _obj2;
 
         public static ActionScope<T1, T2> Create(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
-            => new ActionScope<T1, T2>(ref obj, ref obj2, startAction, undoAction);
+            => new ActionScope<T1, T2>( obj,  obj2, startAction, undoAction);
 
-        private ActionScope(ref T1 obj, ref T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
+        private ActionScope( T1 obj,  T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
         {
             Ensure.NotNull(obj, nameof(obj));
             Ensure.NotNull(obj2, nameof(obj2));
@@ -131,9 +130,9 @@ namespace System
         private readonly T3 _obj3;
 
         public static ActionScope<T1, T2, T3> Create(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
-            => new ActionScope<T1, T2, T3>(ref obj, ref obj2, ref obj3, startAction, undoAction);
+            => new ActionScope<T1, T2, T3>( obj,  obj2,  obj3, startAction, undoAction);
 
-        private ActionScope(ref T1 obj, ref T2 obj2, ref T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
+        private ActionScope( T1 obj,  T2 obj2,  T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
         {
             Ensure.NotNull(obj, nameof(obj));
             Ensure.NotNull(obj2, nameof(obj2));

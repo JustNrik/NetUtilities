@@ -27,6 +27,10 @@ namespace System
             _value = value;
         }
 
+        public Int24(byte[] bytes) : this(BitConverter.ToInt32(bytes))
+        {
+        }
+
         private static void EnsureRange(int value)
         {
             if (value < MinValue || value > MaxValue)
@@ -132,6 +136,14 @@ namespace System
             => new Int24(left._value ^ right._value);
         public static Int24 operator ~(Int24 int24)
             => new Int24(~int24._value & MaxValue);
+        public static Int24 operator +(Int24 left, Int24 right)
+            => new Int24(left._value + right._value);
+        public static Int24 operator -(Int24 left, Int24 right)
+            => new Int24(left._value - right._value);
+        public static Int24 operator /(Int24 left, Int24 right)
+            => new Int24(left._value / right._value);
+        public static Int24 operator *(Int24 left, Int24 right)
+            => new Int24(left._value * right._value);
         #endregion
         #region casts
         // widening casts
