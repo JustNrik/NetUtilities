@@ -42,21 +42,17 @@ namespace System
                 .Select(method => new
                 {
                     Method = method,
-                    Attributes = method.GetCustomAttributes<HandlesAttribute>().ToArray()
+                    Events = method.GetCustomAttributes<HandlesAttribute>().Select(attribute => attribute.EventInfo).ToArray()
                 })
-                .Where(metadata => metadata.Attributes.Length > 0);
+                .Where(metadata => metadata.Events.Length > 0);
 
             foreach (var metadata in metadatas)
             {
                 var method = metadata.Method;
 
-                foreach (var attribute in metadata.Attributes)
+                foreach (var eventInfo in metadata.Events)
                 {
-                    var sourceType = attribute.EventSourceType;
-                    var methodName = attribute.MethodName;
-                    var eventInfo = attribute.EventInfo;
                     var handler = method.CreateDelegate(eventInfo.EventHandlerType, target);
-
                     eventInfo.AddEventHandler(Source, handler);
 
                     if (_handlers.TryGetValue(target, out var list))

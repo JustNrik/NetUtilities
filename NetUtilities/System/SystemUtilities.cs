@@ -1,4 +1,5 @@
 ﻿#nullable enable
+using NetUtilities;
 using System.Collections.Generic;
 
 namespace System
@@ -157,5 +158,8 @@ namespace System
                     span[i] = state[j];
             });
         }
+
+        public static bool Like(this string str, string other, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+            => Ensure.NotNull(str, nameof(str)).Equals(Ensure.NotNull(other, nameof(other)), comparison);
     }
 }

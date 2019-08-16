@@ -6,10 +6,12 @@ namespace NetUtilities.Benchmarks
 {
     class Program
     {
+
         static void Main()
         {
             BenchmarkRunner.Run<MutableStringBench>();
         }
+
     }
 
     public class MutableStringBench

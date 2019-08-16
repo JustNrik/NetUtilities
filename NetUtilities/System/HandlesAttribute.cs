@@ -7,14 +7,11 @@ namespace System
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class HandlesAttribute : Attribute
     {
-        public Type EventSourceType { get; }
         public EventInfo EventInfo { get; }
-        public string MethodName { get; }
 
         public HandlesAttribute(Type eventSourceType, string eventName, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance, [CallerMemberName]string methodName = "")
         {
-            EventSourceType = Ensure.NotNull(eventSourceType, nameof(eventSourceType));
-            MethodName = methodName;
+            Ensure.NotNull(eventSourceType, nameof(eventSourceType));
             EventInfo = eventSourceType.GetEvent(eventName, flags);
 
             if (EventInfo is null)
