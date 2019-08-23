@@ -1,10 +1,9 @@
-﻿using System.Linq.Expressions;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
-#nullable enable
-namespace System
+﻿namespace System
 {
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Threading;
+
     public readonly ref struct BoundScope
     {
         private readonly Action _undoAction;
@@ -55,15 +54,9 @@ namespace System
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)
-                _undoAction();
+                _undoAction.Invoke();
 
             _cts.Dispose();
-        }
-
-        public ValueTask DisposeAsync()
-        {
-            Dispose();
-            return new ValueTask();
         }
     }
 }

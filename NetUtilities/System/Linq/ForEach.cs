@@ -1,16 +1,17 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
-#nullable enable
-namespace System.Linq
+﻿namespace System.Linq
 {
+    using NetUtilities;
+    using System.Collections.Generic;
+
     public static partial class LinqUtilities
     {
         /// <summary>
         /// Invokes an action for each element in the sequence.
         /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="action"></param>
+        /// <exception cref="ArgumentNullException">Thrown when either the source or the action are null.</exception>
+        /// <typeparam name="T">The underlying type of the sequence.</typeparam>
+        /// <param name="source">The sequence.</param>
+        /// <param name="action">The action to be executed on each item of the sequence.</param>
         public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             Ensure.NotNull(source, nameof(source));

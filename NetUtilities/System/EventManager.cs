@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace System
+﻿namespace System
 {
+    using NetUtilities;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Reflection;
+
     /// <summary>
     /// This class is a handy wrapper for automatic event wrapping.
     /// You shouldn't use this class to dynamically add/remove handlers frequently
@@ -11,7 +13,7 @@ namespace System
     /// the performance of your application.
     /// </summary>
     /// <typeparam name="TSource">The source of the events</typeparam>
-    public class EventManager<TSource>
+    public class EventManager<TSource> where TSource : notnull
     {
         /// <summary>
         /// The source of the events
@@ -23,11 +25,10 @@ namespace System
 
         /// <summary>
         /// Creates an instance of <see cref="EventManager{TSource}"/> with the instance of the source provided.
-        /// You can pass null if the source is a static class.
         /// </summary>
         /// <param name="source">The source of the events</param>
         public EventManager(TSource source)
-            => Source = source;
+            => Source = Ensure.NotNull(source, nameof(source));
 
 
         /// <summary>

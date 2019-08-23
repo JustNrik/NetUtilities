@@ -1,7 +1,7 @@
-﻿using System.Runtime.InteropServices;
-#nullable enable
-namespace System
+﻿namespace System
 {
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Represents a 24-bit unsigned integer
     /// </summary>

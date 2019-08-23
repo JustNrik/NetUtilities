@@ -9,12 +9,12 @@ namespace NetUtilities.Benchmarks
 
         static void Main()
         {
-            BenchmarkRunner.Run<MutableStringBench>();
+            BenchmarkRunner.Run<NetUtilitiesBench>();
         }
 
     }
 
-    public class MutableStringBench
+    public class NetUtilitiesBench
     {
         [Params(10, 100, 1000, 1000)]
         public static int Iterations;

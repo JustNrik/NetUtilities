@@ -1,9 +1,9 @@
-﻿using NetUtilities;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-
-namespace System
+﻿namespace System
 {
+    using NetUtilities;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
+
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class HandlesAttribute : Attribute
     {

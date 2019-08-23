@@ -1,36 +1,37 @@
 ﻿using NetUtilities;
 using System.IO;
 using System.Xml.Linq;
-using System.Xml.Serialization;
-#nullable enable
 namespace System.Xml
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Xml.Serialization;
+
     public static class XmlConvert
     {
         /// <summary>
         /// Serializes the object into XML Format
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static string SerializeObject<T>(T obj)
+        /// <exception cref="ArgumentNullException">Thrown if the object is null</exception>
+        /// <typeparam name="T">Type of the object that will be serialized</typeparam>
+        /// <param name="obj">The object to be serialized</param>
+        /// <returns>A string with the XML representation of the object provided.</returns>
+        [return: NotNull]
+        public static string SerializeObject<T>(T obj) where T : notnull
         {
-            Ensure.NotNull(obj, nameof(obj));
-
             using var stringWriter = new StringWriter();
             var serializer = new XmlSerializer(typeof(T));
-            serializer.Serialize(stringWriter, obj);
+            serializer.Serialize(stringWriter, Ensure.NotNull(obj, nameof(obj)));
             return stringWriter.ToString();
         }
 
         /// <summary>
         /// Deserializes a XML Formatted string into an object
         /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="input"></param>
-        /// <returns></returns>
+        /// <exception cref="InvalidOperationException">Thrown if the deserialization fails.</exception>
+        /// <typeparam name="T">Type of the object that will be serialized</typeparam>
+        /// <param name="input">The Formatted XML string</param>
+        /// <returns>An object.</returns>
+        [return: NotNull]
         public static T DeserializeObject<T>(string input)
         {
             ThrowIfNullOrWhiteSpace(input);
@@ -45,25 +46,5 @@ namespace System.Xml
             if (string.IsNullOrWhiteSpace(input))
                 throw new InvalidOperationException("The input is not deserializable, it's null, empty or consists only of white-spaces");
         }
-
-        /// <summary>
-        /// Extension method for <see cref="DeserializeObject{T}(string)"/>
-        /// </summary>
-        /// <exception cref="InvalidOperationException"></exception>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="element"></param>
-        /// <returns></returns>
-        public static T ToObject<T>(this XNode node)
-            => DeserializeObject<T>(node.ToString());
-
-        /// <summary>
-        /// Extension method for <see cref="SerializeObject{T}(T)"/>
-        /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        public static string SerializeAsXml<T>(this T obj)
-            => SerializeObject(obj);
     }
 }

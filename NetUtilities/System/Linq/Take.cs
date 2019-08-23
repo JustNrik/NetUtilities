@@ -1,85 +1,94 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
-#nullable enable
-namespace System.Linq
+﻿namespace System.Linq
 {
+    using NetUtilities;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
     public static partial class LinqUtilities
     {
         /// <summary>
-        /// Takes all elements until the predicate returns true.
+        /// Takes all the elements until the predicate is True.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown when either source or predicate are null.</exception>
+        /// <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+        /// <param name="source">The sequence.</param>
+        /// <param name="predicate">The delegated to filter the items.</param>
+        /// <returns>A sequence of items</returns>
+        [return: NotNull]
         public static IEnumerable<TSource> TakeUntil<TSource>(this IEnumerable<TSource> source, Predicate<TSource> predicate)
         {
             Ensure.NotNull(source, nameof(source));
             Ensure.NotNull(predicate, nameof(predicate));
 
-            return TakeUntilIterator();
+            return TakeUntilIterator(source, predicate);
+        }
 
-            IEnumerable<TSource> TakeUntilIterator()
+        private static IEnumerable<TSource> TakeUntilIterator<TSource>(IEnumerable<TSource> source, Predicate<TSource> predicate)
+        {
+            foreach (var item in source)
             {
-                foreach (var item in source)
-                {
-                    if (predicate(item)) yield break;
-                    yield return item;
-                }
+                if (predicate(item)) yield break;
+                yield return item;
             }
         }
 
         /// <summary>
-        /// Takes all elements while the predicate returns true.
+        /// Takes all the elements while the predicate is True.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public static IEnumerable<TSource> TakeWhile<TSource>(this IEnumerable<TSource> source, Predicate<TSource> predicate)
+        /// <exception cref="ArgumentNullException">Thrown when either source or predicate are null.</exception>
+        /// <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+        /// <param name="source">The sequence.</param>
+        /// <param name="predicate">The delegated to filter the items.</param>
+        /// <returns>A sequence of items</returns>
+        [return: NotNull]
+        public static IEnumerable<TSource> TakeWhile<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             Ensure.NotNull(source, nameof(source));
             Ensure.NotNull(predicate, nameof(predicate));
 
-            return TakeWhileIterator();
+            return TakeWhileIterator(source, predicate);
+        }
 
-            IEnumerable<TSource> TakeWhileIterator()
+        private static IEnumerable<TSource> TakeWhileIterator<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
+        {
+            foreach (var item in source)
             {
-                foreach (var item in source)
-                {
-                    if (!predicate(item)) yield break;
+                if (!predicate(item)) yield break;
 
-                    yield return item;
-                }
+                yield return item;
             }
         }
 
         /// <summary>
         /// Takes an amount of items from the source that matches the given predicate.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public static IEnumerable<TSource> TakeIf<TSource>(this IEnumerable<TSource> source, int count, Predicate<TSource> predicate)
+        /// <exception cref="ArgumentNullException">Thrown when either the source or the predicate are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when count is negative.</exception>
+        /// <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+        /// <param name="source">The sequence.</param>
+        /// <param name="count">The amount of items to be taken.</param>
+        /// <param name="predicate">The delegate used for filtering.</param>
+        /// <returns>A sequence with an amount equal or lower than the count give with the items that matches the predicate.</returns>
+        [return: NotNull]
+        public static IEnumerable<TSource> TakeIf<TSource>(this IEnumerable<TSource> source, int count, Func<TSource, bool> predicate)
         {
             Ensure.NotNull(source, nameof(source));
             Ensure.NotNull(predicate, nameof(predicate));
             Ensure.Positive(count, nameof(count));
 
-            return TakeIfIterator();
+            return TakeIfIterator(source, count, predicate);
+        }
 
-            IEnumerable<TSource> TakeIfIterator()
+        private static IEnumerable<TSource> TakeIfIterator<TSource>(IEnumerable<TSource> source, int count, Func<TSource, bool> predicate)
+        {
+            foreach (var item in source)
             {
-                foreach (var item in source)
+                if (predicate(item))
                 {
-                    if (predicate(item))
-                    {
-                        yield return item;
+                    yield return item;
 
-                        if (--count == 0)
-                            yield break;
-                    }
+                    if (--count == 0)
+                        yield break;
                 }
             }
         }

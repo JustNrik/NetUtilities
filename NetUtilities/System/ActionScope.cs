@@ -1,9 +1,8 @@
-﻿using NetUtilities;
-using System.Threading;
-using System.Threading.Tasks;
-#nullable enable
-namespace System
+﻿namespace System
 {
+    using NetUtilities;
+    using System.Threading;
+
     public readonly ref struct ActionScope
     {
         private readonly Action _undoAction;
@@ -15,10 +14,11 @@ namespace System
         private ActionScope(Action startAction, Action undoAction)
         {
             Ensure.NotNull(startAction, nameof(startAction));
+            Ensure.NotNull(undoAction, nameof(undoAction));
 
-            _undoAction = Ensure.NotNull(undoAction, nameof(undoAction));
+            _undoAction = undoAction;
             _cts = new CancellationTokenSource();
-            startAction();
+            startAction.Invoke();
         }
 
         public void Cancel()
@@ -27,19 +27,13 @@ namespace System
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)
-                _undoAction();
+                _undoAction.Invoke();
 
             _cts.Dispose();
         }
-
-        public ValueTask DisposeAsync()
-        {
-            Dispose();
-            return new ValueTask();
-        }
     }
 
-    public readonly ref struct ActionScope<T>
+    public readonly ref struct ActionScope<T> where T : notnull
     {
         private readonly Action<T> _undoAction;
         private readonly CancellationTokenSource _cts;
@@ -57,7 +51,7 @@ namespace System
             _undoAction = undoAction;
             _obj = obj;
             _cts = new CancellationTokenSource();
-            startAction(obj);
+            startAction.Invoke(obj);
         }
 
         public void Cancel()
@@ -66,19 +60,15 @@ namespace System
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)
-                _undoAction(_obj);
+                _undoAction.Invoke(_obj);
 
             _cts.Dispose();
-        }
-
-        public ValueTask DisposeAsync()
-        {
-            Dispose();
-            return new ValueTask();
         }
     }
 
     public readonly ref struct ActionScope<T1, T2>
+        where T1 : notnull
+        where T2 : notnull
     {
         private readonly Action<T1, T2> _undoAction;
         private readonly CancellationTokenSource _cts;
@@ -99,7 +89,7 @@ namespace System
             _obj = obj;
             _obj2 = obj2;
             _cts = new CancellationTokenSource();
-            startAction(obj, obj2);
+            startAction.Invoke(obj, obj2);
         }
 
         public void Cancel()
@@ -108,20 +98,16 @@ namespace System
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)
-                _undoAction(_obj, _obj2);
+                _undoAction.Invoke(_obj, _obj2);
 
             _cts.Dispose();
         }
-
-        public ValueTask DisposeAsync()
-        {
-            Dispose();
-            return new ValueTask();
-        }
-
     }
 
     public readonly ref struct ActionScope<T1, T2, T3>
+        where T1 : notnull
+        where T2 : notnull
+        where T3 : notnull
     {
         private readonly Action<T1, T2, T3> _undoAction;
         private readonly CancellationTokenSource _cts;
@@ -145,7 +131,7 @@ namespace System
             _obj2 = obj2;
             _obj3 = obj3;
             _cts = new CancellationTokenSource();
-            startAction(obj, obj2, obj3);
+            startAction.Invoke(obj, obj2, obj3);
         }
 
         public void Cancel()
@@ -154,15 +140,9 @@ namespace System
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)
-                _undoAction(_obj, _obj2, _obj3);
+                _undoAction.Invoke(_obj, _obj2, _obj3);
 
             _cts.Dispose();
-        }
-
-        public ValueTask DisposeAsync()
-        {
-            Dispose();
-            return new ValueTask();
         }
     }
 }

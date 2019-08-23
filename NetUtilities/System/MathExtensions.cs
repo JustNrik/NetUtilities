@@ -186,7 +186,7 @@ namespace System
             => GetDigits((ulong)value);
 
         /// <summary>
-        /// Gets the amount of difits in the provided number.
+        /// Gets the amount of digits in the provided number.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -195,7 +195,7 @@ namespace System
             => value == int.MinValue ? 10 : GetDigits((ulong)Abs(value));
 
         /// <summary>
-        /// Gets the amount of difits in the provided number.
+        /// Gets the amount of digits in the provided number.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -204,7 +204,7 @@ namespace System
             => value == long.MinValue ? 19 : GetDigits((ulong)Abs(value));
 
         /// <summary>
-        /// Gets the amount of difits in the provided number.
+        /// Gets the amount of digits in the provided number.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

@@ -1,7 +1,7 @@
-﻿using System.Reflection;
-
-namespace System
+﻿namespace System
 {
+    using System.Reflection;
+
     public sealed class EventNotFoundException : Exception
     {
         public EventNotFoundException(string eventName, string objectName, BindingFlags flags) : base(

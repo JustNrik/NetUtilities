@@ -1,8 +1,11 @@
-﻿using NetUtilities;
-using System.Linq;
-#nullable enable
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
+    using NetUtilities;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using MethodImplementation = Runtime.CompilerServices.MethodImplAttribute;
+
     /// <summary>
     /// A true readonly generic List which provides most of <see cref="List{T}"/> methods.
     /// </summary>
@@ -10,275 +13,365 @@ namespace System.Collections.Generic
     public sealed class ReadOnlyList<T> : IReadOnlyList<T>
     {
         private readonly List<T> _list;
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
 
         /// <summary>
         /// Creates a <see cref="ReadOnlyList{T}"/> from an <see cref="IEnumerable{T}"/>
         /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <param name="sequence"/>
-        public ReadOnlyList(IEnumerable<T> sequence)
+        /// <exception cref="ArgumentNullException">This exception is thrown the if argument is null</exception>
+        /// <param name="source">The source to create the list.</param>
+        public ReadOnlyList([NotNull]IEnumerable<T> source)
+            => _list = Ensure.NotNull(source, nameof(source)).ToList();
+
+        /// <summary>
+        /// Returns the element stored in the given index.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">This exception is throw if the index is out of the bounds of this list</exception>
+        /// <param name="index">The index of the element that will be taken.</param>
+        /// <returns>The element in the given index.</returns>
+        public T this[int index]
         {
-            Ensure.NotNull(sequence, nameof(sequence));
-            _list = sequence.ToList();
+            [MethodImplementation(Inlined)]
+            [return: MaybeNull]
+            get => _list[index];
         }
 
         /// <summary>
         /// Returns the element stored in the given index.
         /// </summary>
-        /// <exception cref="IndexOutOfRangeException"/>
-        /// <param name="index"/>
-        /// <returns/>
-        public T this[int index] 
-            => _list[index];
+        /// <exception cref="ArgumentOutOfRangeException">This exception is throw if the index is out of the bounds of this list.</exception>
+        /// <param name="index">The index of the element that will be taken.</param>
+        /// <returns>The element in the given index.</returns>
+        public T this[Index index]
+        {
+            [MethodImplementation(Inlined)]
+            [return: MaybeNull]
+            get
+            {
+                var indice = index.GetOffset(Count);
+                return _list[indice];
+            }
+        }
+
+        /// <summary>
+        /// Returns all elements in the given range.
+        /// </summary>
+        /// <param name="range">The range where all elements will be taken.</param>
+        /// <returns>A new <see cref="ReadOnlyList{T}"/> with all the elements in the given range.</returns>
+        public ReadOnlyList<T> this[Range range]
+        {
+            [MethodImplementation(Inlined)]
+            [return: NotNull]
+            get
+            {
+                var (startIndex, count) = range.GetOffsetAndLength(_list.Count);
+                return Slice(startIndex, count);
+            }
+        }
 
         /// <summary>
         /// Returns true.
         /// </summary>
-        /// <returns/>
+        /// <returns>Returns true.</returns>
         public bool IsReadOnly
-            => true;
+        {
+            [MethodImplementation(Inlined)]
+            get => true;
+        }
 
         /// <summary>
         /// Returns the amount of element in the current instace.
         /// </summary>
-        /// <returns/>
+        /// <returns>The amount of elements in the current instance.</returns>
         public int Count
-            => _list.Count;
+        {
+            [MethodImplementation(Inlined)]
+            get => _list.Count;
+        }
 
         /// <summary>
         /// Gets the enumerator for the current instance.
         /// </summary>
-        /// <returns/>
+        /// <returns>An enumerator for the current instance.</returns>
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
         public IEnumerator<T> GetEnumerator()
             => _list.GetEnumerator();
 
         /// <summary>
-        /// Gets the index of the provided item, you can optionally provide as well the starting index and the count of indexes.
+        /// Finds the index of the given item.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"/>
-        /// <param name="item"/>
-        /// <param name="index"/>
-        /// <param name="count"/>
-        /// <returns/>
-        public int IndexOf(T item, int index = 0, int? count = null)
-            => _list.IndexOf(item, index, count ?? Count);
+        /// <param name="item">The item whose index will be searched.</param>
+        /// <returns>The index of the given item, -1 if it's not found.</returns>
+        [MethodImplementation(Inlined)]
+        public int IndexOf([AllowNull]T item)
+            => IndexOf(item, 0, Count);
+
+        /// <summary>
+        /// Finds the index of the given item starting from the index given.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+        /// <param name="item">The item whose index will be searched.</param>
+        /// <param name="startIndex">The starting index where the search will begin.</param>
+        /// <returns>The index of the given item, -1 if it's not found.</returns>
+        [MethodImplementation(Inlined)]
+        public int IndexOf([AllowNull]T item, int startIndex)
+            => IndexOf(item, startIndex, Count);
+
+        /// <summary>
+        /// Finds the index of the given item starting from the index given.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+        /// <param name="item">The item whose index will be searched.</param>
+        /// <param name="startIndex">The starting index where the search will begin.</param>
+        /// <param name="count">The amount of items that will be searched.</param>
+        /// <returns>The index of the given item, -1 if it's not found.</returns>
+        [MethodImplementation(Inlined)]
+        public int IndexOf([AllowNull]T item, int startIndex, int count)
+        {
+            Ensure.ValidCount(startIndex, count, Count);
+            return _list.IndexOf(item, startIndex, count);
+        }
 
         /// <summary>
         /// Returns true if the list contains the provided element. otherwise false.
         /// </summary>
-        /// <param name="item"/>
-        /// <returns/>
-        public bool Contains(T item)
+        /// <param name="item">The item that will be searched.</param>
+        /// <returns>true if the items is found, otherwise false.</returns>
+        [MethodImplementation(Inlined)]
+        public bool Contains([AllowNull]T item)
             => _list.Contains(item);
 
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
         IEnumerator IEnumerable.GetEnumerator()
             => _list.GetEnumerator();
 
         /// <summary>
-        /// Finds the first element that matches the given predicate, or the default value if no matching element is found.
+        /// Finds the first element that matches the given predicate.
         /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <param name="predicate"/>
-        /// <returns/>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The first item that matches the predicate. otherwise default.</returns>
+        [MethodImplementation(Inlined)]
+        [return: MaybeNull]
         public T Find(Predicate<T> predicate)
-            => _list.Find(predicate);
+            => _list.Find(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
-        /// Finds the first element that matches the given predicate, or the default value if no matching element is found.
-        /// (This method iterates from last to first)
+        /// Finds the last element that matches the given predicate
         /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <param name="predicate"/>
-        /// <returns/>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The first item that matches the predicate. otherwise default.</returns>
+        [MethodImplementation(Inlined)]
+        [return: MaybeNull]
         public T FindLast(Predicate<T> predicate)
-            => _list.FindLast(predicate);
+            => _list.FindLast(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
         /// Finds all the elements that matches the given predicate. 
-        /// You may as well limit the amount of elements that can be returned. 
-        /// The number of elements in the returning collection is not guaranteed to be the same of maxCount if provided.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="predicate"></param>
-        /// <param name="maxCount"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>A <see cref="ReadOnlyList{T}"/> with all the elements that matches the predicate.</returns>
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
         public ReadOnlyList<T> FindAll(Predicate<T> predicate)
-            => _list.FindAll(predicate).ToReadOnlyList();
+            => _list.FindAll(Ensure.NotNull(predicate, nameof(predicate))).ToReadOnlyList();
 
         /// <summary>
         /// Finds the index of the first element that matches the given predicate.
         /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <param name="predicate"/>
-        /// <returns/>
-        public int FindIndex(Predicate<T> match)
-            => _list.FindIndex(match);
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The index of the first element that matches the given predicate.</returns>
+        [MethodImplementation(Inlined)]
+        public int FindIndex(Predicate<T> predicate)
+            => _list.FindIndex(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
         /// Finds the index of the first element that matches the given predicate starting from the given index.
         /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <exception cref="ArgumentOutOfRangeException"/>
-        /// <param name="startIndex"/>
-        /// <param name="predicate"/>
-        /// <returns/>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+        /// <param name="startIndex">The starting index where the search will begin.</param>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The index of the first element that matches the given predicate.</returns>
+        [MethodImplementation(Inlined)]
         public int FindIndex(int startIndex, Predicate<T> predicate)
-            => _list.FindIndex(startIndex, predicate);
-
-        /// <summary>
-        /// Finds the index of the first element that matches the given predicate starting from the given index and number of elements.
-        /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <exception cref="ArgumentOutOfRangeException"/>
-        /// <param name="startIndex"/>
-        /// <param name="count"/>
-        /// <param name="predicate"/>
-        /// <returns/>
-        public int FindIndex(int startIndex, int count, Predicate<T> predicate)
-            => _list.FindIndex(startIndex, count, predicate);
-
-        /// <summary>
-        /// Finds the index of the first element that matches the given predicate.
-        /// (This method iterates from last to first)
-        /// </summary>
-        /// <exception cref="ArgumentNullException"/>
-        /// <exception cref="ArgumentOutOfRangeException"/>
-        /// <param name="predicate"/>
-        /// <param name="startIndex"/>
-        /// <param name="count"/>
-        /// <returns/>
-        public int FindLastIndex(Predicate<T> predicate, int startIndex = 0, int? count = null)
         {
-            count ??= Count;
-
-            Ensure.NotNull(predicate, nameof(predicate));
-            Ensure.IndexInRange(startIndex, count.Value);
-            Ensure.ValidCount(startIndex, count.Value, Count);
-
-            var index = startIndex + count.Value - 1;
-
-            for (int counter = 1; counter <= count; counter++, index--)
-            {
-                var element = this[index];
-
-                if (predicate(element))
-                    return index;
-            }
-
-            return -1;
+            Ensure.IndexInRange(startIndex, Count);
+            return _list.FindIndex(startIndex, Ensure.NotNull(predicate, nameof(predicate)));
         }
 
-        /// <inheritdoc />
-        public int BinarySearch(T item)
+        /// <summary>
+        /// Finds the index of the first element that matches the given predicate starting from the given index.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+        /// <param name="startIndex">The starting index where the search will begin.</param>
+        /// <param name="count">The amount of items that will be searched.</param>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The index of the first element that matches the given predicate.</returns>
+        [MethodImplementation(Inlined)]
+        public int FindIndex(int startIndex, int count, Predicate<T> predicate)
+        {
+            Ensure.ValidCount(startIndex, count, Count);
+            return _list.FindIndex(startIndex, count, Ensure.NotNull(predicate, nameof(predicate)));
+        }
+
+        /// <summary>
+        /// Finds the index of the last element that matches the given predicate.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The index of the last element that matches the given predicate.</returns>
+        [MethodImplementation(Inlined)]
+        public int FindLastIndex(Predicate<T> predicate)
+            => FindLastIndex(0, Count, predicate);
+
+        /// <summary>
+        /// Finds the index of the last element that matches the given predicate starting from the given index.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start index is not valid (negative or >= Count)</exception>
+        /// <param name="startIndex">The starting index where the search will begin.</param>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <returns>The index of the last element that matches the given predicate.</returns>
+        [MethodImplementation(Inlined)]
+        public int FindLastIndex(int startIndex, Predicate<T> predicate)
+            => FindLastIndex(startIndex, Count, predicate);
+
+        /// <summary>
+        /// Finds the index of the last element that matches the given predicate starting from the given index.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the start index is not valid (negative or >= Count)</exception>
+        /// <param name="startIndex">The starting index where the search will begin.</param>
+        /// <param name="predicate">The predicate used to find a matching item.</param>
+        /// <param name="count">The amount of items to be searched.</param>
+        /// <returns>The index of the last element that matches the given predicate.</returns>
+        [MethodImplementation(Inlined)]
+        public int FindLastIndex(int startIndex, int count, Predicate<T> predicate)
+        {
+            Ensure.IndexInRange(startIndex, count);
+            return _list.FindLastIndex(startIndex, count, predicate);
+        }
+
+        /// <summary>
+        /// Searches for the index of the given item using <see cref="EqualityComparer{T}.Default"/>
+        /// </summary>
+        /// <param name="item">The item to be searched</param>
+        /// <returns>The index of the given item, -1 if not found.</returns>
+        [MethodImplementation(Inlined)]
+        public int BinarySearch([AllowNull]T item)
             => _list.BinarySearch(item);
 
-        /// <inheritdoc />
-        public int BinarySearch(T item, IComparer<T> comparer)
-            => _list.BinarySearch(item, comparer);
+        /// <summary>
+        /// Searches for the index of the given item using the comparer provided.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when the comparer is null.</exception>
+        /// <param name="item">The item to be searched.</param>
+        /// <param name="comparer">The comparer to be used in order to search the item.</param>
+        /// <returns>The index of the given item, -1 if not found.</returns>
+        [MethodImplementation(Inlined)]
+        public int BinarySearch([AllowNull]T item, IComparer<T> comparer)
+            => _list.BinarySearch(item, Ensure.NotNull(comparer, nameof(comparer)));
 
-        /// <inheritdoc />
-        public int BinarySearch(int index, int count, T item, IComparer<T> comparer)
-            => _list.BinarySearch(index, count, item, comparer);
+        /// <summary>
+        /// Searches for the index of the given item using the comparer provided.
+        /// </summary>
+        /// <param name="startIndex">The index where the search will start.</param>
+        /// <param name="count">The amount of elements to be searched.</param>
+        /// <param name="item">The item to be searched.</param>
+        /// <param name="comparer">The comparer to be used in order to search the item.</param>
+        /// <returns>The index of the given item, -1 if not found.</returns>
+        [MethodImplementation(Inlined)]
+        public int BinarySearch(int startIndex, int count, [AllowNull]T item, IComparer<T> comparer)
+        {
+            Ensure.ValidCount(startIndex, count, Count);
+            Ensure.NotNull(comparer, nameof(comparer));
+            return _list.BinarySearch(startIndex, count, item, comparer);
+        }
 
         /// <summary>
         /// Returns a <see cref="ReadOnlyList{TOut}"/> with all members of the current list converted into the target type.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentNullException">Thrown when the converter is null.</exception>
         /// <typeparam name="TOut">The output generic type of the <see cref="ReadOnlyList{T}"/></typeparam>
-        /// <param name="converter"></param>
-        /// <returns></returns>
+        /// <param name="converter">The delegate used to convert the items</param>
+        /// <returns>Returns a <see cref="ReadOnlyList{TOut}"/></returns>
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
         public ReadOnlyList<TOut> ConvertAll<TOut>(Converter<T, TOut> converter)
-            => new ReadOnlyList<TOut>(_list.ConvertAll(converter));
+            => new ReadOnlyList<TOut>(_list.ConvertAll(Ensure.NotNull(converter, nameof(converter))));
 
         /// <summary>
-        /// Returns true if an element of the list matches the given predicate.
+        /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found starting from the given index.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
-        public bool Exists(Predicate<T> predicate)
-            => _list.Exists(predicate);
+        /// <param name="startIndex">The index where elements will start to get taken from.</param>
+        /// <returns>
+        /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
+        /// </returns>
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
+        public ReadOnlyList<T> Slice(int startIndex)
+            => Slice(startIndex, Count - startIndex - 1);
 
         /// <summary>
-        /// Gets the given amount of members from the given index
+        /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found 
+        /// starting from the given index with the given amount of elements.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
-        /// <param name="index"></param>
-        /// <param name="count"></param>
-        /// <returns></returns>
-        public ReadOnlyList<T> GetRange(int index, int count)
+        /// <param name="startIndex">The index where elements will start to get taken from.</param>
+        /// <param name="count">The amount of elements to be taken.</param>
+        /// <returns>
+        /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
+        /// </returns>
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
+        public ReadOnlyList<T> Slice(int startIndex, int count)
         {
-            Ensure.IndexInRange(index, count);
-            Ensure.ValidCount(index, count, Count);
+            Ensure.ValidCount(startIndex, count, Count);
 
-            var list = new List<T>(count);
+            if (startIndex == 0 && count == _list.Count - 1) return this;
 
-            for (int counter = 1; counter <= count; counter++)
-            {
-                list.Add(this[index]);
-                index++;
-            }
+            var array = new T[count];
+            var index = startIndex;
 
-            return list.ToReadOnlyList();
+            for (var currentCount = 1; currentCount <= count; currentCount++, index++)
+                array[index] = _list[index];
+
+            return new ReadOnlyList<T>(array);
         }
 
-        public ReadOnlyList<T> GetRange(Range range)
-        {
-            var (index, count) = range.GetOffsetAndLength(Count);
-            return GetRange(index, count);
-        }
-
         /// <summary>
-        /// Returns true if any of the elements matches the predicate.
+        /// Checks if any element in the current instance matches the given predicate.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The delegate used to filter the items.</param>
+        /// <returns>True if any item matches the predicate. Otherwise false.</returns>
+        [MethodImplementation(Inlined)]
         public bool Any(Predicate<T> predicate)
-        {
-            Ensure.NotNull(predicate, nameof(predicate));
-
-            for (int index = 0; index < Count; index++)
-            {
-                if (predicate(this[index]))
-                    return true;
-            }
-
-            return false;
-        }
+            => _list.Exists(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
-        /// Returns true if all elements matches the predicate.
+        /// Checks if all elements in the current instance match the given predicate.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="predicate"></param>
-        /// <returns></returns>
+        /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
+        /// <param name="predicate">The delegate used to filter the items.</param>
+        /// <returns>True if all items match the predicate. Otherwise false.</returns>
+        [MethodImplementation(Inlined)]
         public bool All(Predicate<T> predicate)
-        {
-            Ensure.NotNull(predicate, nameof(predicate));
-
-            for (int index = 0; index < Count; index++)
-            {
-                if (!predicate(this[index]))
-                    return false;
-            }
-
-            return true;
-        }
+            => _list.TrueForAll(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
         /// Executes an action for each element in the list.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <param name="action"></param>
+        /// <exception cref="ArgumentNullException">Thrown if the action is null.</exception>
+        /// <param name="action">The action delegate to be executed for each item in the list</param>
+        [MethodImplementation(Inlined)]
         public void ForEach(Action<T> action)
-        {
-            Ensure.NotNull(action, nameof(action));
-
-            for (int index = 0; index < Count; index++)
-            {
-                action(this[index]);
-            }
-        }
+            => _list.ForEach(Ensure.NotNull(action, nameof(action)));
     }
 }

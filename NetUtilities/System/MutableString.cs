@@ -1,27 +1,31 @@
-﻿using JetBrains.Annotations;
-using NetUtilities;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-#nullable enable
-namespace System
+﻿namespace System
 {
+    using JetBrains.Annotations;
+    using NetUtilities;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+    using System.Linq;
+    using System.Runtime.CompilerServices;
+    using System.Text;
+    using System.Text.RegularExpressions;
+    using MethodImplementation = Runtime.CompilerServices.MethodImplAttribute;
+
     /// <summary>
     /// This class is a handy wrapper of <see cref="StringBuilder"/> class for string manipulation with minimal cost.
     /// </summary>
     public sealed class MutableString :
-        IEnumerable, IEnumerable<char>,
         ICollection, ICollection<char>,
-        IList<char>,
         IComparable, IComparable<string>, IComparable<MutableString>,
-        IEquatable<string>, IEquatable<MutableString>
+        IEnumerable, IEnumerable<char>,
+        IEquatable<string>, IEquatable<MutableString>,
+        IList<char>
     {
         #region fields and properties
         private readonly StringBuilder _builder;
         private string _current = string.Empty;
         private bool _isModified = true;
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
 
         /// <summary>
         /// Gets or sets the Length of the builder in the current instance.
@@ -29,6 +33,7 @@ namespace System
         /// <exception cref="ArgumentOutOfRangeException"/>
         public int Length
         {
+            [MethodImplementation(Inlined)]
             get => _builder.Length;
             set
             {
@@ -46,7 +51,9 @@ namespace System
         /// <exception cref="ArgumentOutOfRangeException"/>
         public int Capacity
         {
+            [MethodImplementation(Inlined)]
             get => _builder.Capacity;
+            [MethodImplementation(Inlined)]
             set => _builder.Capacity = value;
         }
 
@@ -57,6 +64,7 @@ namespace System
         /// <returns/>
         public char this[Index index]
         {
+            [MethodImplementation(Inlined)]
             get => _builder[index.GetOffset(Length)];
             set
             {
@@ -72,7 +80,9 @@ namespace System
         /// <returns/>
         public char this[int index]
         {
+            [MethodImplementation(Inlined)]
             get => _builder[index];
+            [MethodImplementation(Inlined)]
             set => _builder[index] = value;
         }
 
@@ -85,6 +95,7 @@ namespace System
         /// <returns/>
         public string this[Range range]
         {
+            [MethodImplementation(Inlined)]
             get => Substring(range);
             set
             {
@@ -109,11 +120,15 @@ namespace System
         /// <summary>
         /// Returns a <see cref="MatchCollection"/> with the provided pattern.
         /// </summary>
-        /// <param name="pattern"/>
-        /// <param name="options"/>
-        /// <returns/>
+        /// <param name="pattern">The <see cref="Regex"/> pattern to be used</param>
+        /// <param name="options">The <see cref="RegexOptions"/> to be used</param>
+        /// <returns>A collection of <see cref="Match"/> objects</returns>
         public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
-            => GetMatches(pattern, options);
+        {
+            [MethodImplementation(Inlined)]
+            [return: NotNull]
+            get => GetMatches(pattern, options);
+        }
 
         /// <summary>
         /// Returns a <see cref="string"/> with the replacement applied on the pattern given. This method doesn't mutate the current instance.
@@ -123,7 +138,11 @@ namespace System
         /// <param name="options"/>
         /// <returns/>
         public string this[[RegexPattern]string pattern, string replacement, RegexOptions options = RegexOptions.None]
-            => Regex.Replace(this, pattern, replacement, options);
+        {
+            [MethodImplementation(Inlined)]
+            [return: NotNull]
+            get => Regex.Replace(this, pattern, replacement, options);
+        }
 
         /// <summary>
         /// Returns a <see cref="string"/>[] delimited with the characters provided. An empty array if not found. 
@@ -135,19 +154,26 @@ namespace System
         /// <param name="includeBounds"/>
         /// <returns/>
         public string[] this[char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false]
-            => this.SubstringsBetween(leftBound, rightBound, startIndex, includeBounds);
+        {
+            [MethodImplementation(Inlined)]
+            [return: NotNull]
+            get => this.SubstringsBetween(leftBound, rightBound, startIndex, includeBounds);
+        }
 
         /// <summary>
         /// Returns the maximun capacity of the builder.
         /// </summary>
         public int MaxCapacity
-            => _builder.MaxCapacity;
+        {
+            [MethodImplementation(Inlined)]
+            get => _builder.MaxCapacity;
+        }
         #endregion
         #region constructors
         public MutableString()
             => _builder = new StringBuilder();
 
-        public MutableString(string? value)
+        public MutableString(string value)
             => _builder = new StringBuilder(value);
 
         public MutableString(int capacity, int maxCapacity)
@@ -156,13 +182,13 @@ namespace System
         public MutableString(int capacity)
             => _builder = new StringBuilder(capacity);
 
-        public MutableString(string? value, int capacity)
+        public MutableString(string value, int capacity)
             => _builder = new StringBuilder(value, capacity);
 
-        public MutableString(StringBuilder? builder)
+        public MutableString(StringBuilder builder)
             => _builder = builder ?? new StringBuilder();
 
-        public MutableString(string? value, int startIndex, int capacity, int count)
+        public MutableString(string value, int startIndex, int capacity, int count)
             => _builder = new StringBuilder(value, startIndex, count, capacity);
         #endregion
         #region explicit interface implementation
@@ -291,7 +317,7 @@ namespace System
             return _current;
         }
 
-        public override bool Equals(object? obj)
+        public override bool Equals(object obj)
             => obj switch
         {
             MutableString mutable => Equals(mutable),
@@ -310,70 +336,70 @@ namespace System
             return this;
         }
 
-        public MutableString Append(string? item)
+        public MutableString Append(string item)
         {
             _builder.Append(item);
             _isModified = true;
             return this;
         }
 
-        public MutableString Append(object? item)
+        public MutableString Append(object item)
         {
             _builder.Append(item);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendFormat(string? format, params object[]? args)
+        public MutableString AppendFormat(string format, params object[] args)
         {
             _builder.AppendFormat(format, args);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendFormat(IFormatProvider? provider, string? format, params object[]? args)
+        public MutableString AppendFormat(IFormatProvider provider, string format, params object[] args)
         {
             _builder.AppendFormat(provider, format, args);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(char separator, params object[]? values)
+        public MutableString AppendJoin(char separator, params object[] values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(char separator, params string[]? values)
+        public MutableString AppendJoin(char separator, params string[] values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(string separator, params object[]? values)
+        public MutableString AppendJoin(string separator, params object[] values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin(string separator, params string[]? values)
+        public MutableString AppendJoin(string separator, params string[] values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin<T>(char separator, IEnumerable<T>? values)
+        public MutableString AppendJoin<T>(char separator, IEnumerable<T> values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
             return this;
         }
 
-        public MutableString AppendJoin<T>(string? separator, IEnumerable<T>? values)
+        public MutableString AppendJoin<T>(string separator, IEnumerable<T> values)
         {
             _builder.AppendJoin(separator, values);
             _isModified = true;
@@ -383,19 +409,19 @@ namespace System
         public MutableString AppendLine(char item)
         {
             _isModified = true;
-            return Append(item + Environment.NewLine);
+            return Append(item).Append(Environment.NewLine);
         }
 
-        public MutableString AppendLine(string? item)
+        public MutableString AppendLine(string item)
         {
             _isModified = true;
-            return Append(item + Environment.NewLine);
+            return Append(item).Append(Environment.NewLine);
         }
 
-        public MutableString AppendLine(object? item)
+        public MutableString AppendLine(object item)
         {
             _isModified = true;
-            return Append(item + Environment.NewLine);
+            return Append(item).Append(Environment.NewLine);
         }
         #endregion
         #region Equals
@@ -898,7 +924,10 @@ namespace System
             return Regex.IsMatch(this, pattern, options);
         }
 
-        public MutableString ReplacePattern([RegexPattern]string? pattern, string? replacement, RegexOptions options = RegexOptions.None)
+        public MutableString ReplacePattern(
+            [RegexPattern]string pattern,
+            [AllowNull]string replacement,
+            RegexOptions options = RegexOptions.None)
         {
             Ensure.NotNull(pattern, nameof(pattern));
 
@@ -908,27 +937,23 @@ namespace System
                 _current = _builder.ToString();
 
             _current = Regex.Replace(_current, pattern, replacement, options);
+            _builder.Clear();
+            _builder.Append(_current);
             _isModified = false;
             return this;
         }
 
+        [MethodImplementation(Inlined)]
         public Match GetMatch([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
-        {
-            Ensure.NotNull(pattern, nameof(pattern));
-            return Regex.Match(this, pattern, options);
-        }
+            => Regex.Match(this, Ensure.NotNull(pattern, nameof(pattern)), options);
 
+        [MethodImplementation(Inlined)]
         public MatchCollection GetMatches([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
-        {
-            Ensure.NotNull(pattern, nameof(pattern));
-            return Regex.Matches(this, pattern, options);
-        }
+            => Regex.Matches(this, Ensure.NotNull(pattern, nameof(pattern)), options);
 
+        [MethodImplementation(Inlined)]
         public string[] SplitPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
-        {
-            Ensure.NotNull(pattern, nameof(pattern));
-            return Regex.Split(this, pattern, options);
-        }
+            => Regex.Split(this, Ensure.NotNull(pattern, nameof(pattern)), options);
         #endregion
         #region Substring
         public string Substring(int startIndex)

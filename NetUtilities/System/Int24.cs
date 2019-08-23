@@ -1,7 +1,8 @@
-﻿using System.Runtime.InteropServices;
-#nullable enable
-namespace System
+﻿namespace System
 {
+    using System.Diagnostics.CodeAnalysis;
+    using System.Runtime.InteropServices;
+
     /// <summary>
     /// Represents a 24-bit signed integer
     /// </summary>

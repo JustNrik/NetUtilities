@@ -1,6 +1,8 @@
 ﻿#nullable enable
 using NetUtilities;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace System
 {
@@ -11,7 +13,7 @@ namespace System
         /// </summary>
         /// <param name="charArray"></param>
         /// <returns></returns>
-        public static string AsString(this char[]? charArray)
+        public static string AsString(this char[] charArray)
             => new string(charArray);
 
         /// <summary>
@@ -22,11 +24,9 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string SubstringBetween(this string? input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
+        public static string SubstringBetween(this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            if (input is null) throw new ArgumentNullException(nameof(input));
-
-            var start = input.IndexOf(leftBound, startIndex) + 1;
+            var start = Ensure.NotNull(input, nameof(input)).IndexOf(leftBound, startIndex) + 1;
 
             if (start == 0) return string.Empty;
 
@@ -104,9 +104,9 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string[] SubstringsBetween(this string? input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
+        public static string[] SubstringsBetween(this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            if (input is null) throw new ArgumentNullException(nameof(input));
+            Ensure.NotNull(input, nameof(input));
 
             var indexes = input.IndexesOf(leftBound, startIndex, input.Length);
 
@@ -128,9 +128,9 @@ namespace System
         /// <param name="startIndex"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static int[] IndexesOf(this string? input, char value, int startIndex, int count)
+        public static int[] IndexesOf(this string input, char value, int startIndex, int count)
         {
-            if (input is null) throw new ArgumentNullException(nameof(input));
+            Ensure.NotNull(input, nameof(input));
             if (count == 0) return Array.Empty<int>();
 
             var currentIndex = input.IndexOf(value, startIndex, count);
@@ -148,18 +148,45 @@ namespace System
         public static MutableString ToMutable(this string? value)
             => new MutableString(value);
 
-        public static string Reverse(this string? str)
-        {
-            if (str is null) throw new ArgumentNullException(nameof(str));
-
-            return string.Create(str.Length, str, (span, state) =>
-            {
-                for (int i = 0, j = span.Length - 1; i < span.Length; i++, j--)
-                    span[i] = state[j];
-            });
-        }
+        public static string Reverse(this string str)
+            => string.Create(Ensure.NotNull(str, nameof(str)).Length, str, (span, state) =>
+           {
+               for (int i = 0, j = span.Length - 1; i < span.Length; i++, j--)
+                   span[i] = state[j];
+           });
 
         public static bool Like(this string str, string other, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
             => Ensure.NotNull(str, nameof(str)).Equals(Ensure.NotNull(other, nameof(other)), comparison);
+
+        /// <summary>
+        /// Gets each flags of the given <typeparamref name="TEnum"/> instance.
+        /// </summary>
+        /// <typeparam name="TEnum">Type of the <see cref="Enum"/></typeparam>
+        /// <param name="enum">The <see cref="Enum"/> object</param>
+        /// <returns>A <see cref="{TEnum}"/>[] containing all the flags found in the current instance</returns>
+        public static TEnum[] GetFlags<TEnum>(this TEnum @enum) where TEnum : unmanaged, Enum
+        {
+            if (!EnumHelper<TEnum>.IsFlagEnum)
+                throw new InvalidOperationException("This method can only be used on enums with FlagsAttributes");
+
+            var values = EnumHelper<TEnum>.Values;
+            var length = 0;
+
+            Span<TEnum> span = stackalloc TEnum[values.Length];
+
+            foreach (var value in values)
+            {
+                if (@enum.HasFlag(value))
+                    span[length++] = value;
+            }
+
+            return span[0..length].ToArray();
+        }
+
+        private static class EnumHelper<TEnum> where TEnum : unmanaged, Enum
+        {
+            public static readonly TEnum[] Values = (TEnum[])Enum.GetValues(typeof(TEnum));
+            public static readonly bool IsFlagEnum = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is object;
+        }
     }
 }

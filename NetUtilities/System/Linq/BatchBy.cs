@@ -1,33 +1,35 @@
-﻿using NetUtilities;
-using System;
-using System.Collections.Generic;
-using System.Text;
-#nullable enable
-namespace System.Linq
+﻿namespace System.Linq
 {
+    using NetUtilities;
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
+
     public static partial class LinqUtilities
     {
         /// <summary>
         /// Bulks the collection into a collection of collection by an specific amount.
         /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="size"></param>
-        /// <returns></returns>
+        /// <typeparam name="TSource">The underlying type of the collection</typeparam>
+        /// <param name="source">The collection</param>
+        /// <param name="size">The size of the buckets</param>
+        /// <returns>An enumerable bulked by the given size.</returns>
+        [return: NotNull]
         public static IEnumerable<IEnumerable<TSource>> BulkBy<TSource>(this IEnumerable<TSource> source, int size)
             => BulkBy(source, size, x => x);
 
         /// <summary>
         /// Bulks the collection into a collection of collection by an specific amount.
         /// </summary>
-        /// <exception cref="ArgumentNullException"></exception>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <exception cref="ArgumentNullException">Thrown when either source or selector are null</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when a negative size is given</exception>
         /// <typeparam name="TSource"></typeparam>
         /// <typeparam name="TResult"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="size"></param>
-        /// <param name="selector"></param>
-        /// <returns></returns>
+        /// <param name="source">The source collection.</param>
+        /// <param name="size">The size of the buckets.</param>
+        /// <param name="selector">The selector delegate.</param>
+        /// <returns>An enumerable bulked by the given size.</returns>
+        [return: NotNull]
         public static IEnumerable<TResult> BulkBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
         {
             Ensure.NotNull(source, nameof(source));
@@ -59,7 +61,7 @@ namespace System.Linq
                     count = 0;
                 }
 
-                if (!(bucket is null) && count > 0)
+                if (bucket is object && count > 0)
                 {
                     Array.Resize(ref bucket, count);
                     yield return selector(bucket);
