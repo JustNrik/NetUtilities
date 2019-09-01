@@ -16,13 +16,6 @@
             => _instanceDelegate.Invoke();
 
         /// <summary>
-        /// Creates a <see cref="Scope{T}"/> that contains an object.
-        /// </summary>
-        /// <returns><see cref="Scope{T}"/></returns>
-        public static Scope<T> CreateScope()
-            => new Scope<T>(_instanceDelegate.Invoke());
-
-        /// <summary>
         /// Creates a single instance (Singleton) which can be used on the application lifetime.
         /// </summary>
         public static T Singleton { get; } = _instanceDelegate.Invoke();
