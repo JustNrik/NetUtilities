@@ -53,6 +53,21 @@
         }
 
         /// <summary>
+        /// Returns the specified attribute if exists on the give value of the enum.
+        /// </summary>
+        /// <typeparam name="TAttribute">The type of the attribute.</typeparam>
+        /// <typeparam name="TEnum">The type of the enum.</typeparam>
+        /// <param name="enum">The enum.</param>
+        /// <param name="inherited">Indicates if it should inspect for the ancestors.</param>
+        /// <returns></returns>
+        [return: MaybeNull]
+        public static TAttribute GetEnumFieldAttribute<TAttribute, TEnum>(this TEnum @enum, bool inherited = true)
+            where TAttribute : Attribute
+            where TEnum : Enum
+            => typeof(TEnum).GetField(Enum.GetName(typeof(TEnum), @enum)).GetCustomAttribute<TAttribute>(inherited);
+
+
+        /// <summary>
         /// Indicates if the given type contains a default constructor. 
         /// This method will always return true for structs (Structures in Visual Basic)
         /// </summary>
