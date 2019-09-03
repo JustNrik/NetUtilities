@@ -72,8 +72,11 @@
         /// This method will always return true for structs (Structures in Visual Basic)
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown when type is null.</exception>
-        /// <param name="type"></param>
-        /// <returns>True if the type is </returns>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        /// <see langword="true"/> if the type is a struct or has a parameterless constructor. 
+        /// Otherwise <see langword="false"/>
+        /// </returns>
         [MethodImplementation(Inlined)]
         public static bool HasDefaultConstructor(this Type type)
             => Ensure.NotNull(type, nameof(type)).IsValueType 

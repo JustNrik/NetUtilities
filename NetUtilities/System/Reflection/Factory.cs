@@ -1,53 +1,67 @@
 ﻿namespace System.Reflection
 {
+    using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq.Expressions;
+    using System.Runtime.CompilerServices;
+    using MethodImplementation = Runtime.CompilerServices.MethodImplAttribute;
+
+    /// <summary>
+    /// This class is a helper to create instance of objects whose types are only known at runtime.
+    /// </summary>
+    public static class Factory
+    {
+        private static readonly Dictionary<Type, Func<object>> _dict
+            = new Dictionary<Type, Func<object>>();
+
+        /// <summary>
+        /// Gets the instance of a generic type with a parameterless constructor.
+        /// Performs much better than <see cref="Activator.CreateInstance{T}"/>
+        public static object CreateInstance(Type type)
+            => _dict.TryGetValue(type, out var func)
+            ? func.Invoke()
+            : AddFunc(type);
+
+        private static Func<object> AddFunc(Type type)
+        {
+            if (!type.HasDefaultConstructor())
+                throw new InvalidOperationException($"The type {type.FullName} does not contain a public parameterless constructor.");
+
+            var func = (Func<object>)Expression.Lambda(Expression.New(type)).Compile();
+            _dict.Add(type, func);
+            return func;
+
+        }
+    }
 
     /// <summary>
     /// This class is a helper to create instance of objects whose types are only known at runtime.
     /// </summary>
     /// <typeparam name="T">The type whose instance will be created.</typeparam>
-    public static class Factory<T> where T : notnull, new()
+    public static class Factory<T> where T : new()
     {
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
 
         private static readonly Func<T> _func = typeof(T).IsValueType
             ? (() => default!)
             : Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
 
         /// <summary>
+        /// Creates a single instance (Singleton) which can be used on the application lifetime.
+        /// </summary>
+        public static T Singleton
+        {
+            [MethodImplementation(Inlined)]
+            [return: NotNull]
+            get;
+        } = _func.Invoke();
+
+        /// <summary>
         /// Gets the instance of a generic type with a parameterless constructor.
         /// Performs much better than <see cref="Activator.CreateInstance{T}"/>
         /// </summary>
+        [return: NotNull]
         public static T CreateInstance()
             => _func.Invoke();
-
-        /// <summary>
-        /// Creates a single instance (Singleton) which can be used on the application lifetime.
-        /// </summary>
-        public static T Singleton { get; } = _func.Invoke();
-    }
-
-    /// <summary>
-    /// This class is a helper to create instance of objects whose types are only known at runtime.
-    /// </summary>
-    public static class Factory<TIn, TOut>
-    {
-        /// <summary>
-        /// Creates an instance of <typeparamref name="TOut"/> with the given argument of type <typeparamref name="TIn"/>.
-        /// </summary>
-        /// <typeparam name="TIn">The type of the argument.</typeparam>
-        /// <typeparam name="TOut">The type of the object that will be created.</typeparam>
-        /// <param name="in">The argument.</param>
-        /// <returns>An instance of <typeparamref name="TOut"/></returns>
-        public static TOut CreateInstance(TIn @in) => _func.Invoke(@in);
-        private static readonly Func<TIn, TOut> _func;
-
-        static Factory()
-        {
-            var ctor = typeof(TOut).GetConstructor(new Type[] { typeof(TIn) });
-            var parameter = Expression.Parameter(typeof(TIn), "@in");
-            var @new = Expression.New(ctor, parameter);
-            var lambda = Expression.Lambda<Func<TIn, TOut>>(@new, parameter);
-            _func = lambda.Compile();
-        }
     }
 }

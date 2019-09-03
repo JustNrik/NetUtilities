@@ -10,14 +10,11 @@ namespace NetUtilities.Tests.System.Reflection
         public void Creating_Instances()
         {
             var x = Factory<int>.CreateInstance();
-            var foo = Factory<string, Foo>.CreateInstance("Robert de Niro");
             var singleton = Factory<Bar>.Singleton;
             var singleton2 = Factory<Bar>.Singleton;
             var bar = Factory<Bar>.CreateInstance();
 
             Assert.Equal(0, x);
-            Assert.NotNull(foo);
-            Assert.Equal("Robert de Niro", foo.Name);
             Assert.True(ReferenceEquals(singleton, singleton2));
             Assert.NotNull(bar);
         }
