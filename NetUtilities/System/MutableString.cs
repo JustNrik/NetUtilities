@@ -675,6 +675,38 @@
 
         public bool Contains(string? item, Range range)
             => IndexOf(item, range) != -1;
+
+        /// <summary>
+        /// Indicates if the string contains any of the words provided.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="words">The words.</param>
+        /// <returns><see langword="true"/> if the string contains any of the providen words, otherwise <see langword="false"=""/></returns>
+        public bool ContainsAny(params string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (Contains(word))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Indicates if the string contains all of the words provided.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="words">The words.</param>
+        /// <returns><see langword="true"/> if the string contains all of the providen words, otherwise <see langword="false"=""/></returns>
+        public bool ContainsAll(params string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (!Contains(word))
+                    return false;
+            }
+            return true;
+        }
         #endregion
         #region IndexOf
         public int IndexOf(char item)

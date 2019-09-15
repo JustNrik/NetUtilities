@@ -10,13 +10,20 @@ namespace NetUtilities.Tests.System.Reflection
         public void Creating_Instances()
         {
             var x = Factory<int>.CreateInstance();
-            var singleton = Factory<Bar>.Singleton;
-            var singleton2 = Factory<Bar>.Singleton;
             var bar = Factory<Bar>.CreateInstance();
+            var newX = Factory.CreateInstance(typeof(Bar));
 
             Assert.Equal(0, x);
-            Assert.True(ReferenceEquals(singleton, singleton2));
             Assert.NotNull(bar);
+            Assert.NotNull(newX);
+        }
+
+        [Fact]
+        public void Singleton_Should_Point_To_The_Same_Object()
+        {
+            var singleton = Factory<Bar>.Singleton;
+            var singleton2 = Factory<Bar>.Singleton;
+            Assert.Same(singleton, singleton2);
         }
     }
 

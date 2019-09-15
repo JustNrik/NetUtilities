@@ -145,18 +145,69 @@ namespace System
             return result.ToArray();
         }
 
-        public static MutableString ToMutable(this string? value)
+        /// <summary>
+        /// Creates a <see cref="MutableString"/> with the <see cref="string"/> provided.
+        /// </summary>
+        /// <param name="value">The string.</param>
+        /// <returns>A mutable string.</returns>
+        public static MutableString ToMutable(this string value)
             => new MutableString(value);
 
+        /// <summary>
+        /// Returns a new <see cref="string"/> with the reversed characters.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when the provided string is <see langword="null"/></exception>
+        /// <param name="str">The string to be reversed.</param>
+        /// <returns>A reversed string.</returns>
         public static string Reverse(this string str)
-            => string.Create(Ensure.NotNull(str, nameof(str)).Length, str, (span, state) =>
-           {
-               for (int i = 0, j = span.Length - 1; i < span.Length; i++, j--)
-                   span[i] = state[j];
-           });
+            => string.Create(Ensure.NotNull(str, nameof(str)).Length, str, 
+                (span, state) =>
+                {
+                    for (int i = 0, j = span.Length - 1; i < span.Length; i++, j--)
+                        span[i] = state[j];
+                });
 
+        /// <summary>
+        /// Returns a boolean indicating if both strings are similar content-wise (case-insensitive by default)
+        /// </summary>
+        /// <param name="str">The string to be compared</param>
+        /// <param name="other">The string to look for similarities</param>
+        /// <param name="comparison">The comparison to be used to determine if they are alike</param>
+        /// <returns>A boolean indicating if the string are alike.</returns>
         public static bool Like(this string str, string other, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
             => Ensure.NotNull(str, nameof(str)).Equals(Ensure.NotNull(other, nameof(other)), comparison);
+
+        /// <summary>
+        /// Indicates if the string contains any of the words provided.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="words">The words.</param>
+        /// <returns><see langword="true"/> if the string contains any of the providen words, otherwise <see langword="false"=""/></returns>
+        public static bool ContainsAny(this string str, params string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (str.Contains(word))
+                    return true;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Indicates if the string contains all of the words provided.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <param name="words">The words.</param>
+        /// <returns><see langword="true"/> if the string contains all of the providen words, otherwise <see langword="false"=""/></returns>
+        public static bool ContainsAll(this string str, params string[] words)
+        {
+            foreach (var word in words)
+            {
+                if (!str.Contains(word))
+                    return false;
+            }
+            return true;
+        }
 
         /// <summary>
         /// Gets each flags of the given <typeparamref name="TEnum"/> instance.
