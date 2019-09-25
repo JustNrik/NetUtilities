@@ -1,13 +1,18 @@
 ﻿using System.Runtime.CompilerServices;
 using static System.Math;
+using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
 namespace System
 {
     public static class MathExtensions
     {
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
+        private const decimal Einv = 0.3678794411714423215955237701614608674458111310317678M;
+        private const decimal E = 2.7182818284590452353602874713526624977572470936999595749M;
+
         public static decimal RoundToSignificantDigits(this decimal d, int digits)
         {
-            if (d == 0)
+            if (d is 0)
                 return 0;
 
             var scale = Pow(10, Floor(Log(Abs(d))) + 1);
@@ -16,7 +21,7 @@ namespace System
 
         public static double RoundToSignificantDigits(this double d, int digits)
         {
-            if (d == 0)
+            if (d is 0)
                 return 0;
 
             var scale = Math.Pow(10, Floor(Log10(Abs(d))) + 1);
@@ -25,7 +30,7 @@ namespace System
 
         public static float RoundToSignificantDigits(this float s, int digits)
         {
-            if (s == 0)
+            if (s is 0)
                 return 0;
 
             var scale = MathF.Pow(10, MathF.Floor(MathF.Log10(Abs(s))) + 1);
@@ -34,7 +39,7 @@ namespace System
 
         public static decimal PowN(decimal value, int power)
         {
-            if (power == 0m) return 1m;
+            if (power is 0) return 1m;
             if (power < 0m) return PowN(1m / value, -power);
 
             var q = power;
@@ -42,7 +47,7 @@ namespace System
             var current = value;
             while (q > 0)
             {
-                if (q % 2 == 1)
+                if (q % 2 is 1)
                 {
                     prod = current * prod;
                     q--;
@@ -56,10 +61,10 @@ namespace System
 
         public static decimal Pow(decimal value, decimal pow)
         {
-            if (pow == 0m || value == 1m) return 1m;
-            if (pow == 1m) return value;
+            if (pow is 0m || value is 1m) return 1m;
+            if (pow is 1m) return value;
 
-            if (value == 0m)
+            if (value is 0m)
             {
                 if (pow > 0m)
                     return 0m;
@@ -68,9 +73,7 @@ namespace System
                 throw new InvalidOperationException("Zero base and negative power");
             }
 
-            if (pow == -1m) return 1m / value;
-
-            var isPowerInteger = IsInteger(pow);
+            if (pow is -1m) return 1m / value;
 
             if (IsInteger(pow))
             {
@@ -80,7 +83,7 @@ namespace System
                     return PowN(value, intPow);
                 else
                 {
-                    if (intPow % 2 == 0)
+                    if (intPow % 2 is 0)
                         return Exp(pow * Log(-value));
                     else
                         return -Exp(pow * Log(-value));
@@ -93,7 +96,7 @@ namespace System
             return Exp(pow * Log(value));
         }
 
-        private static bool IsInteger(decimal value)
+        private static bool IsInteger(in decimal value)
             => Abs(value - (long)value) <= 0.0000000000000000001M;
 
         public static decimal Exp(decimal x)
@@ -125,13 +128,11 @@ namespace System
                 result += fatorial;
             } while (cachedResult != result);
 
-            if (count != 0) result *= PowN(E, count);
+            if (!(count is 0)) 
+                result *= PowN(E, count);
 
             return result;
         }
-
-        private const decimal Einv = 0.3678794411714423215955237701614608674458111310317678M;
-        private const decimal E = 2.7182818284590452353602874713526624977572470936999595749M;
 
         public static decimal Log(decimal x)
         {
@@ -154,7 +155,8 @@ namespace System
 
             x--;
 
-            if (x == 0) return count;
+            if (x is 0m) 
+                return count;
 
             var result = 0m;
             var iteration = 0;
@@ -173,11 +175,47 @@ namespace System
         }
 
         /// <summary>
+        /// Returns a boolean indicating if the provided number is a power of 2.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsPowerOf2(this int value)
+            => value < 2 ? false : IsPowerOf2((ulong)value);
+
+        /// <summary>
+        /// Returns a boolean indicating if the provided number is a power of 2.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsPowerOf2(this uint value)
+            => IsPowerOf2((ulong)value);
+
+        /// <summary>
+        /// Returns a boolean indicating if the provided number is a power of 2.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsPowerOf2(this long value)
+            => value < 2 ? false : IsPowerOf2((ulong)value);
+
+        /// <summary>
+        /// Returns a boolean indicating if the provided number is a power of 2.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsPowerOf2(this ulong value)
+            => value < 2 ? false : ((value & (value - 1)) == 0);
+
+        /// <summary>
         /// Gets the amount of digits in the provided number.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImplementation(Inlined)]
         public static int GetDigits(this uint value)
             => GetDigits((ulong)value);
 
@@ -186,7 +224,7 @@ namespace System
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImplementation(Inlined)]
         public static int GetDigits(this int value)
             => value == int.MinValue ? 10 : GetDigits((ulong)Abs(value));
 
@@ -195,7 +233,7 @@ namespace System
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImplementation(Inlined)]
         public static int GetDigits(this long value)
             => value == long.MinValue ? 19 : GetDigits((ulong)Abs(value));
 
@@ -204,7 +242,7 @@ namespace System
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImplementation(Inlined)]
         public static int GetDigits(this ulong value)
         {
             if (value < _8)

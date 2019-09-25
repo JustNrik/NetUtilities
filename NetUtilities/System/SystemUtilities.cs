@@ -1,6 +1,7 @@
 ﻿
 using NetUtilities;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System
@@ -12,6 +13,7 @@ namespace System
         /// </summary>
         /// <param name="charArray"></param>
         /// <returns></returns>
+        [return: NotNull]
         public static string AsString(this char[] charArray)
             => new string(charArray);
 
@@ -23,7 +25,8 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string SubstringBetween(this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
+        [return: NotNull]
+        public static string SubstringBetween([NotNull]this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
             var start = Ensure.NotNull(input, nameof(input)).IndexOf(leftBound, startIndex) + 1;
 
@@ -50,11 +53,10 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string SubstringBetween(this MutableString? input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
+        [return: NotNull]
+        public static string SubstringBetween([NotNull]this MutableString input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            if (input is null) throw new ArgumentNullException(nameof(input));
-
-            var start = input.IndexOf(leftBound, startIndex) + 1;
+            var start = Ensure.NotNull(input, nameof(input)).IndexOf(leftBound, startIndex) + 1;
 
             if (start == 0) return string.Empty;
 
@@ -79,11 +81,10 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string[] SubstringsBetween(this MutableString? input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
+        [return: NotNull]
+        public static string[] SubstringsBetween([NotNull]this MutableString input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            if (input is null) throw new ArgumentNullException(nameof(input));
-
-            var indexes = input.IndexesOf(leftBound, startIndex);
+            var indexes = Ensure.NotNull(input, nameof(input)).IndexesOf(leftBound, startIndex);
 
             if (indexes.Length == 0) return Array.Empty<string>();
 
@@ -103,18 +104,19 @@ namespace System
         /// <param name="rightBound"></param>
         /// <param name="includeBounds"></param>
         /// <returns></returns>
-        public static string[] SubstringsBetween(this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
+        [return: NotNull]
+        public static string[] SubstringsBetween([NotNull]this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
             Ensure.NotNull(input, nameof(input));
 
-            var indexes = input.IndexesOf(leftBound, startIndex, input.Length);
+            var indices = input.IndexesOf(leftBound, startIndex, input.Length);
 
-            if (indexes.Length == 0) return Array.Empty<string>();
+            if (indices.Length == 0) return Array.Empty<string>();
 
-            var result = new string[indexes.Length];
+            var result = new string[indices.Length];
 
-            for (int resultIndex = 0; resultIndex < indexes.Length; resultIndex++)
-                result[resultIndex] = input.SubstringBetween(leftBound, rightBound, indexes[resultIndex], includeBounds);
+            for (int resultIndex = 0; resultIndex < indices.Length; resultIndex++)
+                result[resultIndex] = input.SubstringBetween(leftBound, rightBound, indices[resultIndex], includeBounds);
 
             return result;
         }
@@ -127,13 +129,14 @@ namespace System
         /// <param name="startIndex"></param>
         /// <param name="count"></param>
         /// <returns></returns>
-        public static int[] IndexesOf(this string input, char value, int startIndex, int count)
+        [return: NotNull]
+        public static int[] IndexesOf([NotNull]this string input, char value, int startIndex, int count)
         {
             Ensure.NotNull(input, nameof(input));
             if (count == 0) return Array.Empty<int>();
 
             var currentIndex = input.IndexOf(value, startIndex, count);
-            var result = new List<int>(5);
+            var result = new List<int>();
 
             while (currentIndex != -1)
             {
@@ -149,6 +152,7 @@ namespace System
         /// </summary>
         /// <param name="value">The string.</param>
         /// <returns>A mutable string.</returns>
+        [return: NotNull]
         public static MutableString ToMutable(this string value)
             => new MutableString(value);
 
@@ -158,7 +162,8 @@ namespace System
         /// <exception cref="ArgumentNullException">Thrown when the provided string is <see langword="null"/></exception>
         /// <param name="str">The string to be reversed.</param>
         /// <returns>A reversed string.</returns>
-        public static string Reverse(this string str)
+        [return: NotNull]
+        public static string Reverse([NotNull]this string str)
             => string.Create(Ensure.NotNull(str, nameof(str)).Length, str,
                 (span, state) =>
                 {
@@ -173,7 +178,7 @@ namespace System
         /// <param name="other">The string to look for similarities</param>
         /// <param name="comparison">The comparison to be used to determine if they are alike</param>
         /// <returns>A boolean indicating if the string are alike.</returns>
-        public static bool Like(this string str, string other, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+        public static bool Like([NotNull]this string str, [NotNull]string other, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
             => Ensure.NotNull(str, nameof(str)).Equals(Ensure.NotNull(other, nameof(other)), comparison);
 
         /// <summary>
@@ -182,8 +187,11 @@ namespace System
         /// <param name="str">The string.</param>
         /// <param name="words">The words.</param>
         /// <returns><see langword="true"/> if the string contains any of the providen words, otherwise <see langword="false"=""/></returns>
-        public static bool ContainsAny(this string str, params string[] words)
+        public static bool ContainsAny([NotNull]this string str, [NotNull]params string[] words)
         {
+            Ensure.NotNull(str, nameof(str));
+            Ensure.NotNull(words, nameof(words));
+
             foreach (var word in words)
             {
                 if (str.Contains(word))
@@ -198,8 +206,11 @@ namespace System
         /// <param name="str">The string.</param>
         /// <param name="words">The words.</param>
         /// <returns><see langword="true"/> if the string contains all of the providen words, otherwise <see langword="false"=""/></returns>
-        public static bool ContainsAll(this string str, params string[] words)
+        public static bool ContainsAll([NotNull]this string str, [NotNull]params string[] words)
         {
+            Ensure.NotNull(str, nameof(str));
+            Ensure.NotNull(words, nameof(words));
+
             foreach (var word in words)
             {
                 if (!str.Contains(word))
@@ -214,10 +225,10 @@ namespace System
         /// <typeparam name="TEnum">Type of the <see cref="Enum"/></typeparam>
         /// <param name="enum">The <see cref="Enum"/> object</param>
         /// <returns>A <see cref="{TEnum}"/>[] containing all the flags found in the current instance</returns>
+        [return: NotNull]
         public static TEnum[] GetFlags<TEnum>(this TEnum @enum) where TEnum : unmanaged, Enum
         {
-            if (!EnumHelper<TEnum>.IsFlagEnum)
-                throw new InvalidOperationException("This method can only be used on enums with FlagsAttributes");
+            EnumHelper<TEnum>.ThrowIfNotFlagEnum();
 
             var values = EnumHelper<TEnum>.Values;
             var length = 0;
@@ -235,8 +246,13 @@ namespace System
 
         private static class EnumHelper<TEnum> where TEnum : unmanaged, Enum
         {
-            public static readonly TEnum[] Values = (TEnum[])Enum.GetValues(typeof(TEnum));
-            public static readonly bool IsFlagEnum = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is object;
+            public static TEnum[] Values { get; } = (TEnum[])Enum.GetValues(typeof(TEnum));
+
+            public static void ThrowIfNotFlagEnum()
+            {
+                if (typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is null)
+                    throw new InvalidOperationException("This method can only be used on enums with FlagsAttributes");
+            }
         }
     }
 }

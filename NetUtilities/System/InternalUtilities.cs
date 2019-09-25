@@ -6,7 +6,7 @@ using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute
 
 namespace NetUtilities
 {
-    public static class Ensure
+    internal static class Ensure
     {
         private const MethodImplOptions NotInlined = MethodImplOptions.NoInlining;
 
@@ -38,7 +38,7 @@ namespace NetUtilities
         public static void CanWrite<T>(ICollection<T> source)
         {
             if (source.IsReadOnly)
-                throw new InvalidOperationException($"{typeof(T).Name} is a Read-Only collection");
+                throw new InvalidOperationException($"{source.GetType().Name} is a Read-Only collection");
         }
 
         [MethodImplementation(NotInlined)]
