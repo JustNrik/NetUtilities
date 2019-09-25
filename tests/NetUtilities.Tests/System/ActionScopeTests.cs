@@ -16,7 +16,7 @@ namespace NetUtilities.Tests.System
 
             Assert.Equal(0, stub.Value);
         }
-        
+
         [Fact]
         public void CreateTest_String_ShouldSucceed()
         {

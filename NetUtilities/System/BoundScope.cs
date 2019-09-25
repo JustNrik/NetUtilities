@@ -1,9 +1,9 @@
-﻿namespace System
-{
-    using System.Linq.Expressions;
-    using System.Reflection;
-    using System.Threading;
+﻿using System.Linq.Expressions;
+using System.Reflection;
+using System.Threading;
 
+namespace System
+{
     public readonly ref struct BoundScope
     {
         private readonly Action _undoAction;

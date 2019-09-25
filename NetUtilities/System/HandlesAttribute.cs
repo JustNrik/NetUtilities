@@ -1,9 +1,9 @@
-﻿namespace System
-{
-    using NetUtilities;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
+﻿using NetUtilities;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
+namespace System
+{
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = true)]
     public sealed class HandlesAttribute : Attribute
     {

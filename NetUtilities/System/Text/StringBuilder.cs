@@ -1,8 +1,8 @@
-﻿namespace System.Text
-{
-    using NetUtilities;
-    using System.Diagnostics.CodeAnalysis;
+﻿using NetUtilities;
+using System.Diagnostics.CodeAnalysis;
 
+namespace System.Text
+{
     public static class StringBuilderUtils
     {
         [return: NotNull]

@@ -1,15 +1,17 @@
-﻿namespace NetUtilities
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.CompilerServices;
-    using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
+namespace NetUtilities
+{
     public static class Ensure
     {
         private const MethodImplOptions NotInlined = MethodImplOptions.NoInlining;
 
         [MethodImplementation(NotInlined)]
+        [return: NotNull]
         public static T NotNull<T>(T obj, string name)
         {
             if (obj is null)

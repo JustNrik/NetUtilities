@@ -1,11 +1,10 @@
 ﻿using NetUtilities;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Xml.Linq;
+using System.Xml.Serialization;
+
 namespace System.Xml
 {
-    using System.Diagnostics.CodeAnalysis;
-    using System.Xml.Serialization;
-
     public static class XmlConvert
     {
         /// <summary>

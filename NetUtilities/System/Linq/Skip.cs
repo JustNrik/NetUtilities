@@ -1,7 +1,7 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-#nullable enable
+
 namespace System.Linq
 {
     public static partial class LinqUtilities
@@ -15,19 +15,28 @@ namespace System.Linq
         /// <param name="predicate">The delegated to filter the items.</param>
         /// <returns>A sequence of items</returns>
         [return: NotNull]
-        public static IEnumerable<TSource> SkipWhile<TSource>(this IEnumerable<TSource> source, Predicate<TSource> predicate)
-        {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.NotNull(predicate, nameof(predicate));
+        public static IEnumerable<TSource> SkipWhile<TSource>(
+            [NotNull]this IEnumerable<TSource> source,
+            [NotNull]Func<TSource, bool> predicate)
+            => SkipWhileIterator(
+                Ensure.NotNull(source, nameof(source)), 
+                Ensure.NotNull(predicate, nameof(predicate)));
 
-            return SkipWhileIterator(source, predicate);
-        }
-
-        private static IEnumerable<TSource> SkipWhileIterator<TSource>(IEnumerable<TSource> source, Predicate<TSource> predicate)
+        private static IEnumerable<TSource> SkipWhileIterator<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            using var e = source.GetEnumerator();
-            while (e.MoveNext() && predicate(e.Current)) { } // Consuming the enumerable while the predicate is true
-            while (e.MoveNext()) yield return e.Current;
+            using var enumerator = source.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                if (!predicate(enumerator.Current))
+                {
+                    yield return enumerator.Current;
+
+                    while (enumerator.MoveNext())
+                        yield return enumerator.Current;
+
+                    break;
+                }
+            }
         }
 
         /// <summary>
@@ -39,20 +48,28 @@ namespace System.Linq
         /// <param name="predicate">The delegated to filter the items.</param>
         /// <returns>A sequence of items</returns>
         [return: NotNull]
-        public static IEnumerable<TSource> SkipUntil<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.NotNull(predicate, nameof(predicate));
-
-            return SkipUntilIterator(source, predicate);
-        }
+        public static IEnumerable<TSource> SkipUntil<TSource>(
+            [NotNull]this IEnumerable<TSource> source,
+            [NotNull]Func<TSource, bool> predicate)
+            => SkipUntilIterator(
+                Ensure.NotNull(source, nameof(source)), 
+                Ensure.NotNull(predicate, nameof(predicate)));
 
         private static IEnumerable<TSource> SkipUntilIterator<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             using var enumerator = source.GetEnumerator();
-            while (enumerator.MoveNext() && !predicate(enumerator.Current)) { } // Consuming the enumerable until the predicate is true;
-            yield return enumerator.Current;
-            while (enumerator.MoveNext()) yield return enumerator.Current;
+            while (enumerator.MoveNext()) 
+            {
+                if (predicate(enumerator.Current))
+                {
+                    yield return enumerator.Current;
+
+                    while (enumerator.MoveNext()) 
+                        yield return enumerator.Current;
+
+                    break;
+                }
+            }
         }
     }
 }

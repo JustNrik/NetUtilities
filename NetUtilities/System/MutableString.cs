@@ -1,16 +1,16 @@
-﻿namespace System
-{
-    using JetBrains.Annotations;
-    using NetUtilities;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using System.Text;
-    using System.Text.RegularExpressions;
-    using MethodImplementation = Runtime.CompilerServices.MethodImplAttribute;
+﻿using JetBrains.Annotations;
+using NetUtilities;
+using System.Collections;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Text;
+using System.Text.RegularExpressions;
+using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
+namespace System
+{
     /// <summary>
     /// This class is a handy wrapper of <see cref="StringBuilder"/> class for string manipulation with minimal cost.
     /// </summary>
@@ -215,11 +215,11 @@
 
         int IComparable.CompareTo(object obj)
             => obj switch
-        {
-            string str => ((IComparable<string>)this).CompareTo(str),
-            MutableString mutable => ((IComparable<string>)this).CompareTo(mutable),
-            _ => throw new ArgumentException(nameof(obj))
-        };
+            {
+                string str => ((IComparable<string>)this).CompareTo(str),
+                MutableString mutable => ((IComparable<string>)this).CompareTo(mutable),
+                _ => throw new ArgumentException(nameof(obj))
+            };
 
         int IComparable<string>.CompareTo(string other)
             => ToString().CompareTo(other);
@@ -319,11 +319,11 @@
 
         public override bool Equals(object obj)
             => obj switch
-        {
-            MutableString mutable => Equals(mutable),
-            string immutable => Equals(immutable),
-            _ => false
-        };
+            {
+                MutableString mutable => Equals(mutable),
+                string immutable => Equals(immutable),
+                _ => false
+            };
 
         public override int GetHashCode()
             => _builder.GetHashCode();
@@ -1016,7 +1016,7 @@
         public MutableString Slice(int startIndex, int count)
         {
             EnsureRange(startIndex, count);
-            
+
             if (startIndex > 0) _builder.Remove(0, startIndex);
             _builder.Remove(count, Length - count);
 

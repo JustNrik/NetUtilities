@@ -1,11 +1,10 @@
-﻿namespace System
-{
-    using NetUtilities;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Reflection;
+﻿using NetUtilities;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
+namespace System
+{
     /// <summary>
     /// This class is a handy wrapper for automatic event wrapping.
     /// You shouldn't use this class to dynamically add/remove handlers frequently
@@ -20,12 +19,13 @@
         /// </summary>
         public TSource Source { get; }
 
-        private readonly Dictionary<object, List<(EventInfo, Delegate)>> _handlers = 
+        private readonly Dictionary<object, List<(EventInfo, Delegate)>> _handlers =
             new Dictionary<object, List<(EventInfo, Delegate)>>();
 
         /// <summary>
         /// Creates an instance of <see cref="EventManager{TSource}"/> with the instance of the source provided.
         /// </summary>
+        /// <exception cref="ArgumentNullException">Thrown when source is null.</exception>
         /// <param name="source">The source of the events</param>
         public EventManager(TSource source)
             => Source = Ensure.NotNull(source, nameof(source));

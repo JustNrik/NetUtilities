@@ -1,9 +1,9 @@
-﻿namespace System.Linq
-{
-    using NetUtilities;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
+﻿using NetUtilities;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
+namespace System.Linq
+{
     public static partial class LinqUtilities
     {
         /// <summary>
@@ -25,29 +25,6 @@
                 source.Add(element);
             else
                 source[index] = element;
-        }
-
-        /// <summary>
-        /// Adds an element to a <see cref="IDictionary{TKey, TValue}"/> if it doesn't exists. 
-        /// Otherwise it updates it.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown if either the source or key are null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown if <see cref="ICollection{T}.IsReadOnly"/> returns true.</exception>
-        /// <typeparam name="TKey">The type of the key.</typeparam>
-        /// <typeparam name="TValue">The type of the value.</typeparam>
-        /// <param name="source">The source collection.</param>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
-        public static void AddOrUpdate<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
-        {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.NotNull(key, nameof(key));
-            Ensure.CanWrite(source);
-
-            if (source.ContainsKey(key))
-                source[key] = value;
-            else
-                source.Add(key, value);
         }
 
         /// <summary>

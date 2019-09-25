@@ -1,8 +1,7 @@
-﻿namespace System
-{
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
+namespace System
+{
     /// <summary>
     /// Represents a 24-bit signed integer
     /// </summary>

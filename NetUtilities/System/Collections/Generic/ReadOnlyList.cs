@@ -1,19 +1,19 @@
-﻿namespace System.Collections.Generic
-{
-    using NetUtilities;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
-    using System.Runtime.CompilerServices;
-    using MethodImplementation = Runtime.CompilerServices.MethodImplAttribute;
+﻿using NetUtilities;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
+namespace System.Collections.Generic
+{
     /// <summary>
     /// A true readonly generic List which provides most of <see cref="List{T}"/> methods.
     /// </summary>
     /// <typeparam name="T">The generic type of this instance</typeparam>
     public sealed class ReadOnlyList<T> : IReadOnlyList<T>
     {
-        private readonly List<T> _list;
         private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
+        private readonly List<T> _list;
 
         /// <summary>
         /// Creates a <see cref="ReadOnlyList{T}"/> from an <see cref="IEnumerable{T}"/>
@@ -155,7 +155,7 @@
         /// <returns>The first item that matches the predicate. otherwise default.</returns>
         [MethodImplementation(Inlined)]
         [return: MaybeNull]
-        public T Find(Predicate<T> predicate)
+        public T Find([NotNull]Predicate<T> predicate)
             => _list.Find(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
@@ -166,7 +166,7 @@
         /// <returns>The first item that matches the predicate. otherwise default.</returns>
         [MethodImplementation(Inlined)]
         [return: MaybeNull]
-        public T FindLast(Predicate<T> predicate)
+        public T FindLast([NotNull]Predicate<T> predicate)
             => _list.FindLast(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
@@ -177,7 +177,7 @@
         /// <returns>A <see cref="ReadOnlyList{T}"/> with all the elements that matches the predicate.</returns>
         [MethodImplementation(Inlined)]
         [return: NotNull]
-        public ReadOnlyList<T> FindAll(Predicate<T> predicate)
+        public ReadOnlyList<T> FindAll([NotNull]Predicate<T> predicate)
             => _list.FindAll(Ensure.NotNull(predicate, nameof(predicate))).ToReadOnlyList();
 
         /// <summary>
@@ -187,7 +187,7 @@
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The index of the first element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
-        public int FindIndex(Predicate<T> predicate)
+        public int FindIndex([NotNull]Predicate<T> predicate)
             => _list.FindIndex(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
@@ -199,7 +199,7 @@
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The index of the first element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
-        public int FindIndex(int startIndex, Predicate<T> predicate)
+        public int FindIndex(int startIndex, [NotNull]Predicate<T> predicate)
         {
             Ensure.IndexInRange(startIndex, Count);
             return _list.FindIndex(startIndex, Ensure.NotNull(predicate, nameof(predicate)));
@@ -215,7 +215,7 @@
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The index of the first element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
-        public int FindIndex(int startIndex, int count, Predicate<T> predicate)
+        public int FindIndex(int startIndex, int count, [NotNull]Predicate<T> predicate)
         {
             Ensure.ValidCount(startIndex, count, Count);
             return _list.FindIndex(startIndex, count, Ensure.NotNull(predicate, nameof(predicate)));
@@ -228,7 +228,7 @@
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The index of the last element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
-        public int FindLastIndex(Predicate<T> predicate)
+        public int FindLastIndex([NotNull]Predicate<T> predicate)
             => FindLastIndex(0, Count, predicate);
 
         /// <summary>
@@ -240,7 +240,7 @@
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The index of the last element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
-        public int FindLastIndex(int startIndex, Predicate<T> predicate)
+        public int FindLastIndex(int startIndex, [NotNull]Predicate<T> predicate)
             => FindLastIndex(startIndex, Count, predicate);
 
         /// <summary>
@@ -253,7 +253,7 @@
         /// <param name="count">The amount of items to be searched.</param>
         /// <returns>The index of the last element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
-        public int FindLastIndex(int startIndex, int count, Predicate<T> predicate)
+        public int FindLastIndex(int startIndex, int count, [NotNull]Predicate<T> predicate)
         {
             Ensure.IndexInRange(startIndex, count);
             return _list.FindLastIndex(startIndex, count, predicate);
@@ -276,7 +276,7 @@
         /// <param name="comparer">The comparer to be used in order to search the item.</param>
         /// <returns>The index of the given item, -1 if not found.</returns>
         [MethodImplementation(Inlined)]
-        public int BinarySearch([AllowNull]T item, IComparer<T> comparer)
+        public int BinarySearch([AllowNull]T item, [NotNull]IComparer<T> comparer)
             => _list.BinarySearch(item, Ensure.NotNull(comparer, nameof(comparer)));
 
         /// <summary>
@@ -288,7 +288,7 @@
         /// <param name="comparer">The comparer to be used in order to search the item.</param>
         /// <returns>The index of the given item, -1 if not found.</returns>
         [MethodImplementation(Inlined)]
-        public int BinarySearch(int startIndex, int count, [AllowNull]T item, IComparer<T> comparer)
+        public int BinarySearch(int startIndex, int count, [AllowNull]T item, [NotNull]IComparer<T> comparer)
         {
             Ensure.ValidCount(startIndex, count, Count);
             Ensure.NotNull(comparer, nameof(comparer));
@@ -304,8 +304,8 @@
         /// <returns>Returns a <see cref="ReadOnlyList{TOut}"/></returns>
         [MethodImplementation(Inlined)]
         [return: NotNull]
-        public ReadOnlyList<TOut> ConvertAll<TOut>(Converter<T, TOut> converter)
-            => new ReadOnlyList<TOut>(_list.ConvertAll(Ensure.NotNull(converter, nameof(converter))));
+        public ReadOnlyList<TOut> ConvertAll<TOut>([NotNull]Converter<T, TOut> converter)
+            => _list.ConvertAll(Ensure.NotNull(converter, nameof(converter))).ToReadOnlyList();
 
         /// <summary>
         /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found starting from the given index.
@@ -352,7 +352,7 @@
         /// <param name="predicate">The delegate used to filter the items.</param>
         /// <returns>True if any item matches the predicate. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
-        public bool Any(Predicate<T> predicate)
+        public bool Exists([NotNull]Predicate<T> predicate)
             => _list.Exists(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
@@ -362,7 +362,7 @@
         /// <param name="predicate">The delegate used to filter the items.</param>
         /// <returns>True if all items match the predicate. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
-        public bool All(Predicate<T> predicate)
+        public bool TrueForAll([NotNull]Predicate<T> predicate)
             => _list.TrueForAll(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
@@ -371,7 +371,7 @@
         /// <exception cref="ArgumentNullException">Thrown if the action is null.</exception>
         /// <param name="action">The action delegate to be executed for each item in the list</param>
         [MethodImplementation(Inlined)]
-        public void ForEach(Action<T> action)
+        public void ForEach([NotNull]Action<T> action)
             => _list.ForEach(Ensure.NotNull(action, nameof(action)));
     }
 }

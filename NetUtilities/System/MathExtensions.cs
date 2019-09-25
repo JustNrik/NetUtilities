@@ -34,20 +34,20 @@ namespace System
 
         public static decimal PowN(decimal value, int power)
         {
-            if (power == decimal.Zero) return decimal.One;
-            if (power < decimal.Zero) return PowN(decimal.One / value, -power);
+            if (power == 0m) return 1m;
+            if (power < 0m) return PowN(1m / value, -power);
 
             var q = power;
-            var prod = decimal.One;
+            var prod = 1m;
             var current = value;
             while (q > 0)
             {
                 if (q % 2 == 1)
                 {
-                    prod = current * prod; 
+                    prod = current * prod;
                     q--;
                 }
-                current *= current; 
+                current *= current;
                 q /= 2;
             }
 
@@ -56,44 +56,39 @@ namespace System
 
         public static decimal Pow(decimal value, decimal pow)
         {
-            if (pow == decimal.Zero) return decimal.One;
-            if (pow == decimal.One) return value;
-            if (value == decimal.One) return decimal.One;
+            if (pow == 0m || value == 1m) return 1m;
+            if (pow == 1m) return value;
 
-            if (value == decimal.Zero && pow == decimal.Zero) return decimal.One;
-
-            if (value == decimal.Zero)
+            if (value == 0m)
             {
-                if (pow > decimal.Zero)
-                    return decimal.Zero;
+                if (pow > 0m)
+                    return 0m;
 
 
                 throw new InvalidOperationException("Zero base and negative power");
             }
 
-            if (pow == decimal.MinusOne) return decimal.One / value;
+            if (pow == -1m) return 1m / value;
 
             var isPowerInteger = IsInteger(pow);
-            if (value < decimal.Zero && !isPowerInteger)
-            {
-                throw new InvalidOperationException("Negative base and non-integer power");
-            }
 
-            if (isPowerInteger && value > decimal.Zero)
+            if (IsInteger(pow))
             {
-                int powerInt = (int)(pow);
-                return PowN(value, powerInt);
-            }
+                var intPow = (int)pow;
 
-            if (isPowerInteger && value < decimal.Zero)
-            {
-                int powerInt = (int)pow;
-                if (powerInt % 2 is 0)
-                    return Exp(pow * Log(-value));
+                if (value > 0m)
+                    return PowN(value, intPow);
                 else
-                    return -Exp(pow * Log(-value));
-
+                {
+                    if (intPow % 2 == 0)
+                        return Exp(pow * Log(-value));
+                    else
+                        return -Exp(pow * Log(-value));
+                }
             }
+
+            if (value < 0m)
+                throw new InvalidOperationException("Negative base and non-integer power");
 
             return Exp(pow * Log(value));
         }
@@ -105,21 +100,22 @@ namespace System
         {
             var count = 0;
 
-            while (x > decimal.One)
+            while (x > 1m)
             {
                 x--;
                 count++;
             }
 
-            while (x < decimal.Zero)
+            while (x < 0m)
             {
                 x++;
                 count--;
             }
 
             var iteration = 1;
-            var result = decimal.One;
-            var fatorial = decimal.One;
+            var result = 1m;
+            var fatorial = 1m;
+
             decimal cachedResult;
 
             do
@@ -139,12 +135,12 @@ namespace System
 
         public static decimal Log(decimal x)
         {
-            if (x <= decimal.Zero)
+            if (x <= 0m)
                 throw new ArgumentException("x must be greater than zero");
 
             var count = 0;
 
-            while (x >= decimal.One)
+            while (x >= 1m)
             {
                 x *= Einv;
                 count++;
@@ -160,10 +156,10 @@ namespace System
 
             if (x == 0) return count;
 
-            var result = decimal.Zero;
+            var result = 0m;
             var iteration = 0;
-            var y = decimal.One;
-            var cacheResult = result - decimal.One;
+            var y = 1m;
+            var cacheResult = result - 1m;
 
             while (cacheResult != result && iteration < 100)
             {

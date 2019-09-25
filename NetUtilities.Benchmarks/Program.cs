@@ -4,10 +4,9 @@ using System;
 
 namespace NetUtilities.Benchmarks
 {
-    class Program
+    internal class Program
     {
-
-        static void Main()
+        private static void Main()
         {
             BenchmarkRunner.Run<NetUtilitiesBench>();
         }

@@ -1,7 +1,7 @@
-﻿namespace System
-{
-    using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
+namespace System
+{
     /// <summary>
     /// This struct represents a RGB Color
     /// </summary>
@@ -24,7 +24,7 @@
         private static void ThrowIfOutOfRange(uint value)
         {
             if (value > UInt24.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(value), 
+                throw new ArgumentOutOfRangeException(nameof(value),
                     $"The value must be lower than or equal to {UInt24.MaxValue}");
         }
 
@@ -102,14 +102,14 @@
             => left.RawValue._value <= right.RawValue._value;
         #endregion
         #region static fields
-        public static Color White   = new Color(0xFFFFFF);
-        public static Color Black   = new Color(0x000000);
-        public static Color Gray    = new Color(0xC0C0C0);
-        public static Color Red     = new Color(0xFF0000);
-        public static Color Green   = new Color(0x00FF00);
-        public static Color Blue    = new Color(0x0000FF);
-        public static Color Cyan    = new Color(0x00FFFF);
-        public static Color Yellow  = new Color(0xFFFF00);
+        public static Color White = new Color(0xFFFFFF);
+        public static Color Black = new Color(0x000000);
+        public static Color Gray = new Color(0xC0C0C0);
+        public static Color Red = new Color(0xFF0000);
+        public static Color Green = new Color(0x00FF00);
+        public static Color Blue = new Color(0x0000FF);
+        public static Color Cyan = new Color(0x00FFFF);
+        public static Color Yellow = new Color(0xFFFF00);
         public static Color Magenta = new Color(0xFF00FF);
         #endregion
         #region casts

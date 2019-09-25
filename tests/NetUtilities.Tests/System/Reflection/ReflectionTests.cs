@@ -1,5 +1,4 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using Xunit;
 
 namespace NetUtilities.Tests.System.Reflection

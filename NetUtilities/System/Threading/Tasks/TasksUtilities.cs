@@ -1,7 +1,7 @@
-﻿namespace System.Threading.Tasks
-{
-    using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
+namespace System.Threading.Tasks
+{
     public static partial class TasksUtilities
     {
         /// <summary>

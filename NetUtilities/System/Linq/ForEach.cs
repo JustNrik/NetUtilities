@@ -1,8 +1,8 @@
-﻿namespace System.Linq
-{
-    using NetUtilities;
-    using System.Collections.Generic;
+﻿using NetUtilities;
+using System.Collections.Generic;
 
+namespace System.Linq
+{
     public static partial class LinqUtilities
     {
         /// <summary>

@@ -1,8 +1,8 @@
-﻿namespace System
-{
-    using NetUtilities;
-    using System.Threading;
+﻿using NetUtilities;
+using System.Threading;
 
+namespace System
+{
     public readonly ref struct ActionScope
     {
         private readonly Action _undoAction;
@@ -76,9 +76,9 @@
         private readonly T2 _obj2;
 
         public static ActionScope<T1, T2> Create(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
-            => new ActionScope<T1, T2>( obj,  obj2, startAction, undoAction);
+            => new ActionScope<T1, T2>(obj, obj2, startAction, undoAction);
 
-        private ActionScope( T1 obj,  T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
+        private ActionScope(T1 obj, T2 obj2, Action<T1, T2> startAction, Action<T1, T2> undoAction)
         {
             Ensure.NotNull(obj, nameof(obj));
             Ensure.NotNull(obj2, nameof(obj2));
@@ -116,9 +116,9 @@
         private readonly T3 _obj3;
 
         public static ActionScope<T1, T2, T3> Create(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
-            => new ActionScope<T1, T2, T3>( obj,  obj2,  obj3, startAction, undoAction);
+            => new ActionScope<T1, T2, T3>(obj, obj2, obj3, startAction, undoAction);
 
-        private ActionScope( T1 obj,  T2 obj2,  T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
+        private ActionScope(T1 obj, T2 obj2, T3 obj3, Action<T1, T2, T3> startAction, Action<T1, T2, T3> undoAction)
         {
             Ensure.NotNull(obj, nameof(obj));
             Ensure.NotNull(obj2, nameof(obj2));

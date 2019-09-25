@@ -1,6 +1,6 @@
 ﻿namespace NetUtilities.Tests.Utilities
 {
-    public class ValueStub<T> 
+    public class ValueStub<T>
     {
         public T Value { get; set; }
         public ValueStub() { }

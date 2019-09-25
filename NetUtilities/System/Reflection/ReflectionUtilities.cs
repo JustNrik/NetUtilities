@@ -1,10 +1,10 @@
-﻿namespace System.Reflection
-{
-    using NetUtilities;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Runtime.CompilerServices;
-    using MethodImplementation = Runtime.CompilerServices.MethodImplAttribute;
+﻿using NetUtilities;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
+namespace System.Reflection
+{
     /// <summary>
     /// This class provides utilities for <see cref="Reflection"/>
     /// </summary>
@@ -29,8 +29,8 @@
         /// <param name="type">The target type to check</param>
         /// <returns>True if the type is <see cref="Nullable{T}"/>. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
-        public static bool IsNullable(this Type type)
-            => Ensure.NotNull(type, nameof(type)).IsGenericType 
+        public static bool IsNullable([NotNull]this Type type)
+            => Ensure.NotNull(type, nameof(type)).IsGenericType
             && type.GetGenericTypeDefinition() == typeof(Nullable<>);
 
         /// <summary>
@@ -44,8 +44,8 @@
         /// <returns></returns>
         [MethodImplementation(Inlined)]
         public static bool TryGetCustomAttribute<T>(
-            this Type type, 
-            [DoesNotReturnIf(false)]out T attribute, 
+            [NotNull]this Type type,
+            [MaybeNullWhen(false)]out T attribute,
             bool inherited = true) where T : Attribute
         {
             attribute = Ensure.NotNull(type, nameof(type)).GetCustomAttribute<T>(inherited);
@@ -79,7 +79,7 @@
         /// </returns>
         [MethodImplementation(Inlined)]
         public static bool HasDefaultConstructor(this Type type)
-            => Ensure.NotNull(type, nameof(type)).IsValueType 
+            => Ensure.NotNull(type, nameof(type)).IsValueType
             || type.GetConstructor(Type.EmptyTypes) is object;
     }
 }

@@ -1,7 +1,7 @@
-﻿namespace System
-{
-    using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 
+namespace System
+{
     /// <summary>
     /// Represents a 24-bit unsigned integer
     /// </summary>

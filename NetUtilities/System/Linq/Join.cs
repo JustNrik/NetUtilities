@@ -1,9 +1,9 @@
-﻿namespace System.Linq
-{
-    using NetUtilities;
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
+﻿using NetUtilities;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
+namespace System.Linq
+{
     public static partial class LinqUtilities
     {
         /// <summary>

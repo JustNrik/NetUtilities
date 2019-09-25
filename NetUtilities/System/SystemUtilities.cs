@@ -1,7 +1,6 @@
-﻿#nullable enable
+﻿
 using NetUtilities;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 
 namespace System
@@ -160,7 +159,7 @@ namespace System
         /// <param name="str">The string to be reversed.</param>
         /// <returns>A reversed string.</returns>
         public static string Reverse(this string str)
-            => string.Create(Ensure.NotNull(str, nameof(str)).Length, str, 
+            => string.Create(Ensure.NotNull(str, nameof(str)).Length, str,
                 (span, state) =>
                 {
                     for (int i = 0, j = span.Length - 1; i < span.Length; i++, j--)

@@ -1,4 +1,4 @@
-#nullable enable
+
 namespace System.Diagnostics
 {
     public static partial class ProcessUtilities
