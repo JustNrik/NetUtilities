@@ -3,11 +3,15 @@ using NetUtilities;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
 namespace System
 {
     public static class SystemUtilities
     {
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
+
         /// <summary>
         /// Creates a <see cref="string"/> with the providen array
         /// </summary>
@@ -218,6 +222,16 @@ namespace System
             }
             return true;
         }
+
+        /// <summary>
+        /// Checks if the runtime type of obj is the targeted one.
+        /// </summary>
+        /// <typeparam name="T">Target type.</typeparam>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsType<T>(object obj)
+            => obj is object && obj.GetType() == typeof(T);
 
         /// <summary>
         /// Gets each flags of the given <typeparamref name="TEnum"/> instance.
