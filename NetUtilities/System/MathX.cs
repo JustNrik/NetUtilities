@@ -22,18 +22,7 @@ namespace System.System
         /// <param name="k">The lower limit of the numbers to be sum.</param>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of all integers from K to N.</returns>
-        public static uint Sum(uint k, uint n)
-        {
-            EnsureLowerOrEqual(k, n);
-
-            if (k == n)
-                return n;
-
-            if (k == 1)
-                return Sum(n);
-
-            return Sum(n) - Sum(k - 1);
-        }
+        public static uint Sum(uint k, uint n) =>  n * (k+n) / 2;
 
         /// <summary>
         /// Returns the sum of the squares of all integers from 1 to N.
