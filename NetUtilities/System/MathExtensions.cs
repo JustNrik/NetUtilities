@@ -174,6 +174,38 @@ namespace System
             return count - result;
         }
 
+        [MethodImplementation(Inlined)]
+        public static bool IsEven(this int value)
+            => (value & 1) == 0;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsEven(this uint value)
+            => (value & 1) == 0;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsEven(this long value)
+            => (value & 1) == 0;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsEven(this ulong value)
+            => (value & 1) == 0;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsOdd(this int value)
+            => (value & 1) == 1;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsOdd(this uint value)
+            => (value & 1) == 1;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsOdd(this long value)
+            => (value & 1) == 1;
+
+        [MethodImplementation(Inlined)]
+        public static bool IsOdd(this ulong value)
+            => (value & 1) == 1;
+
         /// <summary>
         /// Returns a boolean indicating if the provided number is a power of 2.
         /// </summary>
