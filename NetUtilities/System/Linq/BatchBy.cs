@@ -7,15 +7,17 @@ namespace System.Linq
     public static partial class LinqUtilities
     {
         /// <summary>
-        /// Bulks the collection into a collection of collection by an specific amount.
+        /// Batches the collection into a collection of collection of an specific size.
         /// </summary>
-        /// <typeparam name="TSource">The underlying type of the collection</typeparam>
-        /// <param name="source">The collection</param>
-        /// <param name="size">The size of the buckets</param>
+        /// <exception cref="ArgumentNullException">Thrown when either source or selector are null.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when a negative size is given.</exception>
+        /// <typeparam name="TSource">The underlying type of the collection.</typeparam>
+        /// <param name="source">The collection.</param>
+        /// <param name="size">The size of the buckets.</param>
         /// <returns>An enumerable bulked by the given size.</returns>
         [return: NotNull]
-        public static IEnumerable<IEnumerable<TSource>> BulkBy<TSource>(this IEnumerable<TSource> source, int size)
-            => BulkBy(source, size, x => x);
+        public static IEnumerable<IEnumerable<TSource>> BatchBy<TSource>(this IEnumerable<TSource> source, int size)
+            => BatchBy(source, size, x => x);
 
         /// <summary>
         /// Bulks the collection into a collection of collection by an specific amount.
@@ -29,43 +31,50 @@ namespace System.Linq
         /// <param name="selector">The selector delegate.</param>
         /// <returns>An enumerable bulked by the given size.</returns>
         [return: NotNull]
-        public static IEnumerable<TResult> BulkBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
+        public static IEnumerable<TResult> BatchBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
         {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.NotNull(selector, nameof(selector));
-            Ensure.Positive(size, nameof(size));
+            if (source is null)
+                Throw.NullArgument(nameof(source));
+            if (selector is null)
+                Throw.NullArgument(nameof(selector));
+            if (size < 1)
+                Throw.InvalidOperation($"Batch size must be higer than zero.");
 
-            return BulkByIterator();
+            return BatchByIterator(source, selector, size);
 
-            IEnumerable<TResult> BulkByIterator()
+            IEnumerable<TResult> BatchByIterator(IEnumerable<TSource> sequence, Func<IEnumerable<TSource>, TResult> picker, int count)
             {
-                TSource[]? bucket = null;
-                var count = 0;
+                using var enumerator = source.GetEnumerator();
 
-                foreach (var item in source)
+                if (enumerator.MoveNext())
                 {
-                    if (bucket is null)
-                        bucket = new TSource[size];
-
-
-                    bucket[count++] = item;
-
-                    if (count != size)
-                        continue;
-
-
-                    yield return selector(bucket);
-
-                    bucket = null;
-                    count = 0;
+                    var cts = new CancellationToken();
+                    while (!cts.IsCancelled)
+                        yield return picker(BatchByBulker(enumerator, count, cts));
                 }
 
-                if (bucket is object && count > 0)
+                static IEnumerable<TSource> BatchByBulker(IEnumerator<TSource> e, int count, CancellationToken token)
                 {
-                    Array.Resize(ref bucket, count);
-                    yield return selector(bucket);
+                    for (var x = 0u; x < count; x++)
+                    {
+                        yield return e.Current;
+
+                        if (!e.MoveNext())
+                        {
+                            token.Cancel();
+                            yield break;
+                        }
+
+                    }
                 }
             }
+        }
+
+        private class CancellationToken
+        {
+            public bool IsCancelled { get; private set; }
+            public void Cancel()
+                => IsCancelled = true;
         }
     }
 }
