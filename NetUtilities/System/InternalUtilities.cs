@@ -8,9 +8,16 @@ namespace NetUtilities
 {
     internal static class Throw
     {
+        [DoesNotReturn]
         public static void InvalidOperation(string message)
         {
             throw new InvalidOperationException(message);
+        }
+
+        [DoesNotReturn]
+        internal static void NullArgument(string argumentName)
+        {
+            throw new ArgumentNullException(argumentName);
         }
     }
     internal static class Ensure
