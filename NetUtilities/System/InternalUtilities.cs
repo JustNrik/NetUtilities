@@ -6,6 +6,13 @@ using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute
 
 namespace NetUtilities
 {
+    internal static class Throw
+    {
+        public static void InvalidOperation(string message)
+        {
+            throw new InvalidOperationException(message);
+        }
+    }
     internal static class Ensure
     {
         private const MethodImplOptions NotInlined = MethodImplOptions.NoInlining;

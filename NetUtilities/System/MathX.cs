@@ -1,38 +1,45 @@
-﻿using System.Runtime.CompilerServices;
+﻿using NetUtilities;
+using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
-namespace System.System
+namespace System
 {
     public static class MathX
     {
-        private const MethodImplOptions NoInlining = MethodImplOptions.NoInlining;
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
 
         /// <summary>
         /// Returns the sum of all integers from 1 to N.
         /// </summary>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of all integers from 1 to N.</returns>
+        [MethodImplementation(Inlined)]
         public static uint Sum(uint n)
-            => n * (n + 1) / 2;
+            => n * (n + 1u) / 2u;
 
         /// <summary>
         /// Returns the sum of all integers from K to N.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when k is higher than n.</exception>
+        /// <exception cref="InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
+        /// <exception cref="OverflowException">
+        /// The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
+        /// </exception>
         /// <param name="k">The lower limit of the numbers to be sum.</param>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of all integers from K to N.</returns>
+        [MethodImplementation(Inlined)]
         public static uint Sum(uint k, uint n)
         {
-            EnsureLowerOrEqual(k, n);
+            if (k > n)
+                Throw.InvalidOperation($"The value of k ({k}) must be lower than the value of n ({n})");
 
             if (k == n)
                 return n;
 
-            if (k == 1)
+            if (k <= 1u)
                 return Sum(n);
 
-            return Sum(n) - Sum(k - 1);
+            return checked((1 + n - k) * (n + k) / 2u);
         }
 
         /// <summary>
@@ -40,27 +47,33 @@ namespace System.System
         /// </summary>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of the squares of all integers from 1 to N.</returns>
+        [MethodImplementation(Inlined)]
         public static uint SquareSum(uint n)
-            => n * (n + 1) * (2 * n + 1) / 6;
+            => n * (n + 1u) * (2u * n + 1) / 6u;
 
         /// <summary>
         /// Returns the sum of the squares of all integers from K to N.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when k is higher than n.</exception>
+        /// <exception cref="InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
+        /// <exception cref="OverflowException">
+        /// The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
+        /// </exception>
         /// <param name="k">The lower limit of the numbers to be sum.</param>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of the squares of all integers from 1 to N.</returns>
+        [MethodImplementation(Inlined)]
         public static uint SquareSum(uint k, uint n)
         {
-            EnsureLowerOrEqual(k, n);
+            if (k > n)
+                Throw.InvalidOperation($"The value of k ({k}) must be lower than the value of n ({n})");
 
             if (k == n)
-                return (uint)Math.Pow(n, 2);
+                return n * n;
 
-            if (k == 1)
+            if (k <= 1)
                 return SquareSum(n);
 
-            return SquareSum(n) - SquareSum(k - 1);
+            return checked((1u + n - k) * ((2u * k * k) + (2u * k * n) - k + (2u * n * n) + n) / 6u);
         }
 
         /// <summary>
@@ -68,34 +81,33 @@ namespace System.System
         /// </summary>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of the cubes of all integers from 1 to N.</returns>
+        [MethodImplementation(Inlined)]
         public static uint CubicSum(uint n)
-            => n * n * (n + 1) * (n + 1) / 4;
+            => n * n * (n + 1u) * (n + 1u) / 4u;
 
         /// <summary>
         /// Returns the sum of the cubes of all integers from K to N.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when k is higher than n.</exception>
+        /// <exception cref="InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
+        /// <exception cref="OverflowException">
+        /// The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
+        /// </exception>
         /// <param name="k">The lower limit of the numbers to be sum.</param>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of the cubes of all integers from 1 to N.</returns>
+        [MethodImplementation(Inlined)]
         public static uint CubicSum(uint k, uint n)
         {
-            EnsureLowerOrEqual(k, n);
+            if (k > n)
+                Throw.InvalidOperation($"The value of k ({k}) must be lower than the value of n ({n})");
 
             if (k == n)
-                return (uint)Math.Pow(n, 3);
+                return n * n * n;
 
-            if (k == 1)
+            if (k <= 1)
                 return CubicSum(n);
 
-            return CubicSum(n) - CubicSum(k - 1);
-        }
-
-        [MethodImplementation(NoInlining)]
-        private static void EnsureLowerOrEqual(uint k, uint n)
-        {
-            if (k > n)
-                throw new InvalidOperationException($"k ({k}) must be lower or equal than n ({n})");
+            return checked ((1u + n - k) * (k + n) * ((k * k) - k + (n * n) + n) / 4u);
         }
     }
 }
