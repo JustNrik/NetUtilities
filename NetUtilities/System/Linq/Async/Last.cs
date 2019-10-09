@@ -133,7 +133,7 @@ namespace System.Linq
 
         private static (bool, TSource) TryGetLast<TSource>(IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
         {
-            for (var index = source.Count - 1; index > 0; index--)
+            for (var index = source.Count - 1; index >= 0; index--)
             {
                 var item = source[index];
 
