@@ -15,7 +15,7 @@ namespace NetUtilities
         }
 
         [DoesNotReturn]
-        internal static void NullArgument(string argumentName)
+        public static void NullArgument(string argumentName)
         {
             throw new ArgumentNullException(argumentName);
         }

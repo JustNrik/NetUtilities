@@ -20,7 +20,8 @@ namespace System.Linq
             => BatchBy(source, size, x => x);
 
         /// <summary>
-        /// Bulks the collection into a collection of collection by an specific amount.
+        /// <summary>
+        /// Batches the collection into a collection of collection of an specific size and returns the selected member.
         /// </summary>
         /// <exception cref="ArgumentNullException">Thrown when either source or selector are null</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when a negative size is given</exception>
