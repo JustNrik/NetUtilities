@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using NetUtilities;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -18,15 +19,10 @@ namespace System
 
         public Color(uint value)
         {
-            ThrowIfOutOfRange(value);
-            RawValue = (UInt24)value;
-        }
-
-        private static void ThrowIfOutOfRange(uint value)
-        {
             if (value > UInt24.MaxValue)
-                throw new ArgumentOutOfRangeException(nameof(value),
-                    $"The value must be lower than or equal to {UInt24.MaxValue}");
+                Throw.ArgumentOutOfRange($"The value must be lower than or equal to {UInt24.MaxValue}");
+
+            RawValue = (UInt24)value;
         }
 
         public Color(UInt24 value)
@@ -34,42 +30,49 @@ namespace System
 
         public Color(int r, int g, int b)
         {
-            ThrowIfOutOfRangeInt(r, nameof(r));
-            ThrowIfOutOfRangeInt(g, nameof(g));
-            ThrowIfOutOfRangeInt(b, nameof(b));
+            if ((uint)r > 255)
+                Throw.ArgumentOutOfRange(nameof(r), "The value must be in the [0, 255] range");
+
+            if ((uint)g > 255)
+                Throw.ArgumentOutOfRange(nameof(g), "The value must be in the [0, 255] range");
+
+            if ((uint)b > 255)
+                Throw.ArgumentOutOfRange(nameof(b), "The value must be in the [0, 255] range");
 
             RawValue = (UInt24)((uint)r << 16 | (uint)g << 8 | (uint)b);
         }
 
-        private static void ThrowIfOutOfRangeSingle(float f, string name)
-        {
-            if (f < 0 || f > 1)
-                throw new ArgumentOutOfRangeException(name, "The value must be in the [0.0, 1.0] range");
-        }
-
-        private static void ThrowIfOutOfRangeInt(int i, string name)
-        {
-            if ((uint)i > 255)
-                throw new ArgumentOutOfRangeException(name, "The value must be in the [0, 255] range");
-        }
-
         public Color(float r, float g, float b)
         {
-            ThrowIfOutOfRangeSingle(r, nameof(r));
-            ThrowIfOutOfRangeSingle(g, nameof(g));
-            ThrowIfOutOfRangeSingle(b, nameof(b));
+            if (r < 0f || r > 1f)
+                Throw.ArgumentOutOfRange(nameof(r), "The value must be in the [0.0, 1.0] range");
+
+            if (g < 0f || g > 1f)
+                Throw.ArgumentOutOfRange(nameof(g), "The value must be in the [0.0, 1.0] range");
+
+            if (b < 0f || b > 1f)
+                Throw.ArgumentOutOfRange(nameof(b), "The value must be in the [0.0, 1.0] range");
 
             RawValue = (UInt24)(((uint)(r * 255f) << 16) | ((uint)(g * 255f) << 8) | (uint)(b * 255f));
         }
 
         public Color Combine(Color other)
-            => new Color(RawValue | other.RawValue);
+            => this | other;
 
         public Color Remove(Color other)
-            => new Color(RawValue & other.RawValue);
+            => this & other;
 
         public Color Invert()
-            => new Color(~RawValue);
+            => ~this;
+
+        public static Color operator |(Color left, Color right)
+            => new Color(left.RawValue | right.RawValue);
+
+        public static Color operator &(Color left, Color right)
+            => new Color(left.RawValue & right.RawValue);
+
+        public static Color operator ~(Color color)
+            => new Color(~color.RawValue);
 
         #region other things
         public override bool Equals(object obj)
@@ -115,7 +118,7 @@ namespace System
         #endregion
         #region casts
         public static explicit operator UInt24(Color color)
-            => new UInt24(color.RawValue);
+            => color.RawValue;
         public static explicit operator Color(UInt24 uInt24)
             => new Color(uInt24);
         #endregion

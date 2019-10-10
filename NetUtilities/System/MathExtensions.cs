@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using NetUtilities;
+using System.Runtime.CompilerServices;
 using static System.Math;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -47,7 +48,7 @@ namespace System
             var current = value;
             while (q > 0)
             {
-                if (q % 2 is 1)
+                if (q.IsOdd())
                 {
                     prod = current * prod;
                     q--;
@@ -70,7 +71,7 @@ namespace System
                     return 0m;
 
 
-                throw new InvalidOperationException("Zero base and negative power");
+                Throw.InvalidOperation("Zero base and negative power");
             }
 
             if (pow is -1m) return 1m / value;
@@ -83,7 +84,7 @@ namespace System
                     return PowN(value, intPow);
                 else
                 {
-                    if (intPow % 2 is 0)
+                    if (intPow.IsEven())
                         return Exp(pow * Log(-value));
                     else
                         return -Exp(pow * Log(-value));
@@ -176,35 +177,35 @@ namespace System
 
         [MethodImplementation(Inlined)]
         public static bool IsEven(this int value)
-            => (value & 1) == 0;
+            => (value & 1) is 0;
 
         [MethodImplementation(Inlined)]
         public static bool IsEven(this uint value)
-            => (value & 1) == 0;
+            => (value & 1) is 0;
 
         [MethodImplementation(Inlined)]
         public static bool IsEven(this long value)
-            => (value & 1) == 0;
+            => (value & 1) is 0;
 
         [MethodImplementation(Inlined)]
         public static bool IsEven(this ulong value)
-            => (value & 1) == 0;
+            => (value & 1) is 0;
 
         [MethodImplementation(Inlined)]
         public static bool IsOdd(this int value)
-            => (value & 1) == 1;
+            => (value & 1) is 1;
 
         [MethodImplementation(Inlined)]
         public static bool IsOdd(this uint value)
-            => (value & 1) == 1;
+            => (value & 1) is 1;
 
         [MethodImplementation(Inlined)]
         public static bool IsOdd(this long value)
-            => (value & 1) == 1;
+            => (value & 1) is 1;
 
         [MethodImplementation(Inlined)]
         public static bool IsOdd(this ulong value)
-            => (value & 1) == 1;
+            => (value & 1) is 1;
 
         /// <summary>
         /// Returns a boolean indicating if the provided number is a power of 2.

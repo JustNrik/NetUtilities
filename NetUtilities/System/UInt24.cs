@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using NetUtilities;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -13,24 +14,20 @@ namespace System
         public const uint MaxValue = 0xFFFFFF;
         public const uint MinValue = 0;
 
-        public UInt24(Int24 value) : this(unchecked((uint)value._value))
+        public UInt24(Int24 value) : this((uint)value._value)
         {
         }
 
-        public UInt24(int value) : this(unchecked((uint)value))
+        public UInt24(int value) : this((uint)value)
         {
         }
 
         public UInt24(uint value)
         {
-            EnsureRange(value);
-            _value = value;
-        }
-
-        private static void EnsureRange(uint value)
-        {
             if (value > MaxValue)
-                throw new OverflowException(nameof(value));
+                Throw.InvalidOperation("The value is outside the range of admited values.");
+
+            _value = value;
         }
 
         #region overrided from System.Object
@@ -179,6 +176,36 @@ namespace System
             => new UInt24((uint)int64);
         public static explicit operator UInt24(ulong uInt64)
             => new UInt24((uint)uInt64);
+        #endregion
+        #region static methods
+        public static UInt24 Parse(string input)
+        {
+            if (input is null)
+                Throw.NullArgument(nameof(input));
+
+            if (uint.TryParse(input, out var parsed))
+            {
+                if (parsed > MaxValue)
+                    Throw.Overflow("The value represented by the string is outside of the allowed ranged.");
+
+                return new UInt24(parsed);
+            }
+
+            Throw.InvalidFormat("The string is not in a valid format");
+            return default;
+        }
+
+        public static bool TryParse(string input, out UInt24 result)
+        {
+            if (int.TryParse(input, out var parsed) && parsed <= MaxValue)
+            {
+                result = new UInt24(parsed);
+                return true;
+            }
+
+            result = default;
+            return false;
+        }
         #endregion
     }
 }

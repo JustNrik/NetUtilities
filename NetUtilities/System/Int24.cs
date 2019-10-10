@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using NetUtilities;
+using System.Runtime.InteropServices;
 
 namespace System
 {
@@ -13,28 +14,20 @@ namespace System
         public const int MaxValue = 0x7FFFFF;
         public const int MinValue = unchecked((int)0xFFFFFFFFFF800000);
 
-        public Int24(UInt24 value) : this(unchecked((int)value._value))
+        public Int24(UInt24 value) : this((int)value._value)
         {
         }
 
-        public Int24(uint value) : this(unchecked((int)value))
+        public Int24(uint value) : this((int)value)
         {
         }
 
-        public Int24(int value)
+        public Int24(int value) 
         {
-            EnsureRange(value);
+            if ((uint)value > MaxValue)
+                Throw.InvalidOperation("The value is outside the range of admited values.");
+
             _value = value;
-        }
-
-        public Int24(byte[] bytes) : this(BitConverter.ToInt32(bytes))
-        {
-        }
-
-        private static void EnsureRange(int value)
-        {
-            if (value < MinValue || value > MaxValue)
-                throw new OverflowException(nameof(value));
         }
 
         #region overrided from System.Object
@@ -177,70 +170,34 @@ namespace System
             => new Int24((int)uInt64);
         #endregion
         #region Static methods
-
         public static Int24 Parse(string input)
         {
-            if (InternalTryParse(input, out var value, out var status))
-                return value;
+            if (input is null)
+                Throw.NullArgument(nameof(input));
 
-            ThrowHelper.ParseFailed(status);
+            if (int.TryParse(input, out var parsed))
+            {
+                if ((uint)parsed > MaxValue)
+                    Throw.Overflow("The value represented by the string is outside of the allowed ranged.");
+
+                return new Int24(parsed);
+            }
+
+            Throw.InvalidFormat("The string is not in a valid format");
             return default;
         }
 
         public static bool TryParse(string input, out Int24 result)
-            => InternalTryParse(input, out result, out var _);
-
-        private static bool InternalTryParse(string input, out Int24 result, out ParseStatus status)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            if (int.TryParse(input, out var parsed) && (uint)parsed <= MaxValue)
             {
-                result = default;
-                status = ParseStatus.NullInput;
-                return false;
-            }
-            else if (int.TryParse(input, out var value))
-            {
-                if (value < MinValue || value > MaxValue)
-                {
-                    result = default;
-                    status = ParseStatus.Overflow;
-                    return false;
-                }
-
-                result = new Int24(value);
-                status = ParseStatus.Ok;
+                result = new Int24(parsed);
                 return true;
             }
 
             result = default;
-            status = ParseStatus.InvalidFormat;
             return false;
         }
         #endregion
-
-        private static class ThrowHelper
-        {
-            public static void ParseFailed(ParseStatus status)
-            {
-                switch (status)
-                {
-                    case ParseStatus.NullInput:
-                        throw new ArgumentNullException("input");
-                    case ParseStatus.InvalidFormat:
-                        throw new FormatException(
-                            $"The value represented in the string is lower than {MinValue} or higher than {MaxValue}");
-                    case ParseStatus.Overflow:
-                        throw new OverflowException();
-                }
-            }
-        }
-
-        private enum ParseStatus
-        {
-            Ok,
-            NullInput,
-            InvalidFormat,
-            Overflow
-        }
     }
 }

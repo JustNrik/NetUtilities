@@ -849,7 +849,8 @@ namespace System
         /// <returns></returns>
         public MutableString Indent(int count, char indent = ' ')
         {
-            Ensure.ZeroOrPositive(count, nameof(count));
+            if (count < 0)
+                Throw.ArgumentOutOfRange(nameof(count));
 
             _builder.AppendLine();
             _builder.Append(new string(indent, count));
@@ -1122,7 +1123,7 @@ namespace System
 
         private void EnsureRange(int startIndex, int count)
         {
-            if (startIndex < 0 || startIndex > Length || startIndex + count > Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
+            if ((uint)startIndex > Length || startIndex + count > Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
             if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
         }
 

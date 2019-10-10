@@ -8,16 +8,42 @@ namespace NetUtilities
 {
     internal static class Throw
     {
-        [DoesNotReturn]
+        private const MethodImplOptions NotInlined = MethodImplOptions.NoInlining;
+
+        [DoesNotReturn, MethodImplementation(NotInlined)]
         public static void InvalidOperation(string message)
         {
             throw new InvalidOperationException(message);
         }
 
-        [DoesNotReturn]
+        [DoesNotReturn, MethodImplementation(NotInlined)]
         public static void NullArgument(string argumentName)
         {
             throw new ArgumentNullException(argumentName);
+        }
+
+        [DoesNotReturn, MethodImplementation(NotInlined)]
+        public static void InvalidFormat(string message)
+        {
+            throw new FormatException(message);
+        }
+
+        [DoesNotReturn, MethodImplementation(NotInlined)]
+        public static void Overflow(string message)
+        {
+            throw new OverflowException(message);
+        }
+
+        [DoesNotReturn, MethodImplementation(NotInlined)]
+        public static void ArgumentOutOfRange(string argumentName)
+        {
+            throw new ArgumentOutOfRangeException(argumentName);
+        }
+
+        [DoesNotReturn, MethodImplementation(NotInlined)]
+        public static void ArgumentOutOfRange(string argumentName, string message)
+        {
+            throw new ArgumentOutOfRangeException(argumentName, message);
         }
     }
     internal static class Ensure
@@ -32,13 +58,6 @@ namespace NetUtilities
                 throw new ArgumentNullException(name);
 
             return obj;
-        }
-
-        [MethodImplementation(NotInlined)]
-        public static void ZeroOrPositive(int number, string name)
-        {
-            if (number < 0)
-                throw new ArgumentOutOfRangeException(name);
         }
 
         [MethodImplementation(NotInlined)]
