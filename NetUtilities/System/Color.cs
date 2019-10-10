@@ -15,6 +15,7 @@ namespace System
 
         public Color(byte r, byte g, byte b)
             => RawValue = (UInt24)((uint)r << 16 | (uint)g << 8 | b);
+
         public Color(uint value)
         {
             ThrowIfOutOfRange(value);
@@ -78,7 +79,7 @@ namespace System
             => (int)RawValue._value;
 
         public override string ToString()
-            => $"#{Convert.ToString(RawValue._value, 16)}";
+            => $"#{RawValue._value:X6}";
 
         public bool Equals(Color color)
             => color.RawValue._value == RawValue._value;
@@ -102,15 +103,15 @@ namespace System
             => left.RawValue._value <= right.RawValue._value;
         #endregion
         #region static fields
-        public static Color White = new Color(0xFFFFFF);
-        public static Color Black = new Color(0x000000);
-        public static Color Gray = new Color(0xC0C0C0);
-        public static Color Red = new Color(0xFF0000);
-        public static Color Green = new Color(0x00FF00);
-        public static Color Blue = new Color(0x0000FF);
-        public static Color Cyan = new Color(0x00FFFF);
-        public static Color Yellow = new Color(0xFFFF00);
-        public static Color Magenta = new Color(0xFF00FF);
+        public static readonly Color White = new Color(0xFFFFFF);
+        public static readonly Color Black = new Color(0x000000);
+        public static readonly Color Gray = new Color(0xC0C0C0);
+        public static readonly Color Red = new Color(0xFF0000);
+        public static readonly Color Green = new Color(0x00FF00);
+        public static readonly Color Blue = new Color(0x0000FF);
+        public static readonly Color Cyan = new Color(0x00FFFF);
+        public static readonly Color Yellow = new Color(0xFFFF00);
+        public static readonly Color Magenta = new Color(0xFF00FF);
         #endregion
         #region casts
         public static explicit operator UInt24(Color color)
