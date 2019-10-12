@@ -21,7 +21,12 @@ namespace System.Reflection
         /// <returns>True if the type implements <see cref="ITuple"/>. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
         public static bool IsTuple(this Type type)
-            => typeof(ITuple).IsAssignableFrom(Ensure.NotNull(type, nameof(type)));
+        {
+            if (type is null)
+                Throw.NullArgument(nameof(type));
+
+            return typeof(ITuple).IsAssignableFrom(type);
+        }
 
         /// <summary>
         /// Indicates if the type is <see cref="Nullable{T}"/>
@@ -31,8 +36,12 @@ namespace System.Reflection
         /// <returns>True if the type is <see cref="Nullable{T}"/>. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
         public static bool IsNullable([NotNull]this Type type)
-            => Ensure.NotNull(type, nameof(type)).IsGenericType
-            && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        {
+            if (type is null)
+                Throw.NullArgument(nameof(type));
+
+            return type.IsGenericMethodParameter && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
 
         /// <summary>
         /// Attempts to get the custom attribute of the given type.
@@ -49,7 +58,10 @@ namespace System.Reflection
             [MaybeNullWhen(false)]out T attribute,
             bool inherited = true) where T : Attribute
         {
-            attribute = Ensure.NotNull(type, nameof(type)).GetCustomAttribute<T>(inherited);
+            if (type is null)
+                Throw.NullArgument(nameof(type));
+
+            attribute = type.GetCustomAttribute<T>(inherited);
             return attribute is object;
         }
 
@@ -64,7 +76,7 @@ namespace System.Reflection
         [return: MaybeNull]
         public static TAttribute GetEnumFieldAttribute<TAttribute, TEnum>(this TEnum @enum, bool inherited = true)
             where TAttribute : Attribute
-            where TEnum : Enum
+            where TEnum : unmanaged, Enum
             => typeof(TEnum).GetField(Enum.GetName(typeof(TEnum), @enum)).GetCustomAttribute<TAttribute>(inherited);
 
 
@@ -79,9 +91,13 @@ namespace System.Reflection
         /// Otherwise <see langword="false"/>
         /// </returns>
         [MethodImplementation(Inlined)]
-        public static bool HasDefaultConstructor(this Type type)
-            => ConstructorCache.GetOrAddFor(type);
+        public static bool HasDefaultConstructor([NotNull]this Type type)
+        {
+            if (type is null)
+                Throw.NullArgument(nameof(type));
 
+            return ConstructorCache.GetOrAddFor(type);
+        }
 
         /// <summary>
         /// Indicates if the given type contains a default constructor. 
