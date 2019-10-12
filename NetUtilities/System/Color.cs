@@ -108,7 +108,8 @@ namespace System
         #region static fields
         public static readonly Color White = new Color(0xFFFFFF);
         public static readonly Color Black = new Color(0x000000);
-        public static readonly Color Gray = new Color(0xC0C0C0);
+        public static readonly Color Gray = new Color(0x808080);
+        public static readonly Color Silver = new Color(0xC0C0C0);
         public static readonly Color Red = new Color(0xFF0000);
         public static readonly Color Green = new Color(0x00FF00);
         public static readonly Color Blue = new Color(0x0000FF);

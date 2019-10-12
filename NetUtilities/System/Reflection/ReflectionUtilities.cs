@@ -1,4 +1,5 @@
 ﻿using NetUtilities;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
@@ -79,7 +80,42 @@ namespace System.Reflection
         /// </returns>
         [MethodImplementation(Inlined)]
         public static bool HasDefaultConstructor(this Type type)
-            => Ensure.NotNull(type, nameof(type)).IsValueType
-            || type.GetConstructor(Type.EmptyTypes) is object;
+            => ConstructorCache.GetOrAddFor(type);
+
+
+        /// <summary>
+        /// Indicates if the given type contains a default constructor. 
+        /// This method will always return true for structs (Structures in Visual Basic)
+        /// </summary>
+        /// <typeparam name="T">The type.</typeparam>
+        /// <returns>
+        /// <see langword="true"/> if the type is a struct or has a parameterless constructor. 
+        /// Otherwise <see langword="false"/>
+        /// </returns>
+        [MethodImplementation(Inlined)]
+        public static bool HasDefaultConstructor<T>()
+            => ConstructorCache<T>.Value;
+
+        private static class ConstructorCache<T>
+        {
+            public static bool Value = typeof(T).IsValueType || typeof(T).GetConstructor(Type.EmptyTypes) is object;
+        }
+
+        private static class ConstructorCache
+        {
+            private static readonly Dictionary<Type, bool> _cache = new Dictionary<Type, bool>();
+
+            public static bool GetOrAddFor(Type type)
+            {
+                if (type.IsValueType)
+                    return true;
+
+                if (_cache.TryGetValue(type, out var hasCtor))
+                    return hasCtor;
+
+                _cache.Add(type, type.GetConstructor(Type.EmptyTypes) is object);
+                return _cache[type];
+            }
+        }
     }
 }
