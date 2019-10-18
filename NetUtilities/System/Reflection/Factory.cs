@@ -16,7 +16,8 @@ namespace System.Reflection
 
         /// <summary>
         /// Gets the instance of a generic type with a parameterless constructor.
-        /// Performs much better than <see cref="Activator.CreateInstance{T}"/>
+        /// Performs much better than <see cref="Activator.CreateInstance(Type)"/>
+        /// </summary>
         public static object CreateInstance(Type type)
             => _dict.TryGetValue(type, out var func)
             ? func.Invoke()

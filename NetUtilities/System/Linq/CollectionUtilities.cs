@@ -16,8 +16,11 @@ namespace System.Linq
         /// <param name="element">The element to search.</param>
         public static void AddOrUpdate<T>(this IList<T> source, T element)
         {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.CanWrite(source);
+            if (source is null)
+                Throw.NullArgument(nameof(source));
+
+            if (source.IsReadOnly)
+                Throw.InvalidOperation($"{source.GetType().Name} is a Read-Only collection"); 
 
             var index = source.IndexOf(element);
 
@@ -41,15 +44,60 @@ namespace System.Linq
         [return: MaybeNull]
         public static TValue GetOrAdd<TKey, TValue>(this IDictionary<TKey, TValue> source, TKey key, TValue value)
         {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.NotNull(key, nameof(key));
-            Ensure.CanWrite(source);
+            if (source is null)
+                Throw.NullArgument(nameof(source));
+
+            if (key is null)
+                Throw.NullArgument(nameof(key));
+
+            if (source.IsReadOnly)
+                Throw.InvalidOperation($"{source.GetType().Name} is a Read-Only collection");
 
             if (source.TryGetValue(key, out var val))
                 return val;
 
             source.Add(key, value);
             return value;
+        }
+
+        /// <summary>
+        /// Shuffles the given list.
+        /// </summary>
+        /// <typeparam name="T">The type.</typeparam>
+        /// <param name="source">The source list.</param>
+        public static void Shuffle<T>(this IList<T> source)
+        {
+            if (source is null)
+                Throw.NullArgument(nameof(source));
+
+            if (source is T[] array)
+            {
+                Array.Sort(array, RandomComparer<T>.Instance);
+                return;
+            }
+
+            if (source is List<T> list)
+            {
+                list.Sort(RandomComparer<T>.Instance);
+                return;
+            }
+
+            var maxIter = (int)Math.Log(source.Count);
+
+            for (var _ = 0; _ < maxIter; _++)
+            {
+                for (var index = 0; index < source.Count - 1; index++)
+                {
+                    var current = source[index];
+                    var next = source[index + 1];
+
+                    if (RandomComparer<T>.Instance.Compare(current, next) != 0)
+                    {
+                        source[index] = next;
+                        source[index + 1] = current;
+                    }
+                }
+            }
         }
     }
 }

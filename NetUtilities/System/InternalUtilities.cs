@@ -68,13 +68,6 @@ namespace NetUtilities
         }
 
         [MethodImplementation(NotInlined)]
-        public static void CanWrite<T>(ICollection<T> source)
-        {
-            if (source.IsReadOnly)
-                throw new InvalidOperationException($"{source.GetType().Name} is a Read-Only collection");
-        }
-
-        [MethodImplementation(NotInlined)]
         public static void IndexInRange(int index, int count)
         {
             if ((uint)index >= count)
