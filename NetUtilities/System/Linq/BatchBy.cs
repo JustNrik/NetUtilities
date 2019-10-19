@@ -36,46 +36,29 @@ namespace System.Linq
         {
             if (source is null)
                 Throw.NullArgument(nameof(source));
+
             if (selector is null)
                 Throw.NullArgument(nameof(selector));
-            if (size < 1)
-                Throw.InvalidOperation($"Batch size must be higer than zero.");
+
+            if (size < 0)
+                Throw.InvalidOperation($"Batch size must be positive.");
 
             return BatchByIterator(source, selector, size);
-
-            IEnumerable<TResult> BatchByIterator(IEnumerable<TSource> sequence, Func<IEnumerable<TSource>, TResult> picker, int count)
-            {
-                using var enumerator = source.GetEnumerator();
-
-                if (enumerator.MoveNext())
-                {
-                    var cts = new CancellationToken();
-                    while (!cts.IsCancelled)
-                        yield return picker(BatchByBulker(enumerator, count, cts));
-                }
-
-                static IEnumerable<TSource> BatchByBulker(IEnumerator<TSource> e, int count, CancellationToken token)
-                {
-                    for (var x = 0u; x < count; x++)
-                    {
-                        yield return e.Current;
-
-                        if (!e.MoveNext())
-                        {
-                            token.Cancel();
-                            yield break;
-                        }
-
-                    }
-                }
-            }
         }
 
-        private class CancellationToken
+        private static IEnumerable<TResult> BatchByIterator<TSource, TResult>(IEnumerable<TSource> source, Func<IEnumerable<TSource>, TResult> selector, int size)
         {
-            public bool IsCancelled { get; private set; }
-            public void Cancel()
-                => IsCancelled = true;
+            using var enumerator = source.GetEnumerator();
+
+            while (enumerator.MoveNext())
+                yield return selector(BatchByBulker(enumerator, size));
+        }
+
+        private static IEnumerable<TSource> BatchByBulker<TSource>(IEnumerator<TSource> enumerator, int size)
+        {
+            do 
+                yield return enumerator.Current;
+            while (--size > 0 && enumerator.MoveNext());
         }
     }
 }
