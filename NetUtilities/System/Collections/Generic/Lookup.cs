@@ -103,7 +103,7 @@ namespace System.Collections.Generic
 
             IGrouping<TKey, TValue> IEnumerator<IGrouping<TKey, TValue>>.Current => Current;
 
-            object IEnumerator.Current => throw new NotImplementedException();
+            object IEnumerator.Current => Current;
 
             public LookupEnumerator(IDictionary<TKey, IList<TValue>> lookup)
             {
