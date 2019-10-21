@@ -72,7 +72,7 @@ namespace System.Linq
             if (source is null)
                 Throw.NullArgument(nameof(source));
 
-            for (var index = 0; index < source.Count - 2; index++)
+            for (var index = 0; index < source.Count - 1; index++)
             {
                 var randomIndex = _random.Next(index, source.Count);
                 var current = source[index];
