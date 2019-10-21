@@ -60,6 +60,8 @@ namespace System.Linq
             return value;
         }
 
+        private static readonly Random _random = new Random();
+
         /// <summary>
         /// Shuffles the given list.
         /// </summary>
@@ -70,33 +72,14 @@ namespace System.Linq
             if (source is null)
                 Throw.NullArgument(nameof(source));
 
-            if (source is T[] array)
+            for (var index = 0; index < source.Count - 2; index++)
             {
-                Array.Sort(array, RandomComparer<T>.Instance);
-                return;
-            }
+                var randomIndex = _random.Next(index, source.Count);
+                var current = source[index];
+                var next = source[randomIndex];
 
-            if (source is List<T> list)
-            {
-                list.Sort(RandomComparer<T>.Instance);
-                return;
-            }
-
-            var maxIter = (int)Math.Log(source.Count);
-
-            for (var _ = 0; _ < maxIter; _++)
-            {
-                for (var index = 0; index < source.Count - 1; index++)
-                {
-                    var current = source[index];
-                    var next = source[index + 1];
-
-                    if (RandomComparer<T>.Instance.Compare(current, next) != 0)
-                    {
-                        source[index] = next;
-                        source[index + 1] = current;
-                    }
-                }
+                source[index] = next;
+                source[randomIndex] = current;
             }
         }
     }
