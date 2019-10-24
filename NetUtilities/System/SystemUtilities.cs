@@ -12,13 +12,22 @@ namespace System
         private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
 
         /// <summary>
-        /// Creates a <see cref="string"/> with the providen array
+        /// Creates a <see cref="string"/> with the providen array.
         /// </summary>
-        /// <param name="charArray"></param>
+        /// <param name="charArray">The array.</param>
         /// <returns></returns>
         [return: NotNull]
         public static string AsString(this char[] charArray)
             => new string(charArray);
+
+        /// <summary>
+        /// Creates a <see cref="string"/> with the provided span.
+        /// </summary>
+        /// <param name="charSpan">The span.</param>
+        /// <returns></returns>
+        [return: NotNull]
+        public static string AsString(this ReadOnlySpan<char> charSpan)
+            => new string(charSpan);
 
         /// <summary>
         /// Gets the substring between two <see cref="char"/> delimiters. Optionally, you can include them into the result.
@@ -31,13 +40,18 @@ namespace System
         [return: NotNull]
         public static string SubstringBetween([NotNull]this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            var start = Ensure.NotNull(input, nameof(input)).IndexOf(leftBound, startIndex) + 1;
+            if (input is null)
+                Throw.NullArgument(nameof(input));
 
-            if (start == 0) return string.Empty;
+            var start = input.IndexOf(leftBound, startIndex) + 1;
+
+            if (start == 0) 
+                return string.Empty;
 
             var end = input.IndexOf(rightBound, start);
 
-            if (end == -1 || start > end) return string.Empty;
+            if (end == -1 || start > end) 
+                return string.Empty;
 
             if (includeBounds)
             {
@@ -59,13 +73,18 @@ namespace System
         [return: NotNull]
         public static string SubstringBetween([NotNull]this MutableString input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            var start = Ensure.NotNull(input, nameof(input)).IndexOf(leftBound, startIndex) + 1;
+            if (input is null)
+                Throw.NullArgument(nameof(input));
 
-            if (start == 0) return string.Empty;
+            var start = input.IndexOf(leftBound, startIndex) + 1;
+
+            if (start == 0) 
+                return string.Empty;
 
             var end = input.IndexOf(rightBound, start);
 
-            if (end == -1 || start > end) return string.Empty;
+            if (end == -1 || start > end) 
+                return string.Empty;
 
             if (includeBounds)
             {
@@ -87,9 +106,13 @@ namespace System
         [return: NotNull]
         public static string[] SubstringsBetween([NotNull]this MutableString input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            var indexes = Ensure.NotNull(input, nameof(input)).IndexesOf(leftBound, startIndex);
+            if (input is null)
+                Throw.NullArgument(nameof(input));
 
-            if (indexes.Length == 0) return Array.Empty<string>();
+            var indexes = input.IndexesOf(leftBound, startIndex);
+
+            if (indexes.Length == 0) 
+                return Array.Empty<string>();
 
             var result = new string[indexes.Length];
 
@@ -110,15 +133,17 @@ namespace System
         [return: NotNull]
         public static string[] SubstringsBetween([NotNull]this string input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            Ensure.NotNull(input, nameof(input));
+            if (input is null)
+                Throw.NullArgument(nameof(input));
 
             var indices = input.IndexesOf(leftBound, startIndex, input.Length);
 
-            if (indices.Length == 0) return Array.Empty<string>();
+            if (indices.Count == 0) 
+                return Array.Empty<string>();
 
-            var result = new string[indices.Length];
+            var result = new string[indices.Count];
 
-            for (int resultIndex = 0; resultIndex < indices.Length; resultIndex++)
+            for (int resultIndex = 0; resultIndex < indices.Count; resultIndex++)
                 result[resultIndex] = input.SubstringBetween(leftBound, rightBound, indices[resultIndex], includeBounds);
 
             return result;
@@ -133,10 +158,13 @@ namespace System
         /// <param name="count"></param>
         /// <returns></returns>
         [return: NotNull]
-        public static int[] IndexesOf([NotNull]this string input, char value, int startIndex, int count)
+        public static IReadOnlyList<int> IndexesOf([NotNull]this string input, char value, int startIndex, int count)
         {
-            Ensure.NotNull(input, nameof(input));
-            if (count == 0) return Array.Empty<int>();
+            if (input is null)
+                Throw.NullArgument(nameof(input));
+
+            if (count == 0) 
+                return Array.Empty<int>();
 
             var currentIndex = input.IndexOf(value, startIndex, count);
             var result = new List<int>();
@@ -147,7 +175,7 @@ namespace System
                 currentIndex = input.IndexOf(value, currentIndex + 1);
             }
 
-            return result.ToArray();
+            return result.AsReadOnly();
         }
 
         /// <summary>
@@ -223,6 +251,22 @@ namespace System
         }
 
         /// <summary>
+        /// Quotes the given string.
+        /// </summary>
+        /// <param name="str">The string.</param>
+        /// <returns></returns>
+        [return: NotNull]
+        public static string Quote([NotNull]this string str)
+            => string.Create(Ensure.NotNull(str, nameof(str)).Length + 2, str, (span, state) =>
+            {
+                span[0] = '"';
+                span[span.Length - 1] = '"';
+
+                for (var index = 1; index < span.Length - 1; index++)
+                    span[index] = state[index - 1];
+            });
+
+        /// <summary>
         /// Checks if the runtime type of obj is the targeted one.
         /// </summary>
         /// <typeparam name="T">Target type.</typeparam>
@@ -230,7 +274,17 @@ namespace System
         /// <returns></returns>
         [MethodImplementation(Inlined)]
         public static bool IsType<T>(object obj)
-            => obj is object && obj.GetType() == typeof(T);
+            => IsType(obj, typeof(T));
+
+        /// <summary>
+        /// Checks if the runtime type of obj is the targeted one.
+        /// </summary>
+        /// <typeparam name="T">Target type.</typeparam>
+        /// <param name="obj">The object.</param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsType(object obj, Type targetType)
+            => obj is object && obj.GetType() == targetType;
 
         /// <summary>
         /// Gets each flags of the given <typeparamref name="TEnum"/> instance.
@@ -259,11 +313,13 @@ namespace System
 
         private static class EnumHelper<TEnum> where TEnum : unmanaged, Enum
         {
+            private static readonly bool _isFlag = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is object;
+
             public static TEnum[] Values { get; } = (TEnum[])Enum.GetValues(typeof(TEnum));
 
             public static void ThrowIfNotFlagEnum()
             {
-                if (typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is null)
+                if (!_isFlag)
                     throw new InvalidOperationException("This method can only be used on enums with FlagsAttributes");
             }
         }
