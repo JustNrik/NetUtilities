@@ -12,30 +12,42 @@ namespace System.Reflection
     {
         private const BindingFlags All = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic;
 
+        private readonly Type _source;
+        private ReadOnlyList<ConstructorData>? _constructors;
+        private ReadOnlyList<EventData>? _events;
+        private ReadOnlyList<FieldData>? _fields;
+        private ReadOnlyList<MethodData>? _methods;
+        private ReadOnlyList<PropertyData>? _properties;
+
         /// <summary>
         /// Contains data related to the type's constructors
         /// </summary>
-        public ReadOnlyList<MemberData<ConstructorInfo>> Constructors { get; }
+        public ReadOnlyList<ConstructorData> Constructors
+            => _constructors ?? (_constructors = _source.GetConstructors(All).Select(x => new ConstructorData(x)).ToReadOnlyList());
 
         /// <summary>
         /// Contains data related to the type's events
         /// </summary>
-        public ReadOnlyList<MemberData<EventInfo>> Events { get; }
+        public ReadOnlyList<EventData> Events 
+            => _events ?? (_events = _source.GetEvents(All).Select(x => new EventData(x)).ToReadOnlyList());
 
         /// <summary>
         /// Contains data related to the type's fields
         /// </summary>
-        public ReadOnlyList<MemberData<FieldInfo>> Fields { get; }
+        public ReadOnlyList<FieldData> Fields
+            => _fields ?? (_fields = _source.GetFields(All).Select(x => new FieldData(x)).ToReadOnlyList());
 
         /// <summary>
         /// Contains data related to the type's methods
         /// </summary>
-        public ReadOnlyList<MemberData<MethodInfo>> Methods { get; }
+        public ReadOnlyList<MethodData> Methods
+            => _methods ?? (_methods = _source.GetMethods(All).Select(x => new MethodData(x)).ToReadOnlyList());
 
         /// <summary>
         /// Contains data related to the type's properties
         /// </summary>
-        public ReadOnlyList<MemberData<PropertyInfo>> Properties { get; }
+        public ReadOnlyList<PropertyData> Properties
+            => _properties ?? (_properties = _source.GetProperties(All).Select(x => new PropertyData(x)).ToReadOnlyList());
 
         /// <summary>
         /// Creates the mapper for the given object.
@@ -54,11 +66,7 @@ namespace System.Reflection
             if (type is null)
                 Throw.NullArgument(nameof(type));
 
-            Fields = type.GetFields(All).Select(field => new MemberData<FieldInfo>(field)).ToReadOnlyList();
-            Properties = type.GetProperties(All).Select(property => new MemberData<PropertyInfo>(property)).ToReadOnlyList();
-            Constructors = type.GetConstructors(All).Select(constructor => new MemberData<ConstructorInfo>(constructor)).ToReadOnlyList();
-            Methods = type.GetMethods(All).Select(method => new MemberData<MethodInfo>(method)).ToReadOnlyList();
-            Events = type.GetEvents(All).Select(@event => new MemberData<EventInfo>(@event)).ToReadOnlyList();
+            _source = type;
         }
     }
 }

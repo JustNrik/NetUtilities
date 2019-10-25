@@ -1,6 +1,7 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -12,6 +13,49 @@ namespace System.Reflection
     public static partial class ReflectionUtilities
     {
         private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
+
+        /// <summary>
+        /// Indicates if the provided type inherits from the base type provided.
+        /// </summary>
+        /// <param name="derived">The derived type.</param>
+        /// <param name="base">The potential base of the type.</param>
+        /// <returns></returns>
+        public static bool Inherits([NotNull]this Type derived, [NotNull]Type @base)
+        {
+            if (derived is null)
+                Throw.NullArgument(nameof(derived));
+
+            if (@base is null)
+                Throw.NullArgument(nameof(@base));
+
+            if (derived == @base)
+                return false;
+
+            if (derived.IsInterface)
+                return @base.IsInterface && derived.GetTypeInfo().ImplementedInterfaces.Any(i => i == @base);
+
+            return @base.IsAssignableFrom(derived);
+        }
+
+        /// <summary>
+        /// Indicates if the provided type implements the provided interface type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="interfaceType">The type of the interface to check.</param>
+        /// <returns></returns>
+        public static bool Implements([NotNull]this Type type, [NotNull]Type interfaceType)
+        {
+            if (type is null)
+                Throw.NullArgument(nameof(type));
+
+            if (interfaceType is null)
+                Throw.NullArgument(nameof(interfaceType));
+
+            if (type.IsInterface || !interfaceType.IsInterface)
+                return false;
+
+            return interfaceType.IsAssignableFrom(type);
+        }
 
         /// <summary>
         /// Indicates if the type implements <see cref="ITuple"/>

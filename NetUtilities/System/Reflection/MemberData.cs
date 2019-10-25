@@ -3,24 +3,21 @@ using System.Linq;
 
 namespace System.Reflection
 {
-    public sealed class MemberData<TMember> where TMember : MemberInfo
+    public abstract class MemberData
     {
-        public TMember Member { get; }
-        public ReadOnlyList<Attribute> Attributes { get; }
-        public ReadOnlyList<CustomAttributeData> CustomAttributeDatas { get; }
-        public ReadOnlyList<ParameterInfo> Parameters { get; }
+        private ReadOnlyList<Attribute>? _attributes;
+        private ReadOnlyList<CustomAttributeData>? _customAttributeDatas;
 
-        public MemberData(TMember member)
+        public MemberInfo Member { get; }
+
+        public ReadOnlyList<Attribute> Attributes
+            => _attributes ?? (_attributes = Member.GetCustomAttributes().ToReadOnlyList());
+        public ReadOnlyList<CustomAttributeData> CustomAttributeDatas
+            => _customAttributeDatas ?? (_customAttributeDatas = Member.CustomAttributes.ToReadOnlyList());
+
+        protected MemberData(MemberInfo member)
         {
             Member = member;
-            Attributes = member.GetCustomAttributes().ToReadOnlyList();
-            CustomAttributeDatas = member.CustomAttributes.ToReadOnlyList();
-            Parameters = member switch
-            {
-                PropertyInfo property => property.GetIndexParameters().ToReadOnlyList(),
-                MethodInfo method => method.GetParameters().ToReadOnlyList(),
-                _ => new ReadOnlyList<ParameterInfo>()
-            };
         }
     }
 }
