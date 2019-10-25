@@ -23,6 +23,11 @@ namespace System.Collections.Generic
         public ReadOnlyList([NotNull]IEnumerable<T> source)
             => _list = Ensure.NotNull(source, nameof(source)).ToList();
 
+        internal ReadOnlyList() 
+        {
+            _list = new List<T>();
+        }
+
         /// <summary>
         /// Returns the element stored in the given index.
         /// </summary>
