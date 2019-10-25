@@ -17,8 +17,7 @@ namespace System.Linq
         /// <param name="source">The sequence</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.</returns>
         [return: NotNull]
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
-            [NotNull]this IEnumerable<KeyValuePair<TKey, TValue>> source)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>([NotNull]this IEnumerable<KeyValuePair<TKey, TValue>> source)
             => Ensure.NotNull(source, nameof(source)).ToDictionary(x => x.Key, x => x.Value);
 
 
@@ -49,8 +48,7 @@ namespace System.Linq
         /// <param name="source">The sequence</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.</returns>
         [return: NotNull]
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
-            [NotNull]this IEnumerable<(TKey Key, TValue Value)> source)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>([NotNull]this IEnumerable<(TKey Key, TValue Value)> source)
             => Ensure.NotNull(source, nameof(source)).ToDictionary(x => x.Key, x => x.Value);
 
 
@@ -79,8 +77,7 @@ namespace System.Linq
         /// <param name="source">The sequence.</param>
         /// <returns>A Read-Only Dictionary from the dictionary provided.</returns>
         [return: NotNull]
-        public static IReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>(
-            [NotNull]this IDictionary<TKey, TValue> source)
+        public static IReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>([NotNull]this IDictionary<TKey, TValue> source)
             => new ReadOnlyDictionary<TKey, TValue>(Ensure.NotNull(source, nameof(source)));
 
         /// <summary>
@@ -90,8 +87,7 @@ namespace System.Linq
         /// <param name="source">The sequence.</param>
         /// <returns>A Read-Only list.</returns>
         [return: NotNull]
-        public static ReadOnlyList<T> ToReadOnlyList<T>(
-            [NotNull]this IEnumerable<T> source)
+        public static ReadOnlyList<T> ToReadOnlyList<T>([NotNull]this IEnumerable<T> source)
             => new ReadOnlyList<T>(Ensure.NotNull(source, nameof(source)));
     }
 }

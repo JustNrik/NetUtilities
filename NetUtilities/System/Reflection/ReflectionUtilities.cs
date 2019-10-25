@@ -84,7 +84,21 @@ namespace System.Reflection
             if (type is null)
                 Throw.NullArgument(nameof(type));
 
-            return type.IsGenericMethodParameter && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return Nullable.GetUnderlyingType(type) is object;
+        }
+
+        /// <summary>
+        /// Indicates if the type is <see langword="static"/>.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsStatic([NotNull]this Type type)
+        {
+            if (type is null)
+                Throw.NullArgument(nameof(type));
+
+            return type.IsAbstract && type.IsSealed;
         }
 
         /// <summary>

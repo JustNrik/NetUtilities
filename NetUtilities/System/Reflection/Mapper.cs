@@ -6,7 +6,7 @@ using System.Linq;
 namespace System.Reflection
 {
     /// <summary>
-    /// Handy class to map reflection metadata. This class has a heavy instantiaton logic, make sure to cache this class.
+    /// Handy class to map reflection metadata and provide high performance runtime manipulation.
     /// </summary>
     public sealed class Mapper 
     {
@@ -68,5 +68,39 @@ namespace System.Reflection
 
             _source = type;
         }
+    }
+
+    /// <summary>
+    /// Handy class to map reflection metadata and provide high performance runtime manupulation.
+    /// </summary>
+    /// <typeparam name="TMember">The type of the <see cref="MemberInfo"/></typeparam>
+    public static class Mapper<TMember> where TMember : MemberInfo
+    {
+        private static readonly Mapper _mapper = new Mapper(typeof(TMember));
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s constructors.
+        /// </summary>
+        public static ReadOnlyList<ConstructorData> Constructors => _mapper.Constructors;
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s events.
+        /// </summary>
+        public static ReadOnlyList<EventData> Events => _mapper.Events;
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s fields.
+        /// </summary>
+        public static ReadOnlyList<FieldData> Fields => _mapper.Fields;
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s methods.
+        /// </summary>
+        public static ReadOnlyList<MethodData> Methods => _mapper.Methods;
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s properties.
+        /// </summary>
+        public static ReadOnlyList<PropertyData> Properties => _mapper.Properties;
     }
 }

@@ -1,12 +1,17 @@
 ﻿namespace System.Reflection
 {
-    public class EventData : MemberData
+    public class EventData : MemberData<EventInfo>
     {
-        public new EventInfo Member => (EventInfo)base.Member;
-        public Type EventHandlerType => Member.EventHandlerType;
+        public Type EventHandlerType { get; }
 
         public EventData(EventInfo @event) : base(@event)
         {
+            EventHandlerType = @event.EventHandlerType;
         }
+
+        //public void AddHandler(object source, object target, Delegate method)
+        //{
+
+        //}
     }
 }

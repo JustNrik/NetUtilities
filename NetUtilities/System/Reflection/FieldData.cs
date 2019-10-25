@@ -1,9 +1,7 @@
 ﻿namespace System.Reflection
 {
-    public class FieldData : MemberData
+    public class FieldData : MemberData<FieldInfo>
     {
-        public new FieldInfo Member => (FieldInfo)base.Member;
-
         public FieldData(FieldInfo field) : base(field)
         {
         }
