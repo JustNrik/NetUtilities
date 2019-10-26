@@ -53,6 +53,16 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.False(typeof(IEnumerable<int>).Implements(typeof(IEnumerable)));
             Assert.False(typeof(Plop).Inherits(typeof(Bar)));
         }
+
+        [Fact]
+        public void MapperCreateInstanceTests()
+        {
+            var mapper = new Mapper(typeof(Foo));
+            var foo = mapper.Constructors[0].CreateInstance("Bob") as Foo;
+
+            Assert.NotNull(foo);
+            Assert.Equal("Bob", foo.Name);
+        }
     }
 
     public class Plop

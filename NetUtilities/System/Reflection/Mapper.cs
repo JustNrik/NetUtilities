@@ -23,7 +23,7 @@ namespace System.Reflection
         /// Contains data related to the type's constructors
         /// </summary>
         public ReadOnlyList<ConstructorData> Constructors
-            => _constructors ?? (_constructors = _source.GetConstructors(All).Select(x => new ConstructorData(x)).ToReadOnlyList());
+            => _constructors ?? (_constructors = _source.GetConstructors(All).Select(x => new ConstructorData(x, _source)).ToReadOnlyList());
 
         /// <summary>
         /// Contains data related to the type's events

@@ -8,10 +8,5 @@
         {
             EventHandlerType = @event.EventHandlerType;
         }
-
-        //public void AddHandler(object source, object target, Delegate method)
-        //{
-
-        //}
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -44,6 +45,12 @@ namespace NetUtilities
         public static void ArgumentOutOfRange(string argumentName, string message)
         {
             throw new ArgumentOutOfRangeException(argumentName, message);
+        }
+
+        [DoesNotReturn, MethodImplementation(NotInlined)]
+        public static void ParameterCountMismatch(string message)
+        {
+            throw new ParameterCountMismatchException(message);
         }
     }
     internal static class Ensure

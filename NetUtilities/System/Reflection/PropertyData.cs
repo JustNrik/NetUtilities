@@ -1,9 +1,7 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Runtime.CompilerServices;
 
 namespace System.Reflection
 {
@@ -33,31 +31,35 @@ namespace System.Reflection
 
             if (Getter is object)
             {
-                var parameter = Expression.Parameter(property.DeclaringType, "instance");
-                var getter = Expression.Property(parameter, property.Name);
-                var cast = Expression.Convert(getter, typeof(object));
-                var lambda = Expression.Lambda(cast, parameter);
+                var parameter = Expression.Parameter(typeof(object), "instance");
+                var cast = Expression.Convert(parameter, property.DeclaringType);
+                var prop = Expression.Property(cast, property.Name);
+                var convert = Expression.Convert(prop, typeof(object));
+                var lambda = Expression.Lambda<Func<object?, object?>>(convert, parameter);
 
-                Debug.Assert(lambda.ToString() == $"instance => Convert(instance.{Member.Name}, Object)");
-
-                _get = Unsafe.As<Func<object?, object?>>(lambda.Compile());
+                _get = lambda.Compile();
             }
 
             if (Setter is object)
             {
-                var parameter = Expression.Parameter(property.DeclaringType, "instance"); 
-                var propParam = Expression.Parameter(typeof(object), "value");            
-                var param = Expression.Convert(propParam, property.PropertyType);        
-                var setter = Expression.Property(parameter, property.Name);               
-                var assign = Expression.Assign(setter, param);                            
-                var lambda = Expression.Lambda(assign, parameter, propParam);             
+                var instance = Expression.Parameter(typeof(object), "instance");
+                var value = Expression.Parameter(typeof(object), "value");
+                var convertInstance = Expression.Convert(instance, property.DeclaringType);
+                var convertValue = Expression.Convert(value, property.PropertyType);
+                var prop = Expression.Property(convertInstance, property.Name);
+                var assign = Expression.Assign(prop, convertValue);
+                var lambda = Expression.Lambda<Action<object?, object?>>(assign, instance, value);
 
-                Debug.Assert(lambda.ToString() == $"(instance, value) => instance.{Member.Name} = Convert(value, {Member.PropertyType})");
-
-                _set = Unsafe.As<Action<object?, object?>>(lambda.Compile());
+                _set = lambda.Compile();
             }
         }
 
+        /// <summary>
+        /// Sets the value of this property given the instance and the value. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when the property has no setter, the target is <see langword="null"/> and the property is not <see langword="static"/> or the value is <see langword="null"/> and the property is not nullable.</exception>
+        /// <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
+        /// <param name="value">The value.</param>
         public void SetValue(object? target, object? value)
         {
             if (_set is null)
@@ -72,6 +74,12 @@ namespace System.Reflection
             _set(target, value);
         }
 
+        /// <summary>
+        /// Gets the value of this property given the instance. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown when the property has no getter or the target is <see langword="null"/> and the property is not <see langword="static"/></exception>
+        /// <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
+        /// <returns>The value of the property.</returns>
         public object? GetValue(object? target)
         {
             if (_get is null)

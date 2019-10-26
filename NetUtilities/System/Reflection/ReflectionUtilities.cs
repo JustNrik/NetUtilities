@@ -88,6 +88,16 @@ namespace System.Reflection
         }
 
         /// <summary>
+        /// Indicates if the type can be implicitly converted to the supplied type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <param name="target">The target type.</param>
+        /// <returns></returns>
+        [MethodImplementation(Inlined)]
+        public static bool CanBeConvertedTo([NotNull]this Type type, [NotNull]Type target)
+            => Ensure.NotNull(target, nameof(target)).IsAssignableFrom(Ensure.NotNull(type, nameof(type)));
+
+        /// <summary>
         /// Indicates if the type is <see langword="static"/>.
         /// </summary>
         /// <param name="type">The type.</param>
