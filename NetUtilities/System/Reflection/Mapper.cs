@@ -44,6 +44,20 @@ namespace System.Reflection
             => _methods ?? (_methods = _source.GetMethods(All).Select(x => new MethodData(x)).ToReadOnlyList());
 
         /// <summary>
+        /// Contains data related to the type's methods - excluding members inhereted from the Object base class
+        /// </summary>
+        public ReadOnlyList<MethodData> MethodsExcludingObjectMembers
+            => _methods ?? (_methods = _source.GetMethods(All)
+            .Where(x => x.DeclaringType != typeof(Object)).Select(x => new MethodData(x)).ToReadOnlyList());
+
+        /// <summary>
+        /// Contains data related to the type's methods - excluding all inhereted members
+        /// </summary>
+        public ReadOnlyList<MethodData> MethodsDeclaringTypeOnly
+            => _methods ?? (_methods = _source.GetMethods(All)
+            .Where(x => x.DeclaringType == _source).Select(x => new MethodData(x)).ToReadOnlyList());
+
+        /// <summary>
         /// Contains data related to the type's properties
         /// </summary>
         public ReadOnlyList<PropertyData> Properties

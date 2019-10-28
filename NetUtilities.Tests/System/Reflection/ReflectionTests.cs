@@ -78,6 +78,36 @@ namespace NetUtilities.Tests.System.Reflection
 
             Assert.True(mapper.Properties.Count == 0);
             Assert.True(mapper.Methods.Count == 7);
+            int count = 0;
+            foreach (var method in mapper.Methods)
+            {
+                if (method.Member.DeclaringType == typeof(MapperMethodsFake))
+                {
+                    count++;
+                }
+            }
+            Assert.True(count == 1);
+        }
+
+        [Fact]
+        public void MapperTest_Method_MethodDeclaringTypeOnly()
+        {
+            var fake = new MapperMethodsInheritanceFake();
+            var mapper = new Mapper(fake);
+
+            Assert.True(mapper.MethodsDeclaringTypeOnly.Count == 1);
+            Assert.Equal("DoNothing", mapper.MethodsDeclaringTypeOnly[0].Member.Name);
+        }
+
+        [Fact]
+        public void MapperTest_Method_MethodExcludingObjectMembers()
+        {
+            var fake = new MapperMethodsInheritanceFake();
+            var mapper = new Mapper(fake);
+
+            Assert.True(mapper.MethodsExcludingObjectMembers.Count == 2);
+            Assert.Equal("DoNothing", mapper.MethodsExcludingObjectMembers[0].Member.Name);
+            Assert.Equal("SumTest", mapper.MethodsExcludingObjectMembers[1].Member.Name);
         }
 
         [Fact]
@@ -205,6 +235,14 @@ namespace NetUtilities.Tests.System.Reflection
         public int SumTest(int x, int y)
         {
             return x + y;
+        }
+    }
+
+    public class MapperMethodsInheritanceFake : MapperMethodsFake
+    {
+        public void DoNothing()
+        {
+            //Does nothing
         }
     }
 
