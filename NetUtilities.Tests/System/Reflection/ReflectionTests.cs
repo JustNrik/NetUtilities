@@ -105,9 +105,9 @@ namespace NetUtilities.Tests.System.Reflection
             var fake = new MapperMethodsInheritanceFake();
             var mapper = new Mapper(fake);
 
-            Assert.True(mapper.MethodsExcludingObjectMembers.Count == 2);
-            Assert.Equal("DoNothing", mapper.MethodsExcludingObjectMembers[0].Member.Name);
-            Assert.Equal("SumTest", mapper.MethodsExcludingObjectMembers[1].Member.Name);
+            Assert.True(mapper.MethodsExcludingObjectBaseMembers.Count == 2);
+            Assert.Equal("DoNothing", mapper.MethodsExcludingObjectBaseMembers[0].Member.Name);
+            Assert.Equal("SumTest", mapper.MethodsExcludingObjectBaseMembers[1].Member.Name);
         }
 
         [Fact]
@@ -186,7 +186,7 @@ namespace NetUtilities.Tests.System.Reflection
 
             Assert.Equal("OnDoingThing", mapper.Events[0].Member.Name);
             Assert.Equal(typeof(EventHandlerTest), mapper.Events[0].Member.EventHandlerType);
-        }
+        }       
 
         [Fact]
         public void InheritsAndImplementsTest()

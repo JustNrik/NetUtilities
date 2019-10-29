@@ -17,6 +17,8 @@ namespace System.Reflection
         private ReadOnlyList<EventData>? _events;
         private ReadOnlyList<FieldData>? _fields;
         private ReadOnlyList<MethodData>? _methods;
+        private ReadOnlyList<MethodData>? _methodsExcludingObjectBaseMembers;
+        private ReadOnlyList<MethodData>? _methodsDeclaringTypeOnly;
         private ReadOnlyList<PropertyData>? _properties;
 
         /// <summary>
@@ -46,15 +48,15 @@ namespace System.Reflection
         /// <summary>
         /// Contains data related to the type's methods - excluding members inhereted from the Object base class
         /// </summary>
-        public ReadOnlyList<MethodData> MethodsExcludingObjectMembers
-            => _methods ?? (_methods = _source.GetMethods(All)
+        public ReadOnlyList<MethodData> MethodsExcludingObjectBaseMembers
+            => _methodsExcludingObjectBaseMembers ?? (_methodsExcludingObjectBaseMembers = _source.GetMethods(All)
             .Where(x => x.DeclaringType != typeof(Object)).Select(x => new MethodData(x)).ToReadOnlyList());
 
         /// <summary>
         /// Contains data related to the type's methods - excluding all inhereted members
         /// </summary>
         public ReadOnlyList<MethodData> MethodsDeclaringTypeOnly
-            => _methods ?? (_methods = _source.GetMethods(All)
+            => _methodsDeclaringTypeOnly ?? (_methodsDeclaringTypeOnly = _source.GetMethods(All)
             .Where(x => x.DeclaringType == _source).Select(x => new MethodData(x)).ToReadOnlyList());
 
         /// <summary>
@@ -85,7 +87,7 @@ namespace System.Reflection
     }
 
     /// <summary>
-    /// Handy class to map reflection metadata and provide high performance runtime manupulation.
+    /// Handy class to map reflection metadata and provide high performance runtime manipulation.
     /// </summary>
     /// <typeparam name="TMember">The type of the <see cref="MemberInfo"/></typeparam>
     public static class Mapper<TMember> where TMember : MemberInfo
@@ -111,6 +113,20 @@ namespace System.Reflection
         /// Contains data related to <typeparamref name="TMember"/>'s methods.
         /// </summary>
         public static ReadOnlyList<MethodData> Methods => _mapper.Methods;
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s methods 
+        /// - excluding members inhereted from the object base class
+        /// </summary>
+        public static ReadOnlyList<MethodData> MethodsExcludingObjectBaseMembers
+            => _mapper.MethodsExcludingObjectBaseMembers;
+
+        /// <summary>
+        /// Contains data related to <typeparamref name="TMember"/>'s methods 
+        /// - excluding all inhereted members
+        /// </summary>
+        public static ReadOnlyList<MethodData> MethodsDeclaringTypeOnly
+            => _mapper.MethodsDeclaringTypeOnly;
 
         /// <summary>
         /// Contains data related to <typeparamref name="TMember"/>'s properties.
