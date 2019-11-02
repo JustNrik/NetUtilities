@@ -1,4 +1,5 @@
 ﻿using NetUtilities;
+using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace System
@@ -12,7 +13,7 @@ namespace System
         internal readonly int _value;
 
         public const int MaxValue = 0x7FFFFF;
-        public const int MinValue = unchecked((int)0xFFFFFFFFFF800000);
+        public const int MinValue = ~0x7FFFFF;
 
         public Int24(UInt24 value) : this((int)value._value)
         {
@@ -113,14 +114,6 @@ namespace System
             => left._value == right._value;
         public static bool operator !=(Int24 left, UInt24 right)
             => left._value != right._value;
-        public static bool operator ==(Int24 left, int right)
-            => left._value == right;
-        public static bool operator !=(Int24 left, int right)
-            => left._value != right;
-        public static bool operator ==(int left, Int24 right)
-            => left == right._value;
-        public static bool operator !=(int left, Int24 right)
-            => left != right._value;
         public static Int24 operator &(Int24 left, Int24 right)
             => new Int24(left._value & right._value);
         public static Int24 operator |(Int24 left, Int24 right)
@@ -171,11 +164,17 @@ namespace System
         #endregion
         #region Static methods
         public static Int24 Parse(string input)
+            => Parse(input, NumberStyles.Integer, null);
+
+        public static Int24 Parse(string input, NumberStyles style)
+            => Parse(input, style, null);
+
+        public static Int24 Parse(string input, NumberStyles style, IFormatProvider? provider)
         {
             if (input is null)
                 Throw.NullArgument(nameof(input));
 
-            if (int.TryParse(input, out var parsed))
+            if (int.TryParse(input, style, provider, out var parsed))
             {
                 if ((uint)parsed > MaxValue)
                     Throw.Overflow("The value represented by the string is outside of the allowed ranged.");
@@ -188,8 +187,14 @@ namespace System
         }
 
         public static bool TryParse(string input, out Int24 result)
+            => TryParse(input, NumberStyles.Integer, null, out result);
+
+        public static bool TryParse(string input, NumberStyles style, out Int24 result)
+            => TryParse(input, style, null, out result);
+
+        public static bool TryParse(string input, NumberStyles style, IFormatProvider? provider, out Int24 result)
         {
-            if (int.TryParse(input, out var parsed) && (uint)parsed <= MaxValue)
+            if (int.TryParse(input, style, provider, out var parsed) && (uint)parsed <= MaxValue)
             {
                 result = new Int24(parsed);
                 return true;

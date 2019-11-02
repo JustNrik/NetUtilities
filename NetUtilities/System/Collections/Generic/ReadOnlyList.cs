@@ -21,11 +21,27 @@ namespace System.Collections.Generic
         /// <exception cref="ArgumentNullException">This exception is thrown the if argument is null</exception>
         /// <param name="source">The source to create the list.</param>
         public ReadOnlyList([NotNull]IEnumerable<T> source)
-            => _list = Ensure.NotNull(source, nameof(source)).ToList();
-
-        internal ReadOnlyList() 
         {
-            _list = new List<T>();
+            if (source is null)
+                Throw.NullArgument(nameof(source));
+
+            _list = source.ToList();
+        }
+
+        /// <summary>
+        /// Creates a <see cref="ReadOnlyList{T}"/> from a given <see cref="List{T}"/>, optionally, you can pass a boolean to indicate if you want to keep the reference of the given list.
+        /// </summary>
+        /// <param name="source">The source to create the list.</param>
+        /// <param name="keepReference">The parameter to determine if the reference should be kept.</param>
+        public ReadOnlyList([NotNull]List<T> source, bool keepReference = true)
+        {
+            if (source is null)
+                Throw.NullArgument(nameof(source));
+
+            if (keepReference)
+                _list = source;
+            else
+                _list = source.ToList();
         }
 
         /// <summary>
@@ -51,37 +67,20 @@ namespace System.Collections.Generic
         {
             [MethodImplementation(Inlined)]
             [return: MaybeNull]
-            get
-            {
-                var indice = index.GetOffset(Count);
-                return _list[indice];
-            }
+            get => _list[index.GetOffset(Count)];
         }
 
         /// <summary>
         /// Returns all elements in the given range.
         /// </summary>
         /// <param name="range">The range where all elements will be taken.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
         /// <returns>A new <see cref="ReadOnlyList{T}"/> with all the elements in the given range.</returns>
         public ReadOnlyList<T> this[Range range]
         {
             [MethodImplementation(Inlined)]
             [return: NotNull]
-            get
-            {
-                var (startIndex, count) = range.GetOffsetAndLength(_list.Count);
-                return Slice(startIndex, count);
-            }
-        }
-
-        /// <summary>
-        /// Returns true.
-        /// </summary>
-        /// <returns>Returns true.</returns>
-        public bool IsReadOnly
-        {
-            [MethodImplementation(Inlined)]
-            get => true;
+            get => Slice(range);
         }
 
         /// <summary>
@@ -100,7 +99,7 @@ namespace System.Collections.Generic
         /// <returns>An enumerator for the current instance.</returns>
         [MethodImplementation(Inlined)]
         [return: NotNull]
-        public IEnumerator<T> GetEnumerator()
+        public List<T>.Enumerator GetEnumerator()
             => _list.GetEnumerator();
 
         /// <summary>
@@ -133,10 +132,7 @@ namespace System.Collections.Generic
         /// <returns>The index of the given item, -1 if it's not found.</returns>
         [MethodImplementation(Inlined)]
         public int IndexOf([AllowNull]T item, int startIndex, int count)
-        {
-            Ensure.ValidCount(startIndex, count, Count);
-            return _list.IndexOf(item, startIndex, count);
-        }
+            => _list.IndexOf(item, startIndex, count);
 
         /// <summary>
         /// Returns true if the list contains the provided element. otherwise false.
@@ -150,6 +146,11 @@ namespace System.Collections.Generic
         [MethodImplementation(Inlined)]
         [return: NotNull]
         IEnumerator IEnumerable.GetEnumerator()
+            => _list.GetEnumerator();
+
+        [MethodImplementation(Inlined)]
+        [return: NotNull]
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
             => _list.GetEnumerator();
 
         /// <summary>
@@ -205,10 +206,7 @@ namespace System.Collections.Generic
         /// <returns>The index of the first element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
         public int FindIndex(int startIndex, [NotNull]Predicate<T> predicate)
-        {
-            Ensure.IndexInRange(startIndex, Count);
-            return _list.FindIndex(startIndex, Ensure.NotNull(predicate, nameof(predicate)));
-        }
+            => _list.FindIndex(startIndex, Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
         /// Finds the index of the first element that matches the given predicate starting from the given index.
@@ -221,10 +219,7 @@ namespace System.Collections.Generic
         /// <returns>The index of the first element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
         public int FindIndex(int startIndex, int count, [NotNull]Predicate<T> predicate)
-        {
-            Ensure.ValidCount(startIndex, count, Count);
-            return _list.FindIndex(startIndex, count, Ensure.NotNull(predicate, nameof(predicate)));
-        }
+            => _list.FindIndex(startIndex, count, Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
         /// Finds the index of the last element that matches the given predicate.
@@ -259,10 +254,7 @@ namespace System.Collections.Generic
         /// <returns>The index of the last element that matches the given predicate.</returns>
         [MethodImplementation(Inlined)]
         public int FindLastIndex(int startIndex, int count, [NotNull]Predicate<T> predicate)
-        {
-            Ensure.IndexInRange(startIndex, count);
-            return _list.FindLastIndex(startIndex, count, predicate);
-        }
+            => _list.FindLastIndex(startIndex, count, predicate);
 
         /// <summary>
         /// Searches for the index of the given item using <see cref="EqualityComparer{T}.Default"/>
@@ -294,11 +286,7 @@ namespace System.Collections.Generic
         /// <returns>The index of the given item, -1 if not found.</returns>
         [MethodImplementation(Inlined)]
         public int BinarySearch(int startIndex, int count, [AllowNull]T item, [NotNull]IComparer<T> comparer)
-        {
-            Ensure.ValidCount(startIndex, count, Count);
-            Ensure.NotNull(comparer, nameof(comparer));
-            return _list.BinarySearch(startIndex, count, item, comparer);
-        }
+            => _list.BinarySearch(startIndex, count, item, Ensure.NotNull(comparer, nameof(comparer)));
 
         /// <summary>
         /// Returns a <see cref="ReadOnlyList{TOut}"/> with all members of the current list converted into the target type.
@@ -316,13 +304,14 @@ namespace System.Collections.Generic
         /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found starting from the given index.
         /// </summary>
         /// <param name="startIndex">The index where elements will start to get taken from.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
         /// <returns>
         /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
         /// </returns>
         [MethodImplementation(Inlined)]
         [return: NotNull]
         public ReadOnlyList<T> Slice(int startIndex)
-            => Slice(startIndex, Count - startIndex - 1);
+            => Slice(startIndex..Count);
 
         /// <summary>
         /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found 
@@ -330,24 +319,24 @@ namespace System.Collections.Generic
         /// </summary>
         /// <param name="startIndex">The index where elements will start to get taken from.</param>
         /// <param name="count">The amount of elements to be taken.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
         /// <returns>
         /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
         /// </returns>
         [MethodImplementation(Inlined)]
         [return: NotNull]
         public ReadOnlyList<T> Slice(int startIndex, int count)
+            => Slice(startIndex..count);
+
+        public ReadOnlyList<T> Slice(Range range)
         {
-            Ensure.ValidCount(startIndex, count, Count);
+            var (offset, length) = range.GetOffsetAndLength(Count);
+            var list = new List<T>(length);
 
-            if (startIndex == 0 && count == _list.Count - 1) return this;
+            for (var count = 0; count <= length; count++)
+                list.Add(this[offset + count]);
 
-            var array = new T[count];
-            var index = startIndex;
-
-            for (var currentCount = 1; currentCount <= count; currentCount++, index++)
-                array[index] = _list[index];
-
-            return new ReadOnlyList<T>(array);
+            return new ReadOnlyList<T>(list);
         }
 
         /// <summary>
@@ -357,7 +346,7 @@ namespace System.Collections.Generic
         /// <param name="predicate">The delegate used to filter the items.</param>
         /// <returns>True if any item matches the predicate. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
-        public bool Exists([NotNull]Predicate<T> predicate)
+        public bool Any([NotNull]Predicate<T> predicate)
             => _list.Exists(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>
@@ -367,7 +356,7 @@ namespace System.Collections.Generic
         /// <param name="predicate">The delegate used to filter the items.</param>
         /// <returns>True if all items match the predicate. Otherwise false.</returns>
         [MethodImplementation(Inlined)]
-        public bool TrueForAll([NotNull]Predicate<T> predicate)
+        public bool All([NotNull]Predicate<T> predicate)
             => _list.TrueForAll(Ensure.NotNull(predicate, nameof(predicate)));
 
         /// <summary>

@@ -6,7 +6,7 @@ namespace System.Text
     public static class StringBuilderUtils
     {
         [return: NotNull]
-        public static StringBuilder AppendIf([NotNull]this StringBuilder builder, bool condition, string text)
+        public static StringBuilder AppendIf([NotNull]this StringBuilder builder, bool condition, string? text)
         {
             Ensure.NotNull(builder, nameof(builder));
             return condition ? builder.Append(text) : builder;
@@ -20,14 +20,14 @@ namespace System.Text
         }
 
         [return: NotNull]
-        public static StringBuilder AppendIf([NotNull]this StringBuilder builder, bool condition, string text, int startIndex, int count)
+        public static StringBuilder AppendIf([NotNull]this StringBuilder builder, bool condition, string? text, int startIndex, int count)
         {
             Ensure.NotNull(builder, nameof(builder));
             return condition ? builder.Append(text, startIndex, count) : builder;
         }
 
         [return: NotNull]
-        public static StringBuilder AppendLineIf([NotNull]this StringBuilder builder, bool condition, string text)
+        public static StringBuilder AppendLineIf([NotNull]this StringBuilder builder, bool condition, string? text)
         {
             Ensure.NotNull(builder, nameof(builder));
             return condition ? builder.AppendLine(text) : builder;

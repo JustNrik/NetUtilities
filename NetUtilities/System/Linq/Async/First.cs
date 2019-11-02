@@ -11,12 +11,14 @@ namespace System.Linq
             if (source is null)
                 Throw.NullArgument(nameof(source));
 
-            var (success, value) = await TryGetFirstAsync(source);
+            await new SynchronizationContextRemover();
 
-            if (!success)
+            var (any, item) = await TryGetFirstAsync(source);
+
+            if (!any)
                 Throw.InvalidOperation("sequence contains no elements");
 
-            return value;
+            return item;
         }
 
         public static async ValueTask<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -27,12 +29,14 @@ namespace System.Linq
             if (predicate is null)
                 Throw.NullArgument(nameof(predicate));
 
-            var (success, value) = await TryGetFirstAsync(source, predicate);
+            await new SynchronizationContextRemover();
 
-            if (!success)
+            var (any, item) = await TryGetFirstAsync(source, predicate).ConfigureAwait(false);
+
+            if (!any)
                 Throw.InvalidOperation("sequence contains no matching elements");
 
-            return value;
+            return item;
         }
 
         public static async ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source)
@@ -40,8 +44,9 @@ namespace System.Linq
             if (source is null)
                 Throw.NullArgument(nameof(source));
 
-            var (_, value) = await TryGetFirstAsync(source);
-            return value;
+            await new SynchronizationContextRemover();
+
+            return (await TryGetFirstAsync(source)).Item;
         }
 
         public static async ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -52,14 +57,20 @@ namespace System.Linq
             if (predicate is null)
                 Throw.NullArgument(nameof(predicate));
 
-            var (_, value) = await TryGetFirstAsync(source, predicate);
-            return value;
+            await new SynchronizationContextRemover();
+
+            return (await TryGetFirstAsync(source, predicate)).Item;
         }
 
-        private static ValueTask<(bool, TSource)> TryGetFirstAsync<TSource>(IAsyncEnumerable<TSource> source)
-            => TryGetFirstAsync(source, _ => true);
+        private async static ValueTask<(bool Any, TSource Item)> TryGetFirstAsync<TSource>(IAsyncEnumerable<TSource> source)
+        {
+            await foreach (var item in source)
+                return (true, item);
 
-        private static async ValueTask<(bool, TSource)> TryGetFirstAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
+            return (false, default!);
+        }
+
+        private static async ValueTask<(bool Any, TSource Item)> TryGetFirstAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             await foreach (var item in source)
             {

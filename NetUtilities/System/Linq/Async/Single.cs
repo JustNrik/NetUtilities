@@ -17,6 +17,8 @@ namespace System.Linq
             if (predicate is null)
                 Throw.NullArgument(nameof(predicate));
 
+            await new SynchronizationContextRemover();
+
             var (any, many, item) = await TryGetSingleAsync(source, predicate);
 
             if (!any)
@@ -39,6 +41,8 @@ namespace System.Linq
             if (predicate is null)
                 Throw.NullArgument(nameof(predicate));
 
+            await new SynchronizationContextRemover();
+
             var (_, many, item) = await TryGetSingleAsync(source, predicate);
 
             if (many)
@@ -47,41 +51,29 @@ namespace System.Linq
             return item;
         }
 
-        private static async ValueTask<(bool any, bool many, TSource item)> TryGetSingleAsync<TSource>(this IAsyncEnumerable<TSource> source)
+        private static async ValueTask<(bool Any, bool Many, TSource Item)> TryGetSingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            await using var enumerator = source.GetAsyncEnumerator();
+            bool any = false;
+            bool many = false;
+            TSource item = default!;
 
-            if (await enumerator.MoveNextAsync())
+            await foreach (var element in source)
             {
-                var single = enumerator.Current;
-
-                if (await enumerator.MoveNextAsync())
-                    return (true, true, default!);
-
-                return (true, false, single);
-            }
-
-            return (false, false, default!);
-        }
-
-        private static async ValueTask<(bool any, bool many, TSource item)> TryGetSingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
-        {
-            bool found = false;
-            TSource single = default!;
-
-            await foreach (var item in source)
-            {
-                if (predicate(item))
+                if (predicate(element))
                 {
-                    if (found)
-                        return (true, true, default!);
+                    if (any)
+                    {
+                        many = true;
+                        item = default!;
+                        break;
+                    }
 
-                    found = true;
-                    single = item;
+                    any = true;
+                    item = element;
                 }
             }
 
-            return (found, false, single);
+            return (any, many, item);
         }
     }
 }

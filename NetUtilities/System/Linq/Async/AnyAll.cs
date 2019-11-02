@@ -1,5 +1,4 @@
 ﻿using NetUtilities;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,23 +7,17 @@ namespace System.Linq
 {
     public static partial class AsyncEnumerable
     {
-        public static ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken token = default)
+        public static async ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, CancellationToken token = default)
         {
             if (source is null)
                 Throw.NullArgument(nameof(source));
 
-            return source switch
-            {
-                ICollection<TSource> gCollection => new ValueTask<bool>(gCollection.Count > 0),
-                ICollection collection => new ValueTask<bool>(collection.Count > 0),
-                _ => AnyAsyncFallback(source, token)
-            };
+            await new SynchronizationContextRemover();
 
-            static async ValueTask<bool> AnyAsyncFallback(IAsyncEnumerable<TSource> sequence, CancellationToken token)
-            {
-                await using var enumerator = sequence.GetAsyncEnumerator(token);
-                return await enumerator.MoveNextAsync();
-            }
+            await foreach (var _ in source)
+                return true;
+
+            return false;
         }
 
         public static async ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate, CancellationToken token = default)
@@ -35,11 +28,11 @@ namespace System.Linq
             if (predicate is null)
                 Throw.NullArgument(nameof(predicate));
 
-            await using var enumerator = source.GetAsyncEnumerator(token);
+            await new SynchronizationContextRemover();
 
-            while (await enumerator.MoveNextAsync())
+            await foreach (var item in source)
             {
-                if (predicate(enumerator.Current))
+                if (predicate(item))
                     return true;
             }
 
@@ -54,11 +47,11 @@ namespace System.Linq
             if (predicate is null)
                 Throw.NullArgument(nameof(predicate));
 
-            await using var enumerator = source.GetAsyncEnumerator(token);
+            await new SynchronizationContextRemover();
 
-            while (await enumerator.MoveNextAsync())
+            await foreach (var item in source)
             {
-                if (!predicate(enumerator.Current))
+                if (!predicate(item))
                     return false;
             }
 

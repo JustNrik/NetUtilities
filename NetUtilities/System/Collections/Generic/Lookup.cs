@@ -94,7 +94,7 @@ namespace System.Collections.Generic
         IEnumerator<IGrouping<TKey, TValue>> IEnumerable<IGrouping<TKey, TValue>>.GetEnumerator()
             => new LookupEnumerator(_lookup);
 
-        public struct LookupEnumerator : IEnumerator<IGrouping<TKey, TValue>>
+        public sealed class LookupEnumerator : IEnumerator<IGrouping<TKey, TValue>>
         {
             private readonly IDictionary<TKey, IList<TValue>> _lookup;
             private readonly TKey[] _keys;
@@ -138,13 +138,13 @@ namespace System.Collections.Generic
         {
             private readonly IEnumerable<TValue> _values;
 
+            public TKey Key { get; }
+
             public Grouping(TKey key, IEnumerable<TValue> values)
             {
                 Key = key;
                 _values = values;
             }
-
-            public TKey Key { get; }
 
             public IEnumerator<TValue> GetEnumerator()
                 => _values.GetEnumerator();

@@ -28,6 +28,8 @@ namespace System.Threading.Tasks
         public SynchronizationContextRemover GetAwaiter()
             => this;
 
-        public void GetResult() { }
+        public void GetResult() 
+        {
+        }
     }
 }

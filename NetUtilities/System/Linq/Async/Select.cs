@@ -1,5 +1,6 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace System.Linq
 {
@@ -18,6 +19,8 @@ namespace System.Linq
 
         private static async IAsyncEnumerable<TTarget> SelectIterator<TSource, TTarget>(IAsyncEnumerable<TSource> sequence, Func<TSource, TTarget> func)
         {
+            await new SynchronizationContextRemover();
+
             await foreach (var item in sequence)
                 yield return func(item);
         }

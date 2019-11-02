@@ -80,12 +80,5 @@ namespace NetUtilities
             if ((uint)index >= count)
                 throw new ArgumentOutOfRangeException(nameof(index));
         }
-
-        [MethodImplementation(NotInlined)]
-        public static void ValidCount(int index, int count, int maxCount)
-        {
-            if (index + count > maxCount)
-                throw new ArgumentOutOfRangeException(nameof(count));
-        }
     }
 }
