@@ -21,7 +21,7 @@ namespace NetUtilities.Tests.System.Collections.Generics
         public void Indexing_Works()
         {
             var list = new int[] { 1, 2, 3, 4, 5, 6, 7 }.ToReadOnlyList();
-            var test = list[0..2];
+            var test = list[0..3];
             Assert.Equal(3, test.Count);
             Assert.Equal(1, test[0]);
             Assert.Equal(2, test[1]);

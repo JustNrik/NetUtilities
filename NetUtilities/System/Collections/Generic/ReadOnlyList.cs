@@ -333,7 +333,7 @@ namespace System.Collections.Generic
             var (offset, length) = range.GetOffsetAndLength(Count);
             var list = new List<T>(length);
 
-            for (var count = 0; count <= length; count++)
+            for (var count = 0; count < length; count++)
                 list.Add(this[offset + count]);
 
             return new ReadOnlyList<T>(list);
