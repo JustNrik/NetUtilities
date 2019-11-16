@@ -1,6 +1,8 @@
+using System.ComponentModel;
 
 namespace System.Diagnostics
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static partial class ProcessUtilities
     {
         /// <summary>

@@ -1,5 +1,6 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -7,6 +8,7 @@ using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute
 
 namespace System
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SystemUtilities
     {
         private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;

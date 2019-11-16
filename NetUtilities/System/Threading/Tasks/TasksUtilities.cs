@@ -1,7 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace System.Threading.Tasks
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static partial class TasksUtilities
     {
         /// <summary>

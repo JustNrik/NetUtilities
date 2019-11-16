@@ -1,9 +1,11 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static partial class LinqUtilities
     {
         /// <summary>
