@@ -11,7 +11,7 @@ namespace NetUtilities.Tests.System.Collections.Generics
         public void List_Doesnt_Mutate_If_Reference_Does()
         {
             var list = new List<int>() { 1, 2, 3, 4, 5 };
-            var readonlyList = new ReadOnlyList<int>(list);
+            var readonlyList = new ReadOnlyList<int>(list, false);
             list.Add(6);
             Assert.Equal(6, list.Count);
             Assert.Equal(5, readonlyList.Count);
