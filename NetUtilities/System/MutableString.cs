@@ -668,7 +668,7 @@ namespace System
             => IndexOf(item, 0, Length) != -1;
 
         public bool Contains(string? item, int startIndex)
-            => IndexOf(item, startIndex, Length) != -1;
+            => IndexOf(item, startIndex, Length - startIndex) != -1;
 
         public bool Contains(string? item, int startIndex, int count)
             => IndexOf(item, startIndex, count) != -1;
@@ -900,13 +900,15 @@ namespace System
             if (value.Length == 0) return Length == 0;
             if (value.Length == Length) return value == this;
 
-            for (int index = Length - value.Length; index < Length; index++)
-            {
-                if (value[index] != this[index])
-                    return false;
-            }
+            string end = _builder.ToString( Length - value.Length, value.Length);
+            return end.Equals(value, StringComparison.CurrentCulture);
 
-            return true;
+            //for (int index = Length - value.Length; index < Length; index++)
+            //{
+            //    if (value[index] != this[index])
+            //        return false;
+            //}
+            //return true;
         }
         #endregion
         #region Split
