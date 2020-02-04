@@ -228,7 +228,7 @@ namespace System
             => ((IComparable<string>)this).CompareTo(other);
 
         void ICollection<char>.Add(char item)
-            => _builder.Append(item);
+            => Append(item);
 
         void ICollection<char>.Clear()
             => RemoveAll();
@@ -263,7 +263,6 @@ namespace System
 
         public static MutableString operator -(MutableString mutableString, char value)
              => mutableString.Remove(value);
-
 
         public static MutableString operator -(MutableString mutableString, string value)
              => mutableString.Remove(value);
@@ -504,7 +503,7 @@ namespace System
 
         public MutableString Remove(char item)
         {
-            int index = 0;
+            var index = 0;
 
             while ((index = IndexOf(item, index)) != -1)
                 _builder.Remove(index, 1);
@@ -529,7 +528,7 @@ namespace System
         {
             if (string.IsNullOrEmpty(item)) return this;
 
-            int index = 0;
+            var index = 0;
 
             while ((index = IndexOf(item, index)) != -1)
                 _builder.Remove(index, item.Length);
@@ -727,9 +726,9 @@ namespace System
 
             if (count == 0) return -1;
 
-            int index = startIndex;
+            var index = startIndex;
 
-            for (int counter = 1; counter <= count; counter++, index++)
+            for (var counter = 1; counter <= count; counter++, index++)
             {
                 if (item == this[index])
                     return index;
@@ -816,9 +815,9 @@ namespace System
 
             if (count == 0) return -1;
 
-            int index = Length - 1;
+            var index = Length - 1;
 
-            for (int counter = 1; counter <= count; counter++, index--)
+            for (var counter = 1; counter <= count; counter++, index--)
             {
                 if (item == this[index])
                     return index;
@@ -900,15 +899,13 @@ namespace System
             if (value.Length == 0) return Length == 0;
             if (value.Length == Length) return value == this;
 
-            string end = _builder.ToString( Length - value.Length, value.Length);
-            return end.Equals(value, StringComparison.CurrentCulture);
-
-            //for (int index = Length - value.Length; index < Length; index++)
-            //{
-            //    if (value[index] != this[index])
-            //        return false;
-            //}
-            //return true;
+            for (var index = Length - value.Length; index < Length; index++)
+            {
+                if (value[index - value.Length - 1] != this[index])
+                    return false;
+            }
+            
+            return true;
         }
         #endregion
         #region Split
