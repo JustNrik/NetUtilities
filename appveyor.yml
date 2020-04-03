@@ -1,0 +1,23 @@
+version: 1.0.0.0-alpha{build}
+branches:
+  only:
+  - master
+max_jobs: 15
+image: Visual Studio 2019 Preview
+configuration: Release
+platform: Any CPU
+before_build:
+- ps: nuget restore
+build:
+  project: NetUtilities.sln
+  publish_nuget: true
+  publish_nuget_symbols: true
+  parallel: true
+  verbosity: minimal
+test: off
+deploy:
+- provider: NuGet
+  api_key:
+    secure: 07A4N3G5s1VV2v8AbDaGu+nYsZcw6o2hSx/f2I45ob4=
+  on:
+    APPVEYOR_REPO_TAG: true
