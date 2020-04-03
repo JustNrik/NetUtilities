@@ -1,5 +1,4 @@
 ﻿using NetUtilities;
-using System.Numerics;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -15,14 +14,16 @@ namespace System
         /// <summary>
         /// The maximum value you can provide to <see cref="SquareSum(uint)"/>
         /// </summary>
-        public const uint SquareSumThreshold = 2344;
+        public const uint SquareSumThreshold = 2343;
 
         /// <summary>
         /// The maximum value you can provide to <see cref="CubicSum(uint)"/>
         /// </summary>
-        public const uint CubicSumThreshold = 362;
+        public const uint CubicSumThreshold = 361;
 
-        /// <summary>Returns the sum of all integers from 1 to <paramref name="n"/>.</summary>
+        /// <summary>
+        /// Returns the sum of all integers from 1 to <paramref name="n"/>.
+        /// </summary>
         /// <exception cref="OverflowException">Thrown when the result would be higher than <see cref="uint.MaxValue"/></exception>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of all integers from 1 to <paramref name="n"/>.</returns>
@@ -37,7 +38,9 @@ namespace System
             return (uint)result;
         }
 
-        /// <summary>Returns the sum of all integers from <paramref name="k"/> to <paramref name="n"/>.</summary>
+        /// <summary>
+        /// Returns the sum of all integers from <paramref name="k"/> to <paramref name="n"/>.
+        /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
         /// <exception cref="OverflowException">Thrown when the result would be higher than <see cref="uint.MaxValue"/></exception>
         /// <param name="k">The lower limit of the numbers to be sum.</param>
@@ -63,21 +66,25 @@ namespace System
             return (uint)result;
         }
 
-        /// <summary>Returns the sum of the squares of all integers from 1 to <paramref name="n"/>.</summary>
+        /// <summary>
+        /// Returns the sum of the squares of all integers from 1 to <paramref name="n"/>.
+        /// </summary>
         /// <exception cref="OverflowException">Thrown when the result would be higher than <see cref="uint.MaxValue"/> (<paramref name="n"/> >= 2344)</exception>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of the squares of all integers from 1 to <paramref name="n"/>.</returns>
         [MethodImplementation(Inlined)]
         public static uint SquareSum(uint n)
         {
-            if (n >= SquareSumThreshold)
+            if (n > SquareSumThreshold)
                 Throw.Overflow($"The square sum from 1 to {n} resulted a value larger than uint.MaxValue ({uint.MaxValue})");
 
             var result = (n + 1UL) * (2 * n + 1) * n / 6;
             return (uint)result;
         }
 
-        /// <summary>Returns the sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.</summary>
+        /// <summary>
+        /// Returns the sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.
+        /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
         /// <exception cref="OverflowException">Thrown when the result would be higher than <see cref="uint.MaxValue"/></exception>
         /// <param name="k">The lower limit of the numbers to be sum.</param>
@@ -119,14 +126,16 @@ namespace System
             }
         }
 
-        /// <summary>Returns the sum of the cubes of all integers from 1 to <paramref name="n"/>.</summary>
+        /// <summary>
+        /// Returns the sum of the cubes of all integers from 1 to <paramref name="n"/>.
+        /// </summary>
         /// <exception cref="OverflowException">Thrown when the result would be higher than <see cref="uint.MaxValue"/> (<paramref name="n"/> >= 362)</exception>
         /// <param name="n">The upper limit of the numbers to be sum.</param>
         /// <returns>The sum of the cubes of all integers from 1 to <paramref name="n"/>.</returns>
         [MethodImplementation(Inlined)]
         public static uint CubicSum(uint n)
         {
-            if (n >= CubicSumThreshold)
+            if (n > CubicSumThreshold)
                 Throw.Overflow($"The cubic sum from 1 to {n} resulted a value larger than uint.MaxValue ({uint.MaxValue})");
 
             var result = (n + 1UL) * (n + 1) * n * n / 4;
@@ -137,7 +146,9 @@ namespace System
             return (uint)result;
         }
 
-        /// <summary>Returns the sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.</summary>
+        /// <summary>
+        /// Returns the sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.
+        /// </summary>
         /// <exception cref="InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
         /// <exception cref="OverflowException">Thrown when the result would be higher than <see cref="uint.MaxValue"/></exception>
         /// <param name="k">The lower limit of the numbers to be sum.</param>

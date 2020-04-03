@@ -638,62 +638,74 @@
             <param name="value"></param>
             <returns></returns>
         </member>
+        <member name="T:System.MathX">
+            <summary>
+            This class provides some math helper methods that <see cref="T:System.Math"/> doesn't provide.
+            </summary>
+        </member>
+        <member name="F:System.MathX.SquareSumThreshold">
+            <summary>
+            The maximum value you can provide to <see cref="M:System.MathX.SquareSum(System.UInt32)"/>
+            </summary>
+        </member>
+        <member name="F:System.MathX.CubicSumThreshold">
+            <summary>
+            The maximum value you can provide to <see cref="M:System.MathX.CubicSum(System.UInt32)"/>
+            </summary>
+        </member>
         <member name="M:System.MathX.Sum(System.UInt32)">
             <summary>
-            Returns the sum of all integers from 1 to N.
+            Returns the sum of all integers from 1 to <paramref name="n"/>.
             </summary>
+            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
             <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of all integers from 1 to N.</returns>
+            <returns>The sum of all integers from 1 to <paramref name="n"/>.</returns>
         </member>
         <member name="M:System.MathX.Sum(System.UInt32,System.UInt32)">
             <summary>
-            Returns the sum of all integers from K to N.
+            Returns the sum of all integers from <paramref name="k"/> to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
-            <exception cref="T:System.OverflowException">
-            The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
-            </exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
+            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
             <param name="k">The lower limit of the numbers to be sum.</param>
             <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of all integers from K to N.</returns>
+            <returns>The sum of all integers from <paramref name="k"/> to <paramref name="n"/>.</returns>
         </member>
         <member name="M:System.MathX.SquareSum(System.UInt32)">
             <summary>
-            Returns the sum of the squares of all integers from 1 to N.
+            Returns the sum of the squares of all integers from 1 to <paramref name="n"/>.
             </summary>
+            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/> (<paramref name="n"/> >= 2344)</exception>
             <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the squares of all integers from 1 to N.</returns>
+            <returns>The sum of the squares of all integers from 1 to <paramref name="n"/>.</returns>
         </member>
         <member name="M:System.MathX.SquareSum(System.UInt32,System.UInt32)">
             <summary>
-            Returns the sum of the squares of all integers from K to N.
+            Returns the sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
-            <exception cref="T:System.OverflowException">
-            The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
-            </exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
+            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
             <param name="k">The lower limit of the numbers to be sum.</param>
             <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the squares of all integers from 1 to N.</returns>
+            <returns>The sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.</returns>
         </member>
         <member name="M:System.MathX.CubicSum(System.UInt32)">
             <summary>
-            Returns the sum of the cubes of all integers from 1 to N.
+            Returns the sum of the cubes of all integers from 1 to <paramref name="n"/>.
             </summary>
+            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/> (<paramref name="n"/> >= 362)</exception>
             <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the cubes of all integers from 1 to N.</returns>
+            <returns>The sum of the cubes of all integers from 1 to <paramref name="n"/>.</returns>
         </member>
         <member name="M:System.MathX.CubicSum(System.UInt32,System.UInt32)">
             <summary>
-            Returns the sum of the cubes of all integers from K to N.
+            Returns the sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
-            <exception cref="T:System.OverflowException">
-            The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
-            </exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
+            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
             <param name="k">The lower limit of the numbers to be sum.</param>
             <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the cubes of all integers from 1 to N.</returns>
+            <returns>The sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.</returns>
         </member>
         <member name="T:System.MutableString">
             <summary>
