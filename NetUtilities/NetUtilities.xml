@@ -1,0 +1,1271 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>NetUtilities</name>
+    </assembly>
+    <members>
+        <member name="T:System.Collections.Generic.ReadOnlyList`1">
+            <summary>
+            A true readonly generic List which provides most of <see cref="T:System.Collections.Generic.List`1"/> methods.
+            </summary>
+            <typeparam name="T">The generic type of this instance</typeparam>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from an <see cref="T:System.Collections.Generic.IEnumerable`1"/>
+            </summary>
+            <exception cref="T:System.ArgumentNullException">This exception is thrown the if argument is null</exception>
+            <param name="source">The source to create the list.</param>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
+            <summary>
+            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from a given <see cref="T:System.Collections.Generic.List`1"/>, optionally, you can pass a boolean to indicate if you want to keep the reference of the given list.
+            </summary>
+            <param name="source">The source to create the list.</param>
+            <param name="keepReference">The parameter to determine if the reference should be kept.</param>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Int32)">
+            <summary>
+            Returns the element stored in the given index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">This exception is throw if the index is out of the bounds of this list</exception>
+            <param name="index">The index of the element that will be taken.</param>
+            <returns>The element in the given index.</returns>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Index)">
+            <summary>
+            Returns the element stored in the given index.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">This exception is throw if the index is out of the bounds of this list.</exception>
+            <param name="index">The index of the element that will be taken.</param>
+            <returns>The element in the given index.</returns>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Range)">
+            <summary>
+            Returns all elements in the given range.
+            </summary>
+            <param name="range">The range where all elements will be taken.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
+            <returns>A new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements in the given range.</returns>
+        </member>
+        <member name="P:System.Collections.Generic.ReadOnlyList`1.Count">
+            <summary>
+            Returns the amount of element in the current instace.
+            </summary>
+            <returns>The amount of elements in the current instance.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetEnumerator">
+            <summary>
+            Gets the enumerator for the current instance.
+            </summary>
+            <returns>An enumerator for the current instance.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0)">
+            <summary>
+            Finds the index of the given item.
+            </summary>
+            <param name="item">The item whose index will be searched.</param>
+            <returns>The index of the given item, -1 if it's not found.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0,System.Int32)">
+            <summary>
+            Finds the index of the given item starting from the index given.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+            <param name="item">The item whose index will be searched.</param>
+            <param name="startIndex">The starting index where the search will begin.</param>
+            <returns>The index of the given item, -1 if it's not found.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0,System.Int32,System.Int32)">
+            <summary>
+            Finds the index of the given item starting from the index given.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+            <param name="item">The item whose index will be searched.</param>
+            <param name="startIndex">The starting index where the search will begin.</param>
+            <param name="count">The amount of items that will be searched.</param>
+            <returns>The index of the given item, -1 if it's not found.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Contains(`0)">
+            <summary>
+            Returns true if the list contains the provided element. otherwise false.
+            </summary>
+            <param name="item">The item that will be searched.</param>
+            <returns>true if the items is found, otherwise false.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Find(System.Predicate{`0})">
+            <summary>
+            Finds the first element that matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The first item that matches the predicate. otherwise default.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLast(System.Predicate{`0})">
+            <summary>
+            Finds the last element that matches the given predicate
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The first item that matches the predicate. otherwise default.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindAll(System.Predicate{`0})">
+            <summary>
+            Finds all the elements that matches the given predicate. 
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>A <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements that matches the predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Predicate{`0})">
+            <summary>
+            Finds the index of the first element that matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The index of the first element that matches the given predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Int32,System.Predicate{`0})">
+            <summary>
+            Finds the index of the first element that matches the given predicate starting from the given index.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+            <param name="startIndex">The starting index where the search will begin.</param>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The index of the first element that matches the given predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Int32,System.Int32,System.Predicate{`0})">
+            <summary>
+            Finds the index of the first element that matches the given predicate starting from the given index.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
+            <param name="startIndex">The starting index where the search will begin.</param>
+            <param name="count">The amount of items that will be searched.</param>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The index of the first element that matches the given predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Predicate{`0})">
+            <summary>
+            Finds the index of the last element that matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The index of the last element that matches the given predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Int32,System.Predicate{`0})">
+            <summary>
+            Finds the index of the last element that matches the given predicate starting from the given index.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid (negative or >= Count)</exception>
+            <param name="startIndex">The starting index where the search will begin.</param>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <returns>The index of the last element that matches the given predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Int32,System.Int32,System.Predicate{`0})">
+            <summary>
+            Finds the index of the last element that matches the given predicate starting from the given index.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid (negative or >= Count)</exception>
+            <param name="startIndex">The starting index where the search will begin.</param>
+            <param name="predicate">The predicate used to find a matching item.</param>
+            <param name="count">The amount of items to be searched.</param>
+            <returns>The index of the last element that matches the given predicate.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(`0)">
+            <summary>
+            Searches for the index of the given item using <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>
+            </summary>
+            <param name="item">The item to be searched</param>
+            <returns>The index of the given item, -1 if not found.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(`0,System.Collections.Generic.IComparer{`0})">
+            <summary>
+            Searches for the index of the given item using the comparer provided.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the comparer is null.</exception>
+            <param name="item">The item to be searched.</param>
+            <param name="comparer">The comparer to be used in order to search the item.</param>
+            <returns>The index of the given item, -1 if not found.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(System.Int32,System.Int32,`0,System.Collections.Generic.IComparer{`0})">
+            <summary>
+            Searches for the index of the given item using the comparer provided.
+            </summary>
+            <param name="startIndex">The index where the search will start.</param>
+            <param name="count">The amount of elements to be searched.</param>
+            <param name="item">The item to be searched.</param>
+            <param name="comparer">The comparer to be used in order to search the item.</param>
+            <returns>The index of the given item, -1 if not found.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.ConvertAll``1(System.Converter{`0,``0})">
+            <summary>
+            Returns a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all members of the current list converted into the target type.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the converter is null.</exception>
+            <typeparam name="TOut">The output generic type of the <see cref="T:System.Collections.Generic.ReadOnlyList`1"/></typeparam>
+            <param name="converter">The delegate used to convert the items</param>
+            <returns>Returns a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/></returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Int32)">
+            <summary>
+            Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found starting from the given index.
+            </summary>
+            <param name="startIndex">The index where elements will start to get taken from.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
+            <returns>
+            Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
+            </returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Int32,System.Int32)">
+            <summary>
+            Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found 
+            starting from the given index with the given amount of elements.
+            </summary>
+            <param name="startIndex">The index where elements will start to get taken from.</param>
+            <param name="count">The amount of elements to be taken.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
+            <returns>
+            Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
+            </returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Any(System.Predicate{`0})">
+            <summary>
+            Checks if any element in the current instance matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The delegate used to filter the items.</param>
+            <returns>True if any item matches the predicate. Otherwise false.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.All(System.Predicate{`0})">
+            <summary>
+            Checks if all elements in the current instance match the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
+            <param name="predicate">The delegate used to filter the items.</param>
+            <returns>True if all items match the predicate. Otherwise false.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.ForEach(System.Action{`0})">
+            <summary>
+            Executes an action for each element in the list.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the action is null.</exception>
+            <param name="action">The action delegate to be executed for each item in the list</param>
+        </member>
+        <member name="T:System.Color">
+            <summary>
+            This struct represents a RGB Color
+            </summary>
+        </member>
+        <member name="T:System.Diagnostics.ProcessOptions">
+            <summary>
+            Extra options for the <see cref="T:System.Diagnostics.Process" /> component.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
+            <summary>
+            Instucts the <see cref="T:System.Diagnostics.Process" /> <keyword cref="T:System.Object" /> to wait until the executed process terminates.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.ProcessOptions.Executing">
+            <summary>
+            Gets if the target process is executing (has not been actually started yet), or is being executed (started). False if it was started.
+            </summary>
+        </member>
+        <member name="M:System.Diagnostics.ProcessUtilities.Shell(System.Diagnostics.Process,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Diagnostics.ProcessWindowStyle,System.String,System.Diagnostics.ProcessOptions)">
+            <summary>
+            Extension for a Shell() function that allows overloading of the working directory variable.
+            It must be a <see cref="T:System.String"/> but can be variables that returns strings.
+            </summary>
+            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
+            <param name="fileName">Process file name to execute.</param>
+            <param name="arguments">Commands to pass to the process file to execute.</param>
+            <param name="redirectStandardOutput">redirects stdout of the target process.</param>
+            <param name="redirectStandardError">redirects stderr of the target process.</param>
+            <param name="useShellExecute">uses shell execute instead.</param>
+            <param name="createNoWindow">Creates no new window for the process.</param>
+            <param name="windowStyle">Window style for the target process.</param>
+            <param name="workingDirectory">Working directory for the target process.</param>
+            <param name="options"> The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
+            <returns>empty string, process stdout data, process stderr data.</returns>
+        </member>
+        <member name="M:System.Diagnostics.ProcessUtilities.Shell(System.Diagnostics.Process,System.Diagnostics.ProcessOptions)">
+            <summary>
+            Extension for a Shell() function that allows overloading of the working directory variable.
+            It must be a <see cref="T:System.String"/> but can be variables that returns strings.
+            </summary>
+            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
+            <param name="options">The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
+            <returns>empty string, process stdout data, process stderr data.</returns>
+        </member>
+        <member name="T:System.EventManager`1">
+            <summary>
+            This class is a handy wrapper for automatic event wrapping.
+            You shouldn't use this class to dynamically add/remove handlers frequently
+            as this class relys on <see cref="N:System.Reflection"/> which may negatively affect
+            the performance of your application.
+            </summary>
+            <typeparam name="TSource">The source of the events</typeparam>
+        </member>
+        <member name="P:System.EventManager`1.Source">
+            <summary>
+            The source of the events
+            </summary>
+        </member>
+        <member name="M:System.EventManager`1.#ctor(`0)">
+            <summary>
+            Creates an instance of <see cref="T:System.EventManager`1"/> with the instance of the source provided.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <param name="source">The source of the events</param>
+        </member>
+        <member name="M:System.EventManager`1.AddHandlers(System.Object,System.Reflection.BindingFlags)">
+            <summary>
+            Adds all the handlers to the methods that have <see cref="T:System.HandlesAttribute"/>
+            </summary>
+            <param name="target">The instance of object that will listen to the events</param>
+            <param name="flags">The flags used for <see cref="N:System.Reflection"/> to search the methods that will listen to the events</param>
+        </member>
+        <member name="M:System.EventManager`1.RemoveHandlers(System.Object)">
+            <summary>
+            Removes all handlers to the methods with <see cref="T:System.HandlesAttribute"/>
+            </summary>
+            <param name="target">The instance of object that is currently listening to the events</param>
+        </member>
+        <member name="P:System.HandlesAttribute.EventInfo">
+            <summary>
+            The event metadata.
+            </summary>
+        </member>
+        <member name="M:System.HandlesAttribute.#ctor(System.Type,System.String,System.Reflection.BindingFlags)">
+            <summary>
+            Creates an attribute that is used for metadata to gather the needed information for <see cref="T:System.EventManager`1"/>
+            </summary>
+            <exception cref="T:System.EventNotFoundException">Thrown when the event can't be found.</exception>
+            <param name="eventSourceType">The type of the source of events.</param>
+            <param name="eventName">The name of the event, recommended to use nameof() operator to prevent <see cref="T:System.EventNotFoundException"/>.</param>
+            <param name="flags">The flags used to search the event.</param>
+            <param name="methodName">The name of the method. This is gathered from <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/> so any value you pass here is ommited.</param>
+        </member>
+        <member name="T:System.Int24">
+            <summary>
+            Represents a 24-bit signed integer
+            </summary>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.BatchBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+            Batches the collection into a collection of collection of an specific size.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either source or selector are null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when a negative size is given.</exception>
+            <typeparam name="TSource">The underlying type of the collection.</typeparam>
+            <param name="source">The collection.</param>
+            <param name="size">The size of the buckets.</param>
+            <returns>An enumerable bulked by the given size.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.Linq.LinqUtilities.BatchBy``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})" -->
+        <member name="M:System.Linq.LinqUtilities.AddOrUpdate``1(System.Collections.Generic.IList{``0},``0)">
+            <summary>
+            Adds an element to a <see cref="T:System.Collections.Generic.IList`1"/> if it doesn't exists, otherwise it updates it.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the source is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
+            <typeparam name="T">The type of the element to be added.</typeparam>
+            <param name="source">The source collection.</param>
+            <param name="element">The element to search.</param>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+            <summary>
+            Gets a value given the key, or adds it if it doesn't exists.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the source or the key are null.</exception>
+            <exception cref="T:System.InvalidOperationException">Throw if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The source collection.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+            <returns>The value.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Shuffle``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            Shuffles the given list.
+            </summary>
+            <typeparam name="T">The type.</typeparam>
+            <param name="source">The source list.</param>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+            Uses the selector to return a collection without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the selector are null.</exception>
+            <typeparam name="TSource">The underlying type of the source of the collection.</typeparam>
+            <typeparam name="TKey">The type of the selected member.</typeparam>
+            <param name="source">The source collection.</param>
+            <param name="selector">The selector delegate used to filter duplicates.</param>
+            <returns>A sequence without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+            Uses the selector to return a collection without duplicates based on the provided comparer.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the selector are null.</exception>
+            <typeparam name="TSource">The underlying type of the source of the collection.</typeparam>
+            <typeparam name="TKey">The type of the selected member.</typeparam>
+            <param name="source">The source collection.</param>
+            <param name="selector">The selector delegate used to filter duplicates.</param>
+            <param name="comparer">The comparer used to filter duplicates.</param>
+            <returns>A sequence without duplicates based on the comparer provided.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+            <summary>
+            Flattens the given sequence of sequences into a single sequence.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <typeparam name="TSource">The underlying type of the sequence of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <returns>A sequence with all members of the original sequence and the nested sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}},System.Func{System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0}})">
+            <summary>
+            Flattens the given sequence of sequences into a single sequence given a selector.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the source or selector are null.</exception>
+            <typeparam name="TSource">The underlying type of the sequence of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="selector">The selector used to select the nested sequence.</param>
+            <returns>A sequence with all members of the original sequence and the nested sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+            <summary>
+            Invokes an action for each element in the sequence.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the action are null.</exception>
+            <typeparam name="T">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="action">The action to be executed on each item of the sequence.</param>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+            Joins the sequence of strings into a single string.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Throw when the source is null.</exception>
+            <param name="source">The string sequence.</param>
+            <param name="separator">The separator used to join the strings. <see cref="F:System.String.Empty"/> if no separator is provided.</param>
+            <returns>A single <see cref="T:System.String"/> with all the elements of the sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.Char},System.String)">
+            <summary>
+            Joins the sequence of chars into a single string.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Throw when the source is null.</exception>
+            <param name="source">The char sequence.</param>
+            <param name="separator">The separator used to join the chars. <see cref="F:System.String.Empty"/> if no separator is provided.</param>
+            <returns>A single <see cref="T:System.String"/> with all the elements of the sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.SkipWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Skips all the elements while the predicate is True.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
+            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="predicate">The delegated to filter the items.</param>
+            <returns>A sequence of items</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Skips all the elements until the predicate is True.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
+            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="predicate">The delegated to filter the items.</param>
+            <returns>A sequence of items</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+            <summary>
+            Takes all the elements until the predicate is True.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
+            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="predicate">The delegated to filter the items.</param>
+            <returns>A sequence of items</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.TakeWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+            Takes all the elements while the predicate is True.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
+            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="predicate">The delegated to filter the items.</param>
+            <returns>A sequence of items</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.TakeIf``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,System.Boolean})">
+            <summary>
+            Takes an amount of items from the source that matches the given predicate.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the predicate are null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when count is negative.</exception>
+            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <param name="count">The amount of items to be taken.</param>
+            <param name="predicate">The delegate used for filtering.</param>
+            <returns>A sequence with an amount equal or lower than the count give with the items that matches the predicate.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+            <summary>
+            Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
+            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The sequence</param>
+            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
+            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair with the comparer provided.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source or comparer are null.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The sequence</param>
+            <param name="comparer">The comparer</param>
+            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
+            <summary>
+            Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
+            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The sequence</param>
+            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+            Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
+            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair with the comparer provided.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The sequence</param>
+            <param name="comparer">The comparer</param>
+            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToReadOnly``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+            Creates a <see cref="T:System.Collections.ObjectModel.ReadOnlyDictionary`2"/> from the dictionary provided.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The sequence.</param>
+            <returns>A Read-Only Dictionary from the dictionary provided.</returns>
+        </member>
+        <member name="M:System.Linq.LinqUtilities.ToReadOnlyList``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Creates as <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from the sequence provided.
+            </summary>
+            <typeparam name="T">The underlying type of the sequence.</typeparam>
+            <param name="source">The sequence.</param>
+            <returns>A Read-Only list.</returns>
+        </member>
+        <member name="M:System.MathExtensions.IsPowerOf2(System.Int32)">
+            <summary>
+            Returns a boolean indicating if the provided number is a power of 2.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.IsPowerOf2(System.UInt32)">
+            <summary>
+            Returns a boolean indicating if the provided number is a power of 2.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.IsPowerOf2(System.Int64)">
+            <summary>
+            Returns a boolean indicating if the provided number is a power of 2.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.IsPowerOf2(System.UInt64)">
+            <summary>
+            Returns a boolean indicating if the provided number is a power of 2.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.GetDigits(System.UInt32)">
+            <summary>
+            Gets the amount of digits in the provided number.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.GetDigits(System.Int32)">
+            <summary>
+            Gets the amount of digits in the provided number.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.GetDigits(System.Int64)">
+            <summary>
+            Gets the amount of digits in the provided number.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathExtensions.GetDigits(System.UInt64)">
+            <summary>
+            Gets the amount of digits in the provided number.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MathX.Sum(System.UInt32)">
+            <summary>
+            Returns the sum of all integers from 1 to N.
+            </summary>
+            <param name="n">The upper limit of the numbers to be sum.</param>
+            <returns>The sum of all integers from 1 to N.</returns>
+        </member>
+        <member name="M:System.MathX.Sum(System.UInt32,System.UInt32)">
+            <summary>
+            Returns the sum of all integers from K to N.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
+            <exception cref="T:System.OverflowException">
+            The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
+            </exception>
+            <param name="k">The lower limit of the numbers to be sum.</param>
+            <param name="n">The upper limit of the numbers to be sum.</param>
+            <returns>The sum of all integers from K to N.</returns>
+        </member>
+        <member name="M:System.MathX.SquareSum(System.UInt32)">
+            <summary>
+            Returns the sum of the squares of all integers from 1 to N.
+            </summary>
+            <param name="n">The upper limit of the numbers to be sum.</param>
+            <returns>The sum of the squares of all integers from 1 to N.</returns>
+        </member>
+        <member name="M:System.MathX.SquareSum(System.UInt32,System.UInt32)">
+            <summary>
+            Returns the sum of the squares of all integers from K to N.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
+            <exception cref="T:System.OverflowException">
+            The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
+            </exception>
+            <param name="k">The lower limit of the numbers to be sum.</param>
+            <param name="n">The upper limit of the numbers to be sum.</param>
+            <returns>The sum of the squares of all integers from 1 to N.</returns>
+        </member>
+        <member name="M:System.MathX.CubicSum(System.UInt32)">
+            <summary>
+            Returns the sum of the cubes of all integers from 1 to N.
+            </summary>
+            <param name="n">The upper limit of the numbers to be sum.</param>
+            <returns>The sum of the cubes of all integers from 1 to N.</returns>
+        </member>
+        <member name="M:System.MathX.CubicSum(System.UInt32,System.UInt32)">
+            <summary>
+            Returns the sum of the cubes of all integers from K to N.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">The exception that is thrown when the value of k you provide is higher than the value of n</exception>
+            <exception cref="T:System.OverflowException">
+            The exception that is thrown when an arithmetic, casting, or conversion operation in a checked context results in an overflow.
+            </exception>
+            <param name="k">The lower limit of the numbers to be sum.</param>
+            <param name="n">The upper limit of the numbers to be sum.</param>
+            <returns>The sum of the cubes of all integers from 1 to N.</returns>
+        </member>
+        <member name="T:System.MutableString">
+            <summary>
+            This class is a handy wrapper of <see cref="T:System.Text.StringBuilder"/> class for string manipulation with minimal cost.
+            </summary>
+        </member>
+        <member name="P:System.MutableString.Length">
+            <summary>
+            Gets or sets the Length of the builder in the current instance.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="P:System.MutableString.Capacity">
+            <summary>
+            Gets or sets the Capacity of the builder in the current instance.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException"/>
+        </member>
+        <member name="P:System.MutableString.Item(System.Index)">
+            <summary>
+            Gets or sets a <see cref="T:System.Char"/> in the specified <see cref="T:System.Index"/>.
+            </summary>
+            <param name="index"/>
+            <returns/>
+        </member>
+        <member name="P:System.MutableString.Item(System.Int32)">
+            <summary>
+            Gets or sets a <see cref="T:System.Char"/> in the specified index.
+            </summary>
+            <param name="index"/>
+            <returns/>
+        </member>
+        <member name="P:System.MutableString.Item(System.Range)">
+            <summary>
+            Gets or sets a <see cref="T:System.String"/> in the specified <see cref="T:System.Range"/>.
+            The input string must have the same length of the string you want to edit, otherwise an <see cref="T:System.IndexOutOfRangeException"/> will be thrown.
+            </summary>
+            <exception cref="T:System.IndexOutOfRangeException"/>
+            <param name="range"/>
+            <returns/>
+        </member>
+        <member name="P:System.MutableString.Item(System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Returns a <see cref="T:System.Text.RegularExpressions.MatchCollection"/> with the provided pattern.
+            </summary>
+            <param name="pattern">The <see cref="T:System.Text.RegularExpressions.Regex"/> pattern to be used</param>
+            <param name="options">The <see cref="T:System.Text.RegularExpressions.RegexOptions"/> to be used</param>
+            <returns>A collection of <see cref="T:System.Text.RegularExpressions.Match"/> objects</returns>
+        </member>
+        <member name="P:System.MutableString.Item(System.String,System.String,System.Text.RegularExpressions.RegexOptions)">
+            <summary>
+            Returns a <see cref="T:System.String"/> with the replacement applied on the pattern given. This method doesn't mutate the current instance.
+            </summary>
+            <param name="pattern"/>
+            <param name="replacement"/>
+            <param name="options"/>
+            <returns/>
+        </member>
+        <member name="P:System.MutableString.Item(System.Char,System.Char,System.Int32,System.Boolean)">
+            <summary>
+            Returns a <see cref="T:System.String"/>[] delimited with the characters provided. An empty array if not found. 
+            You can optionally provide the start index and whether to include the bounds or not.
+            </summary>
+            <param name="leftBound"/>
+            <param name="rightBound"/>
+            <param name="startIndex"/>
+            <param name="includeBounds"/>
+            <returns/>
+        </member>
+        <member name="P:System.MutableString.MaxCapacity">
+            <summary>
+            Returns the maximun capacity of the builder.
+            </summary>
+        </member>
+        <member name="M:System.MutableString.Reverse">
+            <summary>
+            Reverse the current <see cref="T:System.MutableString"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.MutableString.ContainsAny(System.String[])" -->
+        <!-- Badly formed XML comment ignored for member "M:System.MutableString.ContainsAll(System.String[])" -->
+        <member name="M:System.MutableString.Indent(System.Int32,System.Char)">
+            <summary>
+            Jumps to the next line and adds many amount of chars in the beginning of the line.
+            </summary>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MutableString.RangeOf(System.String)">
+            <summary>
+            Returns the range in which the matching input is found. Returns null if not found.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MutableString.IsNullOrEmpty(System.MutableString)">
+            <summary>
+            Returns true if the <see cref="T:System.MutableString"/> is null or empty.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.MutableString.IsNullOrWhiteSpace(System.MutableString)">
+            <summary>
+            Returns true if the <see cref="T:System.MutableString"/> is null, empty or consists only of white-spaces characters.
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ConstructorData.CreateInstance">
+            <summary>
+            Creates an instance of this constructor's type.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Throw if this constructors takes parameters or the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
+            <returns>An instance of the type this constructor belongs to.</returns>
+        </member>
+        <member name="M:System.Reflection.ConstructorData.CreateInstance(System.Object[])">
+            <summary>
+            Creates an instance of this constructor's type with the given arguments.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when args is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
+            <exception cref="T:System.Reflection.ParameterCountMismatchException">Thrown when the supplied arguments count is different from the parameters count of this constructor.</exception>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="T:System.Reflection.Factory">
+            <summary>
+            This class is a helper to create instance of objects whose types are only known at runtime.
+            </summary>
+        </member>
+        <member name="M:System.Reflection.Factory.CreateInstance(System.Type)">
+            <summary>
+            Gets the instance of a generic type with a parameterless constructor.
+            Performs much better than <see cref="M:System.Activator.CreateInstance(System.Type)"/>
+            </summary>
+        </member>
+        <member name="T:System.Reflection.Factory`1">
+            <summary>
+            This class is a helper to create instance of objects whose types are only known at runtime.
+            </summary>
+            <typeparam name="T">The type whose instance will be created.</typeparam>
+        </member>
+        <member name="P:System.Reflection.Factory`1.Singleton">
+            <summary>
+            Creates a single instance (Singleton) which can be used on the application lifetime.
+            </summary>
+        </member>
+        <member name="M:System.Reflection.Factory`1.CreateInstance">
+            <summary>
+            Gets the instance of a generic type with a parameterless constructor.
+            Performs much better than <see cref="M:System.Activator.CreateInstance``1"/>
+            </summary>
+        </member>
+        <member name="T:System.Reflection.Mapper">
+            <summary>
+            Handy class to map reflection metadata and provide high performance runtime manipulation.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.Constructors">
+            <summary>
+            Contains data related to the type's constructors
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.Events">
+            <summary>
+            Contains data related to the type's events
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.Fields">
+            <summary>
+            Contains data related to the type's fields
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.Methods">
+            <summary>
+            Contains data related to the type's methods
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.MethodsExcludingObjectBaseMembers">
+            <summary>
+            Contains data related to the type's methods - excluding members inhereted from the Object base class
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.MethodsDeclaringTypeOnly">
+            <summary>
+            Contains data related to the type's methods - excluding all inhereted members
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.Properties">
+            <summary>
+            Contains data related to the type's properties
+            </summary>
+        </member>
+        <member name="M:System.Reflection.Mapper.#ctor(System.Object)">
+            <summary>
+            Creates the mapper for the given object.
+            </summary>
+            <param name="object">The object.</param>
+        </member>
+        <member name="M:System.Reflection.Mapper.#ctor(System.Type)">
+            <summary>
+            Creates the mapper for the given type.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="T:System.Reflection.Mapper`1">
+            <summary>
+            Handy class to map reflection metadata and provide high performance runtime manipulation.
+            </summary>
+            <typeparam name="TMember">The type of the <see cref="T:System.Reflection.MemberInfo"/></typeparam>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.Constructors">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s constructors.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.Events">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s events.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.Fields">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s fields.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.Methods">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s methods.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.MethodsExcludingObjectBaseMembers">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s methods 
+            - excluding members inhereted from the object base class
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.MethodsDeclaringTypeOnly">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s methods 
+            - excluding all inhereted members
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.Properties">
+            <summary>
+            Contains data related to <typeparamref name="TMember"/>'s properties.
+            </summary>
+        </member>
+        <member name="M:System.Reflection.PropertyData.SetValue(System.Object,System.Object)">
+            <summary>
+            Sets the value of this property given the instance and the value. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when the property has no setter, the target is <see langword="null"/> and the property is not <see langword="static"/> or the value is <see langword="null"/> and the property is not nullable.</exception>
+            <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.Reflection.PropertyData.GetValue(System.Object)">
+            <summary>
+            Gets the value of this property given the instance. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when the property has no getter or the target is <see langword="null"/> and the property is not <see langword="static"/></exception>
+            <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
+            <returns>The value of the property.</returns>
+        </member>
+        <member name="T:System.Reflection.ReflectionUtilities">
+            <summary>
+            This class provides utilities for <see cref="N:System.Reflection"/>
+            </summary>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.Inherits(System.Type,System.Type)">
+            <summary>
+            Indicates if the provided type inherits from the base type provided.
+            </summary>
+            <param name="derived">The derived type.</param>
+            <param name="base">The potential base of the type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.Implements(System.Type,System.Type)">
+            <summary>
+            Indicates if the provided type implements the provided interface type.
+            </summary>
+            <param name="type">The type.</param>
+            <param name="interfaceType">The type of the interface to check.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.IsTuple(System.Type)">
+            <summary>
+            Indicates if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
+            <param name="type">The target type to check</param>
+            <returns>True if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>. Otherwise false.</returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.IsNullable(System.Type)">
+            <summary>
+            Indicates if the type is <see cref="T:System.Nullable`1"/>
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
+            <param name="type">The target type to check</param>
+            <returns>True if the type is <see cref="T:System.Nullable`1"/>. Otherwise false.</returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.CanBeConvertedTo(System.Type,System.Type)">
+            <summary>
+            Indicates if the type can be implicitly converted to the supplied type.
+            </summary>
+            <param name="type">The type.</param>
+            <param name="target">The target type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.IsStatic(System.Type)">
+            <summary>
+            Indicates if the type is <see langword="static"/>.
+            </summary>
+            <param name="type">The type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.TryGetCustomAttribute``1(System.Type,``0@,System.Boolean)">
+            <summary>
+            Attempts to get the custom attribute of the given type.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
+            <typeparam name="T">The attribute to search.</typeparam>
+            <param name="type">The type where the attribute will be searched.</param>
+            <param name="attribute">The output attribute. Null if it can't be found.</param>
+            <param name="inherited">Checks if it should inspect of ancestors of the given type.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.GetEnumFieldAttribute``2(``1,System.Boolean)">
+            <summary>
+            Returns the specified attribute if exists on the give value of the enum.
+            </summary>
+            <typeparam name="TAttribute">The type of the attribute.</typeparam>
+            <typeparam name="TEnum">The type of the enum.</typeparam>
+            <param name="enum">The enum.</param>
+            <param name="inherited">Indicates if it should inspect for the ancestors.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.HasDefaultConstructor(System.Type)">
+            <summary>
+            Indicates if the given type contains a default constructor. 
+            This method will always return true for structs (Structures in Visual Basic)
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
+            <param name="type">The type.</param>
+            <returns>
+            <see langword="true"/> if the type is a struct or has a parameterless constructor. 
+            Otherwise <see langword="false"/>
+            </returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionUtilities.HasDefaultConstructor``1">
+            <summary>
+            Indicates if the given type contains a default constructor. 
+            This method will always return true for structs (Structures in Visual Basic)
+            </summary>
+            <typeparam name="T">The type.</typeparam>
+            <returns>
+            <see langword="true"/> if the type is a struct or has a parameterless constructor. 
+            Otherwise <see langword="false"/>
+            </returns>
+        </member>
+        <member name="M:System.SystemUtilities.AsString(System.Char[])">
+            <summary>
+            Creates a <see cref="T:System.String"/> with the providen array.
+            </summary>
+            <param name="charArray">The array.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.AsString(System.ReadOnlySpan{System.Char})">
+            <summary>
+            Creates a <see cref="T:System.String"/> with the provided span.
+            </summary>
+            <param name="charSpan">The span.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.SubstringBetween(System.String,System.Char,System.Char,System.Int32,System.Boolean)">
+            <summary>
+            Gets the substring between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
+            </summary>
+            <param name="input"></param>
+            <param name="leftBound"></param>
+            <param name="rightBound"></param>
+            <param name="includeBounds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.SubstringBetween(System.MutableString,System.Char,System.Char,System.Int32,System.Boolean)">
+            <summary>
+            Gets the substring between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
+            </summary>
+            <param name="input"></param>
+            <param name="leftBound"></param>
+            <param name="rightBound"></param>
+            <param name="includeBounds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.SubstringsBetween(System.MutableString,System.Char,System.Char,System.Int32,System.Boolean)">
+            <summary>
+            Gets an array of substrings between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
+            </summary>
+            <param name="input"></param>
+            <param name="leftBound"></param>
+            <param name="rightBound"></param>
+            <param name="includeBounds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.SubstringsBetween(System.String,System.Char,System.Char,System.Int32,System.Boolean)">
+            <summary>
+            Gets an array of substrings between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
+            </summary>
+            <param name="input"></param>
+            <param name="leftBound"></param>
+            <param name="rightBound"></param>
+            <param name="includeBounds"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.IndexesOf(System.String,System.Char,System.Int32,System.Int32)">
+            <summary>
+            Gets all the indexes of the providen <see cref="T:System.Char"/>, this method returns an empty array if no indexes are found.
+            </summary>
+            <param name="input"></param>
+            <param name="value"></param>
+            <param name="startIndex"></param>
+            <param name="count"></param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.ToMutable(System.String)">
+            <summary>
+            Creates a <see cref="T:System.MutableString"/> with the <see cref="T:System.String"/> provided.
+            </summary>
+            <param name="value">The string.</param>
+            <returns>A mutable string.</returns>
+        </member>
+        <member name="M:System.SystemUtilities.Reverse(System.String)">
+            <summary>
+            Returns a new <see cref="T:System.String"/> with the reversed characters.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the provided string is <see langword="null"/></exception>
+            <param name="str">The string to be reversed.</param>
+            <returns>A reversed string.</returns>
+        </member>
+        <member name="M:System.SystemUtilities.Like(System.String,System.String,System.StringComparison)">
+            <summary>
+            Returns a boolean indicating if both strings are similar content-wise (case-insensitive by default)
+            </summary>
+            <param name="str">The string to be compared</param>
+            <param name="other">The string to look for similarities</param>
+            <param name="comparison">The comparison to be used to determine if they are alike</param>
+            <returns>A boolean indicating if the string are alike.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:System.SystemUtilities.ContainsAny(System.String,System.String[])" -->
+        <!-- Badly formed XML comment ignored for member "M:System.SystemUtilities.ContainsAll(System.String,System.String[])" -->
+        <member name="M:System.SystemUtilities.Quote(System.String)">
+            <summary>
+            Quotes the given string.
+            </summary>
+            <param name="str">The string.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.IsType``1(System.Object)">
+            <summary>
+            Checks if the runtime type of obj is the targeted one.
+            </summary>
+            <typeparam name="T">Target type.</typeparam>
+            <param name="obj">The object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.IsType(System.Object,System.Type)">
+            <summary>
+            Checks if the runtime type of obj is the targeted one.
+            </summary>
+            <typeparam name="T">Target type.</typeparam>
+            <param name="obj">The object.</param>
+            <returns></returns>
+        </member>
+        <member name="M:System.SystemUtilities.GetFlags``1(``0)">
+            <summary>
+            Gets each flags of the given <typeparamref name="TEnum"/> instance.
+            </summary>
+            <typeparam name="TEnum">Type of the <see cref="T:System.Enum"/></typeparam>
+            <param name="enum">The <see cref="T:System.Enum"/> object</param>
+            <returns>A <see cref="!:&lt;TEnum&gt;"/>[] containing all the flags found in the current instance</returns>
+        </member>
+        <member name="T:System.Threading.Tasks.SynchronizationContextRemover">
+            <summary>
+            This structure is used to remove the current SynchronizationContext. This helps to reduce the verbosity of using <see cref="M:System.Threading.Tasks.Task.ConfigureAwait(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.Task{``0},System.Boolean)">
+            <summary>
+            Runs a <see cref="T:System.Threading.Tasks.Task`1"/> synchronously and returns <typeparamref name="TResult"/>.
+            </summary>
+            <typeparam name="TResult">Type of the result object.</typeparam>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+            <returns>The result of the given task.</returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.Run(System.Threading.Tasks.Task,System.Boolean)">
+            <summary>
+            Runs a <see cref="T:System.Threading.Tasks.Task"/> synchronously.
+            </summary>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.ValueTask{``0},System.Boolean)">
+            <summary>
+            Runs a <see cref="T:System.Threading.Tasks.ValueTask`1"/> synchronously and returns <typeparamref name="TResult"/>.
+            </summary>
+            <typeparam name="TResult">Type of the result object.</typeparam>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+            <returns>The result of the given task.</returns>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.Run(System.Threading.Tasks.ValueTask,System.Boolean)">
+            <summary>
+            Runs a <see cref="T:System.Threading.Tasks.ValueTask"/> synchronously.
+            </summary>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync(System.Threading.Tasks.Task,System.Boolean)">
+            <summary>
+            Fires and forgets the tasks.
+            </summary>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync``1(System.Threading.Tasks.Task{``0},System.Boolean)">
+            <summary>
+            Fires and forgets the tasks.
+            </summary>
+            <typeparam name="TResult">Type of the result object.</typeparam>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync(System.Threading.Tasks.ValueTask,System.Boolean)">
+            <summary>
+            Fires and forgets the tasks.
+            </summary>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        </member>
+        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync``1(System.Threading.Tasks.ValueTask{``0},System.Boolean)">
+            <summary>
+            Fires and forgets the tasks.
+            </summary>
+            <typeparam name="TResult">Type of the result object.</typeparam>
+            <param name="task">The task that will run.</param>
+            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        </member>
+        <member name="T:System.UInt24">
+            <summary>
+            Represents a 24-bit unsigned integer
+            </summary>
+        </member>
+        <member name="M:System.Xml.XmlConvert.SerializeObject``1(``0)">
+            <summary>
+            Serializes the object into XML Format
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the object is null</exception>
+            <typeparam name="T">Type of the object that will be serialized</typeparam>
+            <param name="obj">The object to be serialized</param>
+            <returns>A string with the XML representation of the object provided.</returns>
+        </member>
+        <member name="M:System.Xml.XmlConvert.DeserializeObject``1(System.String)">
+            <summary>
+            Deserializes a XML Formatted string into an object
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown if the deserialization fails.</exception>
+            <typeparam name="T">Type of the object that will be serialized</typeparam>
+            <param name="input">The Formatted XML string</param>
+            <returns>An object.</returns>
+        </member>
+    </members>
+</doc>

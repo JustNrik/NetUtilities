@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <RootNamespace></RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DocumentationFile>C:\Users\Ramiro Flores\source\repos\NetUtilities\NetUtilities\NetUtilities.xml</DocumentationFile>
+  </PropertyGroup>
+
+</Project>
