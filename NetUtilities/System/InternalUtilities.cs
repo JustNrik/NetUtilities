@@ -58,12 +58,20 @@ namespace NetUtilities
 
         [MethodImplementation(NotInlined)]
         [return: NotNull]
-        public static T NotNull<T>(T obj, string name)
+        public static T NotNull<T>(T obj, [CallerArgumentExpression("obj")]string? name = null)
         {
             if (obj is null)
                 throw new ArgumentNullException(name);
 
             return obj;
+        }
+
+        public static void NotOutOfRange(bool rangeCondition, int value,
+            [CallerArgumentExpression("rangeCondition")]string? expression = null,
+            [CallerArgumentExpression("value")]string? argumentName = null)
+        {
+            if (!rangeCondition)
+                throw new ArgumentOutOfRangeException(argumentName, value, $"The expression '{expression}' has a value that doesn't meet the range condition");
         }
 
         [MethodImplementation(NotInlined)]

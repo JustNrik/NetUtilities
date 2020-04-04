@@ -2,8 +2,11 @@ using System.ComponentModel;
 
 namespace System.Diagnostics
 {
+    /// <summary>
+    /// Utility class for <see cref="Process"/>
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static partial class ProcessUtilities
+    public static partial class ProcessExtensions
     {
         /// <summary>
         /// Extension for a Shell() function that allows overloading of the working directory variable.
@@ -43,27 +46,20 @@ namespace System.Diagnostics
         public static string Shell(this Process proc, ProcessOptions options)
         {
             var ret = string.Empty;
+
             proc.Start();
 
             if (options.Executing)
-            {
                 options.Executing = false;
-            }
 
             if (proc.StartInfo.RedirectStandardError)
-            {
                 ret = proc.StandardError.ReadToEnd();
-            }
 
             if (proc.StartInfo.RedirectStandardOutput)
-            {
                 ret = proc.StandardOutput.ReadToEnd();
-            }
 
             if (options.WaitForProcessExit)
-            {
                 proc.WaitForExit();
-            }
 
             return ret;
         }

@@ -1,16 +1,22 @@
 ﻿using NetUtilities;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
 namespace System.Collections.Generic
 {
-    public sealed class Lookup<TKey, TValue> : ILookup<TKey, TValue>, IDictionary<TKey, List<TValue>>
+    /// <summary>
+    /// This class is an implementation of an one-to-many dictionary.
+    /// </summary>
+    /// <typeparam name="TKey"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    public sealed class Lookup<TKey, TValue> : ILookup<TKey, TValue>, IDictionary<TKey, List<TValue>> 
+        where TKey : notnull
     {
-        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
         private readonly IDictionary<TKey, List<TValue>> _lookup;
 
+        /// <summary>
+        /// Creates an empty <see cref="Lookup{TKey, TValue}"/>
+        /// </summary>
         public Lookup()
         {
             _lookup = new Dictionary<TKey, List<TValue>>();
@@ -19,106 +25,119 @@ namespace System.Collections.Generic
         IEnumerable<TValue> ILookup<TKey, TValue>.this[TKey key] 
             => _lookup[key];
 
+        /// <summary>
+        /// Gets or sets the list associated with the given key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>A list with all values that are pointed from that key.</returns>
         public List<TValue> this[TKey key] 
         { 
-            [MethodImplementation(Inlined)]
             get => _lookup[key];
-            [MethodImplementation(Inlined)]
             set => _lookup[key] = value;
         }
 
+        /// <inheritdoc/>
         public int Count 
             => _lookup.Count;
 
+        /// <inheritdoc/>
         public ICollection<TKey> Keys 
             => _lookup.Keys;
 
+        /// <inheritdoc/>
         public ICollection<List<TValue>> Values 
             => _lookup.Values;
 
+        /// <inheritdoc/>
         public bool IsReadOnly 
             => false;
 
+        /// <inheritdoc/>
         public void Add(TKey key, List<TValue> value)
         {
-            if (key is null)
-                Throw.NullArgument(nameof(key));
+            Ensure.NotNull(key);
 
             _lookup.Add(key, value);
         }
 
+        /// <summary>
+        /// Adds an element with the provided key and value to the <see cref="Lookup{TKey, TValue}"/>.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
         public void Add(TKey key, TValue value)
         {
-            if (key is null)
-                Throw.NullArgument(nameof(key));
+            Ensure.NotNull(key);
 
-            if (!_lookup.TryGetValue(key, out var list))
-                _lookup[key] = new List<TValue>() { value };
-            else
+            if (_lookup.TryGetValue(key, out var list))
                 list.Add(value);
+            else
+                _lookup[key] = new List<TValue>() { value };
         }
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public void Add(KeyValuePair<TKey, List<TValue>> item)
             => _lookup.Add(item);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public void Clear()
             => _lookup.Clear();
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public bool Contains(TKey key)
             => _lookup.ContainsKey(key);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public bool Contains(KeyValuePair<TKey, List<TValue>> item)
             => _lookup.Contains(item);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public bool ContainsKey(TKey key)
             => _lookup.ContainsKey(key);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public void CopyTo(KeyValuePair<TKey, List<TValue>>[] array, int arrayIndex)
             => _lookup.CopyTo(array, arrayIndex);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public LookupEnumerator GetEnumerator()
             => new LookupEnumerator(_lookup);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public bool Remove(TKey key)
             => _lookup.Remove(key);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public bool Remove(KeyValuePair<TKey, List<TValue>> item)
             => _lookup.Remove(item);
 
-        [MethodImplementation(Inlined)]
+        /// <inheritdoc/>
         public bool Remove(TKey key, TValue value)
             => _lookup.TryGetValue(key, out var list) && list.Remove(value);
 
-        [MethodImplementation(Inlined)]
-        public bool TryGetValue(TKey key, out List<TValue> value)
+        /// <inheritdoc/>
+        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out List<TValue> value)
             => _lookup.TryGetValue(key, out value);
 
-        [MethodImplementation(Inlined)]
         IEnumerator IEnumerable.GetEnumerator()
             => new LookupEnumerator(_lookup);
 
-        [MethodImplementation(Inlined)]
         IEnumerator<KeyValuePair<TKey, List<TValue>>> IEnumerable<KeyValuePair<TKey, List<TValue>>>.GetEnumerator()
             => _lookup.GetEnumerator();
 
-        [MethodImplementation(Inlined)]
         IEnumerator<IGrouping<TKey, TValue>> IEnumerable<IGrouping<TKey, TValue>>.GetEnumerator()
             => new LookupEnumerator(_lookup);
 
+        /// <summary>
+        /// Supports a simple iteration over a generic collection.
+        /// </summary>
         public sealed class LookupEnumerator : IEnumerator<IGrouping<TKey, TValue>>
         {
             private readonly IDictionary<TKey, List<TValue>> _lookup;
             private readonly TKey[] _keys;
             private int _count;
+
+            /// <inheritdoc/>
             public Grouping Current { get; private set; }
 
             IGrouping<TKey, TValue> IEnumerator<IGrouping<TKey, TValue>>.Current 
@@ -127,6 +146,10 @@ namespace System.Collections.Generic
             object IEnumerator.Current 
                 => Current;
 
+            /// <summary>
+            /// Creates an enumerator to iterate over a <paramref name="lookup"/>
+            /// </summary>
+            /// <param name="lookup"></param>
             public LookupEnumerator(IDictionary<TKey, List<TValue>> lookup)
             {
                 _lookup = lookup;
@@ -135,6 +158,7 @@ namespace System.Collections.Generic
                 Current = default;
             }
 
+            /// <inheritdoc/>
             public bool MoveNext()
             {
                 if (++_count < _keys.Length)
@@ -156,27 +180,37 @@ namespace System.Collections.Generic
             }
         }
 
+        /// <summary>
+        /// Represents a collection of objects that have a common key.
+        /// </summary>
         public readonly struct Grouping : IGrouping<TKey, TValue>
         {
             private readonly List<TValue> _values;
 
+            /// <inheritdoc/>
             public TKey Key { get; }
 
+            /// <summary>
+            /// Creates a grouping with the providen key and values.
+            /// </summary>
+            /// <param name="key">The key.</param>
+            /// <param name="values">The values.</param>
             public Grouping(TKey key, List<TValue> values)
             {
                 Key = key;
                 _values = values;
             }
 
-            [MethodImplementation(Inlined)]
+            /// <summary>
+            /// Returns an enumerator that iterates through the <see cref="List{TValue}"/>
+            /// </summary>
+            /// <returns>An enumerator that iterates through the <see cref="List{TValue}"/></returns>
             public List<TValue>.Enumerator GetEnumerator()
                 => _values.GetEnumerator();
 
-            [MethodImplementation(Inlined)]
             IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator()
                 => GetEnumerator();
 
-            [MethodImplementation(Inlined)]
             IEnumerator IEnumerable.GetEnumerator()
                 => GetEnumerator();
         }
