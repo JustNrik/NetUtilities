@@ -154,10 +154,10 @@ namespace System.Collections.Locked
         }
 
         /// <inheritdoc/>
-        public Enumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
+        public Enumerator GetEnumerator()
         {
             lock (_lock)
-                return Clone()._dictionary.GetEnumerator();
+                return new Enumerator(Clone());
         }
 
         /// <inheritdoc/>

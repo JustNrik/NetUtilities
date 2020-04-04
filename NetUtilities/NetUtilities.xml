@@ -4,9 +4,149 @@
         <name>NetUtilities</name>
     </assembly>
     <members>
+        <member name="T:System.AsyncContext">
+            <summary>
+            This class is a helper to run an action in the <see cref="T:System.DefaultSynchronizationContext"/>. 
+            This class is designed for <see langword="async"/> <see langword="void"/> methods.
+            </summary>
+        </member>
+        <member name="E:System.AsyncContext.CapturedException">
+            <summary>
+            This event raises when exceptions are captured when <see cref="M:System.AsyncContext.Run(System.Action)"/> invokes the action.
+            </summary>
+        </member>
+        <member name="M:System.AsyncContext.Run(System.Action)">
+            <summary>
+            Runs the <paramref name="action"/> in the <see cref="T:System.DefaultSynchronizationContext"/>.
+            </summary>
+            <param name="action"></param>
+        </member>
+        <member name="T:System.CapturedExceptionEventArgs">
+            <summary>
+            This class contains the <see cref="P:System.CapturedExceptionEventArgs.Exception"/> throw on <see cref="M:System.AsyncContext.Run(System.Action)"/>. 
+            If multiple exceptions are throw, they will be wrapped on a <see cref="T:System.AggregateException"/>.
+            </summary>
+        </member>
+        <member name="P:System.CapturedExceptionEventArgs.Exception">
+            <summary>
+            The exception.
+            </summary>
+        </member>
+        <member name="T:System.Collections.Generic.Lookup`2">
+            <summary>
+            This class is an implementation of an one-to-many dictionary.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.#ctor">
+            <summary>
+            Creates an empty <see cref="T:System.Collections.Generic.Lookup`2"/>
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.Item(`0)">
+            <summary>
+            Gets or sets the list associated with the given key.
+            </summary>
+            <param name="key">The key.</param>
+            <returns>A list with all values that are pointed from that key.</returns>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.Count">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.Keys">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.Values">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.IsReadOnly">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Add(`0,System.Collections.Generic.List{`1})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Add(`0,`1)">
+            <summary>
+            Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.Lookup`2"/>.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Add(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Contains(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Contains(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.ContainsKey(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}}[],System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Remove(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Remove(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Remove(`0,`1)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.TryGetValue(`0,System.Collections.Generic.List{`1}@)">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Collections.Generic.Lookup`2.LookupEnumerator">
+            <summary>
+            Supports a simple iteration over a generic collection.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.LookupEnumerator.Current">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.LookupEnumerator.#ctor(System.Collections.Generic.IDictionary{`0,System.Collections.Generic.List{`1}})">
+            <summary>
+            Creates an enumerator to iterate over a <paramref name="lookup"/>
+            </summary>
+            <param name="lookup"></param>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.LookupEnumerator.MoveNext">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Collections.Generic.Lookup`2.Grouping">
+            <summary>
+            Represents a collection of objects that have a common key.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Generic.Lookup`2.Grouping.Key">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Grouping.#ctor(`0,System.Collections.Generic.List{`1})">
+            <summary>
+            Creates a grouping with the providen key and values.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="values">The values.</param>
+        </member>
+        <member name="M:System.Collections.Generic.Lookup`2.Grouping.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the <see cref="T:System.Collections.Generic.List`1"/>
+            </summary>
+            <returns>An enumerator that iterates through the <see cref="T:System.Collections.Generic.List`1"/></returns>
+        </member>
         <member name="T:System.Collections.Generic.ReadOnlyList`1">
             <summary>
-            A true readonly generic List which provides most of <see cref="T:System.Collections.Generic.List`1"/> methods.
+            A true readonly generic list which provides most of <see cref="T:System.Collections.Generic.List`1"/> methods.
             </summary>
             <typeparam name="T">The generic type of this instance</typeparam>
         </member>
@@ -17,28 +157,25 @@
             <exception cref="T:System.ArgumentNullException">This exception is thrown the if argument is null</exception>
             <param name="source">The source to create the list.</param>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0})">
             <summary>
-            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from a given <see cref="T:System.Collections.Generic.List`1"/>, optionally, you can pass a boolean to indicate if you want to keep the reference of the given list.
+            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from a given <see cref="T:System.Collections.Generic.List`1"/>.
+            By default the reference of the source list is kept.
             </summary>
             <param name="source">The source to create the list.</param>
-            <param name="keepReference">The parameter to determine if the reference should be kept.</param>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
+            <summary>
+            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from a given <see cref="T:System.Collections.Generic.List`1"/>.
+            </summary>
+            <param name="source">The source list.</param>
+            <param name="keepReference">Determines if the reference of the source list should be kept.</param>
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Int32)">
-            <summary>
-            Returns the element stored in the given index.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">This exception is throw if the index is out of the bounds of this list</exception>
-            <param name="index">The index of the element that will be taken.</param>
-            <returns>The element in the given index.</returns>
+            <inheritdoc/>
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Index)">
-            <summary>
-            Returns the element stored in the given index.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">This exception is throw if the index is out of the bounds of this list.</exception>
-            <param name="index">The index of the element that will be taken.</param>
-            <returns>The element in the given index.</returns>
+            <inheritdoc/>
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Range)">
             <summary>
@@ -49,10 +186,7 @@
             <returns>A new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements in the given range.</returns>
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Count">
-            <summary>
-            Returns the amount of element in the current instace.
-            </summary>
-            <returns>The amount of elements in the current instance.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.GetEnumerator">
             <summary>
@@ -85,6 +219,7 @@
             <param name="startIndex">The starting index where the search will begin.</param>
             <param name="count">The amount of items that will be searched.</param>
             <returns>The index of the given item, -1 if it's not found.</returns>
+            <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.Contains(`0)">
             <summary>
@@ -232,6 +367,17 @@
             Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
             </returns>
         </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Range)">
+            <summary>
+            Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found 
+            starting from the given index with the given amount of elements.
+            </summary>
+            <param name="range">The range.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
+            <returns>
+            Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
+            </returns>
+        </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.Any(System.Predicate{`0})">
             <summary>
             Checks if any element in the current instance matches the given predicate.
@@ -255,27 +401,250 @@
             <exception cref="T:System.ArgumentNullException">Thrown if the action is null.</exception>
             <param name="action">The action delegate to be executed for each item in the list</param>
         </member>
+        <member name="T:System.Collections.Locked.LockedDictionary`2">
+            <summary>
+            Provides a thread-safe implementation of <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Locked.LockedDictionary`2.Item(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedDictionary`2.Keys">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedDictionary`2.Values">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedDictionary`2.Count">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedDictionary`2.IsReadOnly">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor">
+            <summary>
+            Creates an empty <see cref="T:System.Collections.Locked.LockedDictionary`2"/>
+            </summary>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.Dictionary{`0,`1})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="dictionary"/>. 
+            By default this keeps the reference of the provided dictionary.
+            </summary>
+            <param name="dictionary">The source dictionary.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.Dictionary{`0,`1},System.Boolean)">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="dictionary"/>. 
+            </summary>
+            <param name="dictionary">The source dictionary.</param>
+            <param name="keepReference">Indicates if the reference of the source dictionary should be kept.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="source"/>. 
+            </summary>
+            <param name="source">The source.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{`0,`1}})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="source"/>. 
+            </summary>
+            <param name="source">The source.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Add(`0,`1)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Add(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Contains(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.ContainsKey(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,`1}[],System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Remove(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Remove(System.Collections.Generic.KeyValuePair{`0,`1})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.TryGetValue(`0,`1@)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Collections.Locked.LockedDictionary`2.Enumerator">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedDictionary`2.Enumerator.Current">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Enumerator.#ctor(System.Collections.Locked.LockedDictionary{`0,`1})">
+            <summary>
+            Creates an enumerator to though the <see cref="T:System.Collections.Locked.LockedDictionary`2"/>.
+            </summary>
+            <param name="dictionary">The source dictionary.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Enumerator.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedDictionary`2.Enumerator.MoveNext">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Collections.Locked.LockedList`1">
+            <summary>
+            Provides a thread-safe implementation of <see cref="T:System.Collections.Generic.List`1"/>.
+            </summary>
+        </member>
+        <member name="P:System.Collections.Locked.LockedList`1.Item(System.Index)">
+            <summary>
+            Gets or sets the element at the specified index.
+            </summary>
+            <param name="index">The index.</param>
+            <exception cref="T:System.ArgumentOutOfRangeException">Throw if the <paramref name="index"/> is negative or higher than or equal to <see cref="P:System.Collections.Locked.LockedList`1.Count"/></exception>
+            <returns>The element at the specified <paramref name="index"/></returns>
+        </member>
+        <member name="P:System.Collections.Locked.LockedList`1.Item(System.Range)">
+            <summary>
+            Creates a shallow copy of a range of elements in the source <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </summary>
+            <exception cref="T:System.ArgumentException">Thrown when index is less than 0 or higher than or equal to <see cref="P:System.Collections.Locked.LockedList`1.Count"/>.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when index and count do not denote a valid range of elements.</exception>
+            <param name="range">The range.</param>
+            <returns>A shallow copy of a range of elements in the source <see cref="T:System.Collections.Locked.LockedList`1"/>.</returns>
+        </member>
+        <member name="P:System.Collections.Locked.LockedList`1.Item(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedList`1.Count">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.LockedList`1.IsReadOnly">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.#ctor">
+            <summary>
+            Creates an empty <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </summary>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Int32)">
+            <summary>
+            Creates an empty <see cref="T:System.Collections.Locked.LockedList`1"/> with the provided <paramref name="capacity"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the provided <paramref name="capacity"/> is lower than zero.</exception>
+            <param name="capacity">The initial capacity.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Collections.Generic.List{`0})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedList`1"/> from the source <see cref="T:System.Collections.Generic.List`1"/>. By default this keeps the reference of the provided list.
+            </summary>
+            <param name="source">The source <see cref="T:System.Collections.Generic.List`1"/>.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedList`1"/> from the source <see cref="T:System.Collections.Generic.List`1"/>.
+            </summary>
+            <param name="source">The source <see cref="T:System.Collections.Generic.List`1"/>.</param>
+            <param name="keepReference">Determines if this instance of <see cref="T:System.Collections.Locked.LockedList`1"/> should keep the reference from the source <see cref="T:System.Collections.Generic.List`1"/>.</param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            Creates a <see cref="T:System.Collections.Locked.LockedList`1"/> from the source <see cref="T:System.Collections.Generic.IEnumerable`1"/>.
+            </summary>
+            <param name="source"></param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Add(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Clear">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Contains(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.CopyTo(`0[],System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </summary>
+            <returns>An enumerator that iterates through the <see cref="T:System.Collections.Locked.LockedList`1"/>.</returns>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.IndexOf(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Insert(System.Int32,`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Remove(`0)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.RemoveAt(System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Clone">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Collections.Locked.Enumerator`1">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Collections.Locked.Enumerator`1.Current">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.Enumerator`1.#ctor(System.Collections.Locked.LockedList{`0})">
+            <summary>
+            Creates an enumerator to iterate trought the given <see cref="T:System.Collections.Locked.LockedList`1"/>
+            </summary>
+            <param name="list">The source list.</param>
+        </member>
+        <member name="M:System.Collections.Locked.Enumerator`1.MoveNext">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.Enumerator`1.Dispose">
+            <inheritdoc/>
+        </member>
         <member name="T:System.Color">
             <summary>
             This struct represents a RGB Color
             </summary>
         </member>
-        <member name="T:System.Diagnostics.ProcessOptions">
+        <member name="T:System.DefaultSynchronizationContext">
             <summary>
-            Extra options for the <see cref="T:System.Diagnostics.Process" /> component.
+            This class gives a default <see cref="T:System.Threading.SynchronizationContext"/> for contextless application like Console. 
+            Useful when you have <see langword="async"/> <see langword="void"/> methods as they exceptions cannot be caught in a contexless scenario.
             </summary>
         </member>
-        <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
+        <member name="M:System.DefaultSynchronizationContext.Post(System.Threading.SendOrPostCallback,System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.DefaultSynchronizationContext.OperationCompleted">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.DefaultSynchronizationContext.CreateCopy">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.DefaultSynchronizationContext.ToString">
+            <inheritdoc/>
+        </member>
+        <member name="T:System.Diagnostics.ProcessExtensions">
             <summary>
-            Instucts the <see cref="T:System.Diagnostics.Process" /> <keyword cref="T:System.Object" /> to wait until the executed process terminates.
+            Utility class for <see cref="T:System.Diagnostics.Process"/>
             </summary>
         </member>
-        <member name="P:System.Diagnostics.ProcessOptions.Executing">
-            <summary>
-            Gets if the target process is executing (has not been actually started yet), or is being executed (started). False if it was started.
-            </summary>
-        </member>
-        <member name="M:System.Diagnostics.ProcessUtilities.Shell(System.Diagnostics.Process,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Diagnostics.ProcessWindowStyle,System.String,System.Diagnostics.ProcessOptions)">
+        <member name="M:System.Diagnostics.ProcessExtensions.Shell(System.Diagnostics.Process,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Diagnostics.ProcessWindowStyle,System.String,System.Diagnostics.ProcessOptions)">
             <summary>
             Extension for a Shell() function that allows overloading of the working directory variable.
             It must be a <see cref="T:System.String"/> but can be variables that returns strings.
@@ -292,7 +661,7 @@
             <param name="options"> The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
             <returns>empty string, process stdout data, process stderr data.</returns>
         </member>
-        <member name="M:System.Diagnostics.ProcessUtilities.Shell(System.Diagnostics.Process,System.Diagnostics.ProcessOptions)">
+        <member name="M:System.Diagnostics.ProcessExtensions.Shell(System.Diagnostics.Process,System.Diagnostics.ProcessOptions)">
             <summary>
             Extension for a Shell() function that allows overloading of the working directory variable.
             It must be a <see cref="T:System.String"/> but can be variables that returns strings.
@@ -300,6 +669,21 @@
             <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
             <param name="options">The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
             <returns>empty string, process stdout data, process stderr data.</returns>
+        </member>
+        <member name="T:System.Diagnostics.ProcessOptions">
+            <summary>
+            Extra options for the <see cref="T:System.Diagnostics.Process" /> component.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
+            <summary>
+            Instucts the <see cref="T:System.Diagnostics.Process" /> <keyword cref="T:System.Object" /> to wait until the executed process terminates.
+            </summary>
+        </member>
+        <member name="P:System.Diagnostics.ProcessOptions.Executing">
+            <summary>
+            Gets if the target process is executing (has not been actually started yet), or is being executed (started). False if it was started.
+            </summary>
         </member>
         <member name="T:System.EventManager`1">
             <summary>
@@ -350,10 +734,45 @@
             <param name="flags">The flags used to search the event.</param>
             <param name="methodName">The name of the method. This is gathered from <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/> so any value you pass here is ommited.</param>
         </member>
+        <member name="T:System.ICloneable`1">
+            <summary>
+            Supports cloning, which creates a new instance of a class with the same value as an existing instance.
+            </summary>
+            <typeparam name="T">The type.</typeparam>
+        </member>
+        <member name="M:System.ICloneable`1.Clone">
+            <summary>
+            Creates a new object that is a copy of the current instance.
+            </summary>
+            <returns>A new object that is a copy of this instance.</returns>
+        </member>
         <member name="T:System.Int24">
             <summary>
             Represents a 24-bit signed integer
             </summary>
+        </member>
+        <member name="T:System.IO.IOExtensions">
+            <summary>
+            Utility class for <see cref="N:System.IO"/>.
+            </summary>
+        </member>
+        <member name="M:System.IO.IOExtensions.Read``1(System.IO.Stream)">
+            <summary>
+            Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+            This is equal to the size of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of the value to be read.</typeparam>
+            <param name="stream">The stream.</param>
+            <returns>A value.</returns>
+        </member>
+        <member name="M:System.IO.IOExtensions.Write``1(System.IO.Stream,``0)">
+            <summary>
+            Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+            This is equal to the size of <typeparamref name="T"/>.
+            </summary>
+            <typeparam name="T">The type of the value to be written</typeparam>
+            <param name="stream">The stream.</param>
+            <param name="value">The value.</param>
         </member>
         <member name="M:System.Linq.LinqUtilities.BatchBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
             <summary>
