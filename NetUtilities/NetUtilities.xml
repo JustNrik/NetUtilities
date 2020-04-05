@@ -1235,6 +1235,398 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="T:System.Net.Http.GlobalHttpClient">
+            <summary>
+            This class is a Singleton wrapper over <see cref="T:System.Net.Http.HttpClient"/>
+            </summary>
+        </member>
+        <member name="P:System.Net.Http.GlobalHttpClient.WebProxy">
+            <summary>
+            Gets or sets the global Http proxy. This points directly to <see cref="P:System.Net.Http.HttpClient.DefaultProxy"/>
+            </summary>
+        </member>
+        <member name="P:System.Net.Http.GlobalHttpClient.DefaultRequestVersion">
+            <summary>
+            Gets or sets the default HTTP version used on subsequent requests made by this client.
+            </summary>
+        </member>
+        <member name="P:System.Net.Http.GlobalHttpClient.DefaultRequestHeaders">
+            <summary>
+            Gets the headers which should be sent with each request.
+            </summary>
+        </member>
+        <member name="P:System.Net.Http.GlobalHttpClient.BaseAddress">
+            <summary>
+            Gets or sets the base address of Uniform Resource Identifier (URI) of the Internet resource used when sending requests.
+            </summary>
+        </member>
+        <member name="P:System.Net.Http.GlobalHttpClient.MaxResponseContentBufferSize">
+            <summary>
+            Gets or sets the maximum number of bytes to buffer when reading the response content.
+            </summary>
+        </member>
+        <member name="P:System.Net.Http.GlobalHttpClient.Timeout">
+            <summary>
+            Gets or sets the timespan to wait before the request times out.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.Initialize">
+            <summary>
+            Initializes the <see cref="T:System.Net.Http.HttpClient"/> calling the parameterless constructor.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when you call this method more than once.</exception>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.Initialize(System.Net.Http.HttpMessageHandler)">
+            <summary>
+            Initializes the <see cref="T:System.Net.Http.HttpClient"/> calling the constructor <see cref="M:System.Net.Http.HttpClient.#ctor(System.Net.Http.HttpMessageHandler)"/>
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the handler is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when you call this method more than once.</exception>
+            <param name="messageHandler">The HTTP handler stack to use for sending requests.</param>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.CancelPendingRequests">
+            <summary>
+            Cancel all pending requests on this client.
+            </summary>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.Uri)">
+            <summary>
+            Send a DELETE request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.String)">
+            <summary>
+            Send a DELETE request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Send a DELETE request to the specified <see cref="T:System.Uri"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Send a DELETE request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri,System.Threading.CancellationToken)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri,System.Net.Http.HttpCompletionOption)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> with an HTTP completion option as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String,System.Net.Http.HttpCompletionOption)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with an HTTP completion option as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> with an HTTP completion option and a cancellation token as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with an HTTP completion option and a cancellation token as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetByteArrayAsync(System.Uri)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> and return the response body as a <see cref="T:System.Byte"/>[] in an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetByteArrayAsync(System.String)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> and return the response body as a <see cref="T:System.Byte"/>[] in an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetStreamAsync(System.String)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> and return the response body as a <see cref="T:System.IO.Stream"/> in an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetStreamAsync(System.Uri)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> and return the response body as a <see cref="T:System.IO.Stream"/> in an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetStringAsync(System.Uri)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> and return the response body as a <see cref="T:System.String"/> in an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.GetStringAsync(System.String)">
+            <summary>
+            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> and return the response body as a <see cref="T:System.String"/> in an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.Uri,System.Net.Http.HttpContent)">
+            <summary>
+            Sends a PATCH request with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Sends a PATCH request to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Sends a PATCH request with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.String,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Sends a PATCH request with a <see cref="T:System.Threading.CancellationToken"/> to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.Uri,System.Net.Http.HttpContent)">
+            <summary>
+            Send a POST request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Sends a POST request to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request with a <see cref="T:System.Threading.CancellationToken"/> to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.String,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Sends a POST request with a <see cref="T:System.Threading.CancellationToken"/> to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.Uri,System.Net.Http.HttpContent)">
+            <summary>
+            Send a PUT request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.String,System.Net.Http.HttpContent)">
+            <summary>
+            Send a PUT request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Send a PUT request to the specified <see cref="T:System.Uri"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.String,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
+            <summary>
+            Send a PUT request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
+            </summary>
+            <param name="requestUri">The Uri the request is sent to.</param>
+            <param name="content">The HTTP request content sent to the server.</param>
+            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage)">
+            <summary>
+            Send an HTTP request as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="request">The HTTP request message to send.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
+            <summary>
+            Send an HTTP request as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="request">The HTTP request message to send.</param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption)">
+            <summary>
+            Send an HTTP request as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="request">The HTTP request message to send.</param>
+            <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content).</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
+        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
+            <summary>
+            Send an HTTP request as an asynchronous operation.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
+            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
+            <param name="request">The HTTP request message to send.</param>
+            <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content).</param>
+            <param name="cancellationToken">The cancellation token to cancel operation.</param>
+            <returns>The task object representing the asynchronous operation.</returns>
+        </member>
         <member name="M:System.Reflection.ConstructorData.CreateInstance">
             <summary>
             Creates an instance of this constructor's type.

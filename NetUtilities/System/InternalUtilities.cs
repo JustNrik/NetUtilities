@@ -66,26 +66,13 @@ namespace NetUtilities
             return obj;
         }
 
-        public static void NotOutOfRange(bool rangeCondition, int value,
+        public static void NotOutOfRange(
+            [DoesNotReturnIf(false)]bool rangeCondition, int value,
             [CallerArgumentExpression("rangeCondition")]string? expression = null,
             [CallerArgumentExpression("value")]string? argumentName = null)
         {
             if (!rangeCondition)
                 throw new ArgumentOutOfRangeException(argumentName, value, $"The expression '{expression}' has a value that doesn't meet the range condition");
-        }
-
-        [MethodImplementation(NotInlined)]
-        public static void Positive(int number, string name)
-        {
-            if (number <= 0)
-                throw new ArgumentOutOfRangeException(name);
-        }
-
-        [MethodImplementation(NotInlined)]
-        public static void IndexInRange(int index, int count)
-        {
-            if ((uint)index >= count)
-                throw new ArgumentOutOfRangeException(nameof(index));
         }
     }
 }

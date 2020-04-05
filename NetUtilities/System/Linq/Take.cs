@@ -72,9 +72,9 @@ namespace System.Linq
         [return: NotNull]
         public static IEnumerable<TSource> TakeIf<TSource>(this IEnumerable<TSource> source, int count, Func<TSource, bool> predicate)
         {
-            Ensure.NotNull(source, nameof(source));
-            Ensure.NotNull(predicate, nameof(predicate));
-            Ensure.Positive(count, nameof(count));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
+            Ensure.NotOutOfRange(count > 0, count);
 
             return TakeIfIterator(source, count, predicate);
         }
