@@ -22,9 +22,12 @@ namespace System
             switch (memberInfo)
             {
                 case PropertyInfo propertyInfo:
+                    if (propertyInfo.GetMethod is null || propertyInfo.SetMethod is null)
+                        throw new InvalidOperationException($"The property {propertyInfo.Name} must have getter and setter.");
+
                     oldValue = (TResult)propertyInfo.GetMethod.Invoke(obj, Array.Empty<object>());
                     propertyInfo.SetMethod.Invoke(obj, new object[] { newValue! });
-                    return () => propertyInfo.SetMethod.Invoke(obj, new object[] { oldValue });
+                    return () => propertyInfo.SetMethod.Invoke(obj, new object?[] { oldValue });
                 case FieldInfo fieldInfo:
                     oldValue = (TResult)fieldInfo.GetValue(obj);
                     fieldInfo.SetValue(obj, newValue);

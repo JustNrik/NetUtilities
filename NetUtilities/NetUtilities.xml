@@ -4,33 +4,34 @@
         <name>NetUtilities</name>
     </assembly>
     <members>
-        <member name="T:System.AsyncContext">
-            <summary>
-            This class is a helper to run an action in the <see cref="T:System.DefaultSynchronizationContext"/>. 
-            This class is designed for <see langword="async"/> <see langword="void"/> methods.
-            </summary>
-        </member>
-        <member name="E:System.AsyncContext.CapturedException">
-            <summary>
-            This event raises when exceptions are captured when <see cref="M:System.AsyncContext.Run(System.Action)"/> invokes the action.
-            </summary>
-        </member>
-        <member name="M:System.AsyncContext.Run(System.Action)">
-            <summary>
-            Runs the <paramref name="action"/> in the <see cref="T:System.DefaultSynchronizationContext"/>.
-            </summary>
-            <param name="action"></param>
-        </member>
         <member name="T:System.CapturedExceptionEventArgs">
             <summary>
-            This class contains the <see cref="P:System.CapturedExceptionEventArgs.Exception"/> throw on <see cref="M:System.AsyncContext.Run(System.Action)"/>. 
-            If multiple exceptions are throw, they will be wrapped on a <see cref="T:System.AggregateException"/>.
+            This class contains the <see cref="P:System.CapturedExceptionEventArgs.Exception"/> throw on <see cref="T:System.DefaultSynchronizationContext"/>. 
+            If multiple exceptions are throw, they will be wrapped on an <see cref="T:System.AggregateException"/>.
             </summary>
         </member>
         <member name="P:System.CapturedExceptionEventArgs.Exception">
             <summary>
             The exception.
             </summary>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.AsIndexed``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Enumerates the provided collection with an index.
+            </summary>
+            <typeparam name="T">The underlying type of the collection.</typeparam>
+            <param name="source">The source.</param>
+            <returns>An collection enumerated by index.</returns>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.Shuffle``1(System.Collections.Generic.IList{``0},System.Byte)">
+            <summary>
+            Shuffles the provided collection. 
+            You can optionally provide the amount of iterations. 
+            High values may have a negative impact on performance.
+            </summary>
+            <typeparam name="T">The type.</typeparam>
+            <param name="source">The source.</param>
+            <param name="iterations">The amount of iterations to perform.</param>
         </member>
         <member name="T:System.Collections.Generic.Lookup`2">
             <summary>
@@ -626,6 +627,14 @@
             This class gives a default <see cref="T:System.Threading.SynchronizationContext"/> for contextless application like Console. 
             Useful when you have <see langword="async"/> <see langword="void"/> methods as they exceptions cannot be caught in a contexless scenario.
             </summary>
+        </member>
+        <member name="P:System.DefaultSynchronizationContext.Shared">
+            <summary>
+            Singleton instance of a <see cref="T:System.DefaultSynchronizationContext"/>.
+            </summary>
+        </member>
+        <member name="M:System.DefaultSynchronizationContext.Send(System.Threading.SendOrPostCallback,System.Object)">
+            <inheritdoc/>
         </member>
         <member name="M:System.DefaultSynchronizationContext.Post(System.Threading.SendOrPostCallback,System.Object)">
             <inheritdoc/>
@@ -1627,6 +1636,47 @@
             <param name="cancellationToken">The cancellation token to cancel operation.</param>
             <returns>The task object representing the asynchronous operation.</returns>
         </member>
+        <member name="T:System.Randomizer">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Randomizer.Shared">
+            <summary>
+            Returns a singleton instance of a <see cref="T:System.Randomizer"/>.
+            </summary>
+        </member>
+        <member name="M:System.Randomizer.NextLong">
+            <summary>
+            Returns a non-negative random 64-bits integer.
+            </summary>
+            <returns>A non-negative random 64-bits integer.</returns>
+        </member>
+        <member name="M:System.Randomizer.NextLong(System.Int64)">
+            <summary>
+            Returns a non-negative random 64-bits integer that is lower than <paramref name="max"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="max"/> is lower than zero.</exception>
+            <param name="max">The upper bound.</param>
+            <returns>A non-negative random 64-bits integer that is lower than <paramref name="max"/>.</returns>
+        </member>
+        <member name="M:System.Randomizer.NextLong(System.Int64,System.Int64)">
+            <summary>
+            Returns a random 64-bits integer that is higher or equal than <paramref name="min"/> and lower than <paramref name="max"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="max"/> is lower than <paramref name="min"/>.</exception>
+            <param name="min">The lower bound.</param>
+            <param name="max">The upper bound.</param>
+            <returns>A random 64-bits integer that is higher or equal than <paramref name="min"/> and lower than <paramref name="max"/>.</returns>
+        </member>
+        <member name="M:System.Randomizer.Next(System.Int32,System.Int32)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Randomizer.Next``1">
+            <summary>
+            Returns a random value of the <typeparamref name="T"/> <see langword="unmanaged struct"/>.
+            </summary>
+            <typeparam name="T">The <see langword="unmanaged struct"/>.</typeparam>
+            <returns>A random value of the <typeparamref name="T"/> <see langword="unmanaged struct"/>.</returns>
+        </member>
         <member name="M:System.Reflection.ConstructorData.CreateInstance">
             <summary>
             Creates an instance of this constructor's type.
@@ -1878,6 +1928,64 @@
             <see langword="true"/> if the type is a struct or has a parameterless constructor. 
             Otherwise <see langword="false"/>
             </returns>
+        </member>
+        <member name="T:System.SynchronizationContextHelper">
+            <summary>
+            This class is a helper to run an action in the <see cref="T:System.DefaultSynchronizationContext"/>. 
+            </summary>
+        </member>
+        <member name="E:System.SynchronizationContextHelper.CapturedException">
+            <summary>
+            Occurs when exceptions are captured in the <see cref="T:System.DefaultSynchronizationContext"/>.
+            </summary>
+        </member>
+        <member name="M:System.SynchronizationContextHelper.Run(System.Action)">
+            <summary>
+            Runs the <paramref name="action"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
+            </summary>
+            <param name="action">The action to execute.</param>
+        </member>
+        <member name="M:System.SynchronizationContextHelper.Run``1(System.Action{``0},``0)">
+            <summary>
+            Runs the <paramref name="action"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance with the arguments provided via <paramref name="state"/>.
+            </summary>
+            <param name="action">The action to execute.</param>
+            <param name="state">The arguments for the action.</param>
+            <typeparam name="TState">The type of the arguments for the action.</typeparam>
+        </member>
+        <member name="M:System.SynchronizationContextHelper.RunAsync(System.Func{System.Threading.Tasks.Task})">
+            <summary>
+            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
+            </summary>
+            <param name="func">The function to execute.</param>
+            <returns>The task object returned by the func.</returns>
+        </member>
+        <member name="M:System.SynchronizationContextHelper.RunAsync``1(System.Func{``0,System.Threading.Tasks.Task},``0)">
+            <summary>
+            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
+            </summary>
+            <param name="func">The function to execute.</param>
+            <param name="state">The arguments for the action.</param>
+            <typeparam name="TState">The type of the arguments for the action.</typeparam>
+            <returns>The task object returned by the func.</returns>
+        </member>
+        <member name="M:System.SynchronizationContextHelper.RunAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
+            <summary>
+            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
+            </summary>
+            <param name="func">The function to execute.</param>
+            <typeparam name="TResult">The result of the task.</typeparam>
+            <returns>The task object returned by the func.</returns>
+        </member>
+        <member name="M:System.SynchronizationContextHelper.RunAsync``2(System.Func{``0,System.Threading.Tasks.Task{``1}},``0)">
+            <summary>
+            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
+            </summary>
+            <param name="func">The function to execute.</param>
+            <param name="state">The object to be passed to the delegate.</param>
+            <typeparam name="TState">The type of the arguments for the action.</typeparam>
+            <typeparam name="TResult">The result of the task.</typeparam>
+            <returns>The task object returned by the func.</returns>
         </member>
         <member name="M:System.SystemUtilities.AsString(System.Char[])">
             <summary>

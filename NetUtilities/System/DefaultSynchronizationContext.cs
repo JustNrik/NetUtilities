@@ -12,8 +12,13 @@ namespace System
         private readonly object _lock = new object();
         private ImmutableArray<Exception> _exceptions = ImmutableArray.Create<Exception>();
 
+        /// <summary>
+        /// Singleton instance of a <see cref="DefaultSynchronizationContext"/>.
+        /// </summary>
+        public static DefaultSynchronizationContext Shared { get; } = new DefaultSynchronizationContext();
+
         /// <inheritdoc/>
-        public override void Post(SendOrPostCallback callback, object? state)
+        public override void Send(SendOrPostCallback callback, object? state)
         {
             try
             {
@@ -27,6 +32,10 @@ namespace System
         }
 
         /// <inheritdoc/>
+        public override void Post(SendOrPostCallback callback, object? state)
+            => Send(callback, state);
+
+        /// <inheritdoc/>
         public override void OperationCompleted()
         {
             lock (_lock)
@@ -34,9 +43,12 @@ namespace System
                 if (_exceptions.Length == 0)
                     return;
 
-                AsyncContextInvoker.OnCapturedException(this, new CapturedExceptionEventArgs(_exceptions.Length == 1
-                    ? _exceptions[0]
-                    : new AggregateException(_exceptions)));
+                SynchronizationContextHelper.OnCapturedException(
+                    this,
+                    new CapturedExceptionEventArgs(
+                        _exceptions.Length == 1
+                        ? _exceptions[0]
+                        : new AggregateException(_exceptions)));
 
                 _exceptions = _exceptions.Clear();
             }
