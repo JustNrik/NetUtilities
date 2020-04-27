@@ -1,10 +1,12 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    /// <summary>
+    /// More extensions method for <see cref="Linq"/>.
+    /// </summary>
+    public static partial class LinqExtensions
     {
         /// <summary>
         /// Batches the collection into a collection of collection of an specific size.
@@ -15,7 +17,6 @@ namespace System.Linq
         /// <param name="source">The collection.</param>
         /// <param name="size">The size of the buckets.</param>
         /// <returns>An enumerable bulked by the given size.</returns>
-        [return: NotNull]
         public static IEnumerable<IEnumerable<TSource>> BatchBy<TSource>(this IEnumerable<TSource> source, int size)
             => BatchBy(source, size, x => x);
 
@@ -31,7 +32,6 @@ namespace System.Linq
         /// <param name="size">The size of the buckets.</param>
         /// <param name="selector">The selector delegate.</param>
         /// <returns>An enumerable bulked by the given size.</returns>
-        [return: NotNull]
         public static IEnumerable<TResult> BatchBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
         {
             if (source is null)

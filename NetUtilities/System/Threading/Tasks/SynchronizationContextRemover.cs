@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace System.Threading.Tasks
 {
@@ -7,9 +8,15 @@ namespace System.Threading.Tasks
     /// </summary>
     public struct SynchronizationContextRemover : INotifyCompletion
     {
+        /// <summary>
+        /// Returns if <see cref="SynchronizationContext.Current"/> is <see langword="null"/>.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsCompleted 
             => SynchronizationContext.Current is null;
 
+        /// <inheritdoc/>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnCompleted(Action action)
         {
             var previous = SynchronizationContext.Current;
@@ -25,9 +32,18 @@ namespace System.Threading.Tasks
             }
         }
 
+        /// <summary>
+        /// Returns <see langword="this"/>.
+        /// </summary>
+        /// <returns><see langword="this"/>.</returns>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public SynchronizationContextRemover GetAwaiter()
             => this;
 
+        /// <summary>
+        /// This method does nothing.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void GetResult() 
         {
         }

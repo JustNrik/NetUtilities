@@ -4,30 +4,17 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableExtensions
     {
-        public static async ValueTask<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+        /// <inheritdoc cref="Enumerable.First{TSource}(IEnumerable{TSource})"/>
+        public static ValueTask<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source)
+            => source.FirstAsync(True);
 
-            await new SynchronizationContextRemover();
-
-            var (any, item) = await TryGetFirstAsync(source);
-
-            if (!any)
-                Throw.InvalidOperation("sequence contains no elements");
-
-            return item;
-        }
-
+        /// <inheritdoc cref="Enumerable.First{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<TSource> FirstAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
             await new SynchronizationContextRemover();
 
@@ -39,35 +26,19 @@ namespace System.Linq
             return item;
         }
 
-        public static async ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+        /// <inheritdoc cref="Enumerable.FirstOrDefault{TSource}(IEnumerable{TSource})"/>
+        public static ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source)
+            => source.FirstOrDefaultAsync(True);
 
-            await new SynchronizationContextRemover();
-
-            return (await TryGetFirstAsync(source)).Item;
-        }
-
+        /// <inheritdoc cref="Enumerable.FirstOrDefault{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<TSource> FirstOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
             await new SynchronizationContextRemover();
 
             return (await TryGetFirstAsync(source, predicate)).Item;
-        }
-
-        private async static ValueTask<(bool Any, TSource Item)> TryGetFirstAsync<TSource>(IAsyncEnumerable<TSource> source)
-        {
-            await foreach (var item in source)
-                return (true, item);
-
-            return (false, default!);
         }
 
         private static async ValueTask<(bool Any, TSource Item)> TryGetFirstAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)

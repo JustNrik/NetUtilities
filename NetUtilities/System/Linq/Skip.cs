@@ -1,10 +1,9 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    public static partial class LinqExtensions
     {
         /// <summary>
         /// Skips all the elements while the predicate is True.
@@ -14,10 +13,9 @@ namespace System.Linq
         /// <param name="source">The sequence.</param>
         /// <param name="predicate">The delegated to filter the items.</param>
         /// <returns>A sequence of items</returns>
-        [return: NotNull]
         public static IEnumerable<TSource> SkipWhile<TSource>(
-            [NotNull]this IEnumerable<TSource> source,
-            [NotNull]Func<TSource, bool> predicate)
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate)
             => SkipWhileIterator(
                 Ensure.NotNull(source, nameof(source)), 
                 Ensure.NotNull(predicate, nameof(predicate)));
@@ -47,10 +45,9 @@ namespace System.Linq
         /// <param name="source">The sequence.</param>
         /// <param name="predicate">The delegated to filter the items.</param>
         /// <returns>A sequence of items</returns>
-        [return: NotNull]
         public static IEnumerable<TSource> SkipUntil<TSource>(
-            [NotNull]this IEnumerable<TSource> source,
-            [NotNull]Func<TSource, bool> predicate)
+            this IEnumerable<TSource> source,
+            Func<TSource, bool> predicate)
             => SkipUntilIterator(
                 Ensure.NotNull(source, nameof(source)), 
                 Ensure.NotNull(predicate, nameof(predicate)));

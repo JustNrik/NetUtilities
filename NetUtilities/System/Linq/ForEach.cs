@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    public static partial class LinqExtensions
     {
         /// <summary>
         /// Invokes an action for each element in the sequence.

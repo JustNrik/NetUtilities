@@ -1,7 +1,6 @@
 ﻿using NetUtilities;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Runtime.CompilerServices;
 
 namespace System.Collections.Generic
 {
@@ -68,10 +67,7 @@ namespace System.Collections.Generic
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
         /// <returns>A new <see cref="ReadOnlyList{T}"/> with all the elements in the given range.</returns>
         public ReadOnlyList<T> this[Range range]
-        {
-            [return: NotNull]
-            get => Slice(range);
-        }
+            => GetRange(range);
 
         /// <inheritdoc/>
         public int Count
@@ -134,6 +130,7 @@ namespace System.Collections.Generic
         /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The first item that matches the predicate. otherwise default.</returns>
+        [return: MaybeNull]
         public T Find([NotNull]Predicate<T> predicate)
             => _list.Find(Ensure.NotNull(predicate, nameof(predicate)));
 
@@ -143,6 +140,7 @@ namespace System.Collections.Generic
         /// <exception cref="ArgumentNullException">Thrown if the predicate is null.</exception>
         /// <param name="predicate">The predicate used to find a matching item.</param>
         /// <returns>The first item that matches the predicate. otherwise default.</returns>
+        [return: MaybeNull]
         public T FindLast([NotNull]Predicate<T> predicate)
             => _list.FindLast(Ensure.NotNull(predicate, nameof(predicate)));
 
@@ -266,8 +264,8 @@ namespace System.Collections.Generic
         /// <returns>
         /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
         /// </returns>
-        public ReadOnlyList<T> Slice(int startIndex)
-            => Slice(startIndex..Count);
+        public ReadOnlyList<T> GetRange(int startIndex)
+            => GetRange(startIndex..);
 
         /// <summary>
         /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found 
@@ -279,8 +277,8 @@ namespace System.Collections.Generic
         /// <returns>
         /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
         /// </returns>
-        public ReadOnlyList<T> Slice(int startIndex, int count)
-            => Slice(startIndex..count);
+        public ReadOnlyList<T> GetRange(int startIndex, int count)
+            => GetRange(startIndex..count);
 
         /// <summary>
         /// Retrieves a new <see cref="ReadOnlyList{T}"/> with the elements found 
@@ -291,15 +289,10 @@ namespace System.Collections.Generic
         /// <returns>
         /// Returns a new <see cref="ReadOnlyList{T}"/> with all the elements from the provided index.
         /// </returns>
-        public ReadOnlyList<T> Slice(Range range)
+        public ReadOnlyList<T> GetRange(Range range)
         {
             var (offset, length) = range.GetOffsetAndLength(Count);
-            var list = new List<T>(length);
-
-            for (var count = 0; count < length; count++)
-                list.Add(this[offset + count]);
-
-            return new ReadOnlyList<T>(list);
+            return new ReadOnlyList<T>(_list.GetRange(offset, length));
         }
 
         /// <summary>

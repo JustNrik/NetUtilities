@@ -1,10 +1,9 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    public static partial class LinqExtensions
     {
         /// <summary>
         /// Takes all the elements until the predicate is True.
@@ -14,8 +13,7 @@ namespace System.Linq
         /// <param name="source">The sequence.</param>
         /// <param name="predicate">The delegated to filter the items.</param>
         /// <returns>A sequence of items</returns>
-        [return: NotNull]
-        public static IEnumerable<TSource> TakeUntil<TSource>(this IEnumerable<TSource> source, Predicate<TSource> predicate)
+        public static IEnumerable<TSource> TakeUntil<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             Ensure.NotNull(source, nameof(source));
             Ensure.NotNull(predicate, nameof(predicate));
@@ -23,7 +21,7 @@ namespace System.Linq
             return TakeUntilIterator(source, predicate);
         }
 
-        private static IEnumerable<TSource> TakeUntilIterator<TSource>(IEnumerable<TSource> source, Predicate<TSource> predicate)
+        private static IEnumerable<TSource> TakeUntilIterator<TSource>(IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             foreach (var item in source)
             {
@@ -40,7 +38,6 @@ namespace System.Linq
         /// <param name="source">The sequence.</param>
         /// <param name="predicate">The delegated to filter the items.</param>
         /// <returns>A sequence of items</returns>
-        [return: NotNull]
         public static IEnumerable<TSource> TakeWhile<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             Ensure.NotNull(source, nameof(source));
@@ -69,7 +66,6 @@ namespace System.Linq
         /// <param name="count">The amount of items to be taken.</param>
         /// <param name="predicate">The delegate used for filtering.</param>
         /// <returns>A sequence with an amount equal or lower than the count give with the items that matches the predicate.</returns>
-        [return: NotNull]
         public static IEnumerable<TSource> TakeIf<TSource>(this IEnumerable<TSource> source, int count, Func<TSource, bool> predicate)
         {
             Ensure.NotNull(source);

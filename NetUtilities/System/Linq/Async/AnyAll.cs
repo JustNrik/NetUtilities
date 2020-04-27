@@ -1,32 +1,27 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
-using System.Threading;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    /// <summary>
+    /// Extensions of <see cref="IAsyncEnumerable{T}"/>.
+    /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public static partial class AsyncEnumerableExtensions
     {
-        public static async ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+        internal static bool True<T>(T _) => true;
 
-            await new SynchronizationContextRemover();
+        /// <inheritdoc cref="Enumerable.Any{TSource}(IEnumerable{TSource})"/>
+        public static ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source)
+            => AnyAsync(source, True);
 
-            await foreach (var _ in source)
-                return true;
-
-            return false;
-        }
-
+        /// <inheritdoc cref="Enumerable.Any{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<bool> AnyAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
             await new SynchronizationContextRemover();
 
@@ -39,13 +34,11 @@ namespace System.Linq
             return false;
         }
 
+        /// <inheritdoc cref="Enumerable.All{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<bool> AllAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
             await new SynchronizationContextRemover();
 

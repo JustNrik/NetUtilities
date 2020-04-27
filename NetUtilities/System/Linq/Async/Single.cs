@@ -4,18 +4,17 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableExtensions
     {
+        /// <inheritdoc cref="Enumerable.Single{TSource}(IEnumerable{TSource})"/>
         public static ValueTask<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source)
-            => SingleAsync(source, _ => true);
+            => source.SingleAsync(True);
 
+        /// <inheritdoc cref="Enumerable.Single{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<TSource> SingleAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
             await new SynchronizationContextRemover();
 
@@ -30,16 +29,15 @@ namespace System.Linq
             return item;
         }
 
+        /// <inheritdoc cref="Enumerable.SingleOrDefault{TSource}(IEnumerable{TSource})"/>
         public static ValueTask<TSource> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source)
-            => SingleOrDefaultAsync(source, _ => true);
+            => source.SingleOrDefaultAsync(True);
 
+        /// <inheritdoc cref="Enumerable.SingleOrDefault{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<TSource> SingleOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
             await new SynchronizationContextRemover();
 

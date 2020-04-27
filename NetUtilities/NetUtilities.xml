@@ -15,6 +15,11 @@
             The exception.
             </summary>
         </member>
+        <member name="T:System.Collections.Generic.GenericCollectionExtensions">
+            <summary>
+            Extension methods for generic collections.
+            </summary>
+        </member>
         <member name="M:System.Collections.Generic.GenericCollectionExtensions.AsIndexed``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Enumerates the provided collection with an index.
@@ -33,6 +38,29 @@
             <param name="source">The source.</param>
             <param name="iterations">The amount of iterations to perform.</param>
         </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.AddOrUpdate``1(System.Collections.Generic.IList{``0},``0)">
+            <summary>
+            Adds an element to a <see cref="T:System.Collections.Generic.IList`1"/> if it doesn't exists, otherwise it updates it.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if the source is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
+            <typeparam name="T">The type of the element to be added.</typeparam>
+            <param name="source">The source collection.</param>
+            <param name="element">The element to search.</param>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+            <summary>
+            Gets a value given the key, or adds it if it doesn't exists.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if either the source or the key are null.</exception>
+            <exception cref="T:System.InvalidOperationException">Throw if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+            <param name="source">The source collection.</param>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+            <returns>The value.</returns>
+        </member>
         <member name="T:System.Collections.Generic.Lookup`2">
             <summary>
             This class is an implementation of an one-to-many dictionary.
@@ -46,11 +74,7 @@
             </summary>
         </member>
         <member name="P:System.Collections.Generic.Lookup`2.Item(`0)">
-            <summary>
-            Gets or sets the list associated with the given key.
-            </summary>
-            <param name="key">The key.</param>
-            <returns>A list with all values that are pointed from that key.</returns>
+            <inheritdoc/>
         </member>
         <member name="P:System.Collections.Generic.Lookup`2.Count">
             <inheritdoc/>
@@ -346,7 +370,7 @@
             <param name="converter">The delegate used to convert the items</param>
             <returns>Returns a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/></returns>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Int32)">
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Int32)">
             <summary>
             Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found starting from the given index.
             </summary>
@@ -356,7 +380,7 @@
             Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
             </returns>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Int32,System.Int32)">
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Int32,System.Int32)">
             <summary>
             Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found 
             starting from the given index with the given amount of elements.
@@ -368,7 +392,7 @@
             Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
             </returns>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Range)">
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Range)">
             <summary>
             Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found 
             starting from the given index with the given amount of elements.
@@ -658,7 +682,7 @@
             Extension for a Shell() function that allows overloading of the working directory variable.
             It must be a <see cref="T:System.String"/> but can be variables that returns strings.
             </summary>
-            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
+            <param name="process">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
             <param name="fileName">Process file name to execute.</param>
             <param name="arguments">Commands to pass to the process file to execute.</param>
             <param name="redirectStandardOutput">redirects stdout of the target process.</param>
@@ -675,7 +699,7 @@
             Extension for a Shell() function that allows overloading of the working directory variable.
             It must be a <see cref="T:System.String"/> but can be variables that returns strings.
             </summary>
-            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
+            <param name="process">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
             <param name="options">The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
             <returns>empty string, process stdout data, process stderr data.</returns>
         </member>
@@ -686,7 +710,7 @@
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
             <summary>
-            Instucts the <see cref="T:System.Diagnostics.Process" /> <keyword cref="T:System.Object" /> to wait until the executed process terminates.
+            Instucts the <see cref="T:System.Diagnostics.Process" /> to wait until the executed process terminates.
             </summary>
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.Executing">
@@ -744,16 +768,10 @@
             <param name="methodName">The name of the method. This is gathered from <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/> so any value you pass here is ommited.</param>
         </member>
         <member name="T:System.ICloneable`1">
-            <summary>
-            Supports cloning, which creates a new instance of a class with the same value as an existing instance.
-            </summary>
-            <typeparam name="T">The type.</typeparam>
+            <inheritdoc cref="T:System.ICloneable"/>
         </member>
         <member name="M:System.ICloneable`1.Clone">
-            <summary>
-            Creates a new object that is a copy of the current instance.
-            </summary>
-            <returns>A new object that is a copy of this instance.</returns>
+            <inheritdoc cref="M:System.ICloneable.Clone"/>
         </member>
         <member name="T:System.Int24">
             <summary>
@@ -783,7 +801,65 @@
             <param name="stream">The stream.</param>
             <param name="value">The value.</param>
         </member>
-        <member name="M:System.Linq.LinqUtilities.BatchBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+        <member name="T:System.Linq.AsyncEnumerableExtensions">
+            <summary>
+            Extensions of <see cref="T:System.Collections.Generic.IAsyncEnumerable`1"/>.
+            </summary>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.AnyAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Any``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.AnyAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Any``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.AllAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.All``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.FirstAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.First``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.FirstAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.First``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.FirstOrDefaultAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.FirstOrDefault``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.FirstOrDefaultAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.FirstOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.LastAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Last``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.LastAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Last``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.LastOrDefaultAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.LastOrDefault``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.LastOrDefaultAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.LastOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.Select``2(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,``1})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Select``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.SingleAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Single``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.SingleAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.Single``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.SingleOrDefaultAsync``1(System.Collections.Generic.IAsyncEnumerable{``0})">
+            <inheritdoc cref="M:System.Linq.Enumerable.SingleOrDefault``1(System.Collections.Generic.IEnumerable{``0})"/>
+        </member>
+        <member name="M:System.Linq.AsyncEnumerableExtensions.SingleOrDefaultAsync``1(System.Collections.Generic.IAsyncEnumerable{``0},System.Func{``0,System.Boolean})">
+            <inheritdoc cref="M:System.Linq.Enumerable.SingleOrDefault``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})"/>
+        </member>
+        <member name="T:System.Linq.LinqExtensions">
+            <summary>
+            More extensions method for <see cref="N:System.Linq"/>.
+            </summary>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.BatchBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
             <summary>
             Batches the collection into a collection of collection of an specific size.
             </summary>
@@ -794,38 +870,8 @@
             <param name="size">The size of the buckets.</param>
             <returns>An enumerable bulked by the given size.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.Linq.LinqUtilities.BatchBy``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})" -->
-        <member name="M:System.Linq.LinqUtilities.AddOrUpdate``1(System.Collections.Generic.IList{``0},``0)">
-            <summary>
-            Adds an element to a <see cref="T:System.Collections.Generic.IList`1"/> if it doesn't exists, otherwise it updates it.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the source is null.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
-            <typeparam name="T">The type of the element to be added.</typeparam>
-            <param name="source">The source collection.</param>
-            <param name="element">The element to search.</param>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
-            <summary>
-            Gets a value given the key, or adds it if it doesn't exists.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if either the source or the key are null.</exception>
-            <exception cref="T:System.InvalidOperationException">Throw if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The source collection.</param>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
-            <returns>The value.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.Shuffle``1(System.Collections.Generic.IList{``0})">
-            <summary>
-            Shuffles the given list.
-            </summary>
-            <typeparam name="T">The type.</typeparam>
-            <param name="source">The source list.</param>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+        <!-- Badly formed XML comment ignored for member "M:System.Linq.LinqExtensions.BatchBy``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})" -->
+        <member name="M:System.Linq.LinqExtensions.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
             <summary>
             Uses the selector to return a collection without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
             </summary>
@@ -836,7 +882,7 @@
             <param name="selector">The selector delegate used to filter duplicates.</param>
             <returns>A sequence without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+        <member name="M:System.Linq.LinqExtensions.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
             <summary>
             Uses the selector to return a collection without duplicates based on the provided comparer.
             </summary>
@@ -848,7 +894,7 @@
             <param name="comparer">The comparer used to filter duplicates.</param>
             <returns>A sequence without duplicates based on the comparer provided.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+        <member name="M:System.Linq.LinqExtensions.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
             <summary>
             Flattens the given sequence of sequences into a single sequence.
             </summary>
@@ -857,7 +903,7 @@
             <param name="source">The sequence.</param>
             <returns>A sequence with all members of the original sequence and the nested sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}},System.Func{System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0}})">
+        <member name="M:System.Linq.LinqExtensions.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}},System.Func{System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0}})">
             <summary>
             Flattens the given sequence of sequences into a single sequence given a selector.
             </summary>
@@ -867,7 +913,7 @@
             <param name="selector">The selector used to select the nested sequence.</param>
             <returns>A sequence with all members of the original sequence and the nested sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
+        <member name="M:System.Linq.LinqExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
             <summary>
             Invokes an action for each element in the sequence.
             </summary>
@@ -876,7 +922,7 @@
             <param name="source">The sequence.</param>
             <param name="action">The action to be executed on each item of the sequence.</param>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
+        <member name="M:System.Linq.LinqExtensions.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
             <summary>
             Joins the sequence of strings into a single string.
             </summary>
@@ -885,7 +931,7 @@
             <param name="separator">The separator used to join the strings. <see cref="F:System.String.Empty"/> if no separator is provided.</param>
             <returns>A single <see cref="T:System.String"/> with all the elements of the sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.Char},System.String)">
+        <member name="M:System.Linq.LinqExtensions.Join(System.Collections.Generic.IEnumerable{System.Char},System.String)">
             <summary>
             Joins the sequence of chars into a single string.
             </summary>
@@ -894,7 +940,7 @@
             <param name="separator">The separator used to join the chars. <see cref="F:System.String.Empty"/> if no separator is provided.</param>
             <returns>A single <see cref="T:System.String"/> with all the elements of the sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.SkipWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+        <member name="M:System.Linq.LinqExtensions.SkipWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
             <summary>
             Skips all the elements while the predicate is True.
             </summary>
@@ -904,7 +950,7 @@
             <param name="predicate">The delegated to filter the items.</param>
             <returns>A sequence of items</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+        <member name="M:System.Linq.LinqExtensions.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
             <summary>
             Skips all the elements until the predicate is True.
             </summary>
@@ -914,7 +960,7 @@
             <param name="predicate">The delegated to filter the items.</param>
             <returns>A sequence of items</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
+        <member name="M:System.Linq.LinqExtensions.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
             <summary>
             Takes all the elements until the predicate is True.
             </summary>
@@ -924,7 +970,7 @@
             <param name="predicate">The delegated to filter the items.</param>
             <returns>A sequence of items</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.TakeWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+        <member name="M:System.Linq.LinqExtensions.TakeWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
             <summary>
             Takes all the elements while the predicate is True.
             </summary>
@@ -934,7 +980,7 @@
             <param name="predicate">The delegated to filter the items.</param>
             <returns>A sequence of items</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.TakeIf``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,System.Boolean})">
+        <member name="M:System.Linq.LinqExtensions.TakeIf``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,System.Boolean})">
             <summary>
             Takes an amount of items from the source that matches the given predicate.
             </summary>
@@ -946,7 +992,7 @@
             <param name="predicate">The delegate used for filtering.</param>
             <returns>A sequence with an amount equal or lower than the count give with the items that matches the predicate.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
             <summary>
             Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
             into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
@@ -957,7 +1003,7 @@
             <param name="source">The sequence</param>
             <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
             <summary>
             Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
             into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair with the comparer provided.
@@ -969,7 +1015,7 @@
             <param name="comparer">The comparer</param>
             <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
             <summary>
             Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
             into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
@@ -980,7 +1026,7 @@
             <param name="source">The sequence</param>
             <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
             <summary>
             Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
             into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair with the comparer provided.
@@ -992,7 +1038,7 @@
             <param name="comparer">The comparer</param>
             <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ToReadOnly``2(System.Collections.Generic.IDictionary{``0,``1})">
+        <member name="M:System.Linq.LinqExtensions.ToReadOnly``2(System.Collections.Generic.IDictionary{``0,``1})">
             <summary>
             Creates a <see cref="T:System.Collections.ObjectModel.ReadOnlyDictionary`2"/> from the dictionary provided.
             </summary>
@@ -1002,7 +1048,7 @@
             <param name="source">The sequence.</param>
             <returns>A Read-Only Dictionary from the dictionary provided.</returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.ToReadOnlyList``1(System.Collections.Generic.IEnumerable{``0})">
+        <member name="M:System.Linq.LinqExtensions.ToReadOnlyList``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Creates as <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from the sequence provided.
             </summary>
@@ -2111,6 +2157,25 @@
         <member name="T:System.Threading.Tasks.SynchronizationContextRemover">
             <summary>
             This structure is used to remove the current SynchronizationContext. This helps to reduce the verbosity of using <see cref="M:System.Threading.Tasks.Task.ConfigureAwait(System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="P:System.Threading.Tasks.SynchronizationContextRemover.IsCompleted">
+            <summary>
+            Returns if <see cref="P:System.Threading.SynchronizationContext.Current"/> is <see langword="null"/>.
+            </summary>
+        </member>
+        <member name="M:System.Threading.Tasks.SynchronizationContextRemover.OnCompleted(System.Action)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Threading.Tasks.SynchronizationContextRemover.GetAwaiter">
+            <summary>
+            Returns <see langword="this"/>.
+            </summary>
+            <returns><see langword="this"/>.</returns>
+        </member>
+        <member name="M:System.Threading.Tasks.SynchronizationContextRemover.GetResult">
+            <summary>
+            This method does nothing.
             </summary>
         </member>
         <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.Task{``0},System.Boolean)">

@@ -1,10 +1,9 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    public static partial class LinqExtensions
     {
         /// <summary>
         /// Uses the selector to return a collection without duplicates based on <see cref="EqualityComparer{TKey}.Default"/>.
@@ -15,7 +14,6 @@ namespace System.Linq
         /// <param name="source">The source collection.</param>
         /// <param name="selector">The selector delegate used to filter duplicates.</param>
         /// <returns>A sequence without duplicates based on <see cref="EqualityComparer{TKey}.Default"/>.</returns>
-        [return: NotNull]
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         {
             Ensure.NotNull(source, nameof(source));
@@ -34,7 +32,6 @@ namespace System.Linq
         /// <param name="selector">The selector delegate used to filter duplicates.</param>
         /// <param name="comparer">The comparer used to filter duplicates.</param>
         /// <returns>A sequence without duplicates based on the comparer provided.</returns>
-        [return: NotNull]
         public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey> comparer)
         {
             Ensure.NotNull(source, nameof(source));

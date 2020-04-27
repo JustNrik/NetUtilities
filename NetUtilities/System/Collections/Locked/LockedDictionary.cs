@@ -90,7 +90,9 @@ namespace System.Collections.Locked
         {
             Ensure.NotNull(dictionary);
 
-            _dictionary = keepReference ? dictionary : dictionary.ToDictionary();
+            _dictionary = keepReference 
+                ? dictionary 
+                : dictionary.ToDictionary();
         }
 
         /// <summary>

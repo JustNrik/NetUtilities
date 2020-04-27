@@ -4,30 +4,21 @@ using System.Threading.Tasks;
 
 namespace System.Linq
 {
-    public static partial class AsyncEnumerable
+    public static partial class AsyncEnumerableExtensions
     {
-        public static async ValueTask<TSource> LastAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+        /// <inheritdoc cref="Enumerable.Last{TSource}(IEnumerable{TSource})"/>
+        public static ValueTask<TSource> LastAsync<TSource>(this IAsyncEnumerable<TSource> source)
+            => source.LastAsync(True);
 
-            var (any, item) = await TryGetLastAsync(source).ConfigureAwait(false);
-
-            if (!any)
-                Throw.InvalidOperation("sequence contains no elements");
-
-            return item;
-        }
-
+        /// <inheritdoc cref="Enumerable.Last{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<TSource> LastAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
+            await new SynchronizationContextRemover();
 
-            var (any, item) = await TryGetLastAsync(source, predicate).ConfigureAwait(false);
+            var (any, item) = await TryGetLastAsync(source, predicate);
 
             if (!any)
                 Throw.InvalidOperation("sequence contains no elements");
@@ -35,27 +26,19 @@ namespace System.Linq
             return item;
         }
 
-        public static async ValueTask<TSource> LastOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source)
-        {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+        /// <inheritdoc cref="Enumerable.LastOrDefault{TSource}(IEnumerable{TSource})"/>
+        public static ValueTask<TSource> LastOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source)
+            => source.LastOrDefaultAsync(True);
 
-            return (await TryGetLastAsync(source).ConfigureAwait(false)).Item;
-        }
-
+        /// <inheritdoc cref="Enumerable.LastOrDefault{TSource}(IEnumerable{TSource}, Func{TSource, bool})"/>
         public static async ValueTask<TSource> LastOrDefaultAsync<TSource>(this IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
+            Ensure.NotNull(source);
+            Ensure.NotNull(predicate);
 
-            if (predicate is null)
-                Throw.NullArgument(nameof(predicate));
-
-            return (await TryGetLastAsync(source, predicate).ConfigureAwait(false)).Item;
+            await new SynchronizationContextRemover();
+            return (await TryGetLastAsync(source, predicate)).Item;
         }
-
-        private static ValueTask<(bool Any, TSource Item)> TryGetLastAsync<TSource>(IAsyncEnumerable<TSource> source)
-            => TryGetLastAsync(source, _ => true);
 
         private static async ValueTask<(bool Any, TSource Item)> TryGetLastAsync<TSource>(IAsyncEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
@@ -72,19 +55,6 @@ namespace System.Linq
             }
 
             return (found, last);
-        }
-
-        private static (bool, TSource) TryGetLast<TSource>(IReadOnlyList<TSource> source, Func<TSource, bool> predicate)
-        {
-            for (var index = source.Count - 1; index >= 0; index--)
-            {
-                var item = source[index];
-
-                if (predicate(item))
-                    return (true, item);
-            }
-
-            return (false, default!);
         }
     }
 }

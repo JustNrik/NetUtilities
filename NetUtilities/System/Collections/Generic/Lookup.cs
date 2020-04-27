@@ -25,11 +25,7 @@ namespace System.Collections.Generic
         IEnumerable<TValue> ILookup<TKey, TValue>.this[TKey key] 
             => _lookup[key];
 
-        /// <summary>
-        /// Gets or sets the list associated with the given key.
-        /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns>A list with all values that are pointed from that key.</returns>
+        /// <inheritdoc/>
         public List<TValue> this[TKey key] 
         { 
             get => _lookup[key];

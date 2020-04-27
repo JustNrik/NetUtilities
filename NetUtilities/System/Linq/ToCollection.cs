@@ -1,11 +1,10 @@
 ﻿using NetUtilities;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    public static partial class LinqExtensions
     {
         /// <summary>
         /// Turns an sequence of <see cref="KeyValuePair{TKey, TValue}"/> 
@@ -16,8 +15,8 @@ namespace System.Linq
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="source">The sequence</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.</returns>
-        [return: NotNull]
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>([NotNull]this IEnumerable<KeyValuePair<TKey, TValue>> source)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<KeyValuePair<TKey, TValue>> source)
+            where TKey : notnull
             => Ensure.NotNull(source, nameof(source)).ToDictionary(x => x.Key, x => x.Value);
 
 
@@ -31,10 +30,10 @@ namespace System.Linq
         /// <param name="source">The sequence</param>
         /// <param name="comparer">The comparer</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.</returns>
-        [return: NotNull]
         public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
-            [NotNull]this IEnumerable<KeyValuePair<TKey, TValue>> source, 
-            [NotNull]IEqualityComparer<TKey> comparer)
+            this IEnumerable<KeyValuePair<TKey, TValue>> source, 
+            IEqualityComparer<TKey> comparer)
+            where TKey : notnull
             => Ensure.NotNull(source, nameof(source)).ToDictionary(x => x.Key, x => x.Value, Ensure.NotNull(comparer, nameof(comparer)));
 
 
@@ -47,8 +46,8 @@ namespace System.Linq
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="source">The sequence</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.</returns>
-        [return: NotNull]
-        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>([NotNull]this IEnumerable<(TKey Key, TValue Value)> source)
+        public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey Key, TValue Value)> source)
+           where TKey : notnull
             => Ensure.NotNull(source, nameof(source)).ToDictionary(x => x.Key, x => x.Value);
 
 
@@ -62,10 +61,10 @@ namespace System.Linq
         /// <param name="source">The sequence</param>
         /// <param name="comparer">The comparer</param>
         /// <returns>A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.</returns>
-        [return: NotNull]
         public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(
-            [NotNull]this IEnumerable<(TKey key, TValue value)> source, 
-            [NotNull]IEqualityComparer<TKey> comparer)
+            this IEnumerable<(TKey key, TValue value)> source, 
+            IEqualityComparer<TKey> comparer)
+            where TKey : notnull
             => Ensure.NotNull(source, nameof(source)).ToDictionary(x => x.key, x => x.value, Ensure.NotNull(comparer, nameof(comparer)));
 
         /// <summary>
@@ -76,8 +75,8 @@ namespace System.Linq
         /// <typeparam name="TValue">The type of the value.</typeparam>
         /// <param name="source">The sequence.</param>
         /// <returns>A Read-Only Dictionary from the dictionary provided.</returns>
-        [return: NotNull]
-        public static IReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>([NotNull]this IDictionary<TKey, TValue> source)
+        public static IReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> source)
+            where TKey : notnull
             => new ReadOnlyDictionary<TKey, TValue>(Ensure.NotNull(source, nameof(source)));
 
         /// <summary>
@@ -86,8 +85,7 @@ namespace System.Linq
         /// <typeparam name="T">The underlying type of the sequence.</typeparam>
         /// <param name="source">The sequence.</param>
         /// <returns>A Read-Only list.</returns>
-        [return: NotNull]
-        public static ReadOnlyList<T> ToReadOnlyList<T>([NotNull]this IEnumerable<T> source)
+        public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
             => new ReadOnlyList<T>(Ensure.NotNull(source, nameof(source)));
     }
 }
