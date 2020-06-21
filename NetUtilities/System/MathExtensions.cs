@@ -1,5 +1,5 @@
-﻿using NetUtilities;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
+using NetUtilities;
 using static System.Math;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -71,7 +71,7 @@ namespace System
                     return 0m;
 
 
-                Throw.InvalidOperation("Zero base and negative power");
+                throw new InvalidOperationException("Zero base and negative power");
             }
 
             if (pow is -1m) return 1m / value;
@@ -129,7 +129,7 @@ namespace System
                 result += fatorial;
             } while (cachedResult != result);
 
-            if (!(count is 0)) 
+            if (!(count is 0))
                 result *= PowN(E, count);
 
             return result;
@@ -156,7 +156,7 @@ namespace System
 
             x--;
 
-            if (x is 0m) 
+            if (x is 0m)
                 return count;
 
             var result = 0m;

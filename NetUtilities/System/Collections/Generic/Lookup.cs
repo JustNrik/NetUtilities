@@ -1,55 +1,59 @@
-﻿using NetUtilities;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using NetUtilities;
 
 namespace System.Collections.Generic
 {
     /// <summary>
-    /// This class is an implementation of an one-to-many dictionary.
+    ///     This class is an implementation of an one-to-many dictionary.
     /// </summary>
-    /// <typeparam name="TKey"></typeparam>
-    /// <typeparam name="TValue"></typeparam>
-    public sealed class Lookup<TKey, TValue> : ILookup<TKey, TValue>, IDictionary<TKey, List<TValue>> 
+    /// <typeparam name="TKey">
+    ///     The key type.
+    /// </typeparam>
+    /// <typeparam name="TValue">
+    ///     The value type.
+    /// </typeparam>
+    public sealed class Lookup<TKey, TValue> : ILookup<TKey, TValue>, IDictionary<TKey, IList<TValue>>
         where TKey : notnull
     {
-        private readonly IDictionary<TKey, List<TValue>> _lookup;
+        private readonly IDictionary<TKey, IList<TValue>> _lookup;
 
         /// <summary>
-        /// Creates an empty <see cref="Lookup{TKey, TValue}"/>
+        ///     Initializes a new instance of the <see cref="Lookup{TKey, TValue}"/> <see langword="class"/>.
         /// </summary>
         public Lookup()
         {
-            _lookup = new Dictionary<TKey, List<TValue>>();
+            _lookup = new Dictionary<TKey, IList<TValue>>();
         }
 
-        IEnumerable<TValue> ILookup<TKey, TValue>.this[TKey key] 
+        IEnumerable<TValue> ILookup<TKey, TValue>.this[TKey key]
             => _lookup[key];
 
         /// <inheritdoc/>
-        public List<TValue> this[TKey key] 
-        { 
+        public IList<TValue> this[TKey key]
+        {
             get => _lookup[key];
             set => _lookup[key] = value;
         }
 
         /// <inheritdoc/>
-        public int Count 
+        public int Count
             => _lookup.Count;
 
         /// <inheritdoc/>
-        public ICollection<TKey> Keys 
+        public ICollection<TKey> Keys
             => _lookup.Keys;
 
         /// <inheritdoc/>
-        public ICollection<List<TValue>> Values 
+        public ICollection<IList<TValue>> Values
             => _lookup.Values;
 
         /// <inheritdoc/>
-        public bool IsReadOnly 
+        public bool IsReadOnly
             => false;
 
         /// <inheritdoc/>
-        public void Add(TKey key, List<TValue> value)
+        public void Add(TKey key, IList<TValue> value)
         {
             Ensure.NotNull(key);
 
@@ -57,10 +61,14 @@ namespace System.Collections.Generic
         }
 
         /// <summary>
-        /// Adds an element with the provided key and value to the <see cref="Lookup{TKey, TValue}"/>.
+        ///     Adds an element with the provided key and value to the <see cref="Lookup{TKey, TValue}"/>.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <param name="value">The value.</param>
+        /// <param name="key">
+        ///     The key.
+        /// </param>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
         public void Add(TKey key, TValue value)
         {
             Ensure.NotNull(key);
@@ -72,7 +80,7 @@ namespace System.Collections.Generic
         }
 
         /// <inheritdoc/>
-        public void Add(KeyValuePair<TKey, List<TValue>> item)
+        public void Add(KeyValuePair<TKey, IList<TValue>> item)
             => _lookup.Add(item);
 
         /// <inheritdoc/>
@@ -84,7 +92,7 @@ namespace System.Collections.Generic
             => _lookup.ContainsKey(key);
 
         /// <inheritdoc/>
-        public bool Contains(KeyValuePair<TKey, List<TValue>> item)
+        public bool Contains(KeyValuePair<TKey, IList<TValue>> item)
             => _lookup.Contains(item);
 
         /// <inheritdoc/>
@@ -92,7 +100,7 @@ namespace System.Collections.Generic
             => _lookup.ContainsKey(key);
 
         /// <inheritdoc/>
-        public void CopyTo(KeyValuePair<TKey, List<TValue>>[] array, int arrayIndex)
+        public void CopyTo(KeyValuePair<TKey, IList<TValue>>[] array, int arrayIndex)
             => _lookup.CopyTo(array, arrayIndex);
 
         /// <inheritdoc/>
@@ -104,7 +112,7 @@ namespace System.Collections.Generic
             => _lookup.Remove(key);
 
         /// <inheritdoc/>
-        public bool Remove(KeyValuePair<TKey, List<TValue>> item)
+        public bool Remove(KeyValuePair<TKey, IList<TValue>> item)
             => _lookup.Remove(item);
 
         /// <inheritdoc/>
@@ -112,41 +120,39 @@ namespace System.Collections.Generic
             => _lookup.TryGetValue(key, out var list) && list.Remove(value);
 
         /// <inheritdoc/>
-        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out List<TValue> value)
+        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out IList<TValue> value)
             => _lookup.TryGetValue(key, out value);
 
         IEnumerator IEnumerable.GetEnumerator()
             => new LookupEnumerator(_lookup);
 
-        IEnumerator<KeyValuePair<TKey, List<TValue>>> IEnumerable<KeyValuePair<TKey, List<TValue>>>.GetEnumerator()
+        IEnumerator<KeyValuePair<TKey, IList<TValue>>> IEnumerable<KeyValuePair<TKey, IList<TValue>>>.GetEnumerator()
             => _lookup.GetEnumerator();
 
         IEnumerator<IGrouping<TKey, TValue>> IEnumerable<IGrouping<TKey, TValue>>.GetEnumerator()
             => new LookupEnumerator(_lookup);
 
-        /// <summary>
-        /// Supports a simple iteration over a generic collection.
-        /// </summary>
+        /// <inheritdoc cref="IEnumerator{T}"/>
         public sealed class LookupEnumerator : IEnumerator<IGrouping<TKey, TValue>>
         {
-            private readonly IDictionary<TKey, List<TValue>> _lookup;
+            private readonly IDictionary<TKey, IList<TValue>> _lookup;
             private readonly TKey[] _keys;
             private int _count;
 
             /// <inheritdoc/>
             public Grouping Current { get; private set; }
 
-            IGrouping<TKey, TValue> IEnumerator<IGrouping<TKey, TValue>>.Current 
+            IGrouping<TKey, TValue> IEnumerator<IGrouping<TKey, TValue>>.Current
                 => Current;
 
-            object IEnumerator.Current 
+            object IEnumerator.Current
                 => Current;
 
             /// <summary>
-            /// Creates an enumerator to iterate over a <paramref name="lookup"/>
+            ///     Initializes a new instance of the <see cref="LookupEnumerator"/> <see langword="struct"/> 
+            ///     with the provided lookup.
             /// </summary>
-            /// <param name="lookup"></param>
-            public LookupEnumerator(IDictionary<TKey, List<TValue>> lookup)
+            public LookupEnumerator(IDictionary<TKey, IList<TValue>> lookup)
             {
                 _lookup = lookup;
                 _count = -1;
@@ -176,32 +182,35 @@ namespace System.Collections.Generic
             }
         }
 
-        /// <summary>
-        /// Represents a collection of objects that have a common key.
-        /// </summary>
+        /// <inheritdoc cref="IGrouping{TKey, TElement}"/>
         public readonly struct Grouping : IGrouping<TKey, TValue>
         {
-            private readonly List<TValue> _values;
+            private readonly IList<TValue> _values;
 
             /// <inheritdoc/>
             public TKey Key { get; }
 
             /// <summary>
-            /// Creates a grouping with the providen key and values.
+            ///     Initializes a new instance of the <see cref="IGrouping{TKey, TElement}"/> <see langword="struct"/> 
+            ///     with the provided keys and values.
             /// </summary>
-            /// <param name="key">The key.</param>
-            /// <param name="values">The values.</param>
-            public Grouping(TKey key, List<TValue> values)
+            /// <param name="key">
+            ///     The key.
+            /// </param>
+            /// <param name="values">
+            ///     The values.
+            /// </param>
+            public Grouping(TKey key, IList<TValue> values)
             {
                 Key = key;
                 _values = values;
             }
 
             /// <summary>
-            /// Returns an enumerator that iterates through the <see cref="List{TValue}"/>
+            /// Returns an enumerator that iterates through the <see cref="IList{TValue}"/>
             /// </summary>
-            /// <returns>An enumerator that iterates through the <see cref="List{TValue}"/></returns>
-            public List<TValue>.Enumerator GetEnumerator()
+            /// <returns>An enumerator that iterates through the <see cref="IList{TValue}"/></returns>
+            public IEnumerator<TValue> GetEnumerator()
                 => _values.GetEnumerator();
 
             IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator()

@@ -156,7 +156,7 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.True(mapper.Fields[1].Member.IsStatic);
 
             Assert.Equal("_intField", mapper.Fields[0].Member.Name);
-            Assert.Equal("_stringField", mapper.Fields[1].Member.Name);          
+            Assert.Equal("_stringField", mapper.Fields[1].Member.Name);
         }
 
         [Fact]
@@ -186,7 +186,7 @@ namespace NetUtilities.Tests.System.Reflection
 
             Assert.Equal("OnDoingThing", mapper.Events[0].Member.Name);
             Assert.Equal(typeof(EventHandlerTest), mapper.Events[0].Member.EventHandlerType);
-        }       
+        }
 
         [Fact]
         public void InheritsAndImplementsTest()
@@ -257,7 +257,7 @@ namespace NetUtilities.Tests.System.Reflection
         public delegate void EventHandlerTest();
         public event EventHandlerTest OnDoingThing;
     }
-  
+
     public class Bar
     {
     }
