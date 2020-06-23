@@ -195,5 +195,7 @@ namespace System.Reflection
             where TEnum : unmanaged, Enum
             => typeof(TEnum).GetField(Enum.GetName(typeof(TEnum), @enum) ?? string.Empty)?.GetCustomAttribute<TAttribute>(inherited);
 
+        public static bool IsUnmanaged<T>(this T _)
+            => RuntimeHelpers.IsReferenceOrContainsReferences<T>();
     }
 }

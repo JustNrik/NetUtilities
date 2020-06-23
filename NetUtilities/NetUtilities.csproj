@@ -12,6 +12,11 @@
     <Optimize>true</Optimize>
     <DocumentationFile>C:\Users\Ramiro Flores\source\repos\NetUtilities\NetUtilities\NetUtilities.xml</DocumentationFile>
     <WarningLevel>0</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
 </Project>
