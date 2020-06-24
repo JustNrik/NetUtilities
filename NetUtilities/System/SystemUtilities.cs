@@ -216,7 +216,7 @@ namespace System
         ///     The comparison to be used to determine if they are alike.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the strings are similar (case-insensitive); Otherwise, <see langword="false"/>.
+        ///     <see langword="true"/> if the strings are similar (case-insensitive); otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when either str or other are <see langword="null"/>.

@@ -195,7 +195,29 @@ namespace System.Reflection
             where TEnum : unmanaged, Enum
             => typeof(TEnum).GetField(Enum.GetName(typeof(TEnum), @enum) ?? string.Empty)?.GetCustomAttribute<TAttribute>(inherited);
 
+        /// <summary>
+        ///     Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
+        /// </summary>
+        /// <remarks>
+        ///     This method is just a wrapper of <see cref="RuntimeHelpers.IsReferenceOrContainsReferences{T}"/>;
+        ///     <br/>
+        ///     <br/>
+        ///     This method returns <see langword="true"/> only if the type is a <see langword="struct"/> 
+        ///     and doesn't contain any reference type or pointer as a field.
+        /// </remarks>
+        /// <typeparam name="T">
+        ///     The type.
+        /// </typeparam>
+        /// <param name="_">
+        ///     This parameter is ignored.
+        /// </param>
+        /// <returns>
+        ///     <see langword="true"/> if the type is an <see langword="unmanaged"/> type; otherwise, <see langword="false"/>.
+        /// </returns>
         public static bool IsUnmanaged<T>(this T _)
-            => RuntimeHelpers.IsReferenceOrContainsReferences<T>();
+            => !RuntimeHelpers.IsReferenceOrContainsReferences<T>();
+
+        public static nint GetAddress<T>(this T reference) where T : class
+            => Unsafe.As<T, nint>(ref reference);
     }
 }

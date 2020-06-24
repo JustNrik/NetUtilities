@@ -2022,6 +2022,27 @@
                 The specified attribute if exists on the give value of the <see langword="enum"/>. Otherwise <see langword="null"/>.
             </returns>
         </member>
+        <member name="M:System.Reflection.ReflectionExtensions.IsUnmanaged``1(``0)">
+            <summary>
+                Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
+            </summary>
+            <remarks>
+                This method is just a wrapper of <see cref="M:System.Runtime.CompilerServices.RuntimeHelpers.IsReferenceOrContainsReferences``1"/>;
+                <br/>
+                <br/>
+                This method returns <see langword="true"/> only if the type is a <see langword="struct"/> 
+                and doesn't contain any reference type or pointer as a field.
+            </remarks>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <param name="_">
+                This parameter is ignored.
+            </param>
+            <returns>
+                <see langword="true"/> if the type is an <see langword="unmanaged"/> type; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
         <member name="T:System.Reflection.ReflectionHelper">
             <summary>
                 This class provides helper methods for <see cref="N:System.Reflection"/>.
@@ -2313,7 +2334,7 @@
                 The comparison to be used to determine if they are alike.
             </param>
             <returns>
-                <see langword="true"/> if the strings are similar (case-insensitive); Otherwise, <see langword="false"/>.
+                <see langword="true"/> if the strings are similar (case-insensitive); otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when either str or other are <see langword="null"/>.

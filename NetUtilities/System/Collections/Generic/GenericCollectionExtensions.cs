@@ -294,7 +294,7 @@ namespace System.Collections.Generic
         /// </param>
         /// <returns>
         ///    The zero-based index of the first occurrence of value within the range of elements
-        //     in span that extends from startIndex to the last element, if found; Otherwise,
+        //     in span that extends from startIndex to the last element, if found; otherwise,
         //     -1.
         /// </returns>
         public static int IndexOf<T>(this Span<T> span, T element)
@@ -322,7 +322,7 @@ namespace System.Collections.Generic
         /// </param>
         /// <returns>
         ///    The zero-based index of the first occurrence of value within the range of elements
-        //     in span that extends from startIndex to the last element, if found; Otherwise,
+        //     in span that extends from startIndex to the last element, if found; otherwise,
         //     -1.
         /// </returns>
         public static int IndexOf<T>(this ReadOnlySpan<T> span, T element)

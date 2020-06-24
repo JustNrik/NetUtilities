@@ -37,6 +37,7 @@ namespace System.Collections.Generic
             public const uint HashCollisionThreshold = 100;
             public const int MaxPrimeArrayLength = 0x7FEFFFFD;
             public const int HashPrime = 101;
+
             private static readonly int[] s_primes =
             {
                 3, 7, 11, 17, 23, 29, 37, 47, 59, 71, 89, 107, 131, 163, 197, 239, 293, 353, 431, 521, 631, 761, 919,
@@ -46,7 +47,7 @@ namespace System.Collections.Generic
                 1674319, 2009191, 2411033, 2893249, 3471899, 4166287, 4999559, 5999471, 7199369
             };
 
-            public static bool IsPrime(nint candidate)
+            public static bool IsPrime(int candidate)
             {
                 if ((candidate & 1) == 0)
                     return candidate == 2;
@@ -62,17 +63,17 @@ namespace System.Collections.Generic
                 return true;
             }
 
-            public static nint GetPrime(nint min)
+            public static int GetPrime(int min)
             {
                 Ensure.NotOutOfRange(min >= 0, min);
 
-                foreach (int prime in s_primes)
+                foreach (var prime in s_primes)
                 {
                     if (prime >= min)
                         return prime;
                 }
 
-                for (nint i = (min | 1); i < nint.MaxValue; i += 2)
+                for (var i = (min | 1); i < int.MaxValue; i += 2)
                 {
                     if (IsPrime(i) && ((i - 1) % HashPrime is not 0))
                         return i;
@@ -80,11 +81,11 @@ namespace System.Collections.Generic
                 return min;
             }
 
-            public static nint ExpandPrime(nint oldSize)
+            public static int ExpandPrime(int oldSize)
             {
                 var newSize = 2 * oldSize;
 
-                if ((nuint)newSize > MaxPrimeArrayLength && MaxPrimeArrayLength > oldSize)
+                if ((uint)newSize > MaxPrimeArrayLength && MaxPrimeArrayLength > oldSize)
                     return MaxPrimeArrayLength;
 
                 return GetPrime(newSize);
@@ -117,6 +118,39 @@ namespace System.Collections.Generic
         private ValueCollection? _values;
         private const int StartOfFreeList = -3;
 
+        public IEqualityComparer64<TKey> Comparer
+            => _comparer is null
+            ? EqualityComparer64<TKey>.Default
+            : _comparer;
+
+        public int Count
+            => _count - _freeCount;
+
+        public KeyCollection Keys
+            => _keys ??= new KeyCollection(this);
+
+        ICollection<TKey> IDictionary<TKey, TValue>.Keys
+            => _keys ??= new KeyCollection(this);
+
+        public ValueCollection Values
+            => _values ??= new ValueCollection(this);
+
+        ICollection<TValue> IDictionary<TKey, TValue>.Values
+            => _values ??= new ValueCollection(this);
+
+        public TValue this[TKey key]
+        {
+            get
+            {
+                ref var value = ref FindValue(key);
+                if (!UnsafeX.IsNullRef(ref value))
+                    return value;
+
+                throw new KeyNotFoundException();
+            }
+            set => TryInsert(key, value, InsertionBehavior.OverwriteExisting);
+        }
+
         public Dictionary64() : this(0, null) { }
 
         public Dictionary64(int capacity) : this(capacity, null) { }
@@ -147,17 +181,17 @@ namespace System.Collections.Generic
                 var count = d._count;
                 var entries = d._entries;
 
-                for (nint i = 0; i < count; i++)
+                foreach (var entry in entries)
                 {
-                    if (entries![i].next >= -1)
-                        Add(entries[i].key, entries[i].value);
+                    if (entry.next >= -1)
+                        Add(entry.key, entry.value);
                 }
 
                 return;
             }
 
-            foreach (var pair in dictionary)
-                Add(pair.Key, pair.Value);
+            foreach (var (key, value) in dictionary)
+                Add(key, value);
         }
 
         public Dictionary64(IEnumerable<KeyValuePair<TKey, TValue>> collection) : this(collection, null) { }
@@ -169,36 +203,6 @@ namespace System.Collections.Generic
 
             foreach (var pair in collection)
                 Add(pair.Key, pair.Value);
-        }
-
-        public IEqualityComparer64<TKey> Comparer =>
-            _comparer is null
-            ? EqualityComparer64<TKey>.Default 
-            : _comparer;
-
-        public int Count 
-            => _count - _freeCount;
-
-        public KeyCollection Keys => _keys ??= new KeyCollection(this);
-
-        ICollection<TKey> IDictionary<TKey, TValue>.Keys => _keys ??= new KeyCollection(this);
-
-        public ValueCollection Values => _values ??= new ValueCollection(this);
-
-        ICollection<TValue> IDictionary<TKey, TValue>.Values => _values ??= new ValueCollection(this);
-
-        public TValue this[TKey key]
-        {
-            get
-            {
-                ref var value = ref FindValue(key);
-                if (!UnsafeX.IsNullRef(ref value))
-                    return value;
-
-                throw new KeyNotFoundException();
-                return default;
-            }
-            set => TryInsert(key, value, InsertionBehavior.OverwriteExisting);
         }
 
         public void Add(TKey key, TValue value)
@@ -226,17 +230,16 @@ namespace System.Collections.Generic
 
         public void Clear()
         {
-            int count = _count;
+            var count = _count;
+
             if (count > 0)
             {
-                Debug.Assert(_buckets is not null, "_buckets should be non-null");
-                Debug.Assert(_entries is not null, "_entries should be non-null");
-
                 Array.Clear(_buckets, 0, _buckets.Length);
 
                 _count = 0;
                 _freeList = -1;
                 _freeCount = 0;
+
                 Array.Clear(_entries, 0, count);
             }
         }
@@ -247,6 +250,8 @@ namespace System.Collections.Generic
         public bool ContainsValue(TValue value)
         {
             var entries = _entries;
+            var comparer = EqualityComparer<TValue>.Default;
+
             if (value is null)
             {
                 foreach (var entry in entries)
@@ -261,17 +266,15 @@ namespace System.Collections.Generic
                 {
                     foreach (var entry in entries)
                     {
-                        if (entry.next >= -1 && EqualityComparer<TValue>.Default.Equals(entry.value, value)) 
+                        if (entry.next >= -1 && comparer.Equals(entry.value, value)) 
                             return true;
                     }
                 }
                 else
                 {
-                    var defaultComparer = EqualityComparer<TValue>.Default;
-
                     foreach (var entry in entries)
                     {
-                        if (entry.next >= -1 && defaultComparer.Equals(entry.value, value)) 
+                        if (entry.next >= -1 && comparer.Equals(entry.value, value)) 
                             return true;
                     }
                 }
@@ -288,12 +291,10 @@ namespace System.Collections.Generic
             var count = _count;
             var entries = _entries;
 
-            for (nint i = 0; i < count; i++)
+            foreach (var entry in entries)
             {
-                if (entries![i].next >= -1)
-                {
-                    array[index++] = new KeyValuePair<TKey, TValue>(entries[i].key, entries[i].value);
-                }
+                if (entry.next >= -1)
+                    array[index++] = new KeyValuePair<TKey, TValue>(entry.key, entry.value);
             }
         }
 
@@ -308,17 +309,20 @@ namespace System.Collections.Generic
             Ensure.NotNull(key);
 
             ref var entry = ref UnsafeX.NullRef<Entry>();
+
             if (_buckets is not null)
             {
                 var comparer = _comparer;
+
                 if (comparer is null)
                 {
-                    var hashCode = (ulong)((comparer is null)
-                        ? EqualityComparer<TKey>.Default.GetHashCode(key)
-                        : comparer.GetHashCode64(key));
+                    comparer = EqualityComparer64<TKey>.Default;
+
+                    var hashCode = (ulong)comparer.GetHashCode64(key);
                     var i = GetBucket(hashCode);
                     var entries = _entries;
                     var collisionCount = 0u;
+
                     if (typeof(TKey).IsValueType)
                     {
                         i--;
@@ -330,7 +334,7 @@ namespace System.Collections.Generic
 
                             entry = ref entries[i];
 
-                            if (entry.hashCode == hashCode && EqualityComparer64<TKey>.Default.Equals(entry.key, key))
+                            if (entry.hashCode == hashCode && comparer.Equals(entry.key, key))
                                 goto ReturnFound;
 
                             i = entry.next;
@@ -342,9 +346,8 @@ namespace System.Collections.Generic
                     }
                     else
                     {
-                        var defaultComparer = EqualityComparer64<TKey>.Default;
-
                         i--;
+
                         do
                         {
                             if ((uint)i >= (uint)entries.Length)
@@ -352,7 +355,7 @@ namespace System.Collections.Generic
 
                             entry = ref entries[i];
 
-                            if (entry.hashCode == hashCode && defaultComparer.Equals(entry.key, key))
+                            if (entry.hashCode == hashCode && comparer.Equals(entry.key, key))
                                 goto ReturnFound;
 
                             i = entry.next;
@@ -395,7 +398,7 @@ namespace System.Collections.Generic
             ConcurrentOperation:
             Ensure.CanOperate(false, "Concurrent operations are not supported.");
             ReturnFound:
-            ref TValue value = ref entry.value;
+            ref var value = ref entry.value;
             Return:
             return ref value;
             ReturnNotFound:
@@ -414,7 +417,7 @@ namespace System.Collections.Generic
             _buckets = buckets;
             _entries = entries;
 
-            return (int)size;
+            return size;
         }
 
         private bool TryInsert(TKey key, TValue value, InsertionBehavior behavior)
@@ -426,9 +429,7 @@ namespace System.Collections.Generic
 
             var entries = _entries;
             var comparer = _comparer;
-            var hashCode = (ulong)((comparer is null) 
-                ? EqualityComparer<TKey>.Default.GetHashCode(key) 
-                : comparer.GetHashCode64(key));
+            var hashCode = (ulong)(comparer?.GetHashCode64(key) ?? EqualityComparer64<TKey>.Default.GetHashCode64(key));
 
             var collisionCount = 0u;
             ref var bucket = ref GetBucket(hashCode);
@@ -436,6 +437,7 @@ namespace System.Collections.Generic
 
             if (comparer is null)
             {
+                comparer = EqualityComparer64<TKey>.Default;
                 if (typeof(TKey).IsValueType)
                 {
                     while (true)
@@ -445,7 +447,7 @@ namespace System.Collections.Generic
 
                         var currentEntry = entries[i];
 
-                        if (currentEntry.hashCode == hashCode && EqualityComparer64<TKey>.Default.Equals(currentEntry.key, key))
+                        if (currentEntry.hashCode == hashCode && comparer.Equals(currentEntry.key, key))
                         {
                             if (behavior == InsertionBehavior.OverwriteExisting)
                             {
@@ -468,8 +470,6 @@ namespace System.Collections.Generic
                 }
                 else
                 {
-                    var defaultComparer = EqualityComparer64<TKey>.Default;
-
                     while (true)
                     {
                         if ((uint)i >= (uint)entries.Length)
@@ -477,7 +477,7 @@ namespace System.Collections.Generic
 
                         var currentEntry = entries[i];
 
-                        if (currentEntry.hashCode == hashCode && defaultComparer.Equals(currentEntry.key, key))
+                        if (currentEntry.hashCode == hashCode && comparer.Equals(currentEntry.key, key))
                         {
                             if (behavior == InsertionBehavior.OverwriteExisting)
                             {
@@ -554,7 +554,7 @@ namespace System.Collections.Generic
                 entries = _entries;
             }
 
-            ref Entry entry = ref entries![index];
+            ref var entry = ref entries![index];
 
             if (updateFreeList)
                 _freeList = StartOfFreeList - entries[_freeList].next;
