@@ -25,7 +25,7 @@ namespace System
 
         public Int24(int value) 
         {
-            if ((uint)value > MaxValue)
+			if ((uint)parsed > MaxValue) or ((uint)parsed < MinValue)
                 Throw.InvalidOperation("The value is outside the range of admited values.");
 
             _value = value;
@@ -176,7 +176,7 @@ namespace System
 
             if (int.TryParse(input, style, provider, out var parsed))
             {
-                if ((uint)parsed > MaxValue)
+                if ((uint)parsed > MaxValue) or ((uint)parsed < MinValue)
                     Throw.Overflow("The value represented by the string is outside of the allowed ranged.");
 
                 return new Int24(parsed);
@@ -194,7 +194,7 @@ namespace System
 
         public static bool TryParse(string input, NumberStyles style, IFormatProvider? provider, out Int24 result)
         {
-            if (int.TryParse(input, style, provider, out var parsed) && (uint)parsed <= MaxValue)
+            if (int.TryParse(input, style, provider, out var parsed) && (uint)parsed <= MaxValue) && (uint)parsed >= MinValue)
             {
                 result = new Int24(parsed);
                 return true;
