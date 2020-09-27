@@ -75,6 +75,34 @@
             The exception.
             </summary>
         </member>
+        <member name="M:System.Collections.Generic.Dictionary64`2.EnsureCapacity(System.Int32)">
+            <summary>
+                Ensures that the dictionary can hold up to 'capacity' entries without any further expansion of its backing storage
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.Dictionary64`2.TrimExcess">
+             <summary>
+             Sets the capacity of this dictionary to what it would be if it had been originally initialized with all its entries
+             </summary>
+             <remarks>
+             This method can be used to minimize the memory overhead
+             once it is known that no new elements will be added.
+            
+             To allocate minimum size storage array, execute the following statements:
+            
+             dictionary.Clear();
+             dictionary.TrimExcess();
+             </remarks>
+        </member>
+        <member name="M:System.Collections.Generic.Dictionary64`2.TrimExcess(System.Int32)">
+            <summary>
+            Sets the capacity of this dictionary to hold up 'capacity' entries without any further expansion of its backing storage
+            </summary>
+            <remarks>
+            This method can be used to minimize the memory overhead
+            once it is known that no new elements will be added.
+            </remarks>
+        </member>
         <member name="T:System.Collections.Generic.GenericCollectionExtensions">
             <summary>
                 Extension methods for generic collections.
@@ -175,13 +203,13 @@
                 The sequence.
             </param>
             <returns>
-                <see langword="true"/> if the array contains the sequence. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when either <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
             </exception>
         </member>
-        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[],System.Int32)">
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[],System.Int32,System.Collections.Generic.IEqualityComparer{``0})">
             <summary>
                 Indicates if the array contains the given sequence from the provided starting index.
             </summary>
@@ -198,7 +226,7 @@
                 The start index.
             </param>
             <returns>
-                <see langword="true"/> if the array contains the sequence. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
@@ -207,7 +235,7 @@
                 Thrown when <paramref name="startIndex"/> is negative, higher than or equal to the length of <paramref name="array"/>.
             </exception>
         </member>
-        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[],System.Int32,System.Int32)">
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[],System.Int32,System.Int32,System.Collections.Generic.IEqualityComparer{``0})">
             <summary>
                 Indicates if the array contains the given sequence from the provided range.
             </summary>
@@ -227,7 +255,7 @@
                 The count.
             </param>
             <returns>
-                <see langword="true"/> if the array contains the sequence. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
@@ -871,7 +899,7 @@
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.Executing">
             <summary>
-                Indicates if the target process is executing (has not been actually started yet), or is being executed (started). <see langword="false"/> if it was started.
+                Indicates if the target process is executing (has not been actually started yet), or is being executed (started); otherwise, <see langword="false"/>.
             </summary>
         </member>
         <member name="T:System.EventManager`1">
@@ -968,6 +996,56 @@
             <param name="value">
                 The value.
             </param>
+        </member>
+        <member name="T:System.IO.ValueStringReader">
+            <summary>
+                Zero allocation equivalent of <see cref="T:System.IO.StringReader"/>.
+            </summary>
+        </member>
+        <member name="P:System.IO.ValueStringReader.Current">
+            <summary>
+                Returns the current character. <see langword="null"/> if the end is reached.
+            </summary>
+        </member>
+        <member name="M:System.IO.ValueStringReader.#ctor(System.ReadOnlySpan{System.Char})">
+            <summary>
+                Initializes an instance of <see cref="T:System.IO.ValueStringReader"/> <see langword="struct"/> with the provided <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Char"/>.
+            </summary>
+            <param name="span">
+                The span to read.
+            </param>
+        </member>
+        <member name="M:System.IO.ValueStringReader.#ctor(System.String)">
+            <summary>
+                Initializes an instance of <see cref="T:System.IO.ValueStringReader"/> <see langword="struct"/> with the provided <see cref="T:System.String"/>.
+            </summary>
+            <param name="span">
+                The span to read.
+            </param>
+        </member>
+        <member name="M:System.IO.ValueStringReader.Read">
+            <summary>
+                Reads the next characters and advances one position of the buffer.
+            </summary>
+            <returns>
+                The current character after advancing one position. <see langword="null"/> if the buffer is completely read.
+            </returns>
+        </member>
+        <member name="M:System.IO.ValueStringReader.ReadLine">
+            <summary>
+                Reads all the characters until a new line is found.
+            </summary>
+            <returns>
+                A <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Char"/> with all characters found, excluding the new line.
+            </returns>
+        </member>
+        <member name="M:System.IO.ValueStringReader.ReadToEnd">
+            <summary>
+                Fully reads the buffer from the current position.
+            </summary>
+            <returns>
+                A <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Char"/> with all the characters from the current position until the end of the buffer.
+            </returns>
         </member>
         <member name="T:System.Linq.LinqExtensions">
             <summary>
@@ -1883,9 +1961,6 @@
                         <paramref name="child"/> is an <see langword="interface"/> but <paramref name="parent"/> is not.
                     </item>
                     <item>
-                        <paramref name="child"/> is an <see langword="struct"/> but <paramref name="parent"/> is not either <see cref="T:System.ValueType"/> or <see cref="T:System.Object"/>.
-                    </item>
-                    <item>
                         <paramref name="child"/> and <paramref name="parent"/> are the same type.
                     </item>
                     <item>
@@ -1900,7 +1975,7 @@
                 The parent type.
             </param>
             <returns>
-                <see langword="true"/> if <paramref name="child"/> inherits from <paramref name="parent"/>. Otherwise <see langword="false"/>.
+                <see langword="true"/> if <paramref name="child"/> inherits from <paramref name="parent"/>; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Throw when either <paramref name="child"/> or <paramref name="parent"/> are <see langword="null"/>.
@@ -1931,7 +2006,7 @@
                 The parent type.
             </param>
             <returns>
-                <see langword="true"/> if <paramref name="child"/> implements from <paramref name="parent"/>. Otherwise <see langword="false"/>.
+                <see langword="true"/> if <paramref name="child"/> implements from <paramref name="parent"/>; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Throw when either <paramref name="child"/> or <paramref name="parent"/> are <see langword="null"/>.
@@ -1945,7 +2020,7 @@
                 The type.
             </param>
             <returns>
-                <see langword="true"/> if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -1959,7 +2034,7 @@
                 The target type to check
             </param>
             <returns>
-                <see langword="true"/> if the type is <see cref="T:System.Nullable`1"/>. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the type is <see cref="T:System.Nullable`1"/>; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -1973,7 +2048,7 @@
                 The type.
             </param>
             <returns>
-                <see langword="true"/> if <paramref name="type"/> is <see langword="static"/>. Otherwise <see langword="false"/>.
+                <see langword="true"/> if <paramref name="type"/> is <see langword="static"/>; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -2017,7 +2092,7 @@
                 Indicates if it should inspect for the ancestors.
             </param>
             <returns>
-                The specified attribute if exists on the give value of the <see langword="enum"/>. Otherwise <see langword="null"/>.
+                The specified attribute if exists on the give value of the <see langword="enum"/>; otherwise, <see langword="null"/>.
             </returns>
         </member>
         <member name="M:System.Reflection.ReflectionExtensions.IsUnmanaged``1(``0)">
@@ -2025,11 +2100,22 @@
                 Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
             </summary>
             <remarks>
-                This method is just a wrapper of <see cref="M:System.Runtime.CompilerServices.RuntimeHelpers.IsReferenceOrContainsReferences``1"/>;
+                This method returns <see langword="true"/> if the type is an <see langword="unmanaged"/> type.
                 <br/>
                 <br/>
-                This method returns <see langword="true"/> only if the type is a <see langword="struct"/> 
-                and doesn't contain any reference type or pointer as a field.
+                An <see langword="unmanaged"/> type meets the following conditions:
+                <list type="bullet">
+                    <item>
+                        <description>
+                            The type is a <see langword="struct"/>.
+                        </description>
+                    </item>
+                    <item>
+                        <description>
+                            None of its fields are reference types, pointers, or structures that constains such fields.
+                        </description>
+                    </item>
+                </list>
             </remarks>
             <typeparam name="T">
                 The type.
@@ -2055,7 +2141,7 @@
             </remarks>
             <param name="type">The type.</param>
             <returns>
-                <see langword="true"/> if the type is a struct or has a parameterless constructor. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
             </returns>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -2072,7 +2158,7 @@
                 The type.
             </typeparam>
             <returns>
-                <see langword="true"/> if the type is a struct or has a parameterless constructor. Otherwise <see langword="false"/>.
+                <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
             </returns>
         </member>
         <member name="M:System.Reflection.ReflectionHelper.GetAllTypes">
@@ -2351,7 +2437,7 @@
                 The words.
             </param>
             <returns>
-                <see langword="true"/> if the string contains all of the provided words, otherwise <see langword="false"/>.
+                <see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"/>.
             </returns>
         </member>
         <member name="M:System.SystemUtilities.ContainsAll(System.String,System.StringComparison,System.String[])">
@@ -2368,7 +2454,7 @@
                 The words.
             </param>
             <returns>
-                <see langword="true"/> if the string contains all of the provided words, otherwise <see langword="false"/>.
+                <see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"/>.
             </returns>
         </member>
         <member name="M:System.SystemUtilities.Quote(System.String)">
@@ -2430,7 +2516,7 @@
         </member>
         <member name="P:System.Threading.Tasks.SynchronizationContextRemover.IsCompleted">
             <summary>
-                Returns <see langword="true"/> if <see cref="P:System.Threading.SynchronizationContext.Current"/> is <see langword="null"/>.
+                Indicates if <see cref="P:System.Threading.SynchronizationContext.Current"/> is <see langword="null"/>.
             </summary>
         </member>
         <member name="M:System.Threading.Tasks.SynchronizationContextRemover.OnCompleted(System.Action)">
@@ -2449,97 +2535,29 @@
                 This method does nothing.
             </summary>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.Task{``0})">
+        <member name="M:System.Threading.Tasks.TasksExtensions.Discard(System.Threading.Tasks.Task)">
             <summary>
-                Runs a <see cref="T:System.Threading.Tasks.Task`1"/> synchronously and returns <typeparamref name="TResult"/>.
+                Fires and forgets the task.
             </summary>
-            <typeparam name="TResult">
-                Type of the result object.
-            </typeparam>
-            <param name="task">
-                The task that will run.
+            <param name="_">
+                The task to discard.
             </param>
-            <returns>
-                The result of the given task.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run(System.Threading.Tasks.Task)">
+        <member name="M:System.Threading.Tasks.TasksExtensions.Discard(System.Threading.Tasks.ValueTask)">
             <summary>
-                Runs a <see cref="T:System.Threading.Tasks.Task"/> synchronously.
+                Fires and forgets the task.
             </summary>
-            <param name="task">
-                The task that will run.
+            <param name="_">
+                The task to discard.
             </param>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.ValueTask{``0})">
+        <member name="M:System.Threading.Tasks.TasksExtensions.Discard``1(System.Threading.Tasks.ValueTask{``0})">
             <summary>
-                Runs a <see cref="T:System.Threading.Tasks.ValueTask`1"/> synchronously and returns <typeparamref name="TResult"/>.
+                Fires and forgets the task.
             </summary>
-            <typeparam name="TResult">
-                Type of the result object.
-            </typeparam>
-            <param name="task">
-                The task that will run.
+            <param name="_">
+                The task to discard.
             </param>
-            <returns>
-                The result of the given task.
-            </returns>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
-        </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run(System.Threading.Tasks.ValueTask)">
-            <summary>
-                Runs a <see cref="T:System.Threading.Tasks.ValueTask"/> synchronously.
-            </summary>
-            <param name="task">
-                The task that will run.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
-        </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync(System.Threading.Tasks.Task)">
-            <summary>
-                Fires and forgets the tasks.
-            </summary>
-            <param name="task">
-                The task that will run.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
-        </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync(System.Threading.Tasks.ValueTask)">
-            <summary>
-                Fires and forgets the tasks.
-            </summary>
-            <param name="task">
-                The task that will run.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
-        </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync``1(System.Threading.Tasks.ValueTask{``0})">
-            <summary>
-                Fires and forgets the tasks.
-            </summary>
-            <typeparam name="TResult">
-                Type of the result object.
-            </typeparam>
-            <param name="task">
-                The task that will run.
-            </param>
-            <exception cref="T:System.ArgumentNullException">
-                Thrown when the task is <see langword="null"/>.
-            </exception>
         </member>
         <member name="T:System.UInt24">
             <summary>

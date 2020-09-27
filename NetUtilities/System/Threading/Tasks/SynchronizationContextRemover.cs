@@ -8,10 +8,10 @@ namespace System.Threading.Tasks
     ///     This structure is used to remove <see cref="SynchronizationContext.Current"/>. 
     ///     This helps to reduce the verbosity of using <see cref="Task.ConfigureAwait(bool)"/>
     /// </summary>
-    public struct SynchronizationContextRemover : INotifyCompletion
+    public readonly struct SynchronizationContextRemover : INotifyCompletion
     {
         /// <summary>
-        ///     Returns <see langword="true"/> if <see cref="SynchronizationContext.Current"/> is <see langword="null"/>.
+        ///     Indicates if <see cref="SynchronizationContext.Current"/> is <see langword="null"/>.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public bool IsCompleted

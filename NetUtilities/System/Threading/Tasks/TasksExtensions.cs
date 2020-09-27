@@ -13,7 +13,7 @@ namespace System.Threading.Tasks
         /// <param name="_">
         ///     The task to discard.
         /// </param>
-        public static void Discard(this Task task)
+        public static void Discard(this Task _)
         {
         }
 
@@ -23,7 +23,7 @@ namespace System.Threading.Tasks
         /// <param name="_">
         ///     The task to discard.
         /// </param>
-        public static void Discard(this ValueTask task)
+        public static void Discard(this ValueTask _)
         {
         }
 
@@ -33,7 +33,7 @@ namespace System.Threading.Tasks
         /// <param name="_">
         ///     The task to discard.
         /// </param>
-        public static void Discard<T>(this ValueTask<T> task)
+        public static void Discard<T>(this ValueTask<T> _)
         {
         }
     }

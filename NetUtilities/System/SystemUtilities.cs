@@ -234,7 +234,7 @@ namespace System
         ///     The words.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the string contains any of the provided words, otherwise <see langword="false"=""/>.
+        ///     <see langword="true"/> if the string contains any of the provided words, otherwise, <see langword="false"=""/>.
         /// </returns>
         public static bool ContainsAny(this string str, params string[] words)
         {
@@ -263,7 +263,7 @@ namespace System
         ///     The words.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the string contains any of the provided words, otherwise <see langword="false"=""/>.
+        ///     <see langword="true"/> if the string contains any of the provided words, otherwise, <see langword="false"=""/>.
         /// </returns>
         public static bool ContainsAny(this string str, StringComparison comparisonType, params string[] words)
         {
@@ -289,7 +289,7 @@ namespace System
         ///     The words.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the string contains all of the provided words, otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"/>.
         /// </returns>
         public static bool ContainsAll(this string str, params string[] words)
         {
@@ -318,7 +318,7 @@ namespace System
         ///     The words.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the string contains all of the provided words, otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"/>.
         /// </returns>
         public static bool ContainsAll(this string str, StringComparison comparisonType, params string[] words)
         {

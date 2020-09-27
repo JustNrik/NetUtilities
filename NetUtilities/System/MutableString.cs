@@ -660,7 +660,7 @@ namespace System
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="words">The words.</param>
-        /// <returns><see langword="true"/> if the string contains any of the provided words, otherwise <see langword="false"=""/></returns>
+        /// <returns><see langword="true"/> if the string contains any of the provided words, otherwise, <see langword="false"=""/></returns>
         public bool ContainsAny(params string[] words)
         {
             foreach (var word in words)
@@ -676,7 +676,7 @@ namespace System
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="words">The words.</param>
-        /// <returns><see langword="true"/> if the string contains all of the provided words, otherwise <see langword="false"=""/></returns>
+        /// <returns><see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"=""/></returns>
         public bool ContainsAll(params string[] words)
         {
             foreach (var word in words)

@@ -21,7 +21,7 @@ namespace System.Reflection
         /// </remarks>
         /// <param name="type">The type.</param>
         /// <returns>
-        ///     <see langword="true"/> if the type is a struct or has a parameterless constructor. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -40,7 +40,7 @@ namespace System.Reflection
         ///     The type.
         /// </typeparam>
         /// <returns>
-        ///     <see langword="true"/> if the type is a struct or has a parameterless constructor. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
         /// </returns>
         [MethodImplementation(Inlined)]
         public static bool HasDefaultConstructor<T>()

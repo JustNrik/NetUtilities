@@ -38,7 +38,7 @@ namespace System.Reflection
         ///     The parent type.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if <paramref name="child"/> inherits from <paramref name="parent"/>. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if <paramref name="child"/> inherits from <paramref name="parent"/>; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Throw when either <paramref name="child"/> or <paramref name="parent"/> are <see langword="null"/>.
@@ -81,7 +81,7 @@ namespace System.Reflection
         ///     The parent type.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if <paramref name="child"/> implements from <paramref name="parent"/>. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if <paramref name="child"/> implements from <paramref name="parent"/>; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Throw when either <paramref name="child"/> or <paramref name="parent"/> are <see langword="null"/>.
@@ -101,7 +101,7 @@ namespace System.Reflection
         ///     The type.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the type implements <see cref="ITuple"/>. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the type implements <see cref="ITuple"/>; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -117,7 +117,7 @@ namespace System.Reflection
         ///     The target type to check
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the type is <see cref="Nullable{T}"/>. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the type is <see cref="Nullable{T}"/>; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -133,7 +133,7 @@ namespace System.Reflection
         ///     The type.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if <paramref name="type"/> is <see langword="static"/>. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if <paramref name="type"/> is <see langword="static"/>; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="type"/> is <see langword="null"/>.
@@ -185,7 +185,7 @@ namespace System.Reflection
         ///     Indicates if it should inspect for the ancestors.
         /// </param>
         /// <returns>
-        ///     The specified attribute if exists on the give value of the <see langword="enum"/>. Otherwise <see langword="null"/>.
+        ///     The specified attribute if exists on the give value of the <see langword="enum"/>; otherwise, <see langword="null"/>.
         /// </returns>
         public static TAttribute? GetEnumFieldAttribute<TAttribute, TEnum>(this TEnum @enum, bool inherited = true)
             where TAttribute : Attribute
@@ -224,8 +224,5 @@ namespace System.Reflection
         /// </returns>
         public static bool IsUnmanaged<T>(this T _)
             => !RuntimeHelpers.IsReferenceOrContainsReferences<T>();
-
-        public static nint GetAddress<T>(this T reference) where T : class
-            => Unsafe.As<T, nint>(ref reference);
     }
 }

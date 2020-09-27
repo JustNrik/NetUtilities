@@ -173,7 +173,7 @@ namespace System.Collections.Generic
         ///     The sequence.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the array contains the sequence. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when either <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
@@ -197,7 +197,7 @@ namespace System.Collections.Generic
         ///     The start index.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the array contains the sequence. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
@@ -227,7 +227,7 @@ namespace System.Collections.Generic
         ///     The count.
         /// </param>
         /// <returns>
-        ///     <see langword="true"/> if the array contains the sequence. Otherwise <see langword="false"/>.
+        ///     <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
         /// </returns>
         /// <exception cref="ArgumentNullException">
         ///     Thrown when <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
