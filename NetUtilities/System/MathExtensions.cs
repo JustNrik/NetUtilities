@@ -214,7 +214,7 @@ namespace System
         /// <returns></returns>
         [MethodImplementation(Inlined)]
         public static bool IsPowerOf2(this int value)
-            => value < 2 ? false : IsPowerOf2((ulong)value);
+            => value >= 2 && IsPowerOf2((ulong)value);
 
         /// <summary>
         /// Returns a boolean indicating if the provided number is a power of 2.
@@ -232,7 +232,7 @@ namespace System
         /// <returns></returns>
         [MethodImplementation(Inlined)]
         public static bool IsPowerOf2(this long value)
-            => value < 2 ? false : IsPowerOf2((ulong)value);
+            => value >= 2 && IsPowerOf2((ulong)value);
 
         /// <summary>
         /// Returns a boolean indicating if the provided number is a power of 2.
@@ -241,7 +241,35 @@ namespace System
         /// <returns></returns>
         [MethodImplementation(Inlined)]
         public static bool IsPowerOf2(this ulong value)
-            => value < 2 ? false : ((value & (value - 1)) == 0);
+            => value >= 2 && ((value & (value - 1)) == 0);
+
+        public static bool IsPrime(this int value)
+            => value >= 2 && IsPrime((ulong)value);
+
+        public static bool IsPrime(this uint value)
+            => IsPrime((ulong)value);
+
+        public static bool IsPrime(this long value)
+            => value >= 2 && IsPrime((ulong)value);
+
+        public static bool IsPrime(this ulong value)
+        {
+            if (value <= 1UL)
+                return false;
+
+            if ((value & 1UL) != 0UL)
+            {
+                var limit = (ulong)Math.Sqrt(value);
+
+                for (var divisor = 3UL; divisor <= limit; divisor += 2UL)
+                    if ((value % divisor) == 0UL)
+                        return false;
+
+                return true;
+            }
+
+            return value == 2UL;
+        }
 
         /// <summary>
         /// Gets the amount of digits in the provided number.

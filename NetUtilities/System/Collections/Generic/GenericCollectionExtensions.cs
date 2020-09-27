@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using NetUtilities;
 
 namespace System.Collections.Generic
@@ -10,6 +11,11 @@ namespace System.Collections.Generic
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class GenericCollectionExtensions
     {
+        private static class ZeroArray<T>
+        {
+            public static readonly T[] Value = { default };
+        }
+
         /// <summary>
         ///     Enumerates the provided collection with an index.
         /// </summary>
@@ -199,8 +205,8 @@ namespace System.Collections.Generic
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when <paramref name="startIndex"/> is negative, higher than or equal to the length of <paramref name="array"/>.
         /// </exception>
-        public static bool ContainsSequence<T>(this T[] array, T[] sequence, int startIndex)
-            => array.ContainsSequence(sequence, startIndex, array.Length - startIndex);
+        public static bool ContainsSequence<T>(this T[] array, T[] sequence, int startIndex, IEqualityComparer<T>? comparer = null)
+            => array.ContainsSequence(sequence, startIndex, array.Length - startIndex, comparer);
 
         /// <summary>
         ///     Indicates if the array contains the given sequence from the provided range.
@@ -229,13 +235,15 @@ namespace System.Collections.Generic
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when <paramref name="startIndex"/> and <paramref name="count"/> do not represent a valid range in the array.
         /// </exception>
-        public static bool ContainsSequence<T>(this T[] array, T[] sequence, int startIndex, int count)
+        public static bool ContainsSequence<T>(this T[] array, T[] sequence, int startIndex, int count, IEqualityComparer<T>? comparer = null)
         {
             Ensure.NotNull(array);
             Ensure.NotNull(sequence);
             Ensure.NotOutOfRange((uint)startIndex < array.Length, startIndex);
             Ensure.NotOutOfRange(count <= 0, count);
             Ensure.NotOutOfRange(startIndex + count > array.Length, startIndex + count);
+
+            comparer ??= EqualityComparer<T>.Default;
 
             if (sequence.Length > array.Length)
                 return false;
@@ -253,7 +261,7 @@ namespace System.Collections.Generic
             {
                 for (var i = 0; i < array.Length; i++)
                 {
-                    if (!EqualityComparer<T>.Default.Equals(array[i], sequence[i]))
+                    if (!comparer.Equals(array[i], sequence[i]))
                         return false;
                 }
 
@@ -269,7 +277,7 @@ namespace System.Collections.Generic
 
                 // break the loop to avoid unnecessary calls if it's already false
                 for (var index = 1; areEqual && index < sequence.Length; index++)
-                    areEqual = EqualityComparer<T>.Default.Equals(array[offset + index], sequence[index]);
+                    areEqual = comparer.Equals(array[offset + index], sequence[index]);
 
                 if (areEqual)
                     return true;
@@ -280,60 +288,151 @@ namespace System.Collections.Generic
             return false;
         }
 
-        /// <summary>
-        ///     Returns the index of the provided element.
-        /// </summary>
-        /// <typeparam name="T">
-        ///     The underlying type of the span.
-        /// </typeparam>
-        /// <param name="span">
-        ///     The input span.
-        /// </param>
-        /// <param name="element">
-        ///     The element to search.
-        /// </param>
-        /// <returns>
-        ///    The zero-based index of the first occurrence of value within the range of elements
-        //     in span that extends from startIndex to the last element, if found; otherwise,
-        //     -1.
-        /// </returns>
-        public static int IndexOf<T>(this Span<T> span, T element)
+        public static int FindSequenceIndex<T>(this T[] array, T[] sequence, int startIndex, IEqualityComparer<T>? comparer = null)
+            => array.FindSequenceIndex(sequence, startIndex, array.Length - startIndex);
+
+        public static int FindSequenceIndex<T>(this T[] array, T[] sequence, int startIndex, int count, IEqualityComparer<T>? comparer = null)
         {
-            for (var i = 0; i < span.Length; i++)
+            Ensure.NotNull(array);
+            Ensure.NotNull(sequence);
+            Ensure.NotOutOfRange((uint)startIndex < array.Length, startIndex);
+            Ensure.NotOutOfRange(count <= 0, count);
+            Ensure.NotOutOfRange(startIndex + count > array.Length, startIndex + count);
+            
+            comparer ??= EqualityComparer<T>.Default;
+
+            if (sequence.Length > array.Length || array.Length == 0 || sequence.Length == 0)
+                return -1;
+
+            if (sequence.Length == 1)
+                return Array.IndexOf(array, sequence[0]);
+
+            if (array.Length == sequence.Length)
             {
-                if (EqualityComparer<T>.Default.Equals(span[i], element))
-                    return i;
+                for (var index = 0; index < array.Length; index++)
+                {
+                    if (!comparer.Equals(array[index], sequence[index]))
+                        return -1;
+                }
+
+                return 0;
+            }
+
+            var m = sequence.Length;
+            var n = array.Length;
+            var i = 0;
+            var j = 0;
+            Span<int> lps = stackalloc int[m];
+
+            Compute(sequence, m, lps, comparer);
+
+            while (i < n)
+            {
+                if (comparer.Equals(sequence[j], array[i]))
+                {
+                    j++;
+                    i++;
+                }
+
+                if (j == m)
+                {
+                    return i - j;
+                }
+
+                else if (i < n && !comparer.Equals(sequence[j], array[i]))
+                {
+                    if (j != 0)
+                        j = lps[j - 1];
+                    else
+                        i = i + 1;
+                }
             }
 
             return -1;
         }
 
-        /// <summary>
-        ///     Returns the index of the provided element.
-        /// </summary>
-        /// <typeparam name="T">
-        ///     The underlying type of the span.
-        /// </typeparam>
-        /// <param name="span">
-        ///     The input span.
-        /// </param>
-        /// <param name="element">
-        ///     The element to search.
-        /// </param>
-        /// <returns>
-        ///    The zero-based index of the first occurrence of value within the range of elements
-        //     in span that extends from startIndex to the last element, if found; otherwise,
-        //     -1.
-        /// </returns>
-        public static int IndexOf<T>(this ReadOnlySpan<T> span, T element)
+        public static int[] FindSequenceIndexes<T>(this T[] array, T[] sequence, int startIndex, IEqualityComparer<T>? comparer = null)
+            => array.FindSequenceIndexes(sequence, startIndex, array.Length - startIndex, comparer);
+
+        public static int[] FindSequenceIndexes<T>(this T[] array, T[] sequence, int startIndex, int count, IEqualityComparer<T>? comparer = null)
         {
-            for (var i = 0; i < span.Length; i++)
+            Ensure.NotNull(array);
+            Ensure.NotNull(sequence);
+            Ensure.NotOutOfRange((uint)startIndex < array.Length, startIndex);
+            Ensure.NotOutOfRange(count <= 0, count);
+            Ensure.NotOutOfRange(startIndex + count > array.Length, startIndex + count);
+
+            comparer ??= EqualityComparer<T>.Default;
+
+            if (sequence.Length > array.Length || array.Length == 0 || sequence.Length == 0)
+                return Array.Empty<int>();
+
+            if (sequence.Length == 1)
+                return new[] { Array.IndexOf(array, sequence[0]) };
+
+            if (array.Length == sequence.Length)
             {
-                if (EqualityComparer<T>.Default.Equals(span[i], element))
-                    return i;
+                for (var index = 0; index < array.Length; index++)
+                {
+                    if (!comparer.Equals(array[index], sequence[index]))
+                        return Array.Empty<int>();
+                }
+
+                return ZeroArray<int>.Value;
             }
 
-            return -1;
+            var indexes = new List<int>();
+            var m = sequence.Length;
+            var n = array.Length;
+            var i = 0;
+            var j = 0;
+            Span<int> lps = stackalloc int[m];
+
+            Compute(sequence, m, lps, comparer);
+
+            while (i < n)
+            {
+                if (comparer.Equals(sequence[j], array[i]))
+                {
+                    j++;
+                    i++;
+                }
+
+                if (j == m)
+                {
+                    indexes.Add(i - j);
+                    j = lps[j - 1];
+                }
+
+                else if (i < n && !comparer.Equals(sequence[j], array[i]))
+                {
+                    if (j != 0)
+                        j = lps[j - 1];
+                    else
+                        i++;
+                }
+            }
+
+            return indexes.ToArray();
+        }
+
+        private static void Compute<T>(T[] sequence, int m, Span<int> lps, IEqualityComparer<T> comparer)
+        {
+            var len = 0;
+            var i = 1;
+
+            while (i < m)
+            {
+                if (comparer.Equals(sequence[i], sequence[len]))
+                    lps[i++] = ++len;
+                else
+                {
+                    if (len != 0)
+                        len = lps[len - 1];
+                    else
+                        lps[i++] = 0;
+                }
+            }
         }
     }
 }

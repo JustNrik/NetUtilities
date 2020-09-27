@@ -236,8 +236,6 @@
                 Thrown when <paramref name="startIndex"/> and <paramref name="count"/> do not represent a valid range in the array.
             </exception>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.Collections.Generic.GenericCollectionExtensions.IndexOf``1(System.Span{``0},``0)" -->
-        <!-- Badly formed XML comment ignored for member "M:System.Collections.Generic.GenericCollectionExtensions.IndexOf``1(System.ReadOnlySpan{``0},``0)" -->
         <member name="T:System.Collections.Generic.Lookup`2">
             <summary>
                 This class is an implementation of an one-to-many dictionary.

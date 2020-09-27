@@ -12,7 +12,7 @@ namespace NetUtilities
 
         [MethodImplementation(NotInlined)]
         [return: NotNull]
-        public static T NotNull<T>([AllowNull]T obj, [CallerArgumentExpression("obj")]string? name = null)
+        public static T NotNull<T>([AllowNull] T obj, [CallerArgumentExpression("obj")] string? name = null)
         {
             if (obj is null)
                 throw new ArgumentNullException(name);

@@ -24,9 +24,6 @@ namespace System.Reflection
         ///             <paramref name="child"/> is an <see langword="interface"/> but <paramref name="parent"/> is not.
         ///         </item>
         ///         <item>
-        ///             <paramref name="child"/> is an <see langword="struct"/> but <paramref name="parent"/> is not either <see cref="ValueType"/> or <see cref="object"/>.
-        ///         </item>
-        ///         <item>
         ///             <paramref name="child"/> and <paramref name="parent"/> are the same type.
         ///         </item>
         ///         <item>
@@ -199,11 +196,22 @@ namespace System.Reflection
         ///     Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
         /// </summary>
         /// <remarks>
-        ///     This method is just a wrapper of <see cref="RuntimeHelpers.IsReferenceOrContainsReferences{T}"/>;
+        ///     This method returns <see langword="true"/> if the type is an <see langword="unmanaged"/> type.
         ///     <br/>
         ///     <br/>
-        ///     This method returns <see langword="true"/> only if the type is a <see langword="struct"/> 
-        ///     and doesn't contain any reference type or pointer as a field.
+        ///     An <see langword="unmanaged"/> type meets the following conditions:
+        ///     <list type="bullet">
+        ///         <item>
+        ///             <description>
+        ///                 The type is a <see langword="struct"/>.
+        ///             </description>
+        ///         </item>
+        ///         <item>
+        ///             <description>
+        ///                 None of its fields are reference types, pointers, or structures that constains such fields.
+        ///             </description>
+        ///         </item>
+        ///     </list>
         /// </remarks>
         /// <typeparam name="T">
         ///     The type.

@@ -12,7 +12,7 @@ namespace System.Diagnostics
         public bool WaitForProcessExit { get; set; }
 
         /// <summary>
-        ///     Indicates if the target process is executing (has not been actually started yet), or is being executed (started). <see langword="false"/> if it was started.
+        ///     Indicates if the target process is executing (has not been actually started yet), or is being executed (started); otherwise, <see langword="false"/>.
         /// </summary>
         public bool Executing { get; internal set; } = true;
     }

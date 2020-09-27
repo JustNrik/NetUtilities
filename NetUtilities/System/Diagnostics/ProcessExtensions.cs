@@ -76,9 +76,7 @@ namespace System.Diagnostics
             var ret = string.Empty;
 
             process.Start();
-
-            if (options.Executing)
-                options.Executing = false;
+            options.Executing = false;
 
             if (process.StartInfo.RedirectStandardError)
                 ret = process.StandardError.ReadToEnd();
