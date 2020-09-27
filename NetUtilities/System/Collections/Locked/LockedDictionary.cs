@@ -1,12 +1,12 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using NetUtilities;
 
 namespace System.Collections.Locked
 {
     /// <summary>
-    /// Provides a thread-safe implementation of <see cref="Dictionary{TKey, TValue}"/>.
+    ///     Provides a synchronized implementation of <see cref="Dictionary{TKey, TValue}"/>.
     /// </summary>
     public sealed class LockedDictionary<TKey, TValue> : IDictionary<TKey, TValue>, ICloneable<LockedDictionary<TKey, TValue>>
         where TKey : notnull
@@ -15,7 +15,7 @@ namespace System.Collections.Locked
         private readonly object _lock = new object();
 
         /// <inheritdoc/>
-        public TValue this[TKey key] 
+        public TValue this[TKey key]
         {
             [return: MaybeNull]
             get
@@ -65,7 +65,7 @@ namespace System.Collections.Locked
             => false;
 
         /// <summary>
-        /// Creates an empty <see cref="LockedDictionary{TKey, TValue}"/>
+        ///     Initializes a new instace of the <see cref="LockedDictionary{TKey, TValue}"/> <see langword="class"/> that is empty.
         /// </summary>
         public LockedDictionary()
         {
@@ -73,39 +73,54 @@ namespace System.Collections.Locked
         }
 
         /// <summary>
-        /// Creates a <see cref="LockedDictionary{TKey, TValue}"/> from the provided <paramref name="dictionary"/>. 
-        /// By default this keeps the reference of the provided dictionary.
+        ///     Initializes a new instace of the <see cref="LockedDictionary{TKey, TValue}"/> <see langword="class"/> that is empty,
+        ///     and references the provided dictionary.
         /// </summary>
-        /// <param name="dictionary">The source dictionary.</param>
+        /// <param name="dictionary">
+        ///     The dictionary to reference.
+        /// </param>
         public LockedDictionary(Dictionary<TKey, TValue> dictionary) : this(dictionary, true)
         {
         }
 
         /// <summary>
-        /// Creates a <see cref="LockedDictionary{TKey, TValue}"/> from the provided <paramref name="dictionary"/>. 
+        ///     Initializes a new instace of the <see cref="LockedDictionary{TKey, TValue}"/> <see langword="class"/> that is empty,
+        ///     and optionally you can indicate if you want to reference the provided dictionary.
         /// </summary>
-        /// <param name="dictionary">The source dictionary.</param>
-        /// <param name="keepReference">Indicates if the reference of the source dictionary should be kept.</param>
+        /// <param name="dictionary">
+        ///     The dictionary.
+        /// </param>
+        /// <param name="keepReference">
+        ///     Indicates if the reference to the provided dictionary should be kept.
+        /// </param>
         public LockedDictionary(Dictionary<TKey, TValue> dictionary, bool keepReference)
         {
             Ensure.NotNull(dictionary);
 
-            _dictionary = keepReference ? dictionary : dictionary.ToDictionary();
+            _dictionary = keepReference
+                ? dictionary
+                : dictionary.ToDictionary();
         }
 
         /// <summary>
-        /// Creates a <see cref="LockedDictionary{TKey, TValue}"/> from the provided <paramref name="source"/>. 
+        ///     Initializes a new instace of the <see cref="LockedDictionary{TKey, TValue}"/> <see langword="class"/> that is empty,
+        ///     and contains the elements of the provided source.
         /// </summary>
-        /// <param name="source">The source.</param>
-        public LockedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> source) 
+        /// <param name="source">
+        ///     The source.
+        /// </param>
+        public LockedDictionary(IEnumerable<KeyValuePair<TKey, TValue>> source)
         {
             _dictionary = Ensure.NotNull(source).ToDictionary();
         }
 
         /// <summary>
-        /// Creates a <see cref="LockedDictionary{TKey, TValue}"/> from the provided <paramref name="source"/>. 
+        ///     Initializes a new instace of the <see cref="LockedDictionary{TKey, TValue}"/> <see langword="class"/> that is empty,
+        ///     and contains the elements of the provided source.
         /// </summary>
-        /// <param name="source">The source.</param>
+        /// <param name="source">
+        ///     The source.
+        /// </param>
         public LockedDictionary(IEnumerable<(TKey, TValue)> source)
         {
             _dictionary = Ensure.NotNull(source).ToDictionary();
@@ -194,19 +209,24 @@ namespace System.Collections.Locked
         IEnumerator IEnumerable.GetEnumerator()
             => GetEnumerator();
 
-        /// <inheritdoc/>
+        /// <summary>
+        ///     Enumerates the elements of a <see cref="LockedDictionary{TKey, TValue}"/>.
+        /// </summary>
         public readonly struct Enumerator : IEnumerator<KeyValuePair<TKey, TValue>>
         {
             private readonly Dictionary<TKey, TValue>.Enumerator _enumerator;
 
             /// <inheritdoc/>
-            public KeyValuePair<TKey, TValue> Current 
+            public KeyValuePair<TKey, TValue> Current
                 => _enumerator.Current;
 
             /// <summary>
-            /// Creates an enumerator to though the <see cref="LockedDictionary{TKey, TValue}"/>.
+            ///     Initializes a new instance of the <see cref="LockedDictionary{TKey, TValue}.Enumerator"/> <see langword="struct"/> 
+            ///     with the provided <see cref="LockedDictionary{TKey, TValue}"/>.
             /// </summary>
-            /// <param name="dictionary">The source dictionary.</param>
+            /// <param name="dictionary">
+            ///     The source dictionary.
+            /// </param>
             public Enumerator(LockedDictionary<TKey, TValue> dictionary)
             {
                 _enumerator = dictionary._dictionary.GetEnumerator();

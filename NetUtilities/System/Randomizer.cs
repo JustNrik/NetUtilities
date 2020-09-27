@@ -1,6 +1,6 @@
-﻿using NetUtilities;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using NetUtilities;
 
 namespace System
 {

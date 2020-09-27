@@ -1,136 +1,151 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using NetUtilities;
 
 namespace System.Reflection
 {
     /// <summary>
-    /// Handy class to map reflection metadata and provide high performance runtime manipulation.
+    ///     Handy class to map reflection metadata and provide high performance runtime manipulation.
     /// </summary>
-    public sealed class Mapper 
+    public sealed class Mapper
     {
         private const BindingFlags All = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic;
 
-        private readonly Type _source;
-        private ReadOnlyList<ConstructorData>? _constructors;
-        private ReadOnlyList<EventData>? _events;
-        private ReadOnlyList<FieldData>? _fields;
-        private ReadOnlyList<MethodData>? _methods;
-        private ReadOnlyList<MethodData>? _methodsExcludingObjectBaseMembers;
-        private ReadOnlyList<MethodData>? _methodsDeclaringTypeOnly;
-        private ReadOnlyList<PropertyData>? _properties;
+        private readonly Type _target;
+        private Lazy<ReadOnlyList<ConstructorData>> _constructors;
+        private Lazy<ReadOnlyList<EventData>> _events;
+        private Lazy<ReadOnlyList<FieldData>> _fields;
+        private Lazy<ReadOnlyList<MethodData>> _methods;
+        private Lazy<ReadOnlyList<MethodData>> _methodsExcludingObjectBaseMembers;
+        private Lazy<ReadOnlyList<MethodData>> _methodsDeclaringTypeOnly;
+        private Lazy<ReadOnlyList<PropertyData>> _properties;
 
         /// <summary>
-        /// Contains data related to the type's constructors
+        ///     Contains data related to the type's constructors
         /// </summary>
         public ReadOnlyList<ConstructorData> Constructors
-            => _constructors ?? (_constructors = _source.GetConstructors(All).Select(x => new ConstructorData(x, _source)).ToReadOnlyList());
+            => _constructors.Value;
 
         /// <summary>
-        /// Contains data related to the type's events
+        ///     Contains data related to the type's events
         /// </summary>
-        public ReadOnlyList<EventData> Events 
-            => _events ?? (_events = _source.GetEvents(All).Select(x => new EventData(x)).ToReadOnlyList());
+        public ReadOnlyList<EventData> Events
+            => _events.Value;
 
         /// <summary>
-        /// Contains data related to the type's fields
+        ///     Contains data related to the type's fields
         /// </summary>
         public ReadOnlyList<FieldData> Fields
-            => _fields ?? (_fields = _source.GetFields(All).Select(x => new FieldData(x)).ToReadOnlyList());
+            => _fields.Value;
 
         /// <summary>
-        /// Contains data related to the type's methods
+        ///     Contains data related to the type's methods
         /// </summary>
         public ReadOnlyList<MethodData> Methods
-            => _methods ?? (_methods = _source.GetMethods(All).Select(x => new MethodData(x)).ToReadOnlyList());
+            => _methods.Value;
 
         /// <summary>
-        /// Contains data related to the type's methods - excluding members inhereted from the Object base class
+        ///     Contains data related to the type's methods - excluding members inhereted from the Object base class
         /// </summary>
         public ReadOnlyList<MethodData> MethodsExcludingObjectBaseMembers
-            => _methodsExcludingObjectBaseMembers ?? (_methodsExcludingObjectBaseMembers = _source.GetMethods(All)
-            .Where(x => x.DeclaringType != typeof(Object)).Select(x => new MethodData(x)).ToReadOnlyList());
+            => _methodsExcludingObjectBaseMembers.Value;
 
         /// <summary>
-        /// Contains data related to the type's methods - excluding all inhereted members
+        ///     Contains data related to the type's methods - excluding all inhereted members
         /// </summary>
         public ReadOnlyList<MethodData> MethodsDeclaringTypeOnly
-            => _methodsDeclaringTypeOnly ?? (_methodsDeclaringTypeOnly = _source.GetMethods(All)
-            .Where(x => x.DeclaringType == _source).Select(x => new MethodData(x)).ToReadOnlyList());
+            => _methodsDeclaringTypeOnly.Value;
 
         /// <summary>
-        /// Contains data related to the type's properties
+        ///     Contains data related to the type's properties
         /// </summary>
         public ReadOnlyList<PropertyData> Properties
-            => _properties ?? (_properties = _source.GetProperties(All).Select(x => new PropertyData(x)).ToReadOnlyList());
+            => _properties.Value;
 
         /// <summary>
-        /// Creates the mapper for the given object.
+        ///     Initializes a new instance of <see cref="Mapper"/> class with the provided instance object.
         /// </summary>
-        /// <param name="object">The object.</param>
-        public Mapper([NotNull]object @object) : this(Ensure.NotNull(@object, nameof(@object)).GetType())
+        /// <param name="object">
+        ///     The object.
+        /// </param>
+        public Mapper(object @object) : this(Ensure.NotNull(@object).GetType())
         {
         }
 
         /// <summary>
-        /// Creates the mapper for the given type.
+        ///     Initializes a new instance of <see cref="Mapper"/> class with the provided type.
         /// </summary>
-        /// <param name="type">The type.</param>
-        public Mapper([NotNull]Type type)
+        /// <param name="type">
+        ///     The type.
+        /// </param>
+        public Mapper(Type type)
         {
-            if (type is null)
-                Throw.NullArgument(nameof(type));
+            Ensure.NotNull(type);
 
-            _source = type;
+            _target = type;
+            _constructors = new(() => _target.GetConstructors(All).Select(x => new ConstructorData(x, _target)).ToReadOnlyList(), true);
+            _events = new(() => _target.GetEvents(All).Select(x => new EventData(x)).ToReadOnlyList(), true);
+            _fields = new(() => _target.GetFields(All).Select(x => new FieldData(x)).ToReadOnlyList(), true);
+            _methods = new(() => _target.GetMethods(All).Select(x => new MethodData(x)).ToReadOnlyList(), true);
+            _methodsExcludingObjectBaseMembers = new(() => _methods.Value
+                .FindAll(x => x.Member.DeclaringType != typeof(object)), true);
+            _methodsDeclaringTypeOnly = new(() => _methods.Value
+                .FindAll(x => x.Member.DeclaringType == _target), true);
+            _properties = new(() => _target.GetProperties(All).Select(x => new PropertyData(x)).ToReadOnlyList(), true);
         }
     }
 
     /// <summary>
-    /// Handy class to map reflection metadata and provide high performance runtime manipulation.
+    ///     Handy class to map reflection metadata and provide high performance runtime manipulation.
     /// </summary>
-    /// <typeparam name="TMember">The type of the <see cref="MemberInfo"/></typeparam>
-    public static class Mapper<TMember> where TMember : MemberInfo
+    /// <typeparam name="T">
+    ///     The type.
+    /// </typeparam>
+    public static class Mapper<T> 
     {
-        private static readonly Mapper _mapper = new Mapper(typeof(TMember));
+        private static readonly Mapper _mapper = new Mapper(typeof(T));
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s constructors.
+        ///     Gets the data about all constructors of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<ConstructorData> Constructors => _mapper.Constructors;
+        public static ReadOnlyList<ConstructorData> Constructors 
+            => _mapper.Constructors;
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s events.
+        ///     Gets the data about all events of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<EventData> Events => _mapper.Events;
+        public static ReadOnlyList<EventData> Events 
+            => _mapper.Events;
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s fields.
+        ///     Gets the data about all fields of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<FieldData> Fields => _mapper.Fields;
+        public static ReadOnlyList<FieldData> Fields 
+            => _mapper.Fields;
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s methods.
+        ///     Gets the data about all methods of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<MethodData> Methods => _mapper.Methods;
+        public static ReadOnlyList<MethodData> Methods 
+            => _mapper.Methods;
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s methods 
-        /// - excluding members inhereted from the object base class
+        ///     Gets the data about all methods of <typeparamref name="T"/> excluding those inherited from <see cref="object"/>.
         /// </summary>
         public static ReadOnlyList<MethodData> MethodsExcludingObjectBaseMembers
             => _mapper.MethodsExcludingObjectBaseMembers;
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s methods 
-        /// - excluding all inhereted members
+        ///     Gets the data about all methods declared by <typeparamref name="T"/>.
         /// </summary>
         public static ReadOnlyList<MethodData> MethodsDeclaringTypeOnly
             => _mapper.MethodsDeclaringTypeOnly;
 
         /// <summary>
-        /// Contains data related to <typeparamref name="TMember"/>'s properties.
+        /// Contains data related to <typeparamref name="T"/>'s properties.
         /// </summary>
-        public static ReadOnlyList<PropertyData> Properties => _mapper.Properties;
+        public static ReadOnlyList<PropertyData> Properties 
+            => _mapper.Properties;
     }
 }

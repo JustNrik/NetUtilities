@@ -1,7 +1,7 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NetUtilities;
 
 namespace System
 {
@@ -25,10 +25,10 @@ namespace System
         /// <summary>
         /// Creates an instance of <see cref="EventManager{TSource}"/> with the instance of the source provided.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when source is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when source is <see langword="null"/>.</exception>
         /// <param name="source">The source of the events</param>
         public EventManager(TSource source)
-            => Source = Ensure.NotNull(source, nameof(source));
+            => Source = Ensure.NotNull(source);
 
 
         /// <summary>

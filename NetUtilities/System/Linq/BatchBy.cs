@@ -1,47 +1,69 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using NetUtilities;
 
 namespace System.Linq
 {
-    public static partial class LinqUtilities
+    /// <summary>
+    ///     More extensions method for <see cref="Linq"/>.
+    /// </summary>
+    public static partial class LinqExtensions
     {
         /// <summary>
-        /// Batches the collection into a collection of collection of an specific size.
+        ///     Batches the collection into a collection of collections of an specific size.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when either source or selector are null.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when a negative size is given.</exception>
-        /// <typeparam name="TSource">The underlying type of the collection.</typeparam>
-        /// <param name="source">The collection.</param>
-        /// <param name="size">The size of the buckets.</param>
-        /// <returns>An enumerable bulked by the given size.</returns>
-        [return: NotNull]
+        /// <typeparam name="TSource">
+        ///     The underlying type of the collection.
+        /// </typeparam>
+        /// <param name="source">
+        ///     The collection.
+        /// </param>
+        /// <param name="size">
+        ///     The size of the buckets.
+        /// </param>
+        /// <returns>
+        ///     An enumerable bulked by the given size.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when either source or selector are <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when a negative size is given.
+        /// </exception>
         public static IEnumerable<IEnumerable<TSource>> BatchBy<TSource>(this IEnumerable<TSource> source, int size)
             => BatchBy(source, size, x => x);
 
         /// <summary>
-        /// <summary>
-        /// Batches the collection into a collection of collection of an specific size and returns the selected member.
+        ///     Batches the collection into a collection of collection of an specific size and returns the selected member.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when either source or selector are null</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when a negative size is given</exception>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="source">The source collection.</param>
-        /// <param name="size">The size of the buckets.</param>
-        /// <param name="selector">The selector delegate.</param>
-        /// <returns>An enumerable bulked by the given size.</returns>
-        [return: NotNull]
+        /// <typeparam name="TSource">
+        ///     The underlying type of the source collection.
+        /// </typeparam>
+        /// <typeparam name="TResult">
+        ///     The underlying type of the resulting collection.
+        /// </typeparam>
+        /// <param name="source">
+        ///     The source collection.
+        /// </param>
+        /// <param name="size">
+        ///     The size of the buckets.
+        /// </param>
+        /// <param name="selector">
+        ///     The selector delegate.
+        /// </param>
+        /// <returns>
+        ///     An enumerable bulked by the given size.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when either source or selector are <see langword="null"/>.
+        /// </exception>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when size is less than 0.
+        /// </exception>
         public static IEnumerable<TResult> BatchBy<TSource, TResult>(this IEnumerable<TSource> source, int size, Func<IEnumerable<TSource>, TResult> selector)
         {
-            if (source is null)
-                Throw.NullArgument(nameof(source));
-
-            if (selector is null)
-                Throw.NullArgument(nameof(selector));
-
-            if (size < 0)
-                Throw.InvalidOperation($"Batch size must be positive.");
+            Ensure.NotNull(source);
+            Ensure.NotNull(selector);
+            Ensure.CanOperate(size < 0, "Batch size must be positive.");
 
             return BatchByIterator(source, selector, size);
         }
@@ -56,7 +78,7 @@ namespace System.Linq
 
         private static IEnumerable<TSource> BatchByBulker<TSource>(IEnumerator<TSource> enumerator, int size)
         {
-            do 
+            do
                 yield return enumerator.Current;
             while (--size > 0 && enumerator.MoveNext());
         }
