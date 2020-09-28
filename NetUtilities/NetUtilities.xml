@@ -4,15 +4,97 @@
         <name>NetUtilities</name>
     </assembly>
     <members>
-        <member name="T:System.CapturedExceptionEventArgs">
+        <member name="T:System.ActionScope">
             <summary>
-            This class contains the <see cref="P:System.CapturedExceptionEventArgs.Exception"/> throw on <see cref="T:System.DefaultSynchronizationContext"/>. 
-            If multiple exceptions are throw, they will be wrapped on an <see cref="T:System.AggregateException"/>.
+                Represets a local action, which will be executed instanly and undone when the scope ends.
             </summary>
         </member>
-        <member name="P:System.CapturedExceptionEventArgs.Exception">
+        <member name="M:System.ActionScope.Create(System.Action,System.Action)">
             <summary>
-            The exception.
+                Creates an <see cref="T:System.ActionScope"/> with the provided starting action and undo action.
+            </summary>
+            <param name="startAction">
+                The starting action.
+            </param>
+            <param name="undoAction">
+                The undo action.
+            </param>
+            <returns>
+                An <see cref="T:System.ActionScope"/> instance.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either <paramref name="startAction"/> or <paramref name="undoAction"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.ActionScope.Cancel">
+            <summary>
+                Prevents the undo action to be executed.
+            </summary>
+        </member>
+        <member name="M:System.ActionScope.Dispose">
+            <summary>
+                Executes the undo action and disposes the internal <see cref="T:System.Threading.CancellationTokenSource"/>.
+            </summary>
+        </member>
+        <member name="T:System.ActionScope`1">
+            <summary>
+                Represets a local action, which will be executed instanly and undone when the scope ends.
+            </summary>
+            <typeparam name="TState">
+                The arguments to be used in the scope.
+            </typeparam>
+        </member>
+        <member name="M:System.ActionScope`1.Create(`0,System.Action{`0},System.Action{`0})">
+            <summary>
+                Creates an <see cref="T:System.ActionScope"/> with the provided starting action and undo action.
+            </summary>
+            <param name="state">
+                The state.
+            </param>
+            <param name="startAction">
+                The starting action.
+            </param>
+            <param name="undoAction">
+                The undo action.
+            </param>
+            <returns>
+                An <see cref="T:System.ActionScope`1"/> instance.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="state"/>, <paramref name="startAction"/> or <paramref name="undoAction"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Collections.Generic.Dictionary64`2.EnsureCapacity(System.Int32)">
+            <summary>
+                Ensures that the dictionary can hold up to 'capacity' entries without any further expansion of its backing storage
+            </summary>
+        </member>
+        <member name="M:System.Collections.Generic.Dictionary64`2.TrimExcess">
+             <summary>
+             Sets the capacity of this dictionary to what it would be if it had been originally initialized with all its entries
+             </summary>
+             <remarks>
+             This method can be used to minimize the memory overhead
+             once it is known that no new elements will be added.
+            
+             To allocate minimum size storage array, execute the following statements:
+            
+             dictionary.Clear();
+             dictionary.TrimExcess();
+             </remarks>
+        </member>
+        <member name="M:System.Collections.Generic.Dictionary64`2.TrimExcess(System.Int32)">
+            <summary>
+            Sets the capacity of this dictionary to hold up 'capacity' entries without any further expansion of its backing storage
+            </summary>
+            <remarks>
+            This method can be used to minimize the memory overhead
+            once it is known that no new elements will be added.
+            </remarks>
+        </member>
+        <member name="T:System.Collections.Generic.GenericCollectionExtensions">
+            <summary>
+                Extension methods for generic collections.
             </summary>
         </member>
         <member name="M:System.Collections.Generic.GenericCollectionExtensions.AsIndexed``1(System.Collections.Generic.IEnumerable{``0})">
@@ -2401,9 +2483,6 @@
             <inheritdoc/>
         </member>
         <member name="M:System.UInt24.CompareTo(System.UInt24)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.UInt24.CompareTo(System.Nullable{System.UInt24})">
             <inheritdoc/>
         </member>
         <member name="M:System.UInt24.ToString(System.String,System.IFormatProvider)">

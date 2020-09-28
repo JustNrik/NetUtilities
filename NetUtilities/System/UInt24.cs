@@ -62,8 +62,7 @@ namespace System
         /// </param>
         public UInt24(uint value)
         {
-            Ensure.IsInRange(value <= MaxValue, value);
-
+            Ensure.NotOutOfRange(value <= MaxValue, value);
             _value = value;
         }
 
@@ -92,6 +91,9 @@ namespace System
         /// <inheritdoc/>
         public int CompareTo(UInt24 other)
             => _value.CompareTo(other._value);
+
+        public int CompareTo(UInt24? other)
+            => other is null ? 1 : _value.CompareTo(other.Value._value);
 
         int IComparable.CompareTo(object obj)
             => obj is UInt24 uInt24 ? _value.CompareTo(uInt24._value) : throw new ArgumentException(nameof(obj));
