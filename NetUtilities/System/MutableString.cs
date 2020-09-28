@@ -1,12 +1,12 @@
-﻿using JetBrains.Annotations;
-using NetUtilities;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
+using NetUtilities;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
 namespace System
@@ -124,11 +124,7 @@ namespace System
         /// <param name="options">The <see cref="RegexOptions"/> to be used</param>
         /// <returns>A collection of <see cref="Match"/> objects</returns>
         public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
-        {
-            [MethodImplementation(Inlined)]
-            [return: NotNull]
-            get => GetMatches(pattern, options);
-        }
+            => GetMatches(pattern, options);
 
         /// <summary>
         /// Returns a <see cref="string"/> with the replacement applied on the pattern given. This method doesn't mutate the current instance.
@@ -142,22 +138,6 @@ namespace System
             [MethodImplementation(Inlined)]
             [return: NotNull]
             get => Regex.Replace(this, pattern, replacement, options);
-        }
-
-        /// <summary>
-        /// Returns a <see cref="string"/>[] delimited with the characters provided. An empty array if not found. 
-        /// You can optionally provide the start index and whether to include the bounds or not.
-        /// </summary>
-        /// <param name="leftBound"/>
-        /// <param name="rightBound"/>
-        /// <param name="startIndex"/>
-        /// <param name="includeBounds"/>
-        /// <returns/>
-        public string[] this[char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false]
-        {
-            [MethodImplementation(Inlined)]
-            [return: NotNull]
-            get => this.SubstringsBetween(leftBound, rightBound, startIndex, includeBounds);
         }
 
         /// <summary>
@@ -515,7 +495,7 @@ namespace System
 
         public MutableString Remove(params char[]? chars)
         {
-            Ensure.NotNull(chars, nameof(chars));
+            Ensure.NotNull(chars);
             if (chars!.Length == 0) return this;
 
             foreach (var c in chars)
@@ -680,7 +660,7 @@ namespace System
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="words">The words.</param>
-        /// <returns><see langword="true"/> if the string contains any of the providen words, otherwise <see langword="false"=""/></returns>
+        /// <returns><see langword="true"/> if the string contains any of the provided words, otherwise, <see langword="false"=""/></returns>
         public bool ContainsAny(params string[] words)
         {
             foreach (var word in words)
@@ -696,7 +676,7 @@ namespace System
         /// </summary>
         /// <param name="str">The string.</param>
         /// <param name="words">The words.</param>
-        /// <returns><see langword="true"/> if the string contains all of the providen words, otherwise <see langword="false"=""/></returns>
+        /// <returns><see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"=""/></returns>
         public bool ContainsAll(params string[] words)
         {
             foreach (var word in words)
@@ -784,7 +764,7 @@ namespace System
 
         public int IndexOfAny(params char[]? chars)
         {
-            Ensure.NotNull(chars, nameof(chars));
+            Ensure.NotNull(chars);
             if (chars!.Length == 0) return -1;
 
             foreach (var c in chars)
@@ -828,7 +808,7 @@ namespace System
 
         public int LastIndexOfAny(params char[]? chars)
         {
-            Ensure.NotNull(chars, nameof(chars));
+            Ensure.NotNull(chars);
             if (chars!.Length == 0) return -1;
 
             foreach (var c in chars)
@@ -848,8 +828,7 @@ namespace System
         /// <returns></returns>
         public MutableString Indent(int count, char indent = ' ')
         {
-            if (count < 0)
-                Throw.ArgumentOutOfRange(nameof(count));
+            Ensure.IsInRange(count >= 0, count);
 
             _builder.AppendLine();
             _builder.Append(new string(indent, count));
@@ -895,13 +874,13 @@ namespace System
 
         public bool EndsWith(string? value)
         {
-            if (value is null || value.Length > Length) 
+            if (value is null || value.Length > Length)
                 return false;
 
-            if (value.Length == 0) 
+            if (value.Length == 0)
                 return Length == 0;
 
-            if (value.Length == Length) 
+            if (value.Length == Length)
                 return this == value;
 
             for (var index = 0; index < value.Length; index++)
@@ -957,7 +936,7 @@ namespace System
         #region Regex
         public bool ContainsPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
         {
-            Ensure.NotNull(pattern, nameof(pattern));
+            Ensure.NotNull(pattern);
             return Regex.IsMatch(this, pattern, options);
         }
 
@@ -966,7 +945,7 @@ namespace System
             [AllowNull]string replacement,
             RegexOptions options = RegexOptions.None)
         {
-            Ensure.NotNull(pattern, nameof(pattern));
+            Ensure.NotNull(pattern);
 
             replacement ??= string.Empty;
 
@@ -982,15 +961,15 @@ namespace System
 
         [MethodImplementation(Inlined)]
         public Match GetMatch([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
-            => Regex.Match(this, Ensure.NotNull(pattern, nameof(pattern)), options);
+            => Regex.Match(this, Ensure.NotNull(pattern), options);
 
         [MethodImplementation(Inlined)]
         public MatchCollection GetMatches([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
-            => Regex.Matches(this, Ensure.NotNull(pattern, nameof(pattern)), options);
+            => Regex.Matches(this, Ensure.NotNull(pattern), options);
 
         [MethodImplementation(Inlined)]
         public string[] SplitPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
-            => Regex.Split(this, Ensure.NotNull(pattern, nameof(pattern)), options);
+            => Regex.Split(this, Ensure.NotNull(pattern), options);
         #endregion
         #region Substring
         public string Substring(int startIndex)
@@ -1042,8 +1021,10 @@ namespace System
 
         public MutableString Trim(params char[]? chars)
         {
-            if (chars is null) throw new ArgumentNullException(nameof(chars));
-            if (chars.Length == 0) return this;
+            Ensure.NotNull(chars);
+
+            if (chars.Length == 0)
+                return this;
 
             foreach (var c in chars)
                 Trim(c);
@@ -1070,8 +1051,10 @@ namespace System
 
         public MutableString TrimStart(params char[]? chars)
         {
-            if (chars is null) throw new ArgumentNullException(nameof(chars));
-            if (chars.Length == 0) return this;
+            Ensure.NotNull(chars);
+
+            if (chars.Length == 0) 
+                return this;
 
             foreach (var c in chars)
                 TrimStart(c);
@@ -1098,8 +1081,10 @@ namespace System
 
         public MutableString TrimEnd(params char[]? chars)
         {
-            if (chars is null) throw new ArgumentNullException(nameof(chars));
-            if (chars.Length == 0) return this;
+            Ensure.NotNull(chars);
+
+            if (chars.Length == 0) 
+                return this;
 
             foreach (var c in chars)
                 TrimEnd(c);
@@ -1127,8 +1112,11 @@ namespace System
 
         private void EnsureRange(int startIndex, int count)
         {
-            if ((uint)startIndex > Length || startIndex + count > Length) throw new ArgumentOutOfRangeException(nameof(startIndex));
-            if (count < 0) throw new ArgumentOutOfRangeException(nameof(count));
+            if ((uint)startIndex > Length || startIndex + count > Length)
+                throw new ArgumentOutOfRangeException(nameof(startIndex));
+
+            if (count < 0)
+                throw new ArgumentOutOfRangeException(nameof(count));
         }
 
         #endregion

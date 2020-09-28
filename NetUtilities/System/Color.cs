@@ -1,5 +1,5 @@
-﻿using NetUtilities;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using NetUtilities;
 
 namespace System
 {
@@ -19,8 +19,7 @@ namespace System
 
         public Color(uint value)
         {
-            if (value > UInt24.MaxValue)
-                Throw.ArgumentOutOfRange($"The value must be lower than or equal to {UInt24.MaxValue}");
+            Ensure.IsInRange(value <= UInt24.MaxValue, value, $"The value must be lower than or equal to {UInt24.MaxValue}");
 
             RawValue = (UInt24)value;
         }
@@ -30,28 +29,18 @@ namespace System
 
         public Color(int r, int g, int b)
         {
-            if ((uint)r > 255)
-                Throw.ArgumentOutOfRange(nameof(r), "The value must be in the [0, 255] range");
-
-            if ((uint)g > 255)
-                Throw.ArgumentOutOfRange(nameof(g), "The value must be in the [0, 255] range");
-
-            if ((uint)b > 255)
-                Throw.ArgumentOutOfRange(nameof(b), "The value must be in the [0, 255] range");
+            Ensure.IsInRange((uint)r <= 255, r, "The value must be in the [0, 255] range");
+            Ensure.IsInRange((uint)g <= 255, g, "The value must be in the [0, 255] range");
+            Ensure.IsInRange((uint)b <= 255, b, "The value must be in the [0, 255] range");
 
             RawValue = (UInt24)((uint)r << 16 | (uint)g << 8 | (uint)b);
         }
 
         public Color(float r, float g, float b)
         {
-            if (r < 0f || r > 1f)
-                Throw.ArgumentOutOfRange(nameof(r), "The value must be in the [0.0, 1.0] range");
-
-            if (g < 0f || g > 1f)
-                Throw.ArgumentOutOfRange(nameof(g), "The value must be in the [0.0, 1.0] range");
-
-            if (b < 0f || b > 1f)
-                Throw.ArgumentOutOfRange(nameof(b), "The value must be in the [0.0, 1.0] range");
+            Ensure.IsInRange(r >= 0f && r <= 1f, r, "The value must be in the [0.0, 1.0] range");
+            Ensure.IsInRange(g >= 0f && g <= 1f, g, "The value must be in the [0.0, 1.0] range");
+            Ensure.IsInRange(b >= 0f && b <= 1f, b, "The value must be in the [0.0, 1.0] range");
 
             RawValue = (UInt24)(((uint)(r * 255f) << 16) | ((uint)(g * 255f) << 8) | (uint)(b * 255f));
         }

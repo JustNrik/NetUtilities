@@ -1,17 +1,28 @@
-﻿using NetUtilities;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using NetUtilities;
 
 namespace System.Reflection
 {
+    /// <inheritdoc/>
     public class ConstructorData : MemberData<ConstructorInfo>
     {
         private readonly Type _target;
         private Func<object[], object>? _constructor;
+
+        /// <summary>
+        ///     Gets the parameters of this constructor.
+        /// </summary>
         public ReadOnlyList<ParameterInfo> Parameters { get; }
 
+        /// <summary>
+        ///     Initializes a new instance of <see cref="ConstructorData"/> class 
+        ///     with the provided <see cref="ConstructorInfo"/> and target.
+        /// </summary>
+        /// <param name="constructor">The constructor.</param>
+        /// <param name="target">The target.</param>
         public ConstructorData(ConstructorInfo constructor, Type target) : base(constructor)
         {
             _target = target;
@@ -23,14 +34,12 @@ namespace System.Reflection
         /// </summary>
         /// <exception cref="InvalidOperationException">Throw if this constructors takes parameters or the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
         /// <returns>An instance of the type this constructor belongs to.</returns>
-        [return: NotNull]
         public object CreateInstance()
         {
-            if (_target.IsAbstract)
-                Throw.InvalidOperation("You cannot create an instance of an abstract type.");
-
-            if (Parameters.Count > 0)
-                Throw.InvalidOperation($"This constructor {_target.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
+            Ensure.CanOperate(!_target.IsAbstract, "You cannot create an instance of an abstract type.");
+            Ensure.CanOperate(
+                Parameters.Count == 0,
+                $"This constructor {_target.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
 
             return Factory.CreateInstance(_target);
         }
@@ -38,30 +47,28 @@ namespace System.Reflection
         /// <summary>
         /// Creates an instance of this constructor's type with the given arguments.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when args is null.</exception>
+        /// <exception cref="ArgumentNullException">Thrown when args is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
         /// <exception cref="ParameterCountMismatchException">Thrown when the supplied arguments count is different from the parameters count of this constructor.</exception>
         /// <param name="args"></param>
         /// <returns></returns>
         [return: NotNull]
-        public object CreateInstance([NotNull]params object[] args)
+        public object CreateInstance(params object[] args)
         {
-            if (args is null)
-                Throw.NullArgument(nameof(args));
+            Ensure.NotNull(args);
+            Ensure.CanOperate(!_target.IsAbstract, "You cannot create an instance of an abstract type.");
+            Ensure.CanOperate(
+                Parameters.Count == args.Length,
+                $"This constructor {_target.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
 
-            if (_target.IsAbstract)
-                Throw.InvalidOperation("You cannot create an instance of an abstract type.");
-
-            if (args.Length != Parameters.Count)
-                Throw.ParameterCountMismatch($"This constructor {_target.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
-
-            for (var index = 0; index < args.Length; index++)
+            for (var index = 0; index < Parameters.Count; index++)
             {
-                if (!args[index].GetType().CanBeConvertedTo(Parameters[index].ParameterType))
-                    Throw.InvalidOperation($"The type {args[index].GetType().Name} cannot be implicitly converted to {Parameters[index].ParameterType.Name}");
+                Ensure.CanOperate(
+                    Parameters[index].ParameterType.IsAssignableFrom(args[index].GetType()),
+                    $"The type {args[index].GetType().Name} cannot be assigned to {Parameters[index].ParameterType.Name}");
             }
 
-            if (_constructor is object)
+            if (_constructor is not null)
                 return _constructor(args);
 
             var array = Expression.Parameter(typeof(object[]));

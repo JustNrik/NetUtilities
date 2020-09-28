@@ -1,6 +1,6 @@
-﻿using NetUtilities;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Runtime.InteropServices;
+using NetUtilities;
 
 namespace System
 {
@@ -62,8 +62,7 @@ namespace System
         /// </param>
         public UInt24(uint value)
         {
-            if (value > MaxValue)
-                Throw.InvalidOperation("The value is outside the range of admited values.");
+            Ensure.IsInRange(value <= MaxValue, value);
 
             _value = value;
         }
@@ -94,11 +93,7 @@ namespace System
         public int CompareTo(UInt24 other)
             => _value.CompareTo(other._value);
 
-        /// <inheritdoc/>
-        public int CompareTo(UInt24? other)
-            => _value.CompareTo(other?._value);
-
-        int IComparable.CompareTo(object? obj)
+        int IComparable.CompareTo(object obj)
             => obj is UInt24 uInt24 ? _value.CompareTo(uInt24._value) : throw new ArgumentException(nameof(obj));
 
         /// <inheritdoc/>
@@ -382,19 +377,17 @@ namespace System
 
         public static UInt24 Parse(string input, NumberStyles style, IFormatProvider? provider)
         {
-            if (input is null)
-                Throw.NullArgument(nameof(input));
+            Ensure.NotNull(input);
 
             if (uint.TryParse(input, style, provider, out var parsed))
             {
                 if (parsed > MaxValue)
-                    Throw.Overflow("The value represented by the string is outside of the allowed ranged.");
+                    throw new OverflowException("The value represented by the string is outside of the allowed ranged.");
 
                 return new UInt24(parsed);
             }
 
-            Throw.InvalidFormat("The string is not in a valid format");
-            return default;
+            throw new FormatException("The string is not in a valid format");
         }
 
         public static bool TryParse(string? input, out UInt24 result)

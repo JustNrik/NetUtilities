@@ -1,35 +1,50 @@
-﻿using NetUtilities;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Xml.Serialization;
+using NetUtilities;
 
 namespace System.Xml
 {
     public static class XmlConvert
     {
         /// <summary>
-        /// Serializes the object into XML Format
+        ///     Serializes the object into XML Format
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown if the object is null</exception>
-        /// <typeparam name="T">Type of the object that will be serialized</typeparam>
-        /// <param name="obj">The object to be serialized</param>
-        /// <returns>A string with the XML representation of the object provided.</returns>
-        [return: NotNull]
+        /// <typeparam name="T">
+        ///     Type of the object that will be serialized
+        /// </typeparam>
+        /// <param name="obj">
+        ///     The object to be serialized
+        /// </param>
+        /// <returns>
+        ///     A string with the XML representation of the object provided.
+        /// </returns>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if the object is <see langword="null"/>.
+        /// </exception>
         public static string SerializeObject<T>(T obj) where T : notnull
         {
             using var stringWriter = new StringWriter();
             var serializer = new XmlSerializer(typeof(T));
-            serializer.Serialize(stringWriter, Ensure.NotNull(obj, nameof(obj)));
+            serializer.Serialize(stringWriter, Ensure.NotNull(obj));
             return stringWriter.ToString();
         }
 
         /// <summary>
-        /// Deserializes a XML Formatted string into an object
+        ///     Deserializes a XML Formatted string into an object
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown if the deserialization fails.</exception>
-        /// <typeparam name="T">Type of the object that will be serialized</typeparam>
-        /// <param name="input">The Formatted XML string</param>
-        /// <returns>An object.</returns>
+        /// <typeparam name="T">
+        ///     Type of the object that will be serialized
+        /// </typeparam>
+        /// <param name="input">
+        ///     The Formatted XML string
+        /// </param>
+        /// <returns>
+        ///     The object of type <typeparamref name="T"/> being deserialized.
+        /// </returns>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown if the deserialization fails.
+        /// </exception>
         [return: NotNull]
         public static T DeserializeObject<T>(string input)
         {

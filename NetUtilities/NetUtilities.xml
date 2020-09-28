@@ -4,42 +4,191 @@
         <name>NetUtilities</name>
     </assembly>
     <members>
+        <member name="T:System.CapturedExceptionEventArgs">
+            <summary>
+            This class contains the <see cref="P:System.CapturedExceptionEventArgs.Exception"/> throw on <see cref="T:System.DefaultSynchronizationContext"/>. 
+            If multiple exceptions are throw, they will be wrapped on an <see cref="T:System.AggregateException"/>.
+            </summary>
+        </member>
+        <member name="P:System.CapturedExceptionEventArgs.Exception">
+            <summary>
+            The exception.
+            </summary>
+        </member>
         <member name="M:System.Collections.Generic.GenericCollectionExtensions.AsIndexed``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            Enumerates the provided collection with an index.
+                Enumerates the provided collection with an index.
             </summary>
-            <typeparam name="T">The underlying type of the collection.</typeparam>
-            <param name="source">The source.</param>
-            <returns>An collection enumerated by index.</returns>
+            <typeparam name="T">
+                The underlying type of the collection.
+            </typeparam>
+            <param name="source">
+                The source.
+            </param>
+            <returns>
+                A collection enumerated by index.
+            </returns>
         </member>
         <member name="M:System.Collections.Generic.GenericCollectionExtensions.Shuffle``1(System.Collections.Generic.IList{``0},System.Byte)">
             <summary>
-            Shuffles the provided collection. 
-            You can optionally provide the amount of iterations. 
-            High values may have a negative impact on performance.
+                Shuffles the provided collection. 
             </summary>
-            <typeparam name="T">The type.</typeparam>
-            <param name="source">The source.</param>
-            <param name="iterations">The amount of iterations to perform.</param>
+            <remarks>
+                You can optionally provide the amount of iterations. 
+                High values may have a negative impact on performance.
+            </remarks>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <param name="source">
+                The source.
+            </param>
+            <param name="iterations">
+                The amount of iterations to perform.
+            </param>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.AddOrUpdate``1(System.Collections.Generic.IList{``0},``0)">
+            <summary>
+                Adds an element to a <see cref="T:System.Collections.Generic.IList`1"/> if it doesn't exists, otherwise it updates it.
+            </summary>
+            <typeparam name="T">
+                The type of the element to be added.
+            </typeparam>
+            <param name="source">
+                The source collection.
+            </param>
+            <param name="element">
+                The element to search.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown if the source is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.
+            </exception>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+            <summary>
+                Gets a value given the key, or adds it if it doesn't exists.
+            </summary>
+            <typeparam name="TKey">
+                The type of the key.
+            </typeparam>
+            <typeparam name="TValue">
+                The type of the value.
+            </typeparam>
+            <param name="source">
+                The source dictionary.
+            </param>
+            <param name="key">
+                The key.
+            </param>
+            <param name="value">
+                The value.
+            </param>
+            <returns>
+                The value associated to the provided key.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either the source or the key are <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                Throw when <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> is <see langword="true"/>.
+            </exception>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[])">
+            <summary>
+                Indicates if the array contains the provided sequence.
+            </summary>
+            <typeparam name="T">
+                The underlying type of the array.
+            </typeparam>
+            <param name="array">
+                The array.
+            </param>
+            <param name="sequence">
+                The sequence.
+            </param>
+            <returns>
+                <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[],System.Int32,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+                Indicates if the array contains the given sequence from the provided starting index.
+            </summary>
+            <typeparam name="T">
+                The underlying type of the array.
+            </typeparam>
+            <param name="array">
+                The array.
+            </param>
+            <param name="sequence">
+                The sequence.
+            </param>
+            <param name="startIndex">
+                The start index.
+            </param>
+            <returns>
+                <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="startIndex"/> is negative, higher than or equal to the length of <paramref name="array"/>.
+            </exception>
+        </member>
+        <member name="M:System.Collections.Generic.GenericCollectionExtensions.ContainsSequence``1(``0[],``0[],System.Int32,System.Int32,System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+                Indicates if the array contains the given sequence from the provided range.
+            </summary>
+            <typeparam name="T">
+                The underlying type of the array.
+            </typeparam>
+            <param name="array">
+                The array.
+            </param>
+            <param name="sequence">
+                The sequence.
+            </param>
+            <param name="startIndex">
+                The start index.
+            </param>
+            <param name="count">
+                The count.
+            </param>
+            <returns>
+                <see langword="true"/> if the array contains the sequence; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="array"/> or <paramref name="sequence"/> are <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="startIndex"/> and <paramref name="count"/> do not represent a valid range in the array.
+            </exception>
         </member>
         <member name="T:System.Collections.Generic.Lookup`2">
             <summary>
-            This class is an implementation of an one-to-many dictionary.
+                This class is an implementation of an one-to-many dictionary.
             </summary>
-            <typeparam name="TKey"></typeparam>
-            <typeparam name="TValue"></typeparam>
+            <typeparam name="TKey">
+                The key type.
+            </typeparam>
+            <typeparam name="TValue">
+                The value type.
+            </typeparam>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.#ctor">
             <summary>
-            Creates an empty <see cref="T:System.Collections.Generic.Lookup`2"/>
+                Initializes a new instance of the <see cref="T:System.Collections.Generic.Lookup`2"/> <see langword="class"/>.
             </summary>
         </member>
         <member name="P:System.Collections.Generic.Lookup`2.Item(`0)">
-            <summary>
-            Gets or sets the list associated with the given key.
-            </summary>
-            <param name="key">The key.</param>
-            <returns>A list with all values that are pointed from that key.</returns>
+            <inheritdoc/>
         </member>
         <member name="P:System.Collections.Generic.Lookup`2.Count">
             <inheritdoc/>
@@ -53,17 +202,21 @@
         <member name="P:System.Collections.Generic.Lookup`2.IsReadOnly">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.Add(`0,System.Collections.Generic.List{`1})">
+        <member name="M:System.Collections.Generic.Lookup`2.Add(`0,System.Collections.Generic.IList{`1})">
             <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.Add(`0,`1)">
             <summary>
-            Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.Lookup`2"/>.
+                Adds an element with the provided key and value to the <see cref="T:System.Collections.Generic.Lookup`2"/>.
             </summary>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
+            <param name="key">
+                The key.
+            </param>
+            <param name="value">
+                The value.
+            </param>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.Add(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}})">
+        <member name="M:System.Collections.Generic.Lookup`2.Add(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.IList{`1}})">
             <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.Clear">
@@ -72,13 +225,13 @@
         <member name="M:System.Collections.Generic.Lookup`2.Contains(`0)">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.Contains(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}})">
+        <member name="M:System.Collections.Generic.Lookup`2.Contains(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.IList{`1}})">
             <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.ContainsKey(`0)">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}}[],System.Int32)">
+        <member name="M:System.Collections.Generic.Lookup`2.CopyTo(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.IList{`1}}[],System.Int32)">
             <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.GetEnumerator">
@@ -87,79 +240,59 @@
         <member name="M:System.Collections.Generic.Lookup`2.Remove(`0)">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.Remove(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.List{`1}})">
+        <member name="M:System.Collections.Generic.Lookup`2.Remove(System.Collections.Generic.KeyValuePair{`0,System.Collections.Generic.IList{`1}})">
             <inheritdoc/>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.Remove(`0,`1)">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.TryGetValue(`0,System.Collections.Generic.List{`1}@)">
+        <member name="M:System.Collections.Generic.Lookup`2.TryGetValue(`0,System.Collections.Generic.IList{`1}@)">
             <inheritdoc/>
         </member>
         <member name="T:System.Collections.Generic.Lookup`2.LookupEnumerator">
-            <summary>
-            Supports a simple iteration over a generic collection.
-            </summary>
+            <inheritdoc cref="T:System.Collections.Generic.IEnumerator`1"/>
         </member>
         <member name="P:System.Collections.Generic.Lookup`2.LookupEnumerator.Current">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.LookupEnumerator.#ctor(System.Collections.Generic.IDictionary{`0,System.Collections.Generic.List{`1}})">
+        <member name="M:System.Collections.Generic.Lookup`2.LookupEnumerator.#ctor(System.Collections.Generic.IDictionary{`0,System.Collections.Generic.IList{`1}})">
             <summary>
-            Creates an enumerator to iterate over a <paramref name="lookup"/>
+                Initializes a new instance of the <see cref="T:System.Collections.Generic.Lookup`2.LookupEnumerator"/> <see langword="struct"/> 
+                with the provided lookup.
             </summary>
-            <param name="lookup"></param>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.LookupEnumerator.MoveNext">
             <inheritdoc/>
         </member>
         <member name="T:System.Collections.Generic.Lookup`2.Grouping">
-            <summary>
-            Represents a collection of objects that have a common key.
-            </summary>
+            <inheritdoc cref="T:System.Linq.IGrouping`2"/>
         </member>
         <member name="P:System.Collections.Generic.Lookup`2.Grouping.Key">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Generic.Lookup`2.Grouping.#ctor(`0,System.Collections.Generic.List{`1})">
+        <member name="M:System.Collections.Generic.Lookup`2.Grouping.#ctor(`0,System.Collections.Generic.IList{`1})">
             <summary>
-            Creates a grouping with the providen key and values.
+                Initializes a new instance of the <see cref="T:System.Linq.IGrouping`2"/> <see langword="struct"/> 
+                with the provided keys and values.
             </summary>
-            <param name="key">The key.</param>
-            <param name="values">The values.</param>
+            <param name="key">
+                The key.
+            </param>
+            <param name="values">
+                The values.
+            </param>
         </member>
         <member name="M:System.Collections.Generic.Lookup`2.Grouping.GetEnumerator">
             <summary>
-            Returns an enumerator that iterates through the <see cref="T:System.Collections.Generic.List`1"/>
+            Returns an enumerator that iterates through the <see cref="T:System.Collections.Generic.IList`1"/>
             </summary>
-            <returns>An enumerator that iterates through the <see cref="T:System.Collections.Generic.List`1"/></returns>
+            <returns>An enumerator that iterates through the <see cref="T:System.Collections.Generic.IList`1"/></returns>
         </member>
         <member name="T:System.Collections.Generic.ReadOnlyList`1">
             <summary>
             A true readonly generic list which provides most of <see cref="T:System.Collections.Generic.List`1"/> methods.
             </summary>
             <typeparam name="T">The generic type of this instance</typeparam>
-        </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
-            <summary>
-            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from an <see cref="T:System.Collections.Generic.IEnumerable`1"/>
-            </summary>
-            <exception cref="T:System.ArgumentNullException">This exception is thrown the if argument is null</exception>
-            <param name="source">The source to create the list.</param>
-        </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0})">
-            <summary>
-            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from a given <see cref="T:System.Collections.Generic.List`1"/>.
-            By default the reference of the source list is kept.
-            </summary>
-            <param name="source">The source to create the list.</param>
-        </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
-            <summary>
-            Creates a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from a given <see cref="T:System.Collections.Generic.List`1"/>.
-            </summary>
-            <param name="source">The source list.</param>
-            <param name="keepReference">Determines if the reference of the source list should be kept.</param>
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Int32)">
             <inheritdoc/>
@@ -169,231 +302,140 @@
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Item(System.Range)">
             <summary>
-            Returns all elements in the given range.
+                Gets a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> containing all elements in the provided range.
             </summary>
-            <param name="range">The range where all elements will be taken.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
-            <returns>A new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements in the given range.</returns>
+            <param name="range">
+               The range where all elements will be taken.
+            </param>
+            <returns>
+                A new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> containing all elements in the provided range.
+            </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when the range is outside of the bounds of this list.
+            </exception>
         </member>
         <member name="P:System.Collections.Generic.ReadOnlyList`1.Count">
             <inheritdoc/>
         </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> <see langword="class"/>
+                with the provided enumerable source.
+            </summary>
+            <param name="source">
+                The source.
+            </param>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0})">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.Collections.Generic.Lookup`2"/> <see langword="class"/> 
+                with the provided list.
+            </summary>
+            <param name="source">
+                The source list.
+            </param>
+        </member>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.Collections.Generic.Lookup`2"/> <see langword="class"/>
+                with the provided list. Optionally you can indicate if the reference of the list should be kept.
+            </summary>
+            <param name="source">
+                The source list.
+            </param>
+            <param name="keepReference">
+                Indicates if the reference of the list should be kept.
+            </param>
+        </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.GetEnumerator">
             <summary>
-            Gets the enumerator for the current instance.
+                Returns an enumerator that iterates through the <see cref="T:System.Collections.Generic.ReadOnlyList`1"/>.
             </summary>
-            <returns>An enumerator for the current instance.</returns>
+            <returns>
+                A <see cref="T:System.Collections.Generic.List`1.Enumerator"/> for the <see cref="T:System.Collections.Generic.ReadOnlyList`1"/>.
+            </returns>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0)">
-            <summary>
-            Finds the index of the given item.
-            </summary>
-            <param name="item">The item whose index will be searched.</param>
-            <returns>The index of the given item, -1 if it's not found.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.IndexOf(`0)"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0,System.Int32)">
-            <summary>
-            Finds the index of the given item starting from the index given.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
-            <param name="item">The item whose index will be searched.</param>
-            <param name="startIndex">The starting index where the search will begin.</param>
-            <returns>The index of the given item, -1 if it's not found.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.IndexOf(`0,System.Int32)"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.IndexOf(`0,System.Int32,System.Int32)">
-            <summary>
-            Finds the index of the given item starting from the index given.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
-            <param name="item">The item whose index will be searched.</param>
-            <param name="startIndex">The starting index where the search will begin.</param>
-            <param name="count">The amount of items that will be searched.</param>
-            <returns>The index of the given item, -1 if it's not found.</returns>
-            <inheritdoc/>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.IndexOf(`0,System.Int32,System.Int32)"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.Contains(`0)">
-            <summary>
-            Returns true if the list contains the provided element. otherwise false.
-            </summary>
-            <param name="item">The item that will be searched.</param>
-            <returns>true if the items is found, otherwise false.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.Contains(`0)"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.Find(System.Predicate{`0})">
-            <summary>
-            Finds the first element that matches the given predicate.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The first item that matches the predicate. otherwise default.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.Find(System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLast(System.Predicate{`0})">
-            <summary>
-            Finds the last element that matches the given predicate
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The first item that matches the predicate. otherwise default.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindLast(System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindAll(System.Predicate{`0})">
-            <summary>
-            Finds all the elements that matches the given predicate. 
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>A <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements that matches the predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindAll(System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Predicate{`0})">
-            <summary>
-            Finds the index of the first element that matches the given predicate.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The index of the first element that matches the given predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindIndex(System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Int32,System.Predicate{`0})">
-            <summary>
-            Finds the index of the first element that matches the given predicate starting from the given index.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
-            <param name="startIndex">The starting index where the search will begin.</param>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The index of the first element that matches the given predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindIndex(System.Int32,System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindIndex(System.Int32,System.Int32,System.Predicate{`0})">
-            <summary>
-            Finds the index of the first element that matches the given predicate starting from the given index.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid. (negative or >= Count)</exception>
-            <param name="startIndex">The starting index where the search will begin.</param>
-            <param name="count">The amount of items that will be searched.</param>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The index of the first element that matches the given predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindIndex(System.Int32,System.Int32,System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Predicate{`0})">
-            <summary>
-            Finds the index of the last element that matches the given predicate.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The index of the last element that matches the given predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindLastIndex(System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Int32,System.Predicate{`0})">
-            <summary>
-            Finds the index of the last element that matches the given predicate starting from the given index.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid (negative or >= Count)</exception>
-            <param name="startIndex">The starting index where the search will begin.</param>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <returns>The index of the last element that matches the given predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindLastIndex(System.Int32,System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.FindLastIndex(System.Int32,System.Int32,System.Predicate{`0})">
-            <summary>
-            Finds the index of the last element that matches the given predicate starting from the given index.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the start index is not valid (negative or >= Count)</exception>
-            <param name="startIndex">The starting index where the search will begin.</param>
-            <param name="predicate">The predicate used to find a matching item.</param>
-            <param name="count">The amount of items to be searched.</param>
-            <returns>The index of the last element that matches the given predicate.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.FindLastIndex(System.Int32,System.Int32,System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(`0)">
-            <summary>
-            Searches for the index of the given item using <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>
-            </summary>
-            <param name="item">The item to be searched</param>
-            <returns>The index of the given item, -1 if not found.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.BinarySearch(`0)"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(`0,System.Collections.Generic.IComparer{`0})">
-            <summary>
-            Searches for the index of the given item using the comparer provided.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the comparer is null.</exception>
-            <param name="item">The item to be searched.</param>
-            <param name="comparer">The comparer to be used in order to search the item.</param>
-            <returns>The index of the given item, -1 if not found.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.BinarySearch(`0,System.Collections.Generic.IComparer{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.BinarySearch(System.Int32,System.Int32,`0,System.Collections.Generic.IComparer{`0})">
-            <summary>
-            Searches for the index of the given item using the comparer provided.
-            </summary>
-            <param name="startIndex">The index where the search will start.</param>
-            <param name="count">The amount of elements to be searched.</param>
-            <param name="item">The item to be searched.</param>
-            <param name="comparer">The comparer to be used in order to search the item.</param>
-            <returns>The index of the given item, -1 if not found.</returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.BinarySearch(System.Int32,System.Int32,`0,System.Collections.Generic.IComparer{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.ConvertAll``1(System.Converter{`0,``0})">
-            <summary>
-            Returns a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all members of the current list converted into the target type.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the converter is null.</exception>
-            <typeparam name="TOut">The output generic type of the <see cref="T:System.Collections.Generic.ReadOnlyList`1"/></typeparam>
-            <param name="converter">The delegate used to convert the items</param>
-            <returns>Returns a <see cref="T:System.Collections.Generic.ReadOnlyList`1"/></returns>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.ConvertAll``1(System.Converter{`0,``0})"/>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Int32)">
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Int32)">
             <summary>
-            Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found starting from the given index.
+                Gets a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> containing all elements starting from the provided index.
             </summary>
-            <param name="startIndex">The index where elements will start to get taken from.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
+            <param name="startIndex">
+                The zero-based <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> index at which the range starts.
+            </param>
             <returns>
-            Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
+                A new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> containing all elements in the provided range.
             </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when the range is outside of the bounds of this list.
+            </exception>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Int32,System.Int32)">
-            <summary>
-            Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found 
-            starting from the given index with the given amount of elements.
-            </summary>
-            <param name="startIndex">The index where elements will start to get taken from.</param>
-            <param name="count">The amount of elements to be taken.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
-            <returns>
-            Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
-            </returns>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Int32,System.Int32)">
+            <inheritdoc cref="M:System.Collections.Generic.List`1.GetRange(System.Int32,System.Int32)"/>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Slice(System.Range)">
-            <summary>
-            Retrieves a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with the elements found 
-            starting from the given index with the given amount of elements.
-            </summary>
-            <param name="range">The range.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the range is outside of the bounds of this list.</exception>
-            <returns>
-            Returns a new <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all the elements from the provided index.
-            </returns>
+        <!-- Badly formed XML comment ignored for member "M:System.Collections.Generic.ReadOnlyList`1.GetRange(System.Range)" -->
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.Exists(System.Predicate{`0})">
+            <inheritdoc cref="M:System.Collections.Generic.List`1.Exists(System.Predicate{`0})"/>
         </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.Any(System.Predicate{`0})">
-            <summary>
-            Checks if any element in the current instance matches the given predicate.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The delegate used to filter the items.</param>
-            <returns>True if any item matches the predicate. Otherwise false.</returns>
-        </member>
-        <member name="M:System.Collections.Generic.ReadOnlyList`1.All(System.Predicate{`0})">
-            <summary>
-            Checks if all elements in the current instance match the given predicate.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the predicate is null.</exception>
-            <param name="predicate">The delegate used to filter the items.</param>
-            <returns>True if all items match the predicate. Otherwise false.</returns>
+        <member name="M:System.Collections.Generic.ReadOnlyList`1.TrueForAll(System.Predicate{`0})">
+            <inheritdoc cref="M:System.Collections.Generic.List`1.TrueForAll(System.Predicate{`0})"/>
         </member>
         <member name="M:System.Collections.Generic.ReadOnlyList`1.ForEach(System.Action{`0})">
-            <summary>
-            Executes an action for each element in the list.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the action is null.</exception>
-            <param name="action">The action delegate to be executed for each item in the list</param>
+            <inheritdoc cref="M:System.Collections.Generic.List`1.ForEach(System.Action{`0})"/>
         </member>
         <member name="T:System.Collections.Locked.LockedDictionary`2">
             <summary>
-            Provides a thread-safe implementation of <see cref="T:System.Collections.Generic.Dictionary`2"/>.
+                Provides a synchronized implementation of <see cref="T:System.Collections.Generic.Dictionary`2"/>.
             </summary>
         </member>
         <member name="P:System.Collections.Locked.LockedDictionary`2.Item(`0)">
@@ -413,34 +455,47 @@
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor">
             <summary>
-            Creates an empty <see cref="T:System.Collections.Locked.LockedDictionary`2"/>
+                Initializes a new instace of the <see cref="T:System.Collections.Locked.LockedDictionary`2"/> <see langword="class"/> that is empty.
             </summary>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.Dictionary{`0,`1})">
             <summary>
-            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="dictionary"/>. 
-            By default this keeps the reference of the provided dictionary.
+                Initializes a new instace of the <see cref="T:System.Collections.Locked.LockedDictionary`2"/> <see langword="class"/> that is empty,
+                and references the provided dictionary.
             </summary>
-            <param name="dictionary">The source dictionary.</param>
+            <param name="dictionary">
+                The dictionary to reference.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.Dictionary{`0,`1},System.Boolean)">
             <summary>
-            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="dictionary"/>. 
+                Initializes a new instace of the <see cref="T:System.Collections.Locked.LockedDictionary`2"/> <see langword="class"/> that is empty,
+                and optionally you can indicate if you want to reference the provided dictionary.
             </summary>
-            <param name="dictionary">The source dictionary.</param>
-            <param name="keepReference">Indicates if the reference of the source dictionary should be kept.</param>
+            <param name="dictionary">
+                The dictionary.
+            </param>
+            <param name="keepReference">
+                Indicates if the reference to the provided dictionary should be kept.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{`0,`1}})">
             <summary>
-            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="source"/>. 
+                Initializes a new instace of the <see cref="T:System.Collections.Locked.LockedDictionary`2"/> <see langword="class"/> that is empty,
+                and contains the elements of the provided source.
             </summary>
-            <param name="source">The source.</param>
+            <param name="source">
+                The source.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.#ctor(System.Collections.Generic.IEnumerable{System.ValueTuple{`0,`1}})">
             <summary>
-            Creates a <see cref="T:System.Collections.Locked.LockedDictionary`2"/> from the provided <paramref name="source"/>. 
+                Initializes a new instace of the <see cref="T:System.Collections.Locked.LockedDictionary`2"/> <see langword="class"/> that is empty,
+                and contains the elements of the provided source.
             </summary>
-            <param name="source">The source.</param>
+            <param name="source">
+                The source.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.Add(`0,`1)">
             <inheritdoc/>
@@ -476,16 +531,21 @@
             <inheritdoc/>
         </member>
         <member name="T:System.Collections.Locked.LockedDictionary`2.Enumerator">
-            <inheritdoc/>
+            <summary>
+                Enumerates the elements of a <see cref="T:System.Collections.Locked.LockedDictionary`2"/>.
+            </summary>
         </member>
         <member name="P:System.Collections.Locked.LockedDictionary`2.Enumerator.Current">
             <inheritdoc/>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.Enumerator.#ctor(System.Collections.Locked.LockedDictionary{`0,`1})">
             <summary>
-            Creates an enumerator to though the <see cref="T:System.Collections.Locked.LockedDictionary`2"/>.
+                Initializes a new instance of the <see cref="T:System.Collections.Locked.LockedDictionary`2.Enumerator"/> <see langword="struct"/> 
+                with the provided <see cref="T:System.Collections.Locked.LockedDictionary`2"/>.
             </summary>
-            <param name="dictionary">The source dictionary.</param>
+            <param name="dictionary">
+                The source dictionary.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedDictionary`2.Enumerator.Dispose">
             <inheritdoc/>
@@ -495,25 +555,39 @@
         </member>
         <member name="T:System.Collections.Locked.LockedList`1">
             <summary>
-            Provides a thread-safe implementation of <see cref="T:System.Collections.Generic.List`1"/>.
+                Provides a synchronized implementation of <see cref="T:System.Collections.Generic.List`1"/>.
             </summary>
         </member>
         <member name="P:System.Collections.Locked.LockedList`1.Item(System.Index)">
             <summary>
-            Gets or sets the element at the specified index.
+                Gets or sets the element at the specified index.
             </summary>
-            <param name="index">The index.</param>
-            <exception cref="T:System.ArgumentOutOfRangeException">Throw if the <paramref name="index"/> is negative or higher than or equal to <see cref="P:System.Collections.Locked.LockedList`1.Count"/></exception>
-            <returns>The element at the specified <paramref name="index"/></returns>
+            <param name="index">
+                The index.
+            </param>
+            <returns>
+                The element at the specified <paramref name="index"/>.
+            </returns>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Throw when the <paramref name="index"/> is negative or higher than or equal to <see cref="P:System.Collections.Locked.LockedList`1.Count"/>.
+            </exception>
         </member>
         <member name="P:System.Collections.Locked.LockedList`1.Item(System.Range)">
             <summary>
-            Creates a shallow copy of a range of elements in the source <see cref="T:System.Collections.Locked.LockedList`1"/>.
+                Creates a shallow copy of a range of elements in the source <see cref="T:System.Collections.Locked.LockedList`1"/>.
             </summary>
-            <exception cref="T:System.ArgumentException">Thrown when index is less than 0 or higher than or equal to <see cref="P:System.Collections.Locked.LockedList`1.Count"/>.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when index and count do not denote a valid range of elements.</exception>
-            <param name="range">The range.</param>
-            <returns>A shallow copy of a range of elements in the source <see cref="T:System.Collections.Locked.LockedList`1"/>.</returns>
+            <param name="range">
+                The range.
+            </param>
+            <returns>
+                A shallow copy of a range of elements in the source <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </returns>
+            <exception cref="T:System.ArgumentException">
+                Thrown when index is less than 0 or higher than or equal to <see cref="P:System.Collections.Locked.LockedList`1.Count"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when index and count do not denote a valid range of elements.
+            </exception>
         </member>
         <member name="P:System.Collections.Locked.LockedList`1.Item(System.Int32)">
             <inheritdoc/>
@@ -526,28 +600,42 @@
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.#ctor">
             <summary>
-            Creates an empty <see cref="T:System.Collections.Locked.LockedList`1"/>.
+                Initializes a new instance of the <see cref="T:System.Collections.Locked.LockedList`1"/> class that is empty 
+                and has the default initial capacity.
             </summary>
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Int32)">
             <summary>
-            Creates an empty <see cref="T:System.Collections.Locked.LockedList`1"/> with the provided <paramref name="capacity"/>.
+                Initializes a new instance of the <see cref="T:System.Collections.Locked.LockedList`1"/> class that is empty 
+                and has the specified initial capacity.
             </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when the provided <paramref name="capacity"/> is lower than zero.</exception>
-            <param name="capacity">The initial capacity.</param>
+            <param name="capacity">
+                The capacity.
+            </param>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when capacity is less than 0.
+            </exception>
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Collections.Generic.List{`0})">
             <summary>
-            Creates a <see cref="T:System.Collections.Locked.LockedList`1"/> from the source <see cref="T:System.Collections.Generic.List`1"/>. By default this keeps the reference of the provided list.
+                Initializes a new instance of the <see cref="T:System.Collections.Locked.LockedList`1"/> class that 
+                references the provided <see cref="T:System.Collections.Generic.List`1"/>.
             </summary>
-            <param name="source">The source <see cref="T:System.Collections.Generic.List`1"/>.</param>
+            <param name="source">
+                The source list.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Collections.Generic.List{`0},System.Boolean)">
             <summary>
-            Creates a <see cref="T:System.Collections.Locked.LockedList`1"/> from the source <see cref="T:System.Collections.Generic.List`1"/>.
+                Initializes a new instance of the <see cref="T:System.Collections.Locked.LockedList`1"/> class that 
+                optionally references the provided <see cref="T:System.Collections.Generic.List`1"/>.
             </summary>
-            <param name="source">The source <see cref="T:System.Collections.Generic.List`1"/>.</param>
-            <param name="keepReference">Determines if this instance of <see cref="T:System.Collections.Locked.LockedList`1"/> should keep the reference from the source <see cref="T:System.Collections.Generic.List`1"/>.</param>
+            <param name="source">
+                The source list.
+            </param>
+            <param name="keepReference">
+                Indicates if the provided list referenced should be kept.
+            </param>
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.#ctor(System.Collections.Generic.IEnumerable{`0})">
             <summary>
@@ -569,9 +657,11 @@
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.GetEnumerator">
             <summary>
-            Returns an enumerator that iterates through the <see cref="T:System.Collections.Locked.LockedList`1"/>.
+                Returns an enumerator that iterates through the <see cref="T:System.Collections.Locked.LockedList`1"/>.
             </summary>
-            <returns>An enumerator that iterates through the <see cref="T:System.Collections.Locked.LockedList`1"/>.</returns>
+            <returns> 
+                An enumerator that iterates through the <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </returns>
         </member>
         <member name="M:System.Collections.Locked.LockedList`1.IndexOf(`0)">
             <inheritdoc/>
@@ -588,22 +678,30 @@
         <member name="M:System.Collections.Locked.LockedList`1.Clone">
             <inheritdoc/>
         </member>
-        <member name="T:System.Collections.Locked.Enumerator`1">
-            <inheritdoc/>
-        </member>
-        <member name="P:System.Collections.Locked.Enumerator`1.Current">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.Collections.Locked.Enumerator`1.#ctor(System.Collections.Locked.LockedList{`0})">
+        <member name="T:System.Collections.Locked.LockedList`1.Enumerator">
             <summary>
-            Creates an enumerator to iterate trought the given <see cref="T:System.Collections.Locked.LockedList`1"/>
+                Enumerates the elements of a <see cref="T:System.Collections.Locked.LockedList`1"/>.
             </summary>
-            <param name="list">The source list.</param>
+            <typeparam name="T">
+                The underlying type of the <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </typeparam>
         </member>
-        <member name="M:System.Collections.Locked.Enumerator`1.MoveNext">
+        <member name="P:System.Collections.Locked.LockedList`1.Enumerator.Current">
             <inheritdoc/>
         </member>
-        <member name="M:System.Collections.Locked.Enumerator`1.Dispose">
+        <member name="M:System.Collections.Locked.LockedList`1.Enumerator.#ctor(System.Collections.Locked.LockedList{`0})">
+            <summary>
+                Initializes a new instance of a <see cref="T:System.Collections.Locked.LockedList`1.Enumerator"/> 
+                with the provided <see cref="T:System.Collections.Locked.LockedList`1"/>.
+            </summary>
+            <param name="list">
+                The source list.
+            </param>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Enumerator.MoveNext">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.Collections.Locked.LockedList`1.Enumerator.Dispose">
             <inheritdoc/>
         </member>
         <member name="T:System.Color">
@@ -613,48 +711,76 @@
         </member>
         <member name="T:System.Diagnostics.ProcessExtensions">
             <summary>
-            Utility class for <see cref="T:System.Diagnostics.Process"/>
+                Utility class for <see cref="T:System.Diagnostics.Process"/>
             </summary>
         </member>
         <member name="M:System.Diagnostics.ProcessExtensions.Shell(System.Diagnostics.Process,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Diagnostics.ProcessWindowStyle,System.String,System.Diagnostics.ProcessOptions)">
             <summary>
-            Extension for a Shell() function that allows overloading of the working directory variable.
-            It must be a <see cref="T:System.String"/> but can be variables that returns strings.
+                Extension for a Shell() function that allows overloading of the working directory variable.
+                It must be a <see cref="T:System.String"/> but can be variables that returns strings.
             </summary>
-            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
-            <param name="fileName">Process file name to execute.</param>
-            <param name="arguments">Commands to pass to the process file to execute.</param>
-            <param name="redirectStandardOutput">redirects stdout of the target process.</param>
-            <param name="redirectStandardError">redirects stderr of the target process.</param>
-            <param name="useShellExecute">uses shell execute instead.</param>
-            <param name="createNoWindow">Creates no new window for the process.</param>
-            <param name="windowStyle">Window style for the target process.</param>
-            <param name="workingDirectory">Working directory for the target process.</param>
-            <param name="options"> The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
-            <returns>empty string, process stdout data, process stderr data.</returns>
+            <param name="process">
+                 The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.
+             </param>
+            <param name="fileName">
+                The process file name to execute.
+            </param>
+            <param name="arguments">
+                The commands to pass to the process file to execute.
+            </param>
+            <param name="redirectStandardOutput">
+                Indicates if the standard output should be redirected on the target process.
+            </param>
+            <param name="redirectStandardError">
+                Indicates if the standard error should be redirected on the target process.
+            </param>
+            <param name="useShellExecute">
+                Indicates if shell execute should be used instead.
+            </param>
+            <param name="createNoWindow">
+                Indicates if a no window should be created for the process.
+            </param>
+            <param name="windowStyle">
+                The window style for the target process.
+            </param>
+            <param name="workingDirectory">
+                The working directory for the target process.
+            </param>
+            <param name="options"> 
+                The options for which to also include for the <see cref="T:System.Diagnostics.Process"/> component.
+            </param>
+            <returns>
+                <see cref="F:System.String.Empty"/>, process stdout data or process stderr data.
+            </returns>
         </member>
         <member name="M:System.Diagnostics.ProcessExtensions.Shell(System.Diagnostics.Process,System.Diagnostics.ProcessOptions)">
             <summary>
-            Extension for a Shell() function that allows overloading of the working directory variable.
-            It must be a <see cref="T:System.String"/> but can be variables that returns strings.
+                Extension for a Shell() function that allows overloading of the working directory variable.
+                It must be a <see cref="T:System.String"/> but can be variables that returns strings.
             </summary>
-            <param name="proc">The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.</param>
-            <param name="options">The options for which to also include for the <see cref="T:System.Diagnostics.Process" /> component.</param>
-            <returns>empty string, process stdout data, process stderr data.</returns>
+            <param name="process">
+                 The <see cref="T:System.Diagnostics.Process" /> component for which is used to execute the target process.
+             </param>
+            <param name="options"> 
+                The options for which to also include for the <see cref="T:System.Diagnostics.Process"/> component.
+            </param>
+            <returns>
+                <see cref="F:System.String.Empty"/>, process stdout data or process stderr data.
+            </returns>
         </member>
         <member name="T:System.Diagnostics.ProcessOptions">
             <summary>
-            Extra options for the <see cref="T:System.Diagnostics.Process" /> component.
+                Extra options for the <see cref="T:System.Diagnostics.Process"/> component.
             </summary>
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
             <summary>
-            Instucts the <see cref="T:System.Diagnostics.Process" /> <keyword cref="T:System.Object" /> to wait until the executed process terminates.
+                Instucts the <see cref="T:System.Diagnostics.Process" /> to wait until the executed process terminates.
             </summary>
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.Executing">
             <summary>
-            Gets if the target process is executing (has not been actually started yet), or is being executed (started). False if it was started.
+                Indicates if the target process is executing (has not been actually started yet), or is being executed (started); otherwise, <see langword="false"/>.
             </summary>
         </member>
         <member name="T:System.EventManager`1">
@@ -675,7 +801,7 @@
             <summary>
             Creates an instance of <see cref="T:System.EventManager`1"/> with the instance of the source provided.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when source is <see langword="null"/>.</exception>
             <param name="source">The source of the events</param>
         </member>
         <member name="M:System.EventManager`1.AddHandlers(System.Object,System.Reflection.BindingFlags)">
@@ -702,7 +828,7 @@
             </summary>
             <exception cref="T:System.EventNotFoundException">Thrown when the event can't be found.</exception>
             <param name="eventSourceType">The type of the source of events.</param>
-            <param name="eventName">The name of the event, recommended to use nameof() operator to prevent <see cref="T:System.EventNotFoundException"/>.</param>
+            <param name="eventName">The name of the event, recommended to use breakthis() operator to prevent <see cref="T:System.EventNotFoundException"/>.</param>
             <param name="flags">The flags used to search the event.</param>
             <param name="methodName">The name of the method. This is gathered from <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/> so any value you pass here is ommited.</param>
         </member>
@@ -729,253 +855,475 @@
         </member>
         <member name="T:System.IO.IOExtensions">
             <summary>
-            Utility class for <see cref="N:System.IO"/>.
+                Utility class for <see cref="N:System.IO"/>.
             </summary>
         </member>
         <member name="M:System.IO.IOExtensions.Read``1(System.IO.Stream)">
             <summary>
-            Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
-            This is equal to the size of <typeparamref name="T"/>.
+                Reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+                This is equal to the size of <typeparamref name="T"/>.
             </summary>
-            <typeparam name="T">The type of the value to be read.</typeparam>
-            <param name="stream">The stream.</param>
-            <returns>A value.</returns>
+            <typeparam name="T">
+                The type of the value to be read.
+            </typeparam>
+            <param name="stream">
+                The stream.
+            </param>
+            <returns>
+                A value of type <typeparamref name="T"/>.
+            </returns>
         </member>
         <member name="M:System.IO.IOExtensions.Write``1(System.IO.Stream,``0)">
             <summary>
-            Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
-            This is equal to the size of <typeparamref name="T"/>.
+                Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+                This is equal to the size of <typeparamref name="T"/>.
             </summary>
-            <typeparam name="T">The type of the value to be written</typeparam>
-            <param name="stream">The stream.</param>
-            <param name="value">The value.</param>
+            <typeparam name="T">
+                The type of the value to be written
+            </typeparam>
+            <param name="stream">
+                The stream.
+            </param>
+            <param name="value">
+                The value.
+            </param>
         </member>
-        <member name="M:System.Linq.LinqUtilities.BatchBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+        <member name="T:System.IO.ValueStringReader">
             <summary>
-            Batches the collection into a collection of collection of an specific size.
+                Zero allocation equivalent of <see cref="T:System.IO.StringReader"/>.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either source or selector are null.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when a negative size is given.</exception>
-            <typeparam name="TSource">The underlying type of the collection.</typeparam>
-            <param name="source">The collection.</param>
-            <param name="size">The size of the buckets.</param>
-            <returns>An enumerable bulked by the given size.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:System.Linq.LinqUtilities.BatchBy``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})" -->
-        <member name="M:System.Linq.LinqUtilities.AddOrUpdate``1(System.Collections.Generic.IList{``0},``0)">
+        <member name="P:System.IO.ValueStringReader.Current">
             <summary>
-            Adds an element to a <see cref="T:System.Collections.Generic.IList`1"/> if it doesn't exists, otherwise it updates it.
+                Returns the current character. <see langword="null"/> if the end is reached.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the source is null.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
-            <typeparam name="T">The type of the element to be added.</typeparam>
-            <param name="source">The source collection.</param>
-            <param name="element">The element to search.</param>
         </member>
-        <member name="M:System.Linq.LinqUtilities.GetOrAdd``2(System.Collections.Generic.IDictionary{``0,``1},``0,``1)">
+        <member name="M:System.IO.ValueStringReader.#ctor(System.ReadOnlySpan{System.Char})">
             <summary>
-            Gets a value given the key, or adds it if it doesn't exists.
+                Initializes an instance of <see cref="T:System.IO.ValueStringReader"/> <see langword="struct"/> with the provided <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Char"/>.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if either the source or the key are null.</exception>
-            <exception cref="T:System.InvalidOperationException">Throw if <see cref="P:System.Collections.Generic.ICollection`1.IsReadOnly"/> returns true.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The source collection.</param>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
-            <returns>The value.</returns>
+            <param name="span">
+                The span to read.
+            </param>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Shuffle``1(System.Collections.Generic.IList{``0})">
+        <member name="M:System.IO.ValueStringReader.#ctor(System.String)">
             <summary>
-            Shuffles the given list.
+                Initializes an instance of <see cref="T:System.IO.ValueStringReader"/> <see langword="struct"/> with the provided <see cref="T:System.String"/>.
             </summary>
-            <typeparam name="T">The type.</typeparam>
-            <param name="source">The source list.</param>
+            <param name="span">
+                The span to read.
+            </param>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+        <member name="M:System.IO.ValueStringReader.Read">
             <summary>
-            Uses the selector to return a collection without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+                Reads the next characters and advances one position of the buffer.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the selector are null.</exception>
-            <typeparam name="TSource">The underlying type of the source of the collection.</typeparam>
-            <typeparam name="TKey">The type of the selected member.</typeparam>
-            <param name="source">The source collection.</param>
-            <param name="selector">The selector delegate used to filter duplicates.</param>
-            <returns>A sequence without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.</returns>
+            <returns>
+                The current character after advancing one position. <see langword="null"/> if the buffer is completely read.
+            </returns>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+        <member name="M:System.IO.ValueStringReader.ReadLine">
             <summary>
-            Uses the selector to return a collection without duplicates based on the provided comparer.
+                Reads all the characters until a new line is found.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the selector are null.</exception>
-            <typeparam name="TSource">The underlying type of the source of the collection.</typeparam>
-            <typeparam name="TKey">The type of the selected member.</typeparam>
-            <param name="source">The source collection.</param>
-            <param name="selector">The selector delegate used to filter duplicates.</param>
+            <returns>
+                A <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Char"/> with all characters found, excluding the new line.
+            </returns>
+        </member>
+        <member name="M:System.IO.ValueStringReader.ReadToEnd">
+            <summary>
+                Fully reads the buffer from the current position.
+            </summary>
+            <returns>
+                A <see cref="T:System.ReadOnlySpan`1"/> of <see cref="T:System.Char"/> with all the characters from the current position until the end of the buffer.
+            </returns>
+        </member>
+        <member name="T:System.Linq.LinqExtensions">
+            <summary>
+                More extensions method for <see cref="N:System.Linq"/>.
+            </summary>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.BatchBy``1(System.Collections.Generic.IEnumerable{``0},System.Int32)">
+            <summary>
+                Batches the collection into a collection of collections of an specific size.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the collection.
+            </typeparam>
+            <param name="source">
+                The collection.
+            </param>
+            <param name="size">
+                The size of the buckets.
+            </param>
+            <returns>
+                An enumerable bulked by the given size.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either source or selector are <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when a negative size is given.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.BatchBy``2(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{System.Collections.Generic.IEnumerable{``0},``1})">
+            <summary>
+                Batches the collection into a collection of collection of an specific size and returns the selected member.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the source collection.
+            </typeparam>
+            <typeparam name="TResult">
+                The underlying type of the resulting collection.
+            </typeparam>
+            <param name="source">
+                The source collection.
+            </param>
+            <param name="size">
+                The size of the buckets.
+            </param>
+            <param name="selector">
+                The selector delegate.
+            </param>
+            <returns>
+                An enumerable bulked by the given size.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either source or selector are <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when size is less than 0.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1})">
+            <summary>
+                Uses the selector to return a collection without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the source of the collection.
+            </typeparam>
+            <typeparam name="TKey">
+                The type of the selected member.
+            </typeparam>
+            <param name="source">
+                The source collection.
+            </param>
+            <param name="selector">
+                The selector delegate used to filter duplicates.
+            </param>
+            <returns>
+                A sequence without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either the source or the selector are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.Distinct``2(System.Collections.Generic.IEnumerable{``0},System.Func{``0,``1},System.Collections.Generic.IEqualityComparer{``1})">
+            <summary>
+                Uses the selector to return a collection without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the source of the collection.
+            </typeparam>
+            <typeparam name="TKey">
+                The type of the selected member.
+            </typeparam>
+            <param name="source">
+                The source collection.
+            </param>
+            <param name="selector">
+                The selector delegate used to filter duplicates.
+            </param>
             <param name="comparer">The comparer used to filter duplicates.</param>
-            <returns>A sequence without duplicates based on the comparer provided.</returns>
+            <returns>
+                A sequence without duplicates based on <see cref="P:System.Collections.Generic.EqualityComparer`1.Default"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either the source or the selector are <see langword="null"/>.
+            </exception>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}})">
+        <member name="M:System.Linq.LinqExtensions.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
             <summary>
-            Flattens the given sequence of sequences into a single sequence.
+                Invokes an action for each element in the sequence.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
-            <typeparam name="TSource">The underlying type of the sequence of the sequence.</typeparam>
+            <typeparam name="T">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="action">
+                The action to be executed on each item of the sequence.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either the source or the action are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.ForEach``2(System.Collections.Generic.IEnumerable{``1},``0,System.Action{``0,``1})">
+            <summary>
+                Invokes an action for each element in the sequence with the provided parameters.
+            </summary>
+            <typeparam name="TState">
+                The type of the parameters to be passed.
+            </typeparam>
+            <typeparam name="T">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="action">
+                The action delegate to be executed on each item of the sequence.
+            </param>
+            <param name="state">
+                The arguments to be passed to the action delegate.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either the source or the action are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
+            <summary>
+                Joins the sequence of strings into a single string.
+            </summary>
+            <param name="source">
+                The string sequence.
+            </param>
+            <param name="separator">
+                The separator used to join the strings. <see cref="F:System.String.Empty"/> if no separator is provided.
+            </param>
+            <returns>
+                A single <see cref="T:System.String"/> with all the elements of the sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Throw when the source is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.Join(System.Collections.Generic.IEnumerable{System.Char},System.String)">
+            <summary>
+                Joins the sequence of chars into a single string.
+            </summary>
+            <param name="source">
+                The char sequence.
+            </param>
+            <param name="separator">
+                The separator used to join the chars. <see cref="F:System.String.Empty"/> if no separator is provided.
+            </param>
+            <returns>
+                A single <see cref="T:System.String"/> with all the elements of the sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Throw when the source is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.SkipWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+                Skips all the elements while the predicate is <see langword="true"/>.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="predicate">
+                The delegated to filter the items.
+            </param>
+            <returns>
+                A sequence of items
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either source or predicate are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+                Skips all the elements until the predicate is <see langword="true"/>.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="predicate">
+                The delegated to filter the items.
+            </param>
+            <returns>
+                A sequence of items
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either source or predicate are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+                Takes all the elements until the predicate is <see langword="true"/>.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="predicate">
+                The delegated to filter the items.
+            </param>
+            <returns>
+                A sequence of items
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either source or predicate are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.TakeWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
+            <summary>
+                Takes all the elements while the predicate is <see langword="true"/>.
+            </summary>
+            <typeparam name="TSource">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="predicate">
+                The delegated to filter the items.
+            </param>
+            <returns>
+                A sequence of items
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either source or predicate are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
+            <summary>
+                Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
+                into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
+            </summary>
+            <typeparam name="TKey">
+                The type of the key.
+            </typeparam>
+            <typeparam name="TValue">
+                The type of the value.
+            </typeparam>
+            <param name="source">
+                The sequence
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when source is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+                Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
+                into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair 
+                with the comparer provided.
+            </summary>
+            <typeparam name="TKey">
+                The type of the key.
+            </typeparam>
+            <typeparam name="TValue">
+                The type of the value.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="comparer">
+                The comparer.
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when source or comparer are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
+            <summary>
+                Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
+                into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
+            </summary>
+            <typeparam name="TKey">
+                The type of the key.
+            </typeparam>
+            <typeparam name="TValue">
+                The type of the value.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="comparer">
+                The comparer.
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when source or comparer are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
+            <summary>
+                Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
+                into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair 
+                with the comparer provided.
+            </summary>
+            <typeparam name="TKey">
+                The type of the key.
+            </typeparam>
+            <typeparam name="TValue">
+                The type of the value.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <param name="comparer">
+                The comparer.
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when source or comparer are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Linq.LinqExtensions.ToReadOnly``2(System.Collections.Generic.IDictionary{``0,``1})">
+            <summary>
+                Creates a <see cref="T:System.Collections.ObjectModel.ReadOnlyDictionary`2"/> from the dictionary provided.
+            </summary>
+            <typeparam name="TKey">
+                The type of the key.
+            </typeparam>
+            <typeparam name="TValue">
+                The type of the value.
+            </typeparam>
             <param name="source">The sequence.</param>
-            <returns>A sequence with all members of the original sequence and the nested sequence.</returns>
+            <returns>
+                A <see cref="T:System.Collections.ObjectModel.ReadOnlyDictionary`2"/> from the dictionary provided.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when source is <see langword="null"/>.
+            </exception>
         </member>
-        <member name="M:System.Linq.LinqUtilities.Flatten``1(System.Collections.Generic.IEnumerable{System.Collections.Generic.IEnumerable{``0}},System.Func{System.Collections.Generic.IEnumerable{``0},System.Collections.Generic.IEnumerable{``0}})">
+        <member name="M:System.Linq.LinqExtensions.ToReadOnlyList``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            Flattens the given sequence of sequences into a single sequence given a selector.
+                Creates as <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from the sequence provided.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either the source or selector are null.</exception>
-            <typeparam name="TSource">The underlying type of the sequence of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="selector">The selector used to select the nested sequence.</param>
-            <returns>A sequence with all members of the original sequence and the nested sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ForEach``1(System.Collections.Generic.IEnumerable{``0},System.Action{``0})">
-            <summary>
-            Invokes an action for each element in the sequence.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the action are null.</exception>
-            <typeparam name="T">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="action">The action to be executed on each item of the sequence.</param>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.String},System.String)">
-            <summary>
-            Joins the sequence of strings into a single string.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Throw when the source is null.</exception>
-            <param name="source">The string sequence.</param>
-            <param name="separator">The separator used to join the strings. <see cref="F:System.String.Empty"/> if no separator is provided.</param>
-            <returns>A single <see cref="T:System.String"/> with all the elements of the sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.Join(System.Collections.Generic.IEnumerable{System.Char},System.String)">
-            <summary>
-            Joins the sequence of chars into a single string.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Throw when the source is null.</exception>
-            <param name="source">The char sequence.</param>
-            <param name="separator">The separator used to join the chars. <see cref="F:System.String.Empty"/> if no separator is provided.</param>
-            <returns>A single <see cref="T:System.String"/> with all the elements of the sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.SkipWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
-            <summary>
-            Skips all the elements while the predicate is True.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
-            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="predicate">The delegated to filter the items.</param>
-            <returns>A sequence of items</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.SkipUntil``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
-            <summary>
-            Skips all the elements until the predicate is True.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
-            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="predicate">The delegated to filter the items.</param>
-            <returns>A sequence of items</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.TakeUntil``1(System.Collections.Generic.IEnumerable{``0},System.Predicate{``0})">
-            <summary>
-            Takes all the elements until the predicate is True.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
-            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="predicate">The delegated to filter the items.</param>
-            <returns>A sequence of items</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.TakeWhile``1(System.Collections.Generic.IEnumerable{``0},System.Func{``0,System.Boolean})">
-            <summary>
-            Takes all the elements while the predicate is True.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either source or predicate are null.</exception>
-            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="predicate">The delegated to filter the items.</param>
-            <returns>A sequence of items</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.TakeIf``1(System.Collections.Generic.IEnumerable{``0},System.Int32,System.Func{``0,System.Boolean})">
-            <summary>
-            Takes an amount of items from the source that matches the given predicate.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when either the source or the predicate are null.</exception>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when count is negative.</exception>
-            <typeparam name="TSource">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <param name="count">The amount of items to be taken.</param>
-            <param name="predicate">The delegate used for filtering.</param>
-            <returns>A sequence with an amount equal or lower than the count give with the items that matches the predicate.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}})">
-            <summary>
-            Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
-            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The sequence</param>
-            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.Collections.Generic.KeyValuePair{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
-            <summary>
-            Turns an sequence of <see cref="T:System.Collections.Generic.KeyValuePair`2"/> 
-            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair with the comparer provided.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source or comparer are null.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The sequence</param>
-            <param name="comparer">The comparer</param>
-            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}})">
-            <summary>
-            Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
-            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The sequence</param>
-            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ToDictionary``2(System.Collections.Generic.IEnumerable{System.ValueTuple{``0,``1}},System.Collections.Generic.IEqualityComparer{``0})">
-            <summary>
-            Turns an sequence of <see cref="T:System.ValueTuple`2"/> 
-            into a <see cref="T:System.Collections.Generic.Dictionary`2"/> using the key and value of the pair with the comparer provided.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The sequence</param>
-            <param name="comparer">The comparer</param>
-            <returns>A <see cref="T:System.Collections.Generic.Dictionary`2"/> with the given sequence.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ToReadOnly``2(System.Collections.Generic.IDictionary{``0,``1})">
-            <summary>
-            Creates a <see cref="T:System.Collections.ObjectModel.ReadOnlyDictionary`2"/> from the dictionary provided.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is null.</exception>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-            <param name="source">The sequence.</param>
-            <returns>A Read-Only Dictionary from the dictionary provided.</returns>
-        </member>
-        <member name="M:System.Linq.LinqUtilities.ToReadOnlyList``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            Creates as <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from the sequence provided.
-            </summary>
-            <typeparam name="T">The underlying type of the sequence.</typeparam>
-            <param name="source">The sequence.</param>
-            <returns>A Read-Only list.</returns>
+            <typeparam name="T">
+                The underlying type of the sequence.
+            </typeparam>
+            <param name="source">
+                The sequence.
+            </param>
+            <returns>A <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> from the provided sequence.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when source is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:System.MathExtensions.IsPowerOf2(System.Int32)">
             <summary>
@@ -1035,72 +1383,120 @@
         </member>
         <member name="T:System.MathX">
             <summary>
-            This class provides some math helper methods that <see cref="T:System.Math"/> doesn't provide.
+                This class provides some math helper methods that <see cref="T:System.Math"/> doesn't provide.
             </summary>
         </member>
         <member name="F:System.MathX.SquareSumThreshold">
             <summary>
-            The maximum value you can provide to <see cref="M:System.MathX.SquareSum(System.UInt32)"/>
+                The maximum value you can provide to <see cref="M:System.MathX.SquareSum(System.UInt32)"/>
             </summary>
         </member>
         <member name="F:System.MathX.CubicSumThreshold">
             <summary>
-            The maximum value you can provide to <see cref="M:System.MathX.CubicSum(System.UInt32)"/>
+                The maximum value you can provide to <see cref="M:System.MathX.CubicSum(System.UInt32)"/>
             </summary>
         </member>
         <member name="M:System.MathX.Sum(System.UInt32)">
             <summary>
-            Returns the sum of all integers from 1 to <paramref name="n"/>.
+                Returns the sum of all integers from 1 to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
-            <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of all integers from 1 to <paramref name="n"/>.</returns>
+            <param name="n">
+                The upper limit of the numbers to be sum.
+            </param>
+            <returns>
+                The sum of all integers from 1 to <paramref name="n"/>.
+            </returns>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/>.
+            </exception>
         </member>
         <member name="M:System.MathX.Sum(System.UInt32,System.UInt32)">
             <summary>
-            Returns the sum of all integers from <paramref name="k"/> to <paramref name="n"/>.
+                Returns the sum of all integers from <paramref name="k"/> to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
-            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
-            <param name="k">The lower limit of the numbers to be sum.</param>
-            <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of all integers from <paramref name="k"/> to <paramref name="n"/>.</returns>
+            <param name="k">
+                The lower limit of the numbers to be sum.
+            </param>
+            <param name="n">
+                The upper limit of the numbers to be sum.
+            </param>
+            <returns>
+                The sum of all integers from <paramref name="k"/> to <paramref name="n"/>.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="k"/> is higher than <paramref name="n"/>.
+            </exception>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/>.
+            </exception>
         </member>
         <member name="M:System.MathX.SquareSum(System.UInt32)">
             <summary>
-            Returns the sum of the squares of all integers from 1 to <paramref name="n"/>.
+                Returns the sum of the squares of all integers from 1 to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/> (<paramref name="n"/> >= 2344)</exception>
-            <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the squares of all integers from 1 to <paramref name="n"/>.</returns>
+            <param name="n">
+                The upper limit of the numbers to be sum.
+            </param>
+            <returns>
+                The sum of the squares of all integers from 1 to <paramref name="n"/>.
+            </returns>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/> (<paramref name="n"/> >= 2344)
+            </exception>
         </member>
         <member name="M:System.MathX.SquareSum(System.UInt32,System.UInt32)">
             <summary>
-            Returns the sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.
+                Returns the sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
-            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
-            <param name="k">The lower limit of the numbers to be sum.</param>
-            <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.</returns>
+            <param name="k">
+                The lower limit of the numbers to be sum.
+            </param>
+            <param name="n">
+                The upper limit of the numbers to be sum.
+            </param>
+            <returns>
+                The sum of the squares of all integers from <paramref name="k"/> to <paramref name="n"/>.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="k"/> is higher than <paramref name="n"/>.
+            </exception>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/>.
+            </exception>
         </member>
         <member name="M:System.MathX.CubicSum(System.UInt32)">
             <summary>
-            Returns the sum of the cubes of all integers from 1 to <paramref name="n"/>.
+                Returns the sum of the cubes of all integers from 1 to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/> (<paramref name="n"/> >= 362)</exception>
-            <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the cubes of all integers from 1 to <paramref name="n"/>.</returns>
+            <param name="n">
+                The upper limit of the numbers to be sum.
+            </param>
+            <returns>
+                The sum of the cubes of all integers from 1 to <paramref name="n"/>.
+            </returns>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/> (<paramref name="n"/> >= 362).
+            </exception>
         </member>
         <member name="M:System.MathX.CubicSum(System.UInt32,System.UInt32)">
             <summary>
-            Returns the sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.
+                Returns the sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown when <paramref name="k"/> is higher than <paramref name="n"/></exception>
-            <exception cref="T:System.OverflowException">Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/></exception>
-            <param name="k">The lower limit of the numbers to be sum.</param>
-            <param name="n">The upper limit of the numbers to be sum.</param>
-            <returns>The sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.</returns>
+            <param name="k">
+                The lower limit of the numbers to be sum.
+            </param>
+            <param name="n">
+                The upper limit of the numbers to be sum.
+            </param>
+            <returns>
+                The sum of the cubes of all integers from <paramref name="k"/> to <paramref name="n"/>.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="k"/> is higher than <paramref name="n"/>.
+            </exception>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be higher than <see cref="F:System.UInt32.MaxValue"/>.
+            </exception>
         </member>
         <member name="T:System.MutableString">
             <summary>
@@ -1159,17 +1555,6 @@
             <param name="options"/>
             <returns/>
         </member>
-        <member name="P:System.MutableString.Item(System.Char,System.Char,System.Int32,System.Boolean)">
-            <summary>
-            Returns a <see cref="T:System.String"/>[] delimited with the characters provided. An empty array if not found. 
-            You can optionally provide the start index and whether to include the bounds or not.
-            </summary>
-            <param name="leftBound"/>
-            <param name="rightBound"/>
-            <param name="startIndex"/>
-            <param name="includeBounds"/>
-            <returns/>
-        </member>
         <member name="P:System.MutableString.MaxCapacity">
             <summary>
             Returns the maximun capacity of the builder.
@@ -1210,398 +1595,6 @@
             </summary>
             <param name="input"></param>
             <returns></returns>
-        </member>
-        <member name="T:System.Net.Http.GlobalHttpClient">
-            <summary>
-            This class is a Singleton wrapper over <see cref="T:System.Net.Http.HttpClient"/>
-            </summary>
-        </member>
-        <member name="P:System.Net.Http.GlobalHttpClient.WebProxy">
-            <summary>
-            Gets or sets the global Http proxy. This points directly to <see cref="P:System.Net.Http.HttpClient.DefaultProxy"/>
-            </summary>
-        </member>
-        <member name="P:System.Net.Http.GlobalHttpClient.DefaultRequestVersion">
-            <summary>
-            Gets or sets the default HTTP version used on subsequent requests made by this client.
-            </summary>
-        </member>
-        <member name="P:System.Net.Http.GlobalHttpClient.DefaultRequestHeaders">
-            <summary>
-            Gets the headers which should be sent with each request.
-            </summary>
-        </member>
-        <member name="P:System.Net.Http.GlobalHttpClient.BaseAddress">
-            <summary>
-            Gets or sets the base address of Uniform Resource Identifier (URI) of the Internet resource used when sending requests.
-            </summary>
-        </member>
-        <member name="P:System.Net.Http.GlobalHttpClient.MaxResponseContentBufferSize">
-            <summary>
-            Gets or sets the maximum number of bytes to buffer when reading the response content.
-            </summary>
-        </member>
-        <member name="P:System.Net.Http.GlobalHttpClient.Timeout">
-            <summary>
-            Gets or sets the timespan to wait before the request times out.
-            </summary>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.Initialize">
-            <summary>
-            Initializes the <see cref="T:System.Net.Http.HttpClient"/> calling the parameterless constructor.
-            </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown when you call this method more than once.</exception>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.Initialize(System.Net.Http.HttpMessageHandler)">
-            <summary>
-            Initializes the <see cref="T:System.Net.Http.HttpClient"/> calling the constructor <see cref="M:System.Net.Http.HttpClient.#ctor(System.Net.Http.HttpMessageHandler)"/>
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the handler is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when you call this method more than once.</exception>
-            <param name="messageHandler">The HTTP handler stack to use for sending requests.</param>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.CancelPendingRequests">
-            <summary>
-            Cancel all pending requests on this client.
-            </summary>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.Uri)">
-            <summary>
-            Send a DELETE request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.String)">
-            <summary>
-            Send a DELETE request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.Uri,System.Threading.CancellationToken)">
-            <summary>
-            Send a DELETE request to the specified <see cref="T:System.Uri"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.DeleteAsync(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Send a DELETE request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri,System.Threading.CancellationToken)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String,System.Threading.CancellationToken)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri,System.Net.Http.HttpCompletionOption)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> with an HTTP completion option as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String,System.Net.Http.HttpCompletionOption)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with an HTTP completion option as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.Uri,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> with an HTTP completion option and a cancellation token as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetAsync(System.String,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with an HTTP completion option and a cancellation token as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="completionOption">An HTTP completion option value that indicates when the operation should be considered completed.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetByteArrayAsync(System.Uri)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> and return the response body as a <see cref="T:System.Byte"/>[] in an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetByteArrayAsync(System.String)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> and return the response body as a <see cref="T:System.Byte"/>[] in an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetStreamAsync(System.String)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> and return the response body as a <see cref="T:System.IO.Stream"/> in an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetStreamAsync(System.Uri)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> and return the response body as a <see cref="T:System.IO.Stream"/> in an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetStringAsync(System.Uri)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> and return the response body as a <see cref="T:System.String"/> in an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.GetStringAsync(System.String)">
-            <summary>
-            Send a GET request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> and return the response body as a <see cref="T:System.String"/> in an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the requestUri is <see langword="null"/>.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.Uri,System.Net.Http.HttpContent)">
-            <summary>
-            Sends a PATCH request with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.String,System.Net.Http.HttpContent)">
-            <summary>
-            Sends a PATCH request to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
-            <summary>
-            Sends a PATCH request with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PatchAsync(System.String,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
-            <summary>
-            Sends a PATCH request with a <see cref="T:System.Threading.CancellationToken"/> to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.Uri,System.Net.Http.HttpContent)">
-            <summary>
-            Send a POST request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.String,System.Net.Http.HttpContent)">
-            <summary>
-            Sends a POST request to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
-            <summary>
-            Sends a POST request with a <see cref="T:System.Threading.CancellationToken"/> to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PostAsync(System.String,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
-            <summary>
-            Sends a POST request with a <see cref="T:System.Threading.CancellationToken"/> to a <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.Uri,System.Net.Http.HttpContent)">
-            <summary>
-            Send a PUT request to the specified <see cref="T:System.Uri"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.String,System.Net.Http.HttpContent)">
-            <summary>
-            Send a PUT request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.Uri,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
-            <summary>
-            Send a PUT request to the specified <see cref="T:System.Uri"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.PutAsync(System.String,System.Net.Http.HttpContent,System.Threading.CancellationToken)">
-            <summary>
-            Send a PUT request to the specified <see cref="T:System.Uri"/> designated as a <see cref="T:System.String"/> with a <see cref="T:System.Threading.CancellationToken"/> as an asynchronous operation.
-            </summary>
-            <param name="requestUri">The Uri the request is sent to.</param>
-            <param name="content">The HTTP request content sent to the server.</param>
-            <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="requestUri"/> is <see langword="null"/></exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage)">
-            <summary>
-            Send an HTTP request as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="request">The HTTP request message to send.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Threading.CancellationToken)">
-            <summary>
-            Send an HTTP request as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="request">The HTTP request message to send.</param>
-            <param name="cancellationToken">The cancellation token to cancel operation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption)">
-            <summary>
-            Send an HTTP request as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="request">The HTTP request message to send.</param>
-            <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content).</param>
-            <returns>The task object representing the asynchronous operation.</returns>
-        </member>
-        <member name="M:System.Net.Http.GlobalHttpClient.SendAsync(System.Net.Http.HttpRequestMessage,System.Net.Http.HttpCompletionOption,System.Threading.CancellationToken)">
-            <summary>
-            Send an HTTP request as an asynchronous operation.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the <paramref name="request"/> is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the request message was already sent by the client.</exception>
-            <exception cref="T:System.Net.Http.HttpRequestException">Thrown when the request failed due to an underlying issue such as network connectivity, DNS failure, server certificate validation or timeout.</exception>
-            <param name="request">The HTTP request message to send.</param>
-            <param name="completionOption">When the operation should complete (as soon as a response is available or after reading the whole response content).</param>
-            <param name="cancellationToken">The cancellation token to cancel operation.</param>
-            <returns>The task object representing the asynchronous operation.</returns>
         </member>
         <member name="T:System.Randomizer">
             <inheritdoc/>
@@ -1644,6 +1637,22 @@
             <typeparam name="T">The <see langword="unmanaged struct"/>.</typeparam>
             <returns>A random value of the <typeparamref name="T"/> <see langword="unmanaged struct"/>.</returns>
         </member>
+        <member name="T:System.Reflection.ConstructorData">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.Reflection.ConstructorData.Parameters">
+            <summary>
+                Gets the parameters of this constructor.
+            </summary>
+        </member>
+        <member name="M:System.Reflection.ConstructorData.#ctor(System.Reflection.ConstructorInfo,System.Type)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.Reflection.ConstructorData"/> class 
+                with the provided <see cref="T:System.Reflection.ConstructorInfo"/> and target.
+            </summary>
+            <param name="constructor">The constructor.</param>
+            <param name="target">The target.</param>
+        </member>
         <member name="M:System.Reflection.ConstructorData.CreateInstance">
             <summary>
             Creates an instance of this constructor's type.
@@ -1655,9 +1664,9 @@
             <summary>
             Creates an instance of this constructor's type with the given arguments.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when args is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Thrown when args is <see langword="null"/>.</exception>
             <exception cref="T:System.InvalidOperationException">Thrown when the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
-            <exception cref="T:System.Reflection.ParameterCountMismatchException">Thrown when the supplied arguments count is different from the parameters count of this constructor.</exception>
+            <exception cref="!:ParameterCountMismatchException">Thrown when the supplied arguments count is different from the parameters count of this constructor.</exception>
             <param name="args"></param>
             <returns></returns>
         </member>
@@ -1691,106 +1700,125 @@
         </member>
         <member name="T:System.Reflection.Mapper">
             <summary>
-            Handy class to map reflection metadata and provide high performance runtime manipulation.
+                Handy class to map reflection metadata and provide high performance runtime manipulation.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.Constructors">
             <summary>
-            Contains data related to the type's constructors
+                Contains data related to the type's constructors
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.Events">
             <summary>
-            Contains data related to the type's events
+                Contains data related to the type's events
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.Fields">
             <summary>
-            Contains data related to the type's fields
+                Contains data related to the type's fields
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.Methods">
             <summary>
-            Contains data related to the type's methods
+                Contains data related to the type's methods
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.MethodsExcludingObjectBaseMembers">
             <summary>
-            Contains data related to the type's methods - excluding members inhereted from the Object base class
+                Contains data related to the type's methods - excluding members inhereted from the Object base class
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.MethodsDeclaringTypeOnly">
             <summary>
-            Contains data related to the type's methods - excluding all inhereted members
+                Contains data related to the type's methods - excluding all inhereted members
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper.Properties">
             <summary>
-            Contains data related to the type's properties
+                Contains data related to the type's properties
             </summary>
         </member>
         <member name="M:System.Reflection.Mapper.#ctor(System.Object)">
             <summary>
-            Creates the mapper for the given object.
+                Initializes a new instance of <see cref="T:System.Reflection.Mapper"/> class with the provided instance object.
             </summary>
-            <param name="object">The object.</param>
+            <param name="object">
+                The object.
+            </param>
         </member>
         <member name="M:System.Reflection.Mapper.#ctor(System.Type)">
             <summary>
-            Creates the mapper for the given type.
+                Initializes a new instance of <see cref="T:System.Reflection.Mapper"/> class with the provided type.
             </summary>
-            <param name="type">The type.</param>
+            <param name="type">
+                The type.
+            </param>
         </member>
         <member name="T:System.Reflection.Mapper`1">
             <summary>
-            Handy class to map reflection metadata and provide high performance runtime manipulation.
+                Handy class to map reflection metadata and provide high performance runtime manipulation.
             </summary>
-            <typeparam name="TMember">The type of the <see cref="T:System.Reflection.MemberInfo"/></typeparam>
+            <typeparam name="T">
+                The type.
+            </typeparam>
         </member>
         <member name="P:System.Reflection.Mapper`1.Constructors">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s constructors.
+                Gets the data about all constructors of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Events">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s events.
+                Gets the data about all events of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Fields">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s fields.
+                Gets the data about all fields of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Methods">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s methods.
+                Gets the data about all methods of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.MethodsExcludingObjectBaseMembers">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s methods 
-            - excluding members inhereted from the object base class
+                Gets the data about all methods of <typeparamref name="T"/> excluding those inherited from <see cref="T:System.Object"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.MethodsDeclaringTypeOnly">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s methods 
-            - excluding all inhereted members
+                Gets the data about all methods declared by <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Properties">
             <summary>
-            Contains data related to <typeparamref name="TMember"/>'s properties.
+            Contains data related to <typeparamref name="T"/>'s properties.
             </summary>
         </member>
-        <member name="M:System.Reflection.PropertyData.SetValue(System.Object,System.Object)">
+        <member name="T:System.Reflection.MemberData`1">
             <summary>
-            Sets the value of this property given the instance and the value. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+                Contains rich data and privides helper methods for a <typeparamref name="TMember"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown when the property has no setter, the target is <see langword="null"/> and the property is not <see langword="static"/> or the value is <see langword="null"/> and the property is not nullable.</exception>
-            <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
-            <param name="value">The value.</param>
+            <typeparam name="TMember">
+                The <see cref="T:System.Reflection.MemberInfo"/> type.
+            </typeparam>
+        </member>
+        <member name="P:System.Reflection.MemberData`1.Member">
+            <summary>
+            Gets the <see cref="T:System.Reflection.MemberInfo"/> for this class.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.MemberData`1.Attributes">
+            <summary>
+            Gets the custom attributes of this member.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.MemberData`1.CustomAttributeDatas">
+            <summary>
+            Gets the custom attribute datas of this member.
+            </summary>
         </member>
         <member name="M:System.Reflection.PropertyData.GetValue(System.Object)">
             <summary>
@@ -1800,289 +1828,514 @@
             <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
             <returns>The value of the property.</returns>
         </member>
-        <member name="T:System.Reflection.ReflectionUtilities">
+        <member name="M:System.Reflection.PropertyData.SetValue(System.Object,System.Object)">
             <summary>
-            This class provides utilities for <see cref="N:System.Reflection"/>
+            Sets the value of this property given the instance and the value. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Thrown when the property has no setter, the target is <see langword="null"/> and the property is not <see langword="static"/> or the value is <see langword="null"/> and the property is not nullable.</exception>
+            <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="T:System.Reflection.ReflectionExtensions">
+            <summary>
+                This class provides extension methods for <see cref="N:System.Reflection"/>
             </summary>
         </member>
-        <member name="M:System.Reflection.ReflectionUtilities.Inherits(System.Type,System.Type)">
+        <member name="M:System.Reflection.ReflectionExtensions.Inherits(System.Type,System.Type)">
             <summary>
-            Indicates if the provided type inherits from the base type provided.
+                Indicates if the <paramref name="child"/> type inherits from the <paramref name="parent"/> type.
             </summary>
-            <param name="derived">The derived type.</param>
-            <param name="base">The potential base of the type.</param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.Implements(System.Type,System.Type)">
-            <summary>
-            Indicates if the provided type implements the provided interface type.
-            </summary>
-            <param name="type">The type.</param>
-            <param name="interfaceType">The type of the interface to check.</param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.IsTuple(System.Type)">
-            <summary>
-            Indicates if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
-            <param name="type">The target type to check</param>
-            <returns>True if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>. Otherwise false.</returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.IsNullable(System.Type)">
-            <summary>
-            Indicates if the type is <see cref="T:System.Nullable`1"/>
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
-            <param name="type">The target type to check</param>
-            <returns>True if the type is <see cref="T:System.Nullable`1"/>. Otherwise false.</returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.CanBeConvertedTo(System.Type,System.Type)">
-            <summary>
-            Indicates if the type can be implicitly converted to the supplied type.
-            </summary>
-            <param name="type">The type.</param>
-            <param name="target">The target type.</param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.IsStatic(System.Type)">
-            <summary>
-            Indicates if the type is <see langword="static"/>.
-            </summary>
-            <param name="type">The type.</param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.TryGetCustomAttribute``1(System.Type,``0@,System.Boolean)">
-            <summary>
-            Attempts to get the custom attribute of the given type.
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
-            <typeparam name="T">The attribute to search.</typeparam>
-            <param name="type">The type where the attribute will be searched.</param>
-            <param name="attribute">The output attribute. Null if it can't be found.</param>
-            <param name="inherited">Checks if it should inspect of ancestors of the given type.</param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.GetEnumFieldAttribute``2(``1,System.Boolean)">
-            <summary>
-            Returns the specified attribute if exists on the give value of the enum.
-            </summary>
-            <typeparam name="TAttribute">The type of the attribute.</typeparam>
-            <typeparam name="TEnum">The type of the enum.</typeparam>
-            <param name="enum">The enum.</param>
-            <param name="inherited">Indicates if it should inspect for the ancestors.</param>
-            <returns></returns>
-        </member>
-        <member name="M:System.Reflection.ReflectionUtilities.HasDefaultConstructor(System.Type)">
-            <summary>
-            Indicates if the given type contains a default constructor. 
-            This method will always return true for structs (Structures in Visual Basic)
-            </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when type is null.</exception>
-            <param name="type">The type.</param>
+            <remarks>
+                This method will return <see langword="false"/> if:
+                <list type="number">
+                    <item>
+                        <paramref name="child"/> is an <see langword="interface"/> but <paramref name="parent"/> is not.
+                    </item>
+                    <item>
+                        <paramref name="child"/> and <paramref name="parent"/> are the same type.
+                    </item>
+                    <item>
+                        <paramref name="child"/> does not inherit from <paramref name="parent"/>.
+                    </item>
+                </list>
+            </remarks>
+            <param name="child">
+                The child type.
+            </param>
+            <param name="parent">
+                The parent type.
+            </param>
             <returns>
-            <see langword="true"/> if the type is a struct or has a parameterless constructor. 
-            Otherwise <see langword="false"/>
+                <see langword="true"/> if <paramref name="child"/> inherits from <paramref name="parent"/>; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Throw when either <paramref name="child"/> or <paramref name="parent"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.Implements(System.Type,System.Type)">
+            <summary>
+                Indicates if the <paramref name="child"/> type implements from the <paramref name="parent"/> type.
+            </summary>
+            <remarks>
+                This method will return <see langword="false"/> if:
+                <list type="number">
+                    <item>
+                        <paramref name="child"/> is an <see langword="interface"/>.
+                    </item>
+                    <item>
+                        <paramref name="parent"/> is not an <see langword="interface"/>.
+                    </item>
+                    <item>
+                        <paramref name="child"/> doesn't implement <paramref name="parent"/>.
+                    </item>
+                </list>
+            </remarks>
+            <param name="child">
+                The child type.
+            </param>
+            <param name="parent">
+                The parent type.
+            </param>
+            <returns>
+                <see langword="true"/> if <paramref name="child"/> implements from <paramref name="parent"/>; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Throw when either <paramref name="child"/> or <paramref name="parent"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.IsTuple(System.Type)">
+            <summary>
+                Indicates if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>.
+            </summary>
+            <param name="type">
+                The type.
+            </param>
+            <returns>
+                <see langword="true"/> if the type implements <see cref="T:System.Runtime.CompilerServices.ITuple"/>; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="type"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.IsNullable(System.Type)">
+            <summary>
+                Indicates if the type is <see cref="T:System.Nullable`1"/>.
+            </summary>
+            <param name="type">
+                The target type to check
+            </param>
+            <returns>
+                <see langword="true"/> if the type is <see cref="T:System.Nullable`1"/>; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="type"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.IsStatic(System.Type)">
+            <summary>
+                Indicates if the type is <see langword="static"/>.
+            </summary>
+            <param name="type">
+                The type.
+            </param>
+            <returns>
+                <see langword="true"/> if <paramref name="type"/> is <see langword="static"/>; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="type"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.TryGetCustomAttribute``1(System.Type,``0@,System.Boolean)">
+            <summary>
+                Attempts to get the custom attribute of the given type.
+            </summary>
+            <typeparam name="T">
+                The type of the attribute to search.
+            </typeparam>
+            <param name="type">
+                The type.
+            </param>
+            <param name="attribute">
+                The attribute.
+            </param>
+            <param name="inherited">
+                Checks if it should inspect of ancestors of the given type.
+            </param>
+            <returns></returns>
+            <exception cref = "T:System.ArgumentNullException"> 
+                Thrown when <paramref name="type"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.GetEnumFieldAttribute``2(``1,System.Boolean)">
+            <summary>
+                Returns the specified attribute if exists on the give value of the <see langword="enum"/>.
+            </summary>
+            <typeparam name="TAttribute">
+                The type of the attribute.
+            </typeparam>
+            <typeparam name="TEnum">
+                The type of the <see langword="enum"/>.
+            </typeparam>
+            <param name="enum">
+                The <see langword="enum"/>.
+            </param>
+            <param name="inherited">
+                Indicates if it should inspect for the ancestors.
+            </param>
+            <returns>
+                The specified attribute if exists on the give value of the <see langword="enum"/>; otherwise, <see langword="null"/>.
             </returns>
         </member>
-        <member name="M:System.Reflection.ReflectionUtilities.HasDefaultConstructor``1">
+        <member name="M:System.Reflection.ReflectionExtensions.IsUnmanaged``1(``0)">
             <summary>
-            Indicates if the given type contains a default constructor. 
-            This method will always return true for structs (Structures in Visual Basic)
+                Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
             </summary>
-            <typeparam name="T">The type.</typeparam>
+            <remarks>
+                This method returns <see langword="true"/> if the type is an <see langword="unmanaged"/> type.
+                <br/>
+                <br/>
+                An <see langword="unmanaged"/> type meets the following conditions:
+                <list type="bullet">
+                    <item>
+                        <description>
+                            The type is a <see langword="struct"/>.
+                        </description>
+                    </item>
+                    <item>
+                        <description>
+                            None of its fields are reference types, pointers, or structures that constains such fields.
+                        </description>
+                    </item>
+                </list>
+            </remarks>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <param name="_">
+                This parameter is ignored.
+            </param>
             <returns>
-            <see langword="true"/> if the type is a struct or has a parameterless constructor. 
-            Otherwise <see langword="false"/>
+                <see langword="true"/> if the type is an <see langword="unmanaged"/> type; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="T:System.Reflection.ReflectionHelper">
+            <summary>
+                This class provides helper methods for <see cref="N:System.Reflection"/>.
+            </summary>
+        </member>
+        <member name="M:System.Reflection.ReflectionHelper.HasDefaultConstructor(System.Type)">
+            <summary>
+                Indicates if <paramref name="type"/> contains a default constructor. 
+            </summary>
+            <remarks>
+                Always returns <see langword="true"/> if <paramref name="type"/> is a <see langword="struct"/>.
+            </remarks>
+            <param name="type">The type.</param>
+            <returns>
+                <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="type"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.ReflectionHelper.HasDefaultConstructor``1">
+            <summary>
+                Indicates if <typeparamref name="T"/> contains a default constructor. 
+            </summary>
+            <remarks>
+                Always returns <see langword="true"/> if <typeparamref name="T"/> is a <see langword="struct"/>.
+            </remarks>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <returns>
+                <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionHelper.GetAllTypes">
+            <summary>
+                Get all types from all assemblies in <see cref="P:System.AppDomain.CurrentDomain"/>.
+            </summary>
+            <remarks>
+                This operation is expensive, so caching the result of this method is recommended.
+            </remarks>
+            <returns>
+                An array containing all types from all assemblies in <see cref="P:System.AppDomain.CurrentDomain"/>.
             </returns>
         </member>
         <member name="M:System.SystemUtilities.AsString(System.Char[])">
             <summary>
-            Creates a <see cref="T:System.String"/> with the providen array.
+                Creates a <see cref="T:System.String"/> with the provided array.
             </summary>
-            <param name="charArray">The array.</param>
-            <returns></returns>
+            <param name="charArray">
+                The array.
+            </param>
+            <returns>
+                A new <see cref="T:System.String"/> built from the array provided.
+            </returns>
         </member>
         <member name="M:System.SystemUtilities.AsString(System.ReadOnlySpan{System.Char})">
             <summary>
-            Creates a <see cref="T:System.String"/> with the provided span.
+                Creates a <see cref="T:System.String"/> with the provided span.
             </summary>
-            <param name="charSpan">The span.</param>
-            <returns></returns>
+            <param name="charSpan">
+                The span.
+            </param>
+            <returns>
+                A new <see cref="T:System.String"/> build from the span provided.
+            </returns>
         </member>
         <member name="M:System.SystemUtilities.SubstringBetween(System.String,System.Char,System.Char,System.Int32,System.Boolean)">
             <summary>
-            Gets the substring between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
+                Returns the substring between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
             </summary>
-            <param name="input"></param>
-            <param name="leftBound"></param>
-            <param name="rightBound"></param>
-            <param name="includeBounds"></param>
-            <returns></returns>
+            <param name="input">
+                The input.
+            </param>
+            <param name="leftBound">
+                The left bound.
+            </param>
+            <param name="rightBound">
+                The right bound.
+            </param>
+            <param name="includeBounds">
+                Indicates if bounds should be included in the substring.
+            </param>
+            <returns>
+                The substring between two <see cref="T:System.Char"/> delimiters.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Throw when the input is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when the startIndex is greater than or equal to input's lenght.
+            </exception>
         </member>
         <member name="M:System.SystemUtilities.SubstringBetween(System.MutableString,System.Char,System.Char,System.Int32,System.Boolean)">
             <summary>
-            Gets the substring between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
+                Returns the substring between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
             </summary>
-            <param name="input"></param>
-            <param name="leftBound"></param>
-            <param name="rightBound"></param>
-            <param name="includeBounds"></param>
-            <returns></returns>
-        </member>
-        <member name="M:System.SystemUtilities.SubstringsBetween(System.MutableString,System.Char,System.Char,System.Int32,System.Boolean)">
-            <summary>
-            Gets an array of substrings between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
-            </summary>
-            <param name="input"></param>
-            <param name="leftBound"></param>
-            <param name="rightBound"></param>
-            <param name="includeBounds"></param>
-            <returns></returns>
-        </member>
-        <member name="M:System.SystemUtilities.SubstringsBetween(System.String,System.Char,System.Char,System.Int32,System.Boolean)">
-            <summary>
-            Gets an array of substrings between two <see cref="T:System.Char"/> delimiters. Optionally, you can include them into the result.
-            </summary>
-            <param name="input"></param>
-            <param name="leftBound"></param>
-            <param name="rightBound"></param>
-            <param name="includeBounds"></param>
-            <returns></returns>
+            <param name="input">
+                The input.
+            </param>
+            <param name="leftBound">
+                The left bound.
+            </param>
+            <param name="rightBound">
+                The right bound.
+            </param>
+            <param name="includeBounds">
+                Indicates if bounds should be included in the substring.
+            </param>
+            <returns>
+                The substring between two <see cref="T:System.Char"/> delimiters.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Throw when the input is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when the startIndex is greater than or equal to input's lenght.
+            </exception>
         </member>
         <member name="M:System.SystemUtilities.IndexesOf(System.String,System.Char,System.Int32,System.Int32)">
             <summary>
-            Gets all the indexes of the providen <see cref="T:System.Char"/>, this method returns an empty array if no indexes are found.
+                Gets all the indexes of the provided <see cref="T:System.Char"/>, this method returns an empty array if no indexes are found.
             </summary>
-            <param name="input"></param>
-            <param name="value"></param>
-            <param name="startIndex"></param>
-            <param name="count"></param>
-            <returns></returns>
+            <param name="input">
+                The input.
+            </param>
+            <param name="value">
+                The value.
+            </param>
+            <param name="startIndex">
+                The starting index.
+            </param>
+            <param name="count">
+                The amount of characters to search
+            </param>
+            <returns>
+                A <see cref="T:System.Collections.Generic.ReadOnlyList`1"/> with all indexes found.
+            </returns>
         </member>
         <member name="M:System.SystemUtilities.ToMutable(System.String)">
             <summary>
-            Creates a <see cref="T:System.MutableString"/> with the <see cref="T:System.String"/> provided.
+                Creates a <see cref="T:System.MutableString"/> with the <see cref="T:System.String"/> provided.
             </summary>
-            <param name="value">The string.</param>
-            <returns>A mutable string.</returns>
+            <param name="value">
+                The string.
+            </param>
+            <returns>
+                A <see cref="T:System.MutableString"/>.
+            </returns>
         </member>
         <member name="M:System.SystemUtilities.Reverse(System.String)">
             <summary>
-            Returns a new <see cref="T:System.String"/> with the reversed characters.
+                Returns a new <see cref="T:System.String"/> with the reversed characters.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when the provided string is <see langword="null"/></exception>
-            <param name="str">The string to be reversed.</param>
-            <returns>A reversed string.</returns>
+            <param name="str">
+                The string to be reversed.
+            </param>
+            <returns>
+                A reversed string.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when the provided string is <see langword="null"/>.
+            </exception>
         </member>
-        <member name="M:System.SystemUtilities.Like(System.String,System.String,System.StringComparison)">
+        <member name="M:System.SystemUtilities.Like(System.String,System.String)">
             <summary>
-            Returns a boolean indicating if both strings are similar content-wise (case-insensitive by default)
+                Returns a boolean indicating if both strings are similar content-wise (case-insensitive).
             </summary>
-            <param name="str">The string to be compared</param>
-            <param name="other">The string to look for similarities</param>
-            <param name="comparison">The comparison to be used to determine if they are alike</param>
-            <returns>A boolean indicating if the string are alike.</returns>
+            <param name="str">
+                The string to be compared.
+            </param>
+            <param name="other">
+                The string to look for similarities.
+            </param>
+            <param name="comparison">
+                The comparison to be used to determine if they are alike.
+            </param>
+            <returns>
+                <see langword="true"/> if the strings are similar (case-insensitive); otherwise, <see langword="false"/>.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either str or other are <see langword="null"/>.
+            </exception>
         </member>
         <!-- Badly formed XML comment ignored for member "M:System.SystemUtilities.ContainsAny(System.String,System.String[])" -->
-        <!-- Badly formed XML comment ignored for member "M:System.SystemUtilities.ContainsAll(System.String,System.String[])" -->
+        <!-- Badly formed XML comment ignored for member "M:System.SystemUtilities.ContainsAny(System.String,System.StringComparison,System.String[])" -->
+        <member name="M:System.SystemUtilities.ContainsAll(System.String,System.String[])">
+            <summary>
+                Indicates if the string contains all of the words provided.
+            </summary>
+            <param name="str">
+                The string.
+            </param>
+            <param name="words">
+                The words.
+            </param>
+            <returns>
+                <see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.SystemUtilities.ContainsAll(System.String,System.StringComparison,System.String[])">
+            <summary>
+                Indicates if the string contains all of the words provided.
+            </summary>
+            <param name="str">
+                The string.
+            </param>
+            <param name="comparisonType">
+                The comparison to be used.
+            </param>
+            <param name="words">
+                The words.
+            </param>
+            <returns>
+                <see langword="true"/> if the string contains all of the provided words, otherwise, <see langword="false"/>.
+            </returns>
+        </member>
         <member name="M:System.SystemUtilities.Quote(System.String)">
             <summary>
-            Quotes the given string.
+                Quotes the given <see cref="T:System.String"/>.
             </summary>
-            <param name="str">The string.</param>
-            <returns></returns>
+            <param name="str">
+                The string.
+            </param>
+            <returns>A quoted <see cref="T:System.String"/>.</returns>
         </member>
         <member name="M:System.SystemUtilities.IsType``1(System.Object)">
             <summary>
-            Checks if the runtime type of obj is the targeted one.
+                Checks if the runtime type of obj is the targeted one.
             </summary>
-            <typeparam name="T">Target type.</typeparam>
-            <param name="obj">The object.</param>
-            <returns></returns>
+            <typeparam name="T">
+                Target type.
+            </typeparam>
+            <param name="obj">
+                The object.
+            </param>
+            <returns>
+                <see langword="true"/> if the runtime type of obj is the targeted one; otherwise, <see langword="false"/>.
+            </returns>
         </member>
         <member name="M:System.SystemUtilities.IsType(System.Object,System.Type)">
             <summary>
-            Checks if the runtime type of obj is the targeted one.
+                Checks if the runtime type of obj is the targeted one.
             </summary>
-            <typeparam name="T">Target type.</typeparam>
-            <param name="obj">The object.</param>
-            <returns></returns>
+            <param name="obj">
+                The object.
+            </param>
+            <param name="targetType">
+                The type.
+            </param>
+            <returns>
+                <see langword="true"/> if the runtime type of obj is the targeted one; otherwise, <see langword="false"/>.
+            </returns>
         </member>
         <member name="M:System.SystemUtilities.GetFlags``1(``0)">
             <summary>
-            Gets each flags of the given <typeparamref name="TEnum"/> instance.
+                Gets each flags of the given <typeparamref name="TEnum"/> instance.
             </summary>
-            <typeparam name="TEnum">Type of the <see cref="T:System.Enum"/></typeparam>
-            <param name="enum">The <see cref="T:System.Enum"/> object</param>
-            <returns>A <see cref="!:&lt;TEnum&gt;"/>[] containing all the flags found in the current instance</returns>
+            <typeparam name="TEnum">
+                Type of the <see cref="T:System.Enum"/>.
+            </typeparam>
+            <param name="enum">
+                The <see cref="T:System.Enum"/> object.
+            </param>
+            <returns>
+                A <typeparamref name="TEnum"/>[] containing all the flags found in the current instance.
+            </returns>
         </member>
         <member name="T:System.Threading.Tasks.SynchronizationContextRemover">
             <summary>
-            This structure is used to remove the current SynchronizationContext. This helps to reduce the verbosity of using <see cref="M:System.Threading.Tasks.Task.ConfigureAwait(System.Boolean)"/>
+                This structure is used to remove <see cref="P:System.Threading.SynchronizationContext.Current"/>. 
+                This helps to reduce the verbosity of using <see cref="M:System.Threading.Tasks.Task.ConfigureAwait(System.Boolean)"/>
             </summary>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.Task{``0},System.Boolean)">
+        <member name="P:System.Threading.Tasks.SynchronizationContextRemover.IsCompleted">
             <summary>
-            Runs a <see cref="T:System.Threading.Tasks.Task`1"/> synchronously and returns <typeparamref name="TResult"/>.
+                Indicates if <see cref="P:System.Threading.SynchronizationContext.Current"/> is <see langword="null"/>.
             </summary>
-            <typeparam name="TResult">Type of the result object.</typeparam>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
-            <returns>The result of the given task.</returns>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run(System.Threading.Tasks.Task,System.Boolean)">
-            <summary>
-            Runs a <see cref="T:System.Threading.Tasks.Task"/> synchronously.
-            </summary>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+        <member name="M:System.Threading.Tasks.SynchronizationContextRemover.OnCompleted(System.Action)">
+            <inheritdoc/>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run``1(System.Threading.Tasks.ValueTask{``0},System.Boolean)">
+        <member name="M:System.Threading.Tasks.SynchronizationContextRemover.GetAwaiter">
             <summary>
-            Runs a <see cref="T:System.Threading.Tasks.ValueTask`1"/> synchronously and returns <typeparamref name="TResult"/>.
+                Returns the current instace of <see cref="T:System.Threading.Tasks.SynchronizationContextRemover"/>.
             </summary>
-            <typeparam name="TResult">Type of the result object.</typeparam>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
-            <returns>The result of the given task.</returns>
+            <returns>
+                The current instace of <see cref="T:System.Threading.Tasks.SynchronizationContextRemover"/>.
+            </returns>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.Run(System.Threading.Tasks.ValueTask,System.Boolean)">
+        <member name="M:System.Threading.Tasks.SynchronizationContextRemover.GetResult">
             <summary>
-            Runs a <see cref="T:System.Threading.Tasks.ValueTask"/> synchronously.
+                This method does nothing.
             </summary>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync(System.Threading.Tasks.Task,System.Boolean)">
+        <member name="M:System.Threading.Tasks.TasksExtensions.Discard(System.Threading.Tasks.Task)">
             <summary>
-            Fires and forgets the tasks.
+                Fires and forgets the task.
             </summary>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+            <param name="_">
+                The task to discard.
+            </param>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync``1(System.Threading.Tasks.Task{``0},System.Boolean)">
+        <member name="M:System.Threading.Tasks.TasksExtensions.Discard(System.Threading.Tasks.ValueTask)">
             <summary>
-            Fires and forgets the tasks.
+                Fires and forgets the task.
             </summary>
-            <typeparam name="TResult">Type of the result object.</typeparam>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+            <param name="_">
+                The task to discard.
+            </param>
         </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync(System.Threading.Tasks.ValueTask,System.Boolean)">
+        <member name="M:System.Threading.Tasks.TasksExtensions.Discard``1(System.Threading.Tasks.ValueTask{``0})">
             <summary>
-            Fires and forgets the tasks.
+                Fires and forgets the task.
             </summary>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
-        </member>
-        <member name="M:System.Threading.Tasks.TasksUtilities.RunAsync``1(System.Threading.Tasks.ValueTask{``0},System.Boolean)">
-            <summary>
-            Fires and forgets the tasks.
-            </summary>
-            <typeparam name="TResult">Type of the result object.</typeparam>
-            <param name="task">The task that will run.</param>
-            <param name="continueOnCapturedContext">Indicates if the task should continue in a captured context.</param>
+            <param name="_">
+                The task to discard.
+            </param>
         </member>
         <member name="T:System.UInt24">
             <summary>
@@ -2329,21 +2582,37 @@
         </member>
         <member name="M:System.Xml.XmlConvert.SerializeObject``1(``0)">
             <summary>
-            Serializes the object into XML Format
+                Serializes the object into XML Format
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown if the object is null</exception>
-            <typeparam name="T">Type of the object that will be serialized</typeparam>
-            <param name="obj">The object to be serialized</param>
-            <returns>A string with the XML representation of the object provided.</returns>
+            <typeparam name="T">
+                Type of the object that will be serialized
+            </typeparam>
+            <param name="obj">
+                The object to be serialized
+            </param>
+            <returns>
+                A string with the XML representation of the object provided.
+            </returns>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown if the object is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:System.Xml.XmlConvert.DeserializeObject``1(System.String)">
             <summary>
-            Deserializes a XML Formatted string into an object
+                Deserializes a XML Formatted string into an object
             </summary>
-            <exception cref="T:System.InvalidOperationException">Thrown if the deserialization fails.</exception>
-            <typeparam name="T">Type of the object that will be serialized</typeparam>
-            <param name="input">The Formatted XML string</param>
-            <returns>An object.</returns>
+            <typeparam name="T">
+                Type of the object that will be serialized
+            </typeparam>
+            <param name="input">
+                The Formatted XML string
+            </param>
+            <returns>
+                The object of type <typeparamref name="T"/> being deserialized.
+            </returns>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown if the deserialization fails.
+            </exception>
         </member>
     </members>
 </doc>

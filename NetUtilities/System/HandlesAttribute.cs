@@ -1,6 +1,6 @@
-﻿using NetUtilities;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
+using NetUtilities;
 
 namespace System
 {
@@ -17,12 +17,12 @@ namespace System
         /// </summary>
         /// <exception cref="EventNotFoundException">Thrown when the event can't be found.</exception>
         /// <param name="eventSourceType">The type of the source of events.</param>
-        /// <param name="eventName">The name of the event, recommended to use nameof() operator to prevent <see cref="EventNotFoundException"/>.</param>
+        /// <param name="eventName">The name of the event, recommended to use breakthis() operator to prevent <see cref="EventNotFoundException"/>.</param>
         /// <param name="flags">The flags used to search the event.</param>
         /// <param name="methodName">The name of the method. This is gathered from <see cref="CallerMemberNameAttribute"/> so any value you pass here is ommited.</param>
         public HandlesAttribute(Type eventSourceType, string eventName, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance)
         {
-            Ensure.NotNull(eventSourceType, nameof(eventSourceType));
+            Ensure.NotNull(eventSourceType);
             EventInfo = eventSourceType.GetEvent(eventName, flags);
 
             if (EventInfo is null)

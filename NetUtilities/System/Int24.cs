@@ -1,6 +1,6 @@
-﻿using NetUtilities;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Runtime.InteropServices;
+using NetUtilities;
 
 namespace System
 {
@@ -23,10 +23,9 @@ namespace System
         {
         }
 
-        public Int24(int value) 
+        public Int24(int value)
         {
-            if ((uint)value > MaxValue)
-                Throw.InvalidOperation("The value is outside the range of admited values.");
+            Ensure.IsInRange((uint)value <= MaxValue, value, "The value is outside the range of admited values.");
 
             _value = value;
         }
@@ -171,19 +170,17 @@ namespace System
 
         public static Int24 Parse(string input, NumberStyles style, IFormatProvider? provider)
         {
-            if (input is null)
-                Throw.NullArgument(nameof(input));
+            Ensure.NotNull(input);
 
             if (int.TryParse(input, style, provider, out var parsed))
             {
                 if ((uint)parsed > MaxValue)
-                    Throw.Overflow("The value represented by the string is outside of the allowed ranged.");
+                    throw new OverflowException("The value represented by the string is outside of the allowed ranged.");
 
                 return new Int24(parsed);
             }
 
-            Throw.InvalidFormat("The string is not in a valid format");
-            return default;
+            throw new FormatException("The string is not in a valid format");
         }
 
         public static bool TryParse(string input, out Int24 result)
