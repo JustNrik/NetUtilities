@@ -4,17 +4,6 @@
         <name>NetUtilities</name>
     </assembly>
     <members>
-        <member name="T:System.CapturedExceptionEventArgs">
-            <summary>
-            This class contains the <see cref="P:System.CapturedExceptionEventArgs.Exception"/> throw on <see cref="T:System.DefaultSynchronizationContext"/>. 
-            If multiple exceptions are throw, they will be wrapped on an <see cref="T:System.AggregateException"/>.
-            </summary>
-        </member>
-        <member name="P:System.CapturedExceptionEventArgs.Exception">
-            <summary>
-            The exception.
-            </summary>
-        </member>
         <member name="M:System.Collections.Generic.GenericCollectionExtensions.AsIndexed``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             Enumerates the provided collection with an index.
@@ -622,32 +611,6 @@
             This struct represents a RGB Color
             </summary>
         </member>
-        <member name="T:System.DefaultSynchronizationContext">
-            <summary>
-            This class gives a default <see cref="T:System.Threading.SynchronizationContext"/> for contextless application like Console. 
-            Useful when you have <see langword="async"/> <see langword="void"/> methods as they exceptions cannot be caught in a contexless scenario.
-            </summary>
-        </member>
-        <member name="P:System.DefaultSynchronizationContext.Shared">
-            <summary>
-            Singleton instance of a <see cref="T:System.DefaultSynchronizationContext"/>.
-            </summary>
-        </member>
-        <member name="M:System.DefaultSynchronizationContext.Send(System.Threading.SendOrPostCallback,System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.DefaultSynchronizationContext.Post(System.Threading.SendOrPostCallback,System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.DefaultSynchronizationContext.OperationCompleted">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.DefaultSynchronizationContext.CreateCopy">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.DefaultSynchronizationContext.ToString">
-            <inheritdoc/>
-        </member>
         <member name="T:System.Diagnostics.ProcessExtensions">
             <summary>
             Utility class for <see cref="T:System.Diagnostics.Process"/>
@@ -745,15 +708,19 @@
         </member>
         <member name="T:System.ICloneable`1">
             <summary>
-            Supports cloning, which creates a new instance of a class with the same value as an existing instance.
+                Supports cloning, which creates a new instance of a class with the same value as an existing instance.
             </summary>
-            <typeparam name="T">The type.</typeparam>
+            <typeparam name="T">
+                The type.
+            </typeparam>
         </member>
         <member name="M:System.ICloneable`1.Clone">
             <summary>
-            Creates a new object that is a copy of the current instance.
+                Creates a new object that is a copy of the current instance.
             </summary>
-            <returns>A new object that is a copy of this instance.</returns>
+            <returns>
+                A new object that is a copy of this instance.
+            </returns>
         </member>
         <member name="T:System.Int24">
             <summary>
@@ -1929,64 +1896,6 @@
             Otherwise <see langword="false"/>
             </returns>
         </member>
-        <member name="T:System.SynchronizationContextHelper">
-            <summary>
-            This class is a helper to run an action in the <see cref="T:System.DefaultSynchronizationContext"/>. 
-            </summary>
-        </member>
-        <member name="E:System.SynchronizationContextHelper.CapturedException">
-            <summary>
-            Occurs when exceptions are captured in the <see cref="T:System.DefaultSynchronizationContext"/>.
-            </summary>
-        </member>
-        <member name="M:System.SynchronizationContextHelper.Run(System.Action)">
-            <summary>
-            Runs the <paramref name="action"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
-            </summary>
-            <param name="action">The action to execute.</param>
-        </member>
-        <member name="M:System.SynchronizationContextHelper.Run``1(System.Action{``0},``0)">
-            <summary>
-            Runs the <paramref name="action"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance with the arguments provided via <paramref name="state"/>.
-            </summary>
-            <param name="action">The action to execute.</param>
-            <param name="state">The arguments for the action.</param>
-            <typeparam name="TState">The type of the arguments for the action.</typeparam>
-        </member>
-        <member name="M:System.SynchronizationContextHelper.RunAsync(System.Func{System.Threading.Tasks.Task})">
-            <summary>
-            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
-            </summary>
-            <param name="func">The function to execute.</param>
-            <returns>The task object returned by the func.</returns>
-        </member>
-        <member name="M:System.SynchronizationContextHelper.RunAsync``1(System.Func{``0,System.Threading.Tasks.Task},``0)">
-            <summary>
-            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
-            </summary>
-            <param name="func">The function to execute.</param>
-            <param name="state">The arguments for the action.</param>
-            <typeparam name="TState">The type of the arguments for the action.</typeparam>
-            <returns>The task object returned by the func.</returns>
-        </member>
-        <member name="M:System.SynchronizationContextHelper.RunAsync``1(System.Func{System.Threading.Tasks.Task{``0}})">
-            <summary>
-            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
-            </summary>
-            <param name="func">The function to execute.</param>
-            <typeparam name="TResult">The result of the task.</typeparam>
-            <returns>The task object returned by the func.</returns>
-        </member>
-        <member name="M:System.SynchronizationContextHelper.RunAsync``2(System.Func{``0,System.Threading.Tasks.Task{``1}},``0)">
-            <summary>
-            Runs the <paramref name="func"/> in the <see cref="P:System.DefaultSynchronizationContext.Shared"/> instance.
-            </summary>
-            <param name="func">The function to execute.</param>
-            <param name="state">The object to be passed to the delegate.</param>
-            <typeparam name="TState">The type of the arguments for the action.</typeparam>
-            <typeparam name="TResult">The result of the task.</typeparam>
-            <returns>The task object returned by the func.</returns>
-        </member>
         <member name="M:System.SystemUtilities.AsString(System.Char[])">
             <summary>
             Creates a <see cref="T:System.String"/> with the providen array.
@@ -2177,8 +2086,246 @@
         </member>
         <member name="T:System.UInt24">
             <summary>
-            Represents a 24-bit unsigned integer
+                Represents a 24-bit unsigned integer
             </summary>
+        </member>
+        <member name="F:System.UInt24.MaxValue">
+            <summary>
+                Represents the largest possible value of <see cref="T:System.UInt24"/>. This field is constant.
+            </summary>
+        </member>
+        <member name="F:System.UInt24.MinValue">
+            <summary>
+                Represents the smallest possible value of <see cref="T:System.UInt24"/>. This field is constant.
+            </summary>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.Int24)">
+            <summary>
+                Creates a new instance of <see cref="T:System.UInt24"/> <see langword="struct"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="value"/> is higher than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                The value.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.Int32)">
+            <summary>
+                Creates a new instance of <see cref="T:System.UInt24"/> <see langword="struct"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="value"/> is higher than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                The value.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.UInt32)">
+            <summary>
+                Creates a new instance of <see cref="T:System.UInt24"/> <see langword="struct"/>.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="value"/> is higher than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                The value.
+            </param>
+        </member>
+        <member name="M:System.UInt24.ToString">
+            <inheritdoc cref="M:System.UInt32.ToString"/>
+        </member>
+        <member name="M:System.UInt24.GetHashCode">
+            <inheritdoc cref="M:System.UInt32.GetHashCode"/>
+        </member>
+        <member name="M:System.UInt24.Equals(System.Object)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.UInt24.Equals(System.UInt24)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.UInt24.Equals(System.Nullable{System.UInt24})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.UInt24.CompareTo(System.UInt24)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.UInt24.CompareTo(System.Nullable{System.UInt24})">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.UInt24.ToString(System.String,System.IFormatProvider)">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.UInt24.op_Equality(System.UInt24,System.UInt24)">
+            <summary>
+                Indicates of both instances represent the same value.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+               <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Inequality(System.UInt24,System.UInt24)">
+            <summary>
+                Indicates of both instances represent different values.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+               <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Equality(System.UInt24,System.Int24)">
+            <summary>
+                Indicates of both instances represent the same value.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+               <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Inequality(System.UInt24,System.Int24)">
+            <summary>
+                Indicates of both instances represent different values.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+               <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_BitwiseAnd(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the bitwise logical AND of the integral value of the instances.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+                The bitwise logical AND of the integral value of the instances.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_BitwiseOr(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the bitwise logical OR of the integral value of the instances.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+                The bitwise logical OR of the integral value of the instances.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_ExclusiveOr(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the bitwise logical XOR of the integral value of the instances.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+                The bitwise logical XOR of the integral value of the instances.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_OnesComplement(System.UInt24)">
+            <summary>
+                Computes the bitwise complement of the integral value of the instance.
+            </summary>
+            <param name="uInt24">
+                The value.
+            </param>
+            <returns>
+                The bitwise complement of the integral value of the instance.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Addition(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the sum of both values.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+                The sum of both values.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Subtraction(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the substraction of both values.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <returns>
+                The substraction of both values.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Division(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the divition of both values.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <exception cref="T:System.DivideByZeroException">
+                Throw when <paramref name="right"/> is zero.
+            </exception>
+            <returns>
+                The divition of both values.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.op_Multiply(System.UInt24,System.UInt24)">
+            <summary>
+                Computes the multiplication of both values.
+            </summary>
+            <param name="left">
+                The left value.
+            </param>
+            <param name="right">
+                The right value.
+            </param>
+            <exception cref="T:System.OverflowException">
+                Thrown when the result would be too large.
+            </exception>
+            <returns>
+                The multiplication of both values.
+            </returns>
         </member>
         <member name="M:System.Xml.XmlConvert.SerializeObject``1(``0)">
             <summary>
