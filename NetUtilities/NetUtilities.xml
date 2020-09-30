@@ -64,6 +64,66 @@
                 Thrown when <paramref name="state"/>, <paramref name="startAction"/> or <paramref name="undoAction"/> are <see langword="null"/>.
             </exception>
         </member>
+        <member name="M:System.ActionScope`1.Cancel">
+            <summary>
+                Prevents the undo action to be executed.
+            </summary>
+        </member>
+        <member name="M:System.ActionScope`1.Dispose">
+            <summary>
+                Executes the undo action and disposes the internal <see cref="T:System.Threading.CancellationTokenSource"/>.
+            </summary>
+        </member>
+        <member name="M:System.BoundScope.Create``1(System.Linq.Expressions.Expression{System.Func{``0}},``0)">
+            <summary>
+                Creates a <see cref="T:System.BoundScope"/> with the provided value and expression.
+            </summary>
+            <typeparam name="TValue">
+                The target value's type.
+            </typeparam>
+            <param name="expression">
+                The expression.
+            </param>
+            <param name="newValue">
+                The value.
+            </param>
+            <returns>
+                A <see cref="T:System.BoundScope"/> with the provided value and expression.
+            </returns>
+        </member>
+        <member name="M:System.BoundScope.Create``2(``0,System.Linq.Expressions.Expression{System.Func{``0,``1}},``1)">
+            <summary>
+                Creates a <see cref="T:System.BoundScope"/> with the provided objects and expression.
+            </summary>
+            <typeparam name="T">
+                The object's type.
+            </typeparam>
+            <typeparam name="TValue">
+                The target value's type.
+            </typeparam>
+            <param name="obj">
+                The object.
+            </param>
+            <param name="expression">
+                The expression.
+            </param>
+            <param name="newValue">
+                The value.
+            </param>
+            <returns>
+                A <see cref="T:System.BoundScope"/> with the provided objects and expression.
+            </returns>
+        </member>
+        <member name="M:System.BoundScope.Cancel">
+            <summary>
+                Prevents the undo action to be executed.
+            </summary>
+        </member>
+        <member name="M:System.BoundScope.Dispose">
+            <summary>
+                Executes the undo action and disposes the internal <see cref="T:System.Threading.CancellationTokenSource"/>.
+            </summary>
+        </member>
         <member name="M:System.Collections.Generic.Dictionary64`2.EnsureCapacity(System.Int32)">
             <summary>
                 Ensures that the dictionary can hold up to 'capacity' entries without any further expansion of its backing storage
@@ -786,11 +846,6 @@
         <member name="M:System.Collections.Locked.LockedList`1.Enumerator.Dispose">
             <inheritdoc/>
         </member>
-        <member name="T:System.Color">
-            <summary>
-            This struct represents a RGB Color
-            </summary>
-        </member>
         <member name="T:System.Diagnostics.ProcessExtensions">
             <summary>
                 Utility class for <see cref="T:System.Diagnostics.Process"/>
@@ -867,16 +922,18 @@
         </member>
         <member name="T:System.EventManager`1">
             <summary>
-            This class is a handy wrapper for automatic event wrapping.
-            You shouldn't use this class to dynamically add/remove handlers frequently
-            as this class relys on <see cref="N:System.Reflection"/> which may negatively affect
-            the performance of your application.
+                This class is a handy wrapper for automatic event wrapping.
+                You shouldn't use this class to dynamically add/remove handlers frequently
+                as this class relys on <see cref="N:System.Reflection"/> which may negatively affect
+                the performance of your application.
             </summary>
-            <typeparam name="TSource">The source of the events</typeparam>
+            <typeparam name="TSource">
+                The source of the events
+            </typeparam>
         </member>
         <member name="P:System.EventManager`1.Source">
             <summary>
-            The source of the events
+                The source of the events
             </summary>
         </member>
         <member name="M:System.EventManager`1.#ctor(`0)">
@@ -888,16 +945,22 @@
         </member>
         <member name="M:System.EventManager`1.AddHandlers(System.Object,System.Reflection.BindingFlags)">
             <summary>
-            Adds all the handlers to the methods that have <see cref="T:System.HandlesAttribute"/>
+                Adds all the handlers to the methods that have <see cref="T:System.HandlesAttribute"/>
             </summary>
-            <param name="target">The instance of object that will listen to the events</param>
-            <param name="flags">The flags used for <see cref="N:System.Reflection"/> to search the methods that will listen to the events</param>
+            <param name="target">
+                The instance of object that will listen to the events
+            </param>
+            <param name="flags">
+                The flags used for <see cref="N:System.Reflection"/> to search the methods that will listen to the events
+            </param>
         </member>
         <member name="M:System.EventManager`1.RemoveHandlers(System.Object)">
             <summary>
-            Removes all handlers to the methods with <see cref="T:System.HandlesAttribute"/>
+                Removes all handlers to the methods with <see cref="T:System.HandlesAttribute"/>
             </summary>
-            <param name="target">The instance of object that is currently listening to the events</param>
+            <param name="target">
+                The instance of object that is currently listening to the events
+            </param>
         </member>
         <member name="P:System.HandlesAttribute.EventInfo">
             <summary>
@@ -910,7 +973,7 @@
             </summary>
             <exception cref="T:System.EventNotFoundException">Thrown when the event can't be found.</exception>
             <param name="eventSourceType">The type of the source of events.</param>
-            <param name="eventName">The name of the event, recommended to use breakthis() operator to prevent <see cref="T:System.EventNotFoundException"/>.</param>
+            <param name="eventName">The name of the event, recommended to use <see langword="nameof"/>() operator to prevent <see cref="T:System.EventNotFoundException"/>.</param>
             <param name="flags">The flags used to search the event.</param>
             <param name="methodName">The name of the method. This is gathered from <see cref="T:System.Runtime.CompilerServices.CallerMemberNameAttribute"/> so any value you pass here is ommited.</param>
         </member>
@@ -1683,41 +1746,19 @@
         </member>
         <member name="P:System.Randomizer.Shared">
             <summary>
-            Returns a singleton instance of a <see cref="T:System.Randomizer"/>.
+                Gets a shared <see cref="T:System.Randomizer"/> instance.
             </summary>
-        </member>
-        <member name="M:System.Randomizer.NextLong">
-            <summary>
-            Returns a non-negative random 64-bits integer.
-            </summary>
-            <returns>A non-negative random 64-bits integer.</returns>
-        </member>
-        <member name="M:System.Randomizer.NextLong(System.Int64)">
-            <summary>
-            Returns a non-negative random 64-bits integer that is lower than <paramref name="max"/>.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="max"/> is lower than zero.</exception>
-            <param name="max">The upper bound.</param>
-            <returns>A non-negative random 64-bits integer that is lower than <paramref name="max"/>.</returns>
-        </member>
-        <member name="M:System.Randomizer.NextLong(System.Int64,System.Int64)">
-            <summary>
-            Returns a random 64-bits integer that is higher or equal than <paramref name="min"/> and lower than <paramref name="max"/>.
-            </summary>
-            <exception cref="T:System.ArgumentOutOfRangeException">Thrown when <paramref name="max"/> is lower than <paramref name="min"/>.</exception>
-            <param name="min">The lower bound.</param>
-            <param name="max">The upper bound.</param>
-            <returns>A random 64-bits integer that is higher or equal than <paramref name="min"/> and lower than <paramref name="max"/>.</returns>
-        </member>
-        <member name="M:System.Randomizer.Next(System.Int32,System.Int32)">
-            <inheritdoc/>
         </member>
         <member name="M:System.Randomizer.Next``1">
             <summary>
-            Returns a random value of the <typeparamref name="T"/> <see langword="unmanaged struct"/>.
+                Generates a random value of the provided type.
             </summary>
-            <typeparam name="T">The <see langword="unmanaged struct"/>.</typeparam>
-            <returns>A random value of the <typeparamref name="T"/> <see langword="unmanaged struct"/>.</returns>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <returns>
+                A random value of the provided type.
+            </returns>
         </member>
         <member name="T:System.Reflection.ConstructorData">
             <inheritdoc/>
@@ -1754,30 +1795,32 @@
         </member>
         <member name="T:System.Reflection.Factory">
             <summary>
-            This class is a helper to create instance of objects whose types are only known at runtime.
+                This class is a helper to create instance of objects whose types are only known at runtime.
             </summary>
         </member>
         <member name="M:System.Reflection.Factory.CreateInstance(System.Type)">
             <summary>
-            Gets the instance of a generic type with a parameterless constructor.
-            Performs much better than <see cref="M:System.Activator.CreateInstance(System.Type)"/>
+                Gets the instance of a generic type with a parameterless constructor.
+                Performs much better than <see cref="M:System.Activator.CreateInstance(System.Type)"/>
             </summary>
         </member>
         <member name="T:System.Reflection.Factory`1">
             <summary>
-            This class is a helper to create instance of objects whose types are only known at runtime.
+                This class is a helper to create instance of objects whose types are only known at runtime.
             </summary>
-            <typeparam name="T">The type whose instance will be created.</typeparam>
+            <typeparam name="T">
+                The type whose instance will be created.
+            </typeparam>
         </member>
-        <member name="P:System.Reflection.Factory`1.Singleton">
+        <member name="P:System.Reflection.Factory`1.Shared">
             <summary>
-            Creates a single instance (Singleton) which can be used on the application lifetime.
+                Gets a shared instance of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="M:System.Reflection.Factory`1.CreateInstance">
             <summary>
-            Gets the instance of a generic type with a parameterless constructor.
-            Performs much better than <see cref="M:System.Activator.CreateInstance``1"/>
+                Gets a new instance of a generic type with a parameterless constructor.
+                Performs much better than <see cref="M:System.Activator.CreateInstance``1"/>
             </summary>
         </member>
         <member name="T:System.Reflection.Mapper">

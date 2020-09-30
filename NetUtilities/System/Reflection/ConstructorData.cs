@@ -84,7 +84,6 @@ namespace System.Reflection
             var convert = Expression.Convert(@new, typeof(object));
 
             _constructor = Expression.Lambda<Func<object[], object>>(convert, array).Compile();
-
             return _constructor(args);
         }
     }

@@ -50,11 +50,11 @@ namespace System.Reflection
         public void SetValue(object? target, object? value)
         {
             Ensure.CanOperate(
-                target is not null ^ IsStatic, 
+                target is not null ^ IsStatic,
                 $"The target cannot be null because {Member.DeclaringType}.{Member.Name} is not an static property.");
             Ensure.CanOperate(
                 value is not null || IsNullable,
-                $"The value cannot be null because {Member.DeclaringType}.{Member.Name} is of type {FieldType.Name}, which is not a nullable type (class, interface or Nullable<T>)");
+                $"The value cannot be null because {Member.DeclaringType}.{Member.Name} is of type {FieldType.Name}, which is not a nullable type (class, interface or Nullable<{FieldType.Name}>)");
 
             _set(target, value);
         }

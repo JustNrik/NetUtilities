@@ -38,8 +38,8 @@ namespace NetUtilities
 
         public static void CanOperate(
             [DoesNotReturnIf(false)]bool canOperate,
-            [CallerArgumentExpression("canOperate")]string? expression = null,
-            string? message = null)
+            string? message = null,
+            [CallerArgumentExpression("canOperate")]string? expression = null)
         {
             if (!canOperate)
                 throw new InvalidOperationException(message ?? $"The expression '{expression}' is not valid");

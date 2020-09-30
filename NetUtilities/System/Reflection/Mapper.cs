@@ -85,14 +85,14 @@ namespace System.Reflection
 
             _target = type;
             _constructors = new(() => _target.GetConstructors(All).Select(x => new ConstructorData(x, _target)).ToReadOnlyList(), true);
-            _events = new(() => _target.GetEvents(All).Select(x => new EventData(x)).ToReadOnlyList(), true);
-            _fields = new(() => _target.GetFields(All).Select(x => new FieldData(x)).ToReadOnlyList(), true);
-            _methods = new(() => _target.GetMethods(All).Select(x => new MethodData(x)).ToReadOnlyList(), true);
+            _events = new(() => _target.GetRuntimeEvents().Select(x => new EventData(x)).ToReadOnlyList(), true);
+            _fields = new(() => _target.GetRuntimeFields().Select(x => new FieldData(x)).ToReadOnlyList(), true);
+            _methods = new(() => _target.GetRuntimeMethods().Select(x => new MethodData(x)).ToReadOnlyList(), true);
             _methodsExcludingObjectBaseMembers = new(() => _methods.Value
                 .FindAll(x => x.Member.DeclaringType != typeof(object)), true);
             _methodsDeclaringTypeOnly = new(() => _methods.Value
                 .FindAll(x => x.Member.DeclaringType == _target), true);
-            _properties = new(() => _target.GetProperties(All).Select(x => new PropertyData(x)).ToReadOnlyList(), true);
+            _properties = new(() => _target.GetRuntimeProperties().Select(x => new PropertyData(x)).ToReadOnlyList(), true);
         }
     }
 
