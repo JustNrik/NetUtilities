@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using NetUtilities;
@@ -416,7 +417,12 @@ namespace System
         {
             private static readonly bool _isFlag = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null;
 
-            public static TEnum[] Values { get; } = (TEnum[])Enum.GetValues(typeof(TEnum));
+            public static TEnum[] Values { get; } = Enum.GetValues<TEnum>()
+                .Where(x =>
+                {
+                    var value = Unsafe.As<TEnum, long>(ref x);
+                    return (value & (value - 1)) == 0 && value != 0;
+                }).ToArray();
 
             public static void ThrowIfNotFlagEnum()
             {

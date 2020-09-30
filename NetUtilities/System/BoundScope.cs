@@ -56,6 +56,21 @@ namespace System
             }
         }
 
+        /// <summary>
+        ///     Creates a <see cref="BoundScope"/> with the provided value and expression.
+        /// </summary>
+        /// <typeparam name="TValue">
+        ///     The target value's type.
+        /// </typeparam>
+        /// <param name="expression">
+        ///     The expression.
+        /// </param>
+        /// <param name="newValue">
+        ///     The value.
+        /// </param>
+        /// <returns>
+        ///     A <see cref="BoundScope"/> with the provided value and expression.
+        /// </returns>
         public static BoundScope Create<TValue>(Expression<Func<TValue>> expression, TValue newValue)
         {
             var memberInfo = (expression.Body as MemberExpression)?.Member;
@@ -63,6 +78,27 @@ namespace System
             return new BoundScope(undoFunc);
         }
 
+        /// <summary>
+        ///     Creates a <see cref="BoundScope"/> with the provided objects and expression.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The object's type.
+        /// </typeparam>
+        /// <typeparam name="TValue">
+        ///     The target value's type.
+        /// </typeparam>
+        /// <param name="obj">
+        ///     The object.
+        /// </param>
+        /// <param name="expression">
+        ///     The expression.
+        /// </param>
+        /// <param name="newValue">
+        ///     The value.
+        /// </param>
+        /// <returns>
+        ///     A <see cref="BoundScope"/> with the provided objects and expression.
+        /// </returns>
         public static BoundScope Create<T, TValue>(T obj, Expression<Func<T, TValue>> expression, TValue newValue)
         {
             var memberInfo = (expression.Body as MemberExpression)?.Member;
@@ -70,9 +106,15 @@ namespace System
             return new BoundScope(undoFunc);
         }
 
+        /// <summary>
+        ///     Prevents the undo action to be executed.
+        /// </summary>
         public void Cancel()
             => _cts.Cancel();
 
+        /// <summary>
+        ///     Executes the undo action and disposes the internal <see cref="CancellationTokenSource"/>.
+        /// </summary>
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)

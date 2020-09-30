@@ -1120,11 +1120,18 @@ namespace System
         }
 
         #endregion
-        private struct MutableStringEnumerator : IEnumerator<char>, ICloneable
+        private struct MutableStringEnumerator : IEnumerator<char>, ICloneable<MutableStringEnumerator>
         {
             private readonly MutableString _string;
             private int _index;
             private char _current;
+
+            private MutableStringEnumerator(MutableStringEnumerator copy)
+            {
+                _string = copy._string;
+                _index = copy._index;
+                _current = copy._current;
+            }
 
             public MutableStringEnumerator(MutableString mutableString)
             {
@@ -1139,6 +1146,7 @@ namespace System
                 {
                     if (_index == -1)
                         throw new InvalidOperationException("Enumeration hasn't started");
+
                     if (_index > _string.Length)
                         throw new InvalidOperationException("Enumeration ended already");
 
@@ -1172,8 +1180,8 @@ namespace System
                 _current = default;
             }
 
-            object ICloneable.Clone()
-                => MemberwiseClone();
+            MutableStringEnumerator ICloneable<MutableStringEnumerator>.Clone()
+                => new MutableStringEnumerator(this);
         }
     }
 }

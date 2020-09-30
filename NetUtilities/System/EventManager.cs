@@ -6,16 +6,18 @@ using NetUtilities;
 namespace System
 {
     /// <summary>
-    /// This class is a handy wrapper for automatic event wrapping.
-    /// You shouldn't use this class to dynamically add/remove handlers frequently
-    /// as this class relys on <see cref="Reflection"/> which may negatively affect
-    /// the performance of your application.
+    ///     This class is a handy wrapper for automatic event wrapping.
+    ///     You shouldn't use this class to dynamically add/remove handlers frequently
+    ///     as this class relys on <see cref="Reflection"/> which may negatively affect
+    ///     the performance of your application.
     /// </summary>
-    /// <typeparam name="TSource">The source of the events</typeparam>
+    /// <typeparam name="TSource">
+    ///     The source of the events
+    /// </typeparam>
     public class EventManager<TSource> where TSource : notnull
     {
         /// <summary>
-        /// The source of the events
+        ///     The source of the events
         /// </summary>
         public TSource Source { get; }
 
@@ -32,10 +34,14 @@ namespace System
 
 
         /// <summary>
-        /// Adds all the handlers to the methods that have <see cref="HandlesAttribute"/>
+        ///     Adds all the handlers to the methods that have <see cref="HandlesAttribute"/>
         /// </summary>
-        /// <param name="target">The instance of object that will listen to the events</param>
-        /// <param name="flags">The flags used for <see cref="Reflection"/> to search the methods that will listen to the events</param>
+        /// <param name="target">
+        ///     The instance of object that will listen to the events
+        /// </param>
+        /// <param name="flags">
+        ///     The flags used for <see cref="Reflection"/> to search the methods that will listen to the events
+        /// </param>
         public virtual void AddHandlers(object target, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance)
         {
             var targetType = target.GetType();
@@ -61,9 +67,11 @@ namespace System
         }
 
         /// <summary>
-        /// Removes all handlers to the methods with <see cref="HandlesAttribute"/>
+        ///     Removes all handlers to the methods with <see cref="HandlesAttribute"/>
         /// </summary>
-        /// <param name="target">The instance of object that is currently listening to the events</param>
+        /// <param name="target">
+        ///     The instance of object that is currently listening to the events
+        /// </param>
         public virtual void RemoveHandlers(object target)
         {
             if (!_handlers.TryGetValue(target, out var list)) return;

@@ -102,9 +102,15 @@ namespace System
             startAction.Invoke(state);
         }
 
+        /// <summary>
+        ///     Prevents the undo action to be executed.
+        /// </summary>
         public void Cancel()
             => _cts.Cancel();
 
+        /// <summary>
+        ///     Executes the undo action and disposes the internal <see cref="CancellationTokenSource"/>.
+        /// </summary>
         public void Dispose()
         {
             if (!_cts.IsCancellationRequested)
