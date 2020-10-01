@@ -718,7 +718,7 @@ namespace System
             if (uint.TryParse(input, style, provider, out var parsed))
             {
                 if (parsed > MaxValue)
-                    throw new OverflowException("The value represented by the string is outside of the allowed ranged.");
+                    throw new OverflowException("The value represented by the string is outside of the allowed range.");
 
                 return new UInt24(parsed);
             }
