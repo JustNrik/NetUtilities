@@ -7,7 +7,7 @@ namespace System
     /// <summary>
     ///     Represents a 24-bit unsigned integer
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 3, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Size = 3 /* Size 3 will cut off LSB. Depending on machine endianness, this might be very much undesirable. */, Pack = 1)]
     public readonly struct UInt24 : 
         IEquatable<UInt24>, IComparable<UInt24>, 
         IEquatable<UInt24?>, IComparable<UInt24?>, 
@@ -66,7 +66,7 @@ namespace System
             _value = value;
         }
 
-        #region overrided from System.Object
+        #region overriden from System.Object
         /// <inheritdoc cref="uint.ToString()"/>
         public override string ToString()
             => _value.ToString();
@@ -77,9 +77,10 @@ namespace System
 
         /// <inheritdoc/>
         public override bool Equals(object? obj)
-            => _value.Equals(obj);
+            => obj is UInt24 u24 ? this.Equals(u24) : _value.Equals(obj);
         #endregion
-        #region interfaces implementation
+
+        #region interface implementations
         /// <inheritdoc/>
         public bool Equals(UInt24 other)
             => _value == other._value;
@@ -153,6 +154,7 @@ namespace System
         ulong IConvertible.ToUInt64(IFormatProvider? provider)
             => Convert.ToUInt64(_value, provider);
         #endregion
+
         #region operators
         /// <summary>
         ///     Indicates of both instances represent the same value.
@@ -183,6 +185,64 @@ namespace System
         /// </returns>
         public static bool operator !=(UInt24 left, UInt24 right)
             => left._value != right._value;
+        /// <summary>
+        ///     Indicates of both instances represent the same value.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///    <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool operator ==(UInt24 left, uint right)
+            => left._value == right;
+
+        /// <summary>
+        ///     Indicates of both instances represent different values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///    <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool operator !=(UInt24 left, uint right)
+            => left._value != right;
+        /// <summary>
+        ///     Indicates of both instances represent the same value.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///    <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool operator ==(uint left, UInt24 right)
+            => left == right._value;
+
+        /// <summary>
+        ///     Indicates of both instances represent different values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///    <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
+        /// </returns>
+        public static bool operator !=(uint left, UInt24 right)
+            => left != right._value;
 
         /// <summary>
         ///     Indicates of both instances represent the same value.
@@ -214,6 +274,31 @@ namespace System
         public static bool operator !=(UInt24 left, Int24 right)
             => left._value == right._value;
 
+        public static bool operator >(UInt24 left, UInt24 right)
+            => left._value > right._value;
+        public static bool operator >(UInt24 left, uint right)
+            => left._value > right;
+        public static bool operator >(uint left, UInt24 right)
+            => left > right._value;
+        public static bool operator <(UInt24 left, UInt24 right)
+            => left._value < right._value;
+        public static bool operator <(UInt24 left, uint right)
+            => left._value < right;
+        public static bool operator <(uint left, UInt24 right)
+            => left < right._value;
+        public static bool operator >=(UInt24 left, UInt24 right)
+            => left._value >= right._value;
+        public static bool operator >=(UInt24 left, uint right)
+            => left._value >= right;
+        public static bool operator >=(uint left, UInt24 right)
+            => left >= right._value;
+        public static bool operator <=(UInt24 left, UInt24 right)
+            => left._value <= right._value;
+        public static bool operator <=(UInt24 left, uint right)
+            => left._value <= right;
+        public static bool operator <=(uint left, UInt24 right)
+            => left <= right._value;
+
         /// <summary>
         ///     Computes the bitwise logical AND of the integral value of the instances.
         /// </summary>
@@ -228,6 +313,36 @@ namespace System
         /// </returns>
         public static UInt24 operator &(UInt24 left, UInt24 right)
             => new UInt24(left._value & right._value);
+
+        /// <summary>
+        ///     Computes the bitwise logical AND of the integral value of the instances.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The bitwise logical AND of the integral value of the instances.
+        /// </returns>
+        public static UInt24 operator &(UInt24 left, uint right)
+            => new UInt24(left._value & right);
+
+        /// <summary>
+        ///     Computes the bitwise logical AND of the integral value of the instances.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The bitwise logical AND of the integral value of the instances.
+        /// </returns>
+        public static UInt24 operator &(uint left, UInt24 right)
+            => new UInt24(left & right._value);
 
         /// <summary>
         ///     Computes the bitwise logical OR of the integral value of the instances.
@@ -245,6 +360,36 @@ namespace System
             => new UInt24(left._value | right._value);
 
         /// <summary>
+        ///     Computes the bitwise logical OR of the integral value of the instances.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The bitwise logical OR of the integral value of the instances.
+        /// </returns>
+        public static UInt24 operator |(UInt24 left, uint right)
+            => new UInt24((left._value | right) & MaxValue);
+
+        /// <summary>
+        ///     Computes the bitwise logical OR of the integral value of the instances.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The bitwise logical OR of the integral value of the instances.
+        /// </returns>
+        public static UInt24 operator |(uint left, UInt24 right)
+            => new UInt24((left | right._value) & MaxValue);
+
+        /// <summary>
         ///     Computes the bitwise logical XOR of the integral value of the instances.
         /// </summary>
         /// <param name="left">
@@ -260,6 +405,41 @@ namespace System
             => new UInt24((left._value ^ right._value) & MaxValue);
 
         /// <summary>
+        ///     Computes the bitwise logical XOR of the integral value of the instances.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The bitwise logical XOR of the integral value of the instances.
+        /// </returns>
+        public static UInt24 operator ^(UInt24 left, uint right)
+            => new UInt24((left._value ^ right) & MaxValue);
+
+        /// <summary>
+        ///     Computes the bitwise logical XOR of the integral value of the instances.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The bitwise logical XOR of the integral value of the instances.
+        /// </returns>
+        public static UInt24 operator ^(uint left, UInt24 right)
+            => new UInt24((left ^ right._value) & MaxValue);
+
+        public static UInt24 operator <<(UInt24 left, int right)
+            => new UInt24((left._value << right) & MaxValue);
+        public static UInt24 operator >>(UInt24 left, int right)
+            => new UInt24(left._value >> right);
+
+        /// <summary>
         ///     Computes the bitwise complement of the integral value of the instance.
         /// </summary>
         /// <param name="uInt24">
@@ -270,6 +450,13 @@ namespace System
         /// </returns>
         public static UInt24 operator ~(UInt24 uInt24)
             => new UInt24(~uInt24._value & MaxValue);
+
+        public static UInt24 operator ++(UInt24 uInt24)
+            => new UInt24(uInt24._value + 1);
+        public static UInt24 operator --(UInt24 uInt24)
+            => new UInt24(uInt24._value - 1);
+        public static UInt24 operator +(UInt24 uInt24)
+            => new UInt24(uInt24._value);
 
         /// <summary>
         ///     Computes the sum of both values.
@@ -287,6 +474,36 @@ namespace System
             => new UInt24((left._value + right._value) % (MaxValue + 1));
 
         /// <summary>
+        ///     Computes the sum of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The sum of both values.
+        /// </returns>
+        public static UInt24 operator +(UInt24 left, uint right)
+            => new UInt24((left._value + right) % (MaxValue + 1));
+
+        /// <summary>
+        ///     Computes the sum of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The sum of both values.
+        /// </returns>
+        public static UInt24 operator +(uint left, UInt24 right)
+            => new UInt24((left + right._value) % (MaxValue + 1));
+
+        /// <summary>
         ///     Computes the substraction of both values.
         /// </summary>
         /// <param name="left">
@@ -302,6 +519,40 @@ namespace System
             => left._value > right._value 
             ? new UInt24(left._value - right._value)
             : new UInt24(MaxValue - right._value - left._value + 1);
+
+        /// <summary>
+        ///     Computes the substraction of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The substraction of both values.
+        /// </returns>
+        public static UInt24 operator -(UInt24 left, uint right)
+            => left._value > right
+            ? new UInt24(left._value - right)
+            : new UInt24(MaxValue - right - left._value + 1);
+
+        /// <summary>
+        ///     Computes the substraction of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <returns>
+        ///     The substraction of both values.
+        /// </returns>
+        public static UInt24 operator -(uint left, UInt24 right)
+            => left > right._value
+            ? new UInt24(left - right._value)
+            : new UInt24(MaxValue - right._value - left + 1);
 
         /// <summary>
         ///     Computes the divition of both values.
@@ -322,6 +573,42 @@ namespace System
             => new UInt24(left._value / right._value);
 
         /// <summary>
+        ///     Computes the divition of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <exception cref="DivideByZeroException">
+        ///     Throw when <paramref name="right"/> is zero.
+        /// </exception>
+        /// <returns>
+        ///     The divition of both values.
+        /// </returns>
+        public static UInt24 operator /(UInt24 left, uint right)
+            => new UInt24(left._value / right);
+
+        /// <summary>
+        ///     Computes the divition of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <exception cref="DivideByZeroException">
+        ///     Throw when <paramref name="right"/> is zero.
+        /// </exception>
+        /// <returns>
+        ///     The divition of both values.
+        /// </returns>
+        public static UInt24 operator /(uint left, UInt24 right)
+            => new UInt24(left / right._value);
+
+        /// <summary>
         ///     Computes the multiplication of both values.
         /// </summary>
         /// <param name="left">
@@ -338,7 +625,51 @@ namespace System
         /// </returns>
         public static UInt24 operator *(UInt24 left, UInt24 right)
             => new UInt24(checked(left._value * right._value));
+
+        /// <summary>
+        ///     Computes the multiplication of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <exception cref="OverflowException">
+        ///     Thrown when the result would be too large.
+        /// </exception>
+        /// <returns>
+        ///     The multiplication of both values.
+        /// </returns>
+        public static UInt24 operator *(UInt24 left, uint right)
+            => new UInt24(checked(left._value * right));
+
+        /// <summary>
+        ///     Computes the multiplication of both values.
+        /// </summary>
+        /// <param name="left">
+        ///     The left value.
+        /// </param>
+        /// <param name="right">
+        ///     The right value.
+        /// </param>
+        /// <exception cref="OverflowException">
+        ///     Thrown when the result would be too large.
+        /// </exception>
+        /// <returns>
+        ///     The multiplication of both values.
+        /// </returns>
+        public static UInt24 operator *(uint left, UInt24 right)
+            => new UInt24(checked(left * right._value));
+
+        public static UInt24 operator %(UInt24 left, UInt24 right)
+            => new UInt24(left._value % right._value);
+        public static UInt24 operator %(uint left, UInt24 right)
+            => new UInt24(left % right._value);
+        public static UInt24 operator %(UInt24 left, uint right)
+            => new UInt24(left._value % right);
         #endregion
+
         #region casts
         // widening casts
         public static implicit operator int(UInt24 uInt24)
@@ -346,6 +677,8 @@ namespace System
         public static implicit operator uint(UInt24 uInt24)
             => uInt24._value;
         public static implicit operator long(UInt24 uInt24)
+            => uInt24._value;
+        public static implicit operator ulong(UInt24 uInt24)
             => uInt24._value;
         // narrowing casts from UInt24
         public static explicit operator byte(UInt24 uInt24)
@@ -370,6 +703,7 @@ namespace System
         public static explicit operator UInt24(ulong uInt64)
             => new UInt24((uint)uInt64);
         #endregion
+        
         #region static methods
         public static UInt24 Parse(string input)
             => Parse(input, NumberStyles.Integer, null);
@@ -384,7 +718,7 @@ namespace System
             if (uint.TryParse(input, style, provider, out var parsed))
             {
                 if (parsed > MaxValue)
-                    throw new OverflowException("The value represented by the string is outside of the allowed ranged.");
+                    throw new OverflowException("The value represented by the string is outside of the allowed range.");
 
                 return new UInt24(parsed);
             }
