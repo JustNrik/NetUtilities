@@ -10,7 +10,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DocumentationFile>C:\Users\Ramiro Flores\source\repos\NetUtilities\NetUtilities\NetUtilities.xml</DocumentationFile>
+    <DocumentationFile>NetUtilities.xml</DocumentationFile>
     <WarningLevel>0</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>

@@ -7,13 +7,14 @@ namespace System
     /// <summary>
     /// Represents a 24-bit signed integer
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Size = 3, Pack = 1)]
+    [StructLayout(LayoutKind.Sequential, Size = 3 /* Size 3 will cut off LSB. Depending on machine endianness, this might be very much undesirable. */, Pack = 1)]
     public readonly struct Int24 : IEquatable<Int24>, IComparable<Int24>, IConvertible, IComparable, IFormattable
     {
         internal readonly int _value;
 
         public const int MaxValue = 0x7FFFFF;
         public const int MinValue = ~0x7FFFFF;
+        private const int Mask = 0xFFFFFF;
 
         public Int24(UInt24 value) : this((int)value._value)
         {
@@ -30,7 +31,7 @@ namespace System
             _value = value;
         }
 
-        #region overrided from System.Object
+        #region overriden from System.Object
         public override string ToString()
             => _value.ToString();
 
@@ -38,9 +39,10 @@ namespace System
             => _value;
 
         public override bool Equals(object obj)
-            => _value.Equals(obj);
+            => obj is Int24 i24 ? this.Equals(i24) : _value.Equals(obj);
         #endregion
-        #region interfaces implementation
+
+        #region interface implementations
         public bool Equals(Int24 other)
             => _value == other._value;
 
@@ -104,35 +106,122 @@ namespace System
         ulong IConvertible.ToUInt64(IFormatProvider provider)
             => Convert.ToUInt64(_value, provider);
         #endregion
+
         #region operators
+        // equality
         public static bool operator ==(Int24 left, Int24 right)
             => left._value == right._value;
         public static bool operator !=(Int24 left, Int24 right)
             => left._value != right._value;
+        public static bool operator ==(Int24 left, int right)
+            => left._value == right;
+        public static bool operator !=(Int24 left, int right)
+            => left._value != right;
+        public static bool operator ==(int left, Int24 right)
+            => left == right._value;
+        public static bool operator !=(int left, Int24 right)
+            => left != right._value;
         public static bool operator ==(Int24 left, UInt24 right)
             => left._value == right._value;
         public static bool operator !=(Int24 left, UInt24 right)
             => left._value != right._value;
+
+        // comparison
+        public static bool operator >(Int24 left, Int24 right)
+            => left._value > right._value;
+        public static bool operator >(Int24 left, int right)
+            => left._value > right;
+        public static bool operator >(int left, Int24 right)
+            => left > right._value;
+        public static bool operator <(Int24 left, Int24 right)
+            => left._value < right._value;
+        public static bool operator <(Int24 left, int right)
+            => left._value < right;
+        public static bool operator <(int left, Int24 right)
+            => left < right._value;
+        public static bool operator >=(Int24 left, Int24 right)
+            => left._value >= right._value;
+        public static bool operator >=(Int24 left, int right)
+            => left._value >= right;
+        public static bool operator >=(int left, Int24 right)
+            => left >= right._value;
+        public static bool operator <=(Int24 left, Int24 right)
+            => left._value <= right._value;
+        public static bool operator <=(Int24 left, int right)
+            => left._value <= right;
+        public static bool operator <=(int left, Int24 right)
+            => left <= right._value;
+
+        // bitwise
         public static Int24 operator &(Int24 left, Int24 right)
             => new Int24(left._value & right._value);
+        public static Int24 operator &(Int24 left, int right)
+            => new Int24(left._value & right);
+        public static Int24 operator &(int left, Int24 right)
+            => new Int24(left & right._value);
         public static Int24 operator |(Int24 left, Int24 right)
             => new Int24(left._value | right._value);
+        public static Int24 operator |(Int24 left, int right)
+            => new Int24(left._value | right);
+        public static Int24 operator |(int left, Int24 right)
+            => new Int24(left | right._value);
         public static Int24 operator ^(Int24 left, Int24 right)
             => new Int24(left._value ^ right._value);
+        public static Int24 operator ^(Int24 left, int right)
+            => new Int24((left._value ^ right) & Mask);
+        public static Int24 operator ^(int left, Int24 right)
+            => new Int24((left ^ right._value) & Mask);
+        public static Int24 operator <<(Int24 left, int right)
+            => new Int24((left._value << right) & Mask);
+        public static Int24 operator >>(Int24 left, int right)
+            => new Int24(left._value >> right);
         public static Int24 operator ~(Int24 int24)
             => new Int24(~int24._value & MaxValue);
+
+        // unary arithmetic
+        public static Int24 operator +(Int24 int24)
+            => new Int24(int24._value + 1);
+        public static Int24 operator -(Int24 int24)
+            => new Int24(int24._value - 1);
+
+        // binary arithmetic
         public static Int24 operator +(Int24 left, Int24 right)
             => new Int24(left._value + right._value);
+        public static Int24 operator +(Int24 left, int right)
+            => new Int24(left._value + right);
+        public static Int24 operator +(int left, Int24 right)
+            => new Int24(left + right._value);
         public static Int24 operator -(Int24 left, Int24 right)
             => new Int24(left._value - right._value);
+        public static Int24 operator -(Int24 left, int right)
+            => new Int24(left._value - right);
+        public static Int24 operator -(int left, Int24 right)
+            => new Int24(left - right._value);
         public static Int24 operator /(Int24 left, Int24 right)
             => new Int24(left._value / right._value);
+        public static Int24 operator /(Int24 left, int right)
+            => new Int24(left._value / right);
+        public static Int24 operator /(int left, Int24 right)
+            => new Int24(left / right._value);
         public static Int24 operator *(Int24 left, Int24 right)
             => new Int24(left._value * right._value);
+        public static Int24 operator *(Int24 left, int right)
+            => new Int24(left._value * right);
+        public static Int24 operator *(int left, Int24 right)
+            => new Int24(left * right._value);
+        public static Int24 operator %(Int24 left, Int24 right)
+            => new Int24(left._value % right._value);
+        public static Int24 operator %(int left, Int24 right)
+            => new Int24(left % right._value);
+        public static Int24 operator %(Int24 left, int right)
+            => new Int24(left._value % right);
         #endregion
+
         #region casts
         // widening casts
         public static implicit operator int(Int24 int24)
+            => int24._value;
+        public static implicit operator long(Int24 int24)
             => int24._value;
         // narrowing casts from Int24
         public static explicit operator byte(Int24 int24)
@@ -161,6 +250,7 @@ namespace System
         public static explicit operator Int24(ulong uInt64)
             => new Int24((int)uInt64);
         #endregion
+
         #region Static methods
         public static Int24 Parse(string input)
             => Parse(input, NumberStyles.Integer, null);
@@ -175,7 +265,7 @@ namespace System
             if (int.TryParse(input, style, provider, out var parsed))
             {
                 if ((uint)parsed > MaxValue)
-                    throw new OverflowException("The value represented by the string is outside of the allowed ranged.");
+                    throw new OverflowException("The value represented by the string is outside of the allowed range.");
 
                 return new Int24(parsed);
             }
