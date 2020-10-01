@@ -179,10 +179,14 @@ namespace System
             => new Int24(~int24._value & MaxValue);
 
         // unary arithmetic
-        public static Int24 operator +(Int24 int24)
+        public static Int24 operator ++(Int24 int24)
             => new Int24(int24._value + 1);
-        public static Int24 operator -(Int24 int24)
+        public static Int24 operator --(Int24 int24)
             => new Int24(int24._value - 1);
+        public static Int24 operator +(Int24 int24)
+            => new Int24(int24._value);
+        public static Int24 operator -(Int24 int24)
+            => new Int24(-int24._value);
 
         // binary arithmetic
         public static Int24 operator +(Int24 left, Int24 right)
