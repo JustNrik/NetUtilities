@@ -60,7 +60,7 @@ namespace System.Reflection
 
         private static class ConstructorCache<T>
         {
-            public static bool Value = typeof(T).IsValueType || typeof(T).GetConstructor(Type.EmptyTypes) is not null;
+            public static bool Value = Mapper<T>.Constructors.Any(ctor => ctor.IsDefault);
         }
 
         private static class ConstructorCache

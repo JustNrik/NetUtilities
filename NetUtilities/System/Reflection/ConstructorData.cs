@@ -18,6 +18,11 @@ namespace System.Reflection
         public ReadOnlyList<ParameterInfo> Parameters { get; }
 
         /// <summary>
+        ///     Indicates if this constructor is the default constructor.
+        /// </summary>
+        public bool IsDefault { get; }
+
+        /// <summary>
         ///     Initializes a new instance of <see cref="ConstructorData"/> class 
         ///     with the provided <see cref="ConstructorInfo"/> and target.
         /// </summary>
@@ -27,6 +32,7 @@ namespace System.Reflection
         {
             _target = target;
             Parameters = constructor.GetParameters().ToReadOnlyList();
+            IsDefault = target.IsValueType || Parameters.Count == 0;
         }
 
         /// <summary>
