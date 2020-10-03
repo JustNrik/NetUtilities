@@ -101,7 +101,41 @@ namespace System
         /// </param>
         public Int24(byte value)
         {
-            this = Unsafe.As<byte, Int24>(ref value);
+            _value = value;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="Int24"/> to the value of the specified <see cref="IntPtr"/>.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="value"/> is a number less than <see cref="Int24.MinValue"/> or greater than <see cref="Int24.MaxValue"/>.
+        /// </exception>
+        /// <param name="value">
+        ///      The value to represent as a <see cref="Int24"/>.
+        /// </param>
+        public Int24(nint value)
+        {
+            if ((nuint)value > MaxValue)
+                throw new ArgumentOutOfRangeException($"The value must be between {MinValue} and {MaxValue}");
+
+            _value = (int)value;
+        }
+
+        /// <summary>
+        ///     Initializes a new instance of <see cref="Int24"/> to the value of the specified <see cref="UIntPtr"/>.
+        /// </summary>
+        /// <exception cref="ArgumentOutOfRangeException">
+        ///     Thrown when <paramref name="value"/> is a number less than <see cref="Int24.MinValue"/> or greater than <see cref="Int24.MaxValue"/>.
+        /// </exception>
+        /// <param name="value">
+        ///      The value to represent as a <see cref="Int24"/>.
+        /// </param>
+        public Int24(nuint value)
+        {
+            if (value > MaxValue)
+                throw new ArgumentOutOfRangeException($"The value must be between {MinValue} and {MaxValue}");
+
+            _value = (int)value;
         }
 
         /// <summary>
@@ -112,7 +146,7 @@ namespace System
         /// </param>
         public Int24(sbyte value)
         {
-            this = Unsafe.As<sbyte, Int24>(ref value);
+            _value = value;
         }
 
         /// <summary>
@@ -123,7 +157,7 @@ namespace System
         /// </param>
         public Int24(short value)
         {
-            this = Unsafe.As<short, Int24>(ref value);
+            _value = value;
         }
 
         /// <summary>
@@ -134,7 +168,7 @@ namespace System
         /// </param>
         public Int24(ushort value)
         {
-            this = Unsafe.As<ushort, Int24>(ref value);
+            _value = value;
         }
 
         /// <summary>
@@ -172,7 +206,8 @@ namespace System
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">
         ///     Thrown when <paramref name="startIndex"/> is outside the bounds of the array. 
-        ///     -or- the range from the <paramref name="startIndex"/> to the span length is not 3.
+        ///     -or- 
+        ///     the range from the <paramref name="startIndex"/> to the span length is not 3.
         /// </exception>
         /// <param name="value">
         ///      The array to convert into a <see cref="Int24"/>.
@@ -222,7 +257,7 @@ namespace System
             => _value;
 
         public override bool Equals(object obj)
-            => obj is Int24 i24 ? this.Equals(i24) : _value.Equals(obj);
+            => obj is Int24 i24 ? Equals(i24) : _value.Equals(obj);
         #endregion
 
         #region interface implementations
@@ -410,6 +445,8 @@ namespace System
             => int24._value;
         public static implicit operator long(Int24 int24)
             => int24._value;
+        public static implicit operator nint(Int24 int24)
+            => int24._value;
         // narrowing casts from Int24
         public static explicit operator byte(Int24 int24)
             => (byte)int24._value;
@@ -423,8 +460,8 @@ namespace System
             => (uint)int24._value;
         public static explicit operator ulong(Int24 int24)
             => (ulong)int24._value;
-        public static explicit operator UInt24(Int24 int24)
-            => new UInt24(int24);
+        public static explicit operator nuint(Int24 int24)
+            => (nuint)int24._value;
         // narrowing casts to Int24
         public static explicit operator Int24(UInt24 uInt24)
             => new Int24(uInt24);
@@ -436,6 +473,10 @@ namespace System
             => new Int24((int)int64);
         public static explicit operator Int24(ulong uInt64)
             => new Int24((int)uInt64);
+        public static explicit operator Int24(nint intPtr)
+            => new Int24(intPtr);
+        public static explicit operator Int24(nuint uIntPtr)
+            => new Int24(uIntPtr);
         #endregion
 
         #region Static methods

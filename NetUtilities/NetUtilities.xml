@@ -1060,6 +1060,28 @@
                  The value to represent as a <see cref="T:System.Int24"/>.
             </param>
         </member>
+        <member name="M:System.Int24.#ctor(System.IntPtr)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.Int24"/> to the value of the specified <see cref="T:System.IntPtr"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.Int24.MinValue"/> or greater than <see cref="F:System.Int24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.Int24"/>.
+            </param>
+        </member>
+        <member name="M:System.Int24.#ctor(System.UIntPtr)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.Int24"/> to the value of the specified <see cref="T:System.UIntPtr"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.Int24.MinValue"/> or greater than <see cref="F:System.Int24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.Int24"/>.
+            </param>
+        </member>
         <member name="M:System.Int24.#ctor(System.SByte)">
             <summary>
                 Initializes a new instance of <see cref="T:System.Int24"/> to the value of the specified <see cref="T:System.SByte"/>.
@@ -1112,7 +1134,8 @@
             </summary>
             <exception cref="T:System.ArgumentOutOfRangeException">
                 Thrown when <paramref name="startIndex"/> is outside the bounds of the array. 
-                -or- the range from the <paramref name="startIndex"/> to the span length is not 3.
+                -or- 
+                the range from the <paramref name="startIndex"/> to the span length is not 3.
             </exception>
             <param name="value">
                  The array to convert into a <see cref="T:System.Int24"/>.
@@ -2837,491 +2860,374 @@
         </member>
         <member name="M:System.UInt24.#ctor(System.Int24)">
             <summary>
-                Creates a new instance of <see cref="T:System.UInt24"/> <see langword="struct"/>.
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.Int24"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">
-                Thrown when <paramref name="value"/> is higher than <see cref="F:System.UInt24.MaxValue"/>.
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
             </exception>
             <param name="value">
-                The value.
-            </param>
-        </member>
-        <member name="M:System.UInt24.#ctor(System.Int32)">
-            <summary>
-                Creates a new instance of <see cref="T:System.UInt24"/> <see langword="struct"/>.
-            </summary>
-            <exception cref="T:System.InvalidOperationException">
-                Thrown when <paramref name="value"/> is higher than <see cref="F:System.UInt24.MaxValue"/>.
-            </exception>
-            <param name="value">
-                The value.
+                 The value to represent as a <see cref="T:System.UInt24"/>.
             </param>
         </member>
         <member name="M:System.UInt24.#ctor(System.UInt32)">
             <summary>
-                Creates a new instance of <see cref="T:System.UInt24"/> <see langword="struct"/>.
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.UInt32"/>.
             </summary>
-            <exception cref="T:System.InvalidOperationException">
-                Thrown when <paramref name="value"/> is higher than <see cref="F:System.UInt24.MaxValue"/>.
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
             </exception>
             <param name="value">
-                The value.
+                 The value to represent as a <see cref="T:System.UInt24"/>.
             </param>
         </member>
-        <member name="M:System.UInt24.ToString">
-            <inheritdoc cref="M:System.UInt32.ToString"/>
-        </member>
-        <member name="M:System.UInt24.GetHashCode">
-            <inheritdoc cref="M:System.UInt32.GetHashCode"/>
-        </member>
-        <member name="M:System.UInt24.Equals(System.Object)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.UInt24.Equals(System.UInt24)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.UInt24.Equals(System.Nullable{System.UInt24})">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.UInt24.CompareTo(System.UInt24)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.UInt24.ToString(System.String,System.IFormatProvider)">
-            <inheritdoc/>
-        </member>
-        <member name="M:System.UInt24.op_Equality(System.UInt24,System.UInt24)">
+        <member name="M:System.UInt24.#ctor(System.Int32)">
             <summary>
-                Indicates of both instances represent the same value.
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.Int32"/>.
             </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Inequality(System.UInt24,System.UInt24)">
-            <summary>
-                Indicates of both instances represent different values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Equality(System.UInt24,System.UInt32)">
-            <summary>
-                Indicates of both instances represent the same value.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Inequality(System.UInt24,System.UInt32)">
-            <summary>
-                Indicates of both instances represent different values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Equality(System.UInt32,System.UInt24)">
-            <summary>
-                Indicates of both instances represent the same value.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Inequality(System.UInt32,System.UInt24)">
-            <summary>
-                Indicates of both instances represent different values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Equality(System.UInt24,System.Int24)">
-            <summary>
-                Indicates of both instances represent the same value.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent the same value; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Inequality(System.UInt24,System.Int24)">
-            <summary>
-                Indicates of both instances represent different values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-               <see langword="true"/> if both instances represent different values; otherwise, <see langword="false"/>.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_BitwiseAnd(System.UInt24,System.UInt24)">
-            <summary>
-                Computes the bitwise logical AND of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical AND of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_BitwiseAnd(System.UInt24,System.UInt32)">
-            <summary>
-                Computes the bitwise logical AND of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical AND of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_BitwiseAnd(System.UInt32,System.UInt24)">
-            <summary>
-                Computes the bitwise logical AND of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical AND of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_BitwiseOr(System.UInt24,System.UInt24)">
-            <summary>
-                Computes the bitwise logical OR of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical OR of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_BitwiseOr(System.UInt24,System.UInt32)">
-            <summary>
-                Computes the bitwise logical OR of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical OR of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_BitwiseOr(System.UInt32,System.UInt24)">
-            <summary>
-                Computes the bitwise logical OR of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical OR of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_ExclusiveOr(System.UInt24,System.UInt24)">
-            <summary>
-                Computes the bitwise logical XOR of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical XOR of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_ExclusiveOr(System.UInt24,System.UInt32)">
-            <summary>
-                Computes the bitwise logical XOR of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical XOR of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_ExclusiveOr(System.UInt32,System.UInt24)">
-            <summary>
-                Computes the bitwise logical XOR of the integral value of the instances.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The bitwise logical XOR of the integral value of the instances.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_OnesComplement(System.UInt24)">
-            <summary>
-                Computes the bitwise complement of the integral value of the instance.
-            </summary>
-            <param name="uInt24">
-                The value.
-            </param>
-            <returns>
-                The bitwise complement of the integral value of the instance.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Addition(System.UInt24,System.UInt24)">
-            <summary>
-                Computes the sum of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The sum of both values.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Addition(System.UInt24,System.UInt32)">
-            <summary>
-                Computes the sum of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The sum of both values.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Addition(System.UInt32,System.UInt24)">
-            <summary>
-                Computes the sum of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The sum of both values.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Subtraction(System.UInt24,System.UInt24)">
-            <summary>
-                Computes the substraction of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The substraction of both values.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Subtraction(System.UInt24,System.UInt32)">
-            <summary>
-                Computes the substraction of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The substraction of both values.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Subtraction(System.UInt32,System.UInt24)">
-            <summary>
-                Computes the substraction of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <returns>
-                The substraction of both values.
-            </returns>
-        </member>
-        <member name="M:System.UInt24.op_Division(System.UInt24,System.UInt24)">
-            <summary>
-                Computes the divition of both values.
-            </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <exception cref="T:System.DivideByZeroException">
-                Throw when <paramref name="right"/> is zero.
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
             </exception>
-            <returns>
-                The divition of both values.
-            </returns>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
         </member>
-        <member name="M:System.UInt24.op_Division(System.UInt24,System.UInt32)">
+        <member name="M:System.UInt24.#ctor(System.UInt64)">
             <summary>
-                Computes the divition of both values.
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.UInt64"/>.
             </summary>
-            <param name="left">
-                The left value.
-            </param>
-            <param name="right">
-                The right value.
-            </param>
-            <exception cref="T:System.DivideByZeroException">
-                Throw when <paramref name="right"/> is zero.
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
             </exception>
-            <returns>
-                The divition of both values.
-            </returns>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
         </member>
-        <member name="M:System.UInt24.op_Division(System.UInt32,System.UInt24)">
+        <member name="M:System.UInt24.#ctor(System.Byte)">
             <summary>
-                Computes the divition of both values.
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.Byte"/>.
             </summary>
-            <param name="left">
-                The left value.
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
             </param>
-            <param name="right">
-                The right value.
-            </param>
-            <exception cref="T:System.DivideByZeroException">
-                Throw when <paramref name="right"/> is zero.
+        </member>
+        <member name="M:System.UInt24.#ctor(System.IntPtr)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.IntPtr"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
             </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.UIntPtr)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.UIntPtr"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.SByte)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.SByte"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.Int16)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.Int16"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.UInt16)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.UInt16"/>.
+            </summary>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.Int64)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> to the value of the specified <see cref="T:System.Int64"/>.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="value"/> is a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+            </exception>
+            <param name="value">
+                 The value to represent as a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.Byte[])">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> from three bytes in the byte array.
+            </summary>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="value"/> length is not 3.
+            </exception>
+            <param name="value">
+                 The array to convert into a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.Byte[],System.Int32)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> from three bytes at a specific position in the byte array.
+            </summary>
+            <exception cref="T:System.ArgumentOutOfRangeException">
+                Thrown when <paramref name="startIndex"/> is outside the bounds of the array. 
+                -or- 
+                the range from the <paramref name="startIndex"/> to the span length is not 3.
+            </exception>
+            <param name="value">
+                 The array to convert into a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.#ctor(System.ReadOnlySpan{System.Byte})">
+            <summary>
+                Initializes a new instance of <see cref="T:System.UInt24"/> from three bytes in the span.
+            </summary>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="value"/> length is not 3.
+            </exception>
+            <param name="value">
+                 The span to convert into a <see cref="T:System.UInt24"/>.
+            </param>
+        </member>
+        <member name="M:System.UInt24.GetBytes">
+            <summary>
+                Returns this instance's value as a byte array.
+            </summary>
             <returns>
-                The divition of both values.
+                This instance's value as a byte array.
             </returns>
         </member>
-        <member name="M:System.UInt24.op_Multiply(System.UInt24,System.UInt24)">
+        <member name="M:System.UInt24.Parse(System.String)">
             <summary>
-                Computes the multiplication of both values.
+                Converts the string representation of a number to its 24-bit unsigned integer equivalent.
             </summary>
-            <param name="left">
-                The left value.
+            <param name="input">
+                A string containing a number to convert.
             </param>
-            <param name="right">
-                The right value.
-            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="input"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.FormatException">
+                Thrown when <paramref name="input"/> is not in the correct format.
+            </exception>
             <exception cref="T:System.OverflowException">
-                Thrown when the result would be too large.
+                Thrown when <paramref name="input"/> represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
             </exception>
             <returns>
-                The multiplication of both values.
+                A 24-bit unsigned integer equivalent to the number contained in <paramref name="input"/>.
             </returns>
         </member>
-        <member name="M:System.UInt24.op_Multiply(System.UInt24,System.UInt32)">
+        <member name="M:System.UInt24.Parse(System.String,System.Globalization.NumberStyles)">
             <summary>
-                Computes the multiplication of both values.
+                Converts the string representation of a number in a specified style to its 32-bit unsigned integer equivalent.
             </summary>
-            <param name="left">
-                The left value.
+            <param name="input">
+                A string containing a number to convert.
             </param>
-            <param name="right">
-                The right value.
+            <param name="style">
+                A bitwise combination of the enumeration values that indicates the style elements that can be present in <paramref name="input"/>. 
+                A typical value to specify is <see cref="F:System.Globalization.NumberStyles.Integer"/>.
             </param>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="style"/> is not a <see cref="F:System.Globalization.NumberStyles.Integer"/> value.
+                -or- 
+                <paramref name="style"/> is not a combination of <see cref="F:System.Globalization.NumberStyles.AllowHexSpecifier"/> and <see cref="F:System.Globalization.NumberStyles.HexNumber"/> values.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="input"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.FormatException">
+                Thrown when <paramref name="input"/> is not in the correct format.
+            </exception>
             <exception cref="T:System.OverflowException">
-                Thrown when the result would be too large.
+                Thrown when <paramref name="input"/> represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+                -or- 
+                <paramref name="input"/> includes non-zero, fractional digits.
             </exception>
             <returns>
-                The multiplication of both values.
+                A 24-bit unsigned integer equivalent to the number contained in <paramref name="input"/>.
             </returns>
         </member>
-        <member name="M:System.UInt24.op_Multiply(System.UInt32,System.UInt24)">
+        <member name="M:System.UInt24.Parse(System.String,System.Globalization.NumberStyles,System.IFormatProvider)">
             <summary>
-                Computes the multiplication of both values.
+                Converts the string representation of a number in a specified style and culture-specific format to its 24-bit unsigned integer equivalent.
             </summary>
-            <param name="left">
-                The left value.
+            <param name="input">
+                A string containing a number to convert.
             </param>
-            <param name="right">
-                The right value.
+            <param name="style">
+                A bitwise combination of the enumeration values that indicates the style elements that can be present in <paramref name="input"/>. 
+                A typical value to specify is <see cref="F:System.Globalization.NumberStyles.Integer"/>.
             </param>
+            <param name="provider">
+                An object that supplies culture-specific information about the format of <paramref name="input"/>.
+            </param>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="style"/> is not a <see cref="F:System.Globalization.NumberStyles.Integer"/> value.
+                -or- 
+                <paramref name="style"/> is not a combination of <see cref="F:System.Globalization.NumberStyles.AllowHexSpecifier"/> and <see cref="F:System.Globalization.NumberStyles.HexNumber"/> values.
+            </exception>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="input"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.FormatException">
+                Thrown when <paramref name="input"/> is not in the correct format.
+            </exception>
             <exception cref="T:System.OverflowException">
-                Thrown when the result would be too large.
+                Thrown when <paramref name="input"/> represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+                -or- 
+                <paramref name="input"/> includes non-zero, fractional digits.
             </exception>
             <returns>
-                The multiplication of both values.
+                A 24-bit unsigned integer equivalent to the number contained in <paramref name="input"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.Parse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider)">
+            <summary>
+                Converts the span representation of a number in a specified style and culture-specific format to its 24-bit unsigned integer equivalent.
+            </summary>
+            <param name="span">
+                A span containing the characters representing the number to convert.
+            </param>
+            <param name="style">
+                A bitwise combination of the enumeration values that indicates the style elements that can be present in <paramref name="span"/>. 
+                A typical value to specify is <see cref="F:System.Globalization.NumberStyles.Integer"/>.
+            </param>
+            <param name="provider">
+                An object that supplies culture-specific information about the format of <paramref name="span"/>.
+            </param>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="style"/> is not a <see cref="F:System.Globalization.NumberStyles.Integer"/> value.
+                -or- 
+                <paramref name="style"/> is not a combination of <see cref="F:System.Globalization.NumberStyles.AllowHexSpecifier"/> and <see cref="F:System.Globalization.NumberStyles.HexNumber"/> values.
+            </exception>
+            <exception cref="T:System.FormatException">
+                Thrown when <paramref name="span"/> is not in the correct format.
+            </exception>
+            <exception cref="T:System.OverflowException">
+                Thrown when <paramref name="span"/> represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>.
+                -or- 
+                <paramref name="span"/> includes non-zero, fractional digits.
+            </exception>
+            <returns>
+                A 24-bit unsigned integer equivalent to the number contained in <paramref name="span"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.TryParse(System.String,System.UInt24@)">
+            <summary>
+                Converts the string representation of a number to its 24-bit unsigned integer equivalent. A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="input">
+                A string containing a number to convert.
+            </param>
+            <param name="result">
+                When this method returns, contains the 24-bit unsigned integer value equivalent of the number contained in <paramref name="input"/>, 
+                if the conversion succeeded, or zero if the conversion failed. 
+                The conversion fails if the <paramref name="input"/> parameter is <see langword="null"/> or <see cref="F:System.String.Empty"/>, is not of the correct format, 
+                or represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>. This parameter is passed uninitialized;
+                any value originally supplied in result will be overwritten.
+            </param>
+            <returns>
+                <see langword="true"/> if <paramref name="input"/> was converted successfully; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.TryParse(System.ReadOnlySpan{System.Char},System.UInt24@)">
+            <summary>
+                Converts the span representation of a number to its 24-bit unsigned integer equivalent. A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="span">
+                A span containing the characters that represent the number to convert.
+            </param>
+            <param name="result">
+                When this method returns, contains the 24-bit unsigned integer value equivalent of the number contained in <paramref name="span"/>, 
+                if the conversion succeeded, or zero if the conversion failed. 
+                The conversion fails if the <paramref name="span"/> parameter is <see langword="null"/> or <see cref="F:System.String.Empty"/>, is not of the correct format, 
+                or represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>. This parameter is passed uninitialized;
+                any value originally supplied in result will be overwritten.
+            </param>
+            <returns>
+                <see langword="true"/> if <paramref name="span"/> was converted successfully; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.TryParse(System.String,System.Globalization.NumberStyles,System.IFormatProvider,System.UInt24@)">
+            <summary>
+                Converts the string representation of a number in a specified style and culture-specific format to its 24-bit unsigned integer equivalent. 
+                A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="input">
+                A string containing a number to convert. The string is interpreted using the style specified by <paramref name="style"/>.
+            </param>
+            <param name="style">
+                A bitwise combination of the enumeration values that indicates the style elements that can be present in <paramref name="input"/>. 
+                A typical value to specify is <see cref="F:System.Globalization.NumberStyles.Integer"/>.
+            </param>
+            <param name="provider">
+                An object that supplies culture-specific information about the format of <paramref name="input"/>.
+            </param>
+            <param name="result">
+                When this method returns, contains the 24-bit unsigned integer value equivalent of the number contained in <paramref name="input"/>, 
+                if the conversion succeeded, or zero if the conversion failed. 
+                The conversion fails if the <paramref name="input"/> parameter is <see langword="null"/> or <see cref="F:System.String.Empty"/>, is not of the correct format, 
+                or represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>. This parameter is passed uninitialized;
+                any value originally supplied in result will be overwritten.
+            </param>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="style"/> is not a <see cref="F:System.Globalization.NumberStyles.Integer"/> value.
+                -or- 
+                <paramref name="style"/> is not a combination of <see cref="F:System.Globalization.NumberStyles.AllowHexSpecifier"/> and <see cref="F:System.Globalization.NumberStyles.HexNumber"/> values.
+            </exception>
+            <returns>
+                <see langword="true"/> if <paramref name="input"/> was converted successfully; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.UInt24.TryParse(System.ReadOnlySpan{System.Char},System.Globalization.NumberStyles,System.IFormatProvider,System.UInt24@)">
+            <summary>
+                Converts the span representation of a number in a specified style and culture-specific format to its 24-bit unsigned integer equivalent. 
+                A return value indicates whether the conversion succeeded.
+            </summary>
+            <param name="span">
+                A span containing the characters that represent the number to convert. The span is interpreted using the style specified by <paramref name="style"/>.
+            </param>
+            <param name="style">
+                A bitwise combination of the enumeration values that indicates the style elements that can be present in <paramref name="span"/>. 
+                A typical value to specify is <see cref="F:System.Globalization.NumberStyles.Integer"/>.
+            </param>
+            <param name="provider">
+                An object that supplies culture-specific information about the format of <paramref name="span"/>.
+            </param>
+            <param name="result">
+                When this method returns, contains the 24-bit unsigned integer value equivalent of the number contained in <paramref name="input"/>, 
+                if the conversion succeeded, or zero if the conversion failed. 
+                The conversion fails if the <paramref name="span"/> parameter is <see langword="null"/> or <see cref="F:System.String.Empty"/>, is not of the correct format, 
+                or represents a number less than <see cref="F:System.UInt24.MinValue"/> or greater than <see cref="F:System.UInt24.MaxValue"/>. This parameter is passed uninitialized;
+                any value originally supplied in result will be overwritten.
+            </param>
+            <exception cref="T:System.ArgumentException">
+                Thrown when <paramref name="style"/> is not a <see cref="F:System.Globalization.NumberStyles.Integer"/> value.
+                -or- 
+                <paramref name="style"/> is not a combination of <see cref="F:System.Globalization.NumberStyles.AllowHexSpecifier"/> and <see cref="F:System.Globalization.NumberStyles.HexNumber"/> values.
+            </exception>
+            <returns>
+                <see langword="true"/> if <paramref name="span"/> was converted successfully; otherwise, <see langword="false"/>.
             </returns>
         </member>
         <member name="M:System.Xml.XmlConvert.SerializeObject``1(``0)">
