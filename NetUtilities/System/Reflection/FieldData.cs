@@ -19,7 +19,7 @@ namespace System.Reflection
             IsNullable = FieldType.IsClass || FieldType.IsInterface || FieldType.IsNullable();
             IsStatic = field.IsStatic;
 
-            var parameter = Expression.Parameter(typeof(object), "instance");
+            var parameter = Expression.Parameter(typeof(object));
             var cast = Expression.Convert(parameter, FieldType.DeclaringType!); // will be null if it's a module property, cba to handle it
             var prop = Expression.Field(cast, FieldType.Name);
             var convert = Expression.Convert(prop, typeof(object));
@@ -27,8 +27,8 @@ namespace System.Reflection
 
             _get = lambda.Compile();
 
-            var instance = Expression.Parameter(typeof(object), "instance");
-            var value = Expression.Parameter(typeof(object), "value");
+            var instance = Expression.Parameter(typeof(object));
+            var value = Expression.Parameter(typeof(object));
             var convertInstance = Expression.Convert(instance, FieldType.DeclaringType!);
             var convertValue = Expression.Convert(value, FieldType);
             var prop2 = Expression.Field(convertInstance, FieldType.Name);

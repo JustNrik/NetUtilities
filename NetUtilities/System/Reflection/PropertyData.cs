@@ -27,11 +27,11 @@ namespace System.Reflection
             Setter = property.GetSetMethod(false) ?? property.GetSetMethod(true);
             IsIndexer = Parameters.Count > 0;
             IsNullable = PropertyType.IsClass || PropertyType.IsInterface || PropertyType.IsNullable();
-            IsStatic = PropertyType.IsStatic();
+            IsStatic = PropertyType.IsAbstract && PropertyType.IsSealed;
 
             if (Getter is not null)
             {
-                var parameter = Expression.Parameter(typeof(object), "instance");
+                var parameter = Expression.Parameter(typeof(object));
                 var cast = Expression.Convert(parameter, property.DeclaringType!); // will be null if it's a module property, cba to handle it
                 var prop = Expression.Property(cast, property.Name);
                 var convert = Expression.Convert(prop, typeof(object));
@@ -42,8 +42,8 @@ namespace System.Reflection
 
             if (Setter is not null)
             {
-                var instance = Expression.Parameter(typeof(object), "instance");
-                var value = Expression.Parameter(typeof(object), "value");
+                var instance = Expression.Parameter(typeof(object));
+                var value = Expression.Parameter(typeof(object));
                 var convertInstance = Expression.Convert(instance, property.DeclaringType!);
                 var convertValue = Expression.Convert(value, property.PropertyType);
                 var prop = Expression.Property(convertInstance, property.Name);

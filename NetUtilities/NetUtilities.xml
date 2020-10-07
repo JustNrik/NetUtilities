@@ -2154,25 +2154,45 @@
                 Initializes a new instance of <see cref="T:System.Reflection.ConstructorData"/> class 
                 with the provided <see cref="T:System.Reflection.ConstructorInfo"/> and target.
             </summary>
-            <param name="constructor">The constructor.</param>
-            <param name="target">The target.</param>
+            <param name="constructor">
+                The constructor.
+            </param>
+            <param name="target">
+                The target.
+            </param>
         </member>
         <member name="M:System.Reflection.ConstructorData.CreateInstance">
             <summary>
-            Creates an instance of this constructor's type.
+                Creates an instance of the type this constructor belongs to.
             </summary>
-            <exception cref="T:System.InvalidOperationException">Throw if this constructors takes parameters or the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
-            <returns>An instance of the type this constructor belongs to.</returns>
+            <exception cref="T:System.InvalidOperationException">
+                Throw if this constructors requires parameters 
+                -- OR -- 
+                the type this constructor belongs to is either <see langword="abstract"/> or <see langword="static"/>.
+            </exception>
+            <returns>
+                An instance of the type this constructor belongs to.
+            </returns>
         </member>
         <member name="M:System.Reflection.ConstructorData.CreateInstance(System.Object[])">
             <summary>
-            Creates an instance of this constructor's type with the given arguments.
+                Creates an instance of the type this constructor belongs to with the provided arguments.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when args is <see langword="null"/>.</exception>
-            <exception cref="T:System.InvalidOperationException">Thrown when the type this constructor belongs to is <see langword="abstract"/> or <see langword="static"/>.</exception>
-            <exception cref="!:ParameterCountMismatchException">Thrown when the supplied arguments count is different from the parameters count of this constructor.</exception>
-            <param name="args"></param>
-            <returns></returns>
+            <param name="args">
+                The arguments.
+            </param>
+            <exception cref="T:System.ArgumentException">
+                Thrown when the supplied arguments count is different from the parameters count of this constructor.
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+                Thrown when one of the arguments couldn't be casted to the respective type.
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when the type this constructor belongs to is either <see langword="abstract"/> or <see langword="static"/>.
+            </exception>
+            <returns>
+                An instance of the type this constructor belongs to.
+            </returns>
         </member>
         <member name="T:System.Reflection.Factory">
             <summary>
@@ -2229,16 +2249,6 @@
                 Contains data related to the type's methods
             </summary>
         </member>
-        <member name="P:System.Reflection.Mapper.MethodsExcludingObjectBaseMembers">
-            <summary>
-                Contains data related to the type's methods - excluding members inhereted from the Object base class
-            </summary>
-        </member>
-        <member name="P:System.Reflection.Mapper.MethodsDeclaringTypeOnly">
-            <summary>
-                Contains data related to the type's methods - excluding all inhereted members
-            </summary>
-        </member>
         <member name="P:System.Reflection.Mapper.Properties">
             <summary>
                 Contains data related to the type's properties
@@ -2251,6 +2261,9 @@
             <param name="object">
                 The object.
             </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown if <paramref name="object"/> is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:System.Reflection.Mapper.#ctor(System.Type)">
             <summary>
@@ -2270,37 +2283,27 @@
         </member>
         <member name="P:System.Reflection.Mapper`1.Constructors">
             <summary>
-                Gets the data about all constructors of <typeparamref name="T"/>.
+                Gets the <see cref="T:System.Reflection.ConstructorData"/> for all constructors of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Events">
             <summary>
-                Gets the data about all events of <typeparamref name="T"/>.
+                Gets the <see cref="T:System.Reflection.EventData"/> for all events of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Fields">
             <summary>
-                Gets the data about all fields of <typeparamref name="T"/>.
+                Gets the <see cref="T:System.Reflection.FieldData"/> for all fields of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Methods">
             <summary>
-                Gets the data about all methods of <typeparamref name="T"/>.
-            </summary>
-        </member>
-        <member name="P:System.Reflection.Mapper`1.MethodsExcludingObjectBaseMembers">
-            <summary>
-                Gets the data about all methods of <typeparamref name="T"/> excluding those inherited from <see cref="T:System.Object"/>.
-            </summary>
-        </member>
-        <member name="P:System.Reflection.Mapper`1.MethodsDeclaringTypeOnly">
-            <summary>
-                Gets the data about all methods declared by <typeparamref name="T"/>.
+                Gets the <see cref="T:System.Reflection.MethodData"/> for all methods of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Properties">
             <summary>
-            Contains data related to <typeparamref name="T"/>'s properties.
+                Gets the <see cref="T:System.Reflection.PropertyData"/> for all properties of <typeparamref name="T"/>.
             </summary>
         </member>
         <member name="T:System.Reflection.MemberData`1">
@@ -2313,18 +2316,43 @@
         </member>
         <member name="P:System.Reflection.MemberData`1.Member">
             <summary>
-            Gets the <see cref="T:System.Reflection.MemberInfo"/> for this class.
+                Gets the <see cref="T:System.Reflection.MemberInfo"/> for this class.
             </summary>
         </member>
-        <member name="P:System.Reflection.MemberData`1.Attributes">
+        <member name="P:System.Reflection.MemberData`1.CustomAttributes">
             <summary>
-            Gets the custom attributes of this member.
+                Gets the custom attributes of this member.
             </summary>
         </member>
         <member name="P:System.Reflection.MemberData`1.CustomAttributeDatas">
             <summary>
-            Gets the custom attribute datas of this member.
+                Gets the custom attribute datas of this member.
             </summary>
+        </member>
+        <member name="M:System.Reflection.MethodData.Invoke(System.Object,System.Object[])">
+            <summary>
+                Invokes the method this data reflects.
+            </summary>
+            <param name="instance">
+                The instance object the method will be invoked on. 
+                Must be <see langword="null"/> if the method is <see langword="static"/>.
+            </param>
+            <param name="parameters">
+                The parameters the reflected method requires.
+            </param>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when the instance is <see langword="null"/> and the method is an instance method. 
+                -- or -- 
+                when the instance is not <see langword="null"/> and the method is <see langword="static"/>.
+                -- or -- 
+                when the parameters length doesn't match the method parameters count.
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+                Thrown when one of the arguments couldn't be casted to the respective type.
+            </exception>
+            <returns>
+                The value the method this data reflects returns. <see langword="null"/> if the return type of the reflected method is <see langword="void"/>.
+            </returns>
         </member>
         <member name="M:System.Reflection.PropertyData.GetValue(System.Object)">
             <summary>
@@ -2556,6 +2584,17 @@
             </typeparam>
             <returns>
                 <see langword="true"/> if the type is a struct or has a parameterless constructor; otherwise, <see langword="false"/>.
+            </returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionHelper.IsNullable``1">
+            <summary>
+                Indicates if <typeparamref name="T"/>'s default value is <see langword="null"/>.
+            </summary>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <returns>
+                <see langword="true"/> if the <typeparamref name="T"/>'s default value is <see langword="null"/>; otherwise, <see langword="false"/>.
             </returns>
         </member>
         <member name="M:System.Reflection.ReflectionHelper.GetAllTypes">

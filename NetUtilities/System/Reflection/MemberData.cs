@@ -11,22 +11,24 @@ namespace System.Reflection
     /// </typeparam>
     public abstract class MemberData<TMember> where TMember : MemberInfo
     {
-        private Lazy<ReadOnlyList<Attribute>> _attributes;
+        private Lazy<ReadOnlyList<Attribute>> _customAttributes;
         private Lazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
 
+        protected string _memberName;
+
         /// <summary>
-        /// Gets the <see cref="MemberInfo"/> for this class.
+        ///     Gets the <see cref="MemberInfo"/> for this class.
         /// </summary>
         public TMember Member { get; }
 
         /// <summary>
-        /// Gets the custom attributes of this member.
+        ///     Gets the custom attributes of this member.
         /// </summary>
-        public ReadOnlyList<Attribute> Attributes
-            => _attributes.Value;
+        public ReadOnlyList<Attribute> CustomAttributes
+            => _customAttributes.Value;
 
         /// <summary>
-        /// Gets the custom attribute datas of this member.
+        ///     Gets the custom attribute datas of this member.
         /// </summary>
         public ReadOnlyList<CustomAttributeData> CustomAttributeDatas
             => _customAttributeDatas.Value;
@@ -34,9 +36,8 @@ namespace System.Reflection
         protected MemberData(TMember member)
         {
             Member = member;
-            _attributes = new(() => Member.GetCustomAttributes().ToReadOnlyList(), true);
+            _customAttributes = new(() => Member.GetCustomAttributes().ToReadOnlyList(), true);
             _customAttributeDatas = new(() => Member.CustomAttributes.ToReadOnlyList(), true);
-
         }
     }
 }
