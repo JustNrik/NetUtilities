@@ -90,27 +90,6 @@ namespace NetUtilities.Tests.System.Reflection
         }
 
         [Fact]
-        public void MapperTest_Method_MethodDeclaringTypeOnly()
-        {
-            var fake = new MapperMethodsInheritanceFake();
-            var mapper = new Mapper(fake);
-
-            Assert.True(mapper.MethodsDeclaringTypeOnly.Count == 1);
-            Assert.Equal("DoNothing", mapper.MethodsDeclaringTypeOnly[0].Member.Name);
-        }
-
-        [Fact]
-        public void MapperTest_Method_MethodExcludingObjectMembers()
-        {
-            var fake = new MapperMethodsInheritanceFake();
-            var mapper = new Mapper(fake);
-
-            Assert.True(mapper.MethodsExcludingObjectBaseMembers.Count == 2);
-            Assert.Equal("DoNothing", mapper.MethodsExcludingObjectBaseMembers[0].Member.Name);
-            Assert.Equal("SumTest", mapper.MethodsExcludingObjectBaseMembers[1].Member.Name);
-        }
-
-        [Fact]
         public void MapperTest_Method_MethodSearch()
         {
             var fake = new MapperMethodsFake();
