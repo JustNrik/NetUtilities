@@ -10,21 +10,21 @@ namespace System.Reflection
     public class ConstructorData : MemberData<ConstructorInfo>
     {
         private readonly Type _target;
-        private readonly Lazy<Func<object[], object>?> _constructor;
+        private readonly Lazy<Func<object?[], object>> _constructor;
 
         /// <summary>
-        ///     Gets the parameters of this constructor.
+        ///     Gets the parameters of the constructor this data reflects.
         /// </summary>
         public ReadOnlyList<ParameterInfo> Parameters { get; }
 
         /// <summary>
-        ///     Indicates if this constructor is the default constructor.
+        ///     Indicates if this constructor data reflects the default constructor.
         /// </summary>
         public bool IsDefault { get; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="ConstructorData"/> class 
-        ///     with the provided <see cref="ConstructorInfo"/> and target.
+        ///     with the provided <see cref="ConstructorInfo"/> and <see cref="Type"/>.
         /// </summary>
         /// <param name="constructor">
         ///     The constructor.
@@ -48,7 +48,7 @@ namespace System.Reflection
                 var @new = Expression.New(Member, parameters);
                 var convert = Expression.Convert(@new, typeof(object));
 
-                return Expression.Lambda<Func<object[], object>>(convert, array).Compile();
+                return Expression.Lambda<Func<object?[], object>>(convert, array).Compile();
             }, true);
 
             Parameters = @params.ToReadOnlyList();
@@ -97,9 +97,9 @@ namespace System.Reflection
         /// <returns>
         ///     An instance of the type this constructor belongs to.
         /// </returns>
-        public object CreateInstance(params object[] args)
+        public object CreateInstance(params object?[] args)
         {
-            if (args is null || args.Length == 0)
+            if (args is null or { Length: 0 })
                 return CreateInstance();
 
             if (_target.IsAbstract)

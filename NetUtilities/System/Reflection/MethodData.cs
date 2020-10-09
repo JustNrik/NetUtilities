@@ -5,14 +5,29 @@ using NetUtilities;
 
 namespace System.Reflection
 {
+    /// <inheritdoc/>
     public class MethodData : MemberData<MethodInfo>
     {
         private readonly Lazy<Action<object?, object?[]>> _action;
         private readonly Lazy<Func<object?, object[]?, object?>> _func;
 
+        /// <summary>
+        ///     Gets the parameters of the method this data reflects.
+        /// </summary>
         public ReadOnlyList<ParameterInfo> Parameters { get; }
+
+        /// <summary>
+        ///     Gets the generic arguments of the method this data reflects.
+        /// </summary>
         public ReadOnlyList<Type> GenericArguments { get; }
 
+        /// <summary>
+        ///     Initializes a new instance of <see cref="MethodData"/> class 
+        ///     with the provided <see cref="MethodInfo"/>.
+        /// </summary>
+        /// <param name="method">
+        ///     The method.
+        /// </param>
         public MethodData(MethodInfo method) : base(method)
         {
             Parameters = method.GetParameters().ToReadOnlyList();
@@ -72,11 +87,13 @@ namespace System.Reflection
         /// </returns>
         public object? Invoke(object? instance, params object?[]? parameters)
         {
-            if (instance is not null ^ Member.IsStatic)
-                throw new InvalidOperationException("The instance cannot be null because the method this data reflects is not static.");
+            if (instance is null ^ Member.IsStatic)
+                throw new InvalidOperationException(
+                    $"The instance cannot be null because {Member.DeclaringType}.{Member.Name} is not an static method.");
 
             if (parameters is not null && Parameters.Count != parameters.Length)
-                throw new InvalidOperationException("The parameters length doesn't match the reflected method parameters count.");
+                throw new InvalidOperationException(
+                    "The parameters length doesn't match the reflected method parameters count.");
 
             if (_func.IsValueCreated)
                 return _func.Value(instance, parameters);

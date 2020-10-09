@@ -17,8 +17,6 @@ namespace System.Reflection
         private readonly Lazy<ReadOnlyList<EventData>> _events;
         private readonly Lazy<ReadOnlyList<FieldData>> _fields;
         private readonly Lazy<ReadOnlyList<MethodData>> _methods;
-        private readonly Lazy<ReadOnlyList<MethodData>> _methodsExcludingObjectBaseMembers;
-        private readonly Lazy<ReadOnlyList<MethodData>> _methodsDeclaringTypeOnly;
         private readonly Lazy<ReadOnlyList<PropertyData>> _properties;
 
         /// <summary>

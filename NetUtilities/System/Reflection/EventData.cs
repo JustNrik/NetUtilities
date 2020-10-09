@@ -1,6 +1,7 @@
 ﻿namespace System.Reflection
 {
     // TODO: Implement this.
+    /// <inheritdoc/>
     public class EventData : MemberData<EventInfo>
     {
         //private readonly Lazy<Func<object?, object?[]?>?> _raise;
@@ -8,6 +9,13 @@
         //private readonly Lazy<Action<Delegate>> _remove;
         public Type EventHandlerType { get; }
 
+        /// <summary>
+        ///     Initializes a new instance of <see cref="EventData"/> class 
+        ///     with the provided <see cref="EventInfo"/> and target.
+        /// </summary>
+        /// <param name="event">
+        ///     The event.
+        /// </param>
         public EventData(EventInfo @event) : base(@event)
         {
             EventHandlerType = @event.EventHandlerType;

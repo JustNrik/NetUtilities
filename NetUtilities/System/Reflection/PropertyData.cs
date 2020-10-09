@@ -5,20 +5,54 @@ using NetUtilities;
 
 namespace System.Reflection
 {
+    /// <inheritdoc/>
     public class PropertyData : MemberData<PropertyInfo>
     {
-        private readonly Func<object?, object?>? _get;
-        private readonly Action<object?, object?>? _set;
+        private readonly Lazy<Func<object?, object?>>? _get;
+        private readonly Lazy<Action<object?, object?>>? _set;
 
+        /// <summary>
+        ///     Gets the parameters of the property this data reflects.
+        /// </summary>
         public ReadOnlyList<ParameterInfo> Parameters { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="MethodInfo"/> that reflects the getter of this data reflected property.
+        /// </summary>
         public MethodInfo? Getter { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="MethodInfo"/> that reflects the setter of this data reflected property.
+        /// </summary>
         public MethodInfo? Setter { get; }
+
+        /// <summary>
+        ///     Gets the <see cref="Type"/> of the property this data reflects.
+        /// </summary>
         public Type PropertyType { get; }
+
+        /// <summary>
+        ///     Indicates if the property this data reflects returns a nullable type (class, interface or <see cref="Nullable{T}"/>).
+        /// </summary>
         public bool IsNullable { get; }
+
+        /// <summary>
+        ///     Indicates if the property this data reflects is an indexer.
+        /// </summary>
         public bool IsIndexer { get; }
+
+        /// <summary>
+        ///     Indicates if the property this data reflects is <see langword="static"/>.
+        /// </summary>
         public bool IsStatic { get; }
 
-
+        /// <summary>
+        ///     Initializes a new instance of <see cref="PropertyData"/> class 
+        ///     with the provided <see cref="PropertyInfo"/>.
+        /// </summary>
+        /// <param name="property">
+        ///     The property.
+        /// </param>
         public PropertyData(PropertyInfo property) : base(property)
         {
             PropertyType = property.PropertyType;
@@ -31,66 +65,110 @@ namespace System.Reflection
 
             if (Getter is not null)
             {
-                var parameter = Expression.Parameter(typeof(object));
-                var cast = Expression.Convert(parameter, property.DeclaringType!); // will be null if it's a module property, cba to handle it
-                var prop = Expression.Property(cast, property.Name);
-                var convert = Expression.Convert(prop, typeof(object));
-                var lambda = Expression.Lambda<Func<object?, object?>>(convert, parameter);
-
-                _get = lambda.Compile();
+                _get = new(() =>
+                {
+                    var parameter = Expression.Parameter(typeof(object));
+                    var cast = Expression.Convert(parameter, property.DeclaringType!); // will be null if it's a module property, cba to handle it
+                    var prop = Expression.Property(cast, property.Name);
+                    var convert = Expression.Convert(prop, typeof(object));
+                    var lambda = Expression.Lambda<Func<object?, object?>>(convert, parameter);
+                    return lambda.Compile();
+                }, true);
             }
 
             if (Setter is not null)
             {
-                var instance = Expression.Parameter(typeof(object));
-                var value = Expression.Parameter(typeof(object));
-                var convertInstance = Expression.Convert(instance, property.DeclaringType!);
-                var convertValue = Expression.Convert(value, property.PropertyType);
-                var prop = Expression.Property(convertInstance, property.Name);
-                var assign = Expression.Assign(prop, convertValue);
-                var lambda = Expression.Lambda<Action<object?, object?>>(assign, instance, value);
-
-                _set = lambda.Compile();
+                _set = new(() =>
+                {
+                    var instance = Expression.Parameter(typeof(object));
+                    var value = Expression.Parameter(typeof(object));
+                    var convertInstance = Expression.Convert(instance, property.DeclaringType!);
+                    var convertValue = Expression.Convert(value, property.PropertyType);
+                    var prop = Expression.Property(convertInstance, property.Name);
+                    var assign = Expression.Assign(prop, convertValue);
+                    var lambda = Expression.Lambda<Action<object?, object?>>(assign, instance, value);
+                    return lambda.Compile();
+                });
             }
         }
 
         /// <summary>
-        /// Gets the value of this property given the instance. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+        ///     Gets the value of the property this data reflects given the instance. 
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when the property has no getter or the target is <see langword="null"/> and the property is not <see langword="static"/></exception>
-        /// <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
-        /// <returns>The value of the property.</returns>
-        public object? GetValue(object? target)
+        /// <remarks>
+        ///     The <paramref name="instance"/> must be <see langword="null"/> if the property is <see langword="static"/>.<br/>
+        ///     The <paramref name="instance"/> must <b>not</b> be <see langword="null"/> if the property is <b>not</b> <see langword="static"/>.
+        /// </remarks>
+        /// <param name="instance">
+        ///     The instance object.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown when the property has no getter. 
+        ///     -- or --
+        ///     when the instance is <see langword="null"/> but the property is not <see langword="static"/>.
+        ///     -- or --
+        ///     when the instance is not <see langword="null"/> but the property is <see langword="static"/>.
+        /// </exception>
+        /// <returns>
+        ///     The value of the property this data reflects.
+        /// </returns>
+        public object? GetValue(object? instance)
         {
-            Ensure.CanOperate(
-                _get is not null,
-                $"The property {Member.DeclaringType}.{Member.Name} doesn't contain a getter.");
-            Ensure.CanOperate(
-                target is not null ^ IsStatic,
-                $"The target cannot be null because {Member.DeclaringType}.{Member.Name} is not an static property.");
+            if (_get is null)
+                throw new InvalidOperationException(
+                    $"The property {Member.DeclaringType}.{Member.Name} doesn't have a getter.");
 
-            return _get(target);
+            if (instance is null && !IsStatic)
+                throw new InvalidOperationException(
+                    $"The instance cannot be null because {Member.DeclaringType}.{Member.Name} is not a static field.");
+
+            if (instance is not null && IsStatic)
+                throw new InvalidOperationException(
+                    $"The instance must be null because {Member.DeclaringType}.{Member.Name} is a static field.");
+
+            return _get.Value(instance);
         }
 
         /// <summary>
-        /// Sets the value of this property given the instance and the value. If the property is <see langword="static"/>, pass <see langword="null"/> on the target.
+        ///     Gets the value of the property this data reflects given the instance. 
         /// </summary>
-        /// <exception cref="InvalidOperationException">Thrown when the property has no setter, the target is <see langword="null"/> and the property is not <see langword="static"/> or the value is <see langword="null"/> and the property is not nullable.</exception>
-        /// <param name="target">The target instance. Pass <see langword="null"/> if the property is <see langword="static"/>.</param>
-        /// <param name="value">The value.</param>
-        public void SetValue(object? target, object? value)
+        /// <remarks>
+        ///     The <paramref name="instance"/> must be <see langword="null"/> if the property is <see langword="static"/>.<br/>
+        ///     The <paramref name="instance"/> must <b>not</b> be <see langword="null"/> if the property is <b>not</b> <see langword="static"/>.<br/>
+        ///     The <paramref name="value"/> must <b>not</b> be <see langword="null"/> if the property type is <b>not</b> a nullable type (<see langword="class"/>, <see langword="interface"/> or <see cref="Nullable{T}"/>).
+        /// </remarks>
+        /// <param name="instance">
+        ///     The instance object.
+        /// </param>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown when the property has no getter. 
+        ///     -- or --
+        ///     when the instance is <see langword="null"/> but the property is not <see langword="static"/>.
+        ///     -- or --
+        ///     when the instance is not <see langword="null"/> but the property is <see langword="static"/>.
+        /// </exception>
+        public void SetValue(object? instance, object? value)
         {
-            Ensure.CanOperate(
-                _set is not null,
-                $"The property {Member.DeclaringType}.{Member.Name} doesn't contain a setter.");
-            Ensure.CanOperate(
-                target is not null ^ IsStatic,
-                $"The target cannot be null because {Member.DeclaringType}.{Member.Name} is not an static property.");
-            Ensure.CanOperate(
-                value is not null || IsNullable,
-                $"The value cannot be null because {Member.DeclaringType}.{Member.Name} is of type {PropertyType.Name}, which is not a nullable type (class, interface or Nullable<T>)");
+            if (_set is null)
+                throw new InvalidOperationException(
+                    $"The property {Member.DeclaringType}.{Member.Name} doesn't have a getter.");
 
-            _set(target, value);
+            if (instance is null && !IsStatic)
+                throw new InvalidOperationException(
+                    $"The instance cannot be null because {Member.DeclaringType}.{Member.Name} is not a static field.");
+
+            if (instance is not null && IsStatic)
+                throw new InvalidOperationException(
+                    $"The instance must be null because {Member.DeclaringType}.{Member.Name} is a static field.");
+
+            if (value is null && !IsNullable)
+                throw new InvalidOperationException(
+                    $"The value cannot be null because {Member.DeclaringType}.{Member.Name} is of type {PropertyType.Name}, which is not a nullable type (class, interface or Nullable<{PropertyType.Name}>)");
+
+            _set.Value(instance, value);
         }
     }
 }

@@ -46,25 +46,16 @@ namespace System.Reflection
     {
         private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
 
-        private static readonly Func<T> _func = typeof(T).IsValueType
-            ? (() => default!)
-            : Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
-
-        /// <summary>
-        ///     Gets a shared instance of <typeparamref name="T"/>.
-        /// </summary>
-        public static T Shared
-        {
-            [MethodImplementation(Inlined)]
-            get;
-        } = _func.Invoke();
+        private static readonly Func<T> _func = Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
 
         /// <summary>
         ///     Gets a new instance of a generic type with a parameterless constructor.
         ///     Performs much better than <see cref="Activator.CreateInstance{T}"/>
         /// </summary>
-        [return: NotNull]
+        [MethodImplementation(Inlined)]
         public static T CreateInstance()
-            => _func.Invoke();
+            => typeof(T).IsValueType 
+            ? default! 
+            : _func.Invoke();
     }
 }

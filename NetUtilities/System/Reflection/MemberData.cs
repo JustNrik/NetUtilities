@@ -4,7 +4,7 @@ using System.Linq;
 namespace System.Reflection
 {
     /// <summary>
-    ///     Contains rich data and privides helper methods for a <typeparamref name="TMember"/>.
+    ///     Contains rich data and provides helper methods for a <typeparamref name="TMember"/>.
     /// </summary>
     /// <typeparam name="TMember">
     ///     The <see cref="MemberInfo"/> type.
