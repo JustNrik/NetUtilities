@@ -65,13 +65,19 @@ namespace System.Reflection
         /// <summary>
         ///     Invokes the method this data reflects.
         /// </summary>
+        /// <remarks>
+        ///     The <paramref name="instance"/> must be <see langword="null"/> if the method is <see langword="static"/>.<br/>
+        ///     The <paramref name="instance"/> must <b>not</b> be <see langword="null"/> if the method is <b>not</b> <see langword="static"/>.
+        /// </remarks>
         /// <param name="instance">
-        ///     The instance object the method will be invoked on. 
-        ///     Must be <see langword="null"/> if the method is <see langword="static"/>.
+        ///     The instance object.
         /// </param>
         /// <param name="parameters">
         ///     The parameters the reflected method requires.
         /// </param>
+        /// <exception cref="InvalidCastException">
+        ///     Thrown when one of the arguments couldn't be casted to the respective type.
+        /// </exception>
         /// <exception cref="InvalidOperationException">
         ///     Thrown when the instance is <see langword="null"/> and the method is an instance method. 
         ///     -- or -- 
@@ -79,17 +85,18 @@ namespace System.Reflection
         ///     -- or -- 
         ///     when the parameters length doesn't match the method parameters count.
         /// </exception>
-        /// <exception cref="InvalidCastException">
-        ///     Thrown when one of the arguments couldn't be casted to the respective type.
-        /// </exception>
         /// <returns>
         ///     The value the method this data reflects returns. <see langword="null"/> if the return type of the reflected method is <see langword="void"/>.
         /// </returns>
         public object? Invoke(object? instance, params object?[]? parameters)
         {
-            if (instance is null ^ Member.IsStatic)
+            if (instance is null && !Member.IsStatic)
                 throw new InvalidOperationException(
-                    $"The instance cannot be null because {Member.DeclaringType}.{Member.Name} is not an static method.");
+                    $"The instance cannot be null because {Member.DeclaringType}.{Member.Name} is not a static method.");
+
+            if (instance is not null && Member.IsStatic)
+                throw new InvalidOperationException(
+                    $"The instance must be null because {Member.DeclaringType}.{Member.Name} is a static method.");
 
             if (parameters is not null && Parameters.Count != parameters.Length)
                 throw new InvalidOperationException(

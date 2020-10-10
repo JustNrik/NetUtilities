@@ -44,7 +44,7 @@ namespace System.Reflection
                     Expression.ArrayIndex(
                         array,
                         Expression.Constant(index)),
-                    arg.GetType())).ToArray();
+                    arg.ParameterType)).ToArray();
                 var @new = Expression.New(Member, parameters);
                 var convert = Expression.Convert(@new, typeof(object));
 
