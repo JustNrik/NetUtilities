@@ -14,12 +14,12 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the <see cref="Type"/> object of the underlying event-handler delegate associated with this event.
         /// </summary>
-        public Type EventHandlerType { get; }
+        public Type EventHandlerType { get; init; }
 
         /// <summary>
         ///     Indicates if the <see langword="event"/> this data reflects to is <see langword="static"/>.
         /// </summary>
-        public bool IsStatic { get; }
+        public bool IsStatic { get; init; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="EventData"/> class with the provided <see cref="EventInfo"/>.

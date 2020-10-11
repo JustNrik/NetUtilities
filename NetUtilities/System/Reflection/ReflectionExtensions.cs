@@ -190,15 +190,13 @@ namespace System.Reflection
         public static TAttribute? GetEnumFieldAttribute<TAttribute, TEnum>(this TEnum @enum, bool inherited = true)
             where TAttribute : Attribute
             where TEnum : unmanaged, Enum
-            => typeof(TEnum).GetField(Enum.GetName(typeof(TEnum), @enum) ?? string.Empty)?.GetCustomAttribute<TAttribute>(inherited);
+            => typeof(TEnum).GetRuntimeField(Enum.GetName(@enum) ?? string.Empty)?.GetCustomAttribute<TAttribute>(inherited);
 
         /// <summary>
-        ///     Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
+        ///     Indicates if <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
         /// </summary>
         /// <remarks>
-        ///     This method returns <see langword="true"/> if the type is an <see langword="unmanaged"/> type.
-        ///     <br/>
-        ///     <br/>
+        ///     This method returns <see langword="true"/> if <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
         ///     An <see langword="unmanaged"/> type meets the following conditions:
         ///     <list type="bullet">
         ///         <item>
@@ -224,5 +222,7 @@ namespace System.Reflection
         /// </returns>
         public static bool IsUnmanaged<T>(this T _)
             => !RuntimeHelpers.IsReferenceOrContainsReferences<T>();
+
+
     }
 }

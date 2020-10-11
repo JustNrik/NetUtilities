@@ -16,31 +16,34 @@ namespace System
     /// </typeparam>
     public class EventManager<TSource> where TSource : notnull
     {
+        private readonly Dictionary<object, List<(EventInfo, Delegate)>> _handlers = new ();
+
         /// <summary>
         ///     The source of the events
         /// </summary>
-        public TSource Source { get; }
-
-        private readonly Dictionary<object, List<(EventInfo, Delegate)>> _handlers =
-            new Dictionary<object, List<(EventInfo, Delegate)>>();
+        public TSource Source { get; init; }
 
         /// <summary>
-        /// Creates an instance of <see cref="EventManager{TSource}"/> with the instance of the source provided.
+        ///     Creates an instance of <see cref="EventManager{TSource}"/> with the instance of the source provided.
         /// </summary>
-        /// <exception cref="ArgumentNullException">Thrown when source is <see langword="null"/>.</exception>
-        /// <param name="source">The source of the events</param>
+        /// <param name="source">
+        ///     The source of the events.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when <paramref name="source"/> is <see langword="null"/>.
+        /// </exception>
         public EventManager(TSource source)
             => Source = Ensure.NotNull(source);
 
 
         /// <summary>
-        ///     Adds all the handlers to the methods that have <see cref="HandlesAttribute"/>
+        ///     Adds all the handlers to the methods that have <see cref="HandlesAttribute"/>.
         /// </summary>
         /// <param name="target">
-        ///     The instance of object that will listen to the events
+        ///     The instance of object that will listen to the events.
         /// </param>
         /// <param name="flags">
-        ///     The flags used for <see cref="Reflection"/> to search the methods that will listen to the events
+        ///     The flags used for <see cref="Reflection"/> to search the methods that will listen to the events.
         /// </param>
         public virtual void AddHandlers(object target, BindingFlags flags = BindingFlags.Public | BindingFlags.Instance)
         {
@@ -67,10 +70,10 @@ namespace System
         }
 
         /// <summary>
-        ///     Removes all handlers to the methods with <see cref="HandlesAttribute"/>
+        ///     Removes all handlers to the methods with <see cref="HandlesAttribute"/>.
         /// </summary>
         /// <param name="target">
-        ///     The instance of object that is currently listening to the events
+        ///     The instance of object that is currently listening to the events.
         /// </param>
         public virtual void RemoveHandlers(object target)
         {

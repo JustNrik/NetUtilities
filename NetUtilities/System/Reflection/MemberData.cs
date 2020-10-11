@@ -19,7 +19,7 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the <see cref="MemberInfo"/> for this class.
         /// </summary>
-        public TMember Member { get; }
+        public TMember Member { get; init; }
 
         /// <summary>
         ///     Gets the custom attributes of this member.

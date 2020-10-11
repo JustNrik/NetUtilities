@@ -13,18 +13,18 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the type of the field this data reflects.
         /// </summary>
-        public Type FieldType { get; }
+        public Type FieldType { get; init; }
 
         /// <summary>
         ///     Indicates if the type of the field this data reflects is a nullable type 
         ///     (<see langword="class"/>, <see langword="interface"/> or <see cref="Nullable{T}"/>).
         /// </summary>
-        public bool IsNullable { get; }
+        public bool IsNullable { get; init; }
 
         /// <summary>
         ///     Indicates if the field this data reflects is <see langword="static"/>.
         /// </summary>
-        public bool IsStatic { get; }
+        public bool IsStatic { get; init; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="FieldData"/> class 

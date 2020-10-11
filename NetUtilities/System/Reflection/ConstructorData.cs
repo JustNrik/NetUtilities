@@ -15,12 +15,12 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the parameters of the constructor this data reflects.
         /// </summary>
-        public ReadOnlyList<ParameterInfo> Parameters { get; }
+        public ReadOnlyList<ParameterInfo> Parameters { get; init; }
 
         /// <summary>
         ///     Indicates if this constructor data reflects the default constructor.
         /// </summary>
-        public bool IsDefault { get; }
+        public bool IsDefault { get; init; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="ConstructorData"/> class 

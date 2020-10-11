@@ -22,14 +22,6 @@ namespace NetUtilities.Tests.System.Reflection
         }
 
         [Fact]
-        public void Singleton_Should_Point_To_The_Same_Object()
-        {
-            var singleton = Factory<Bar>.Shared;
-            var singleton2 = Factory<Bar>.Shared;
-            Assert.Same(singleton, singleton2);
-        }
-
-        [Fact]
         public void MapperTest_Properties_SingleProperty()
         {
             var plop = new Plop();

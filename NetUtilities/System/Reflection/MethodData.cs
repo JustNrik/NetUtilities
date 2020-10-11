@@ -14,12 +14,12 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the parameters of the method this data reflects.
         /// </summary>
-        public ReadOnlyList<ParameterInfo> Parameters { get; }
+        public ReadOnlyList<ParameterInfo> Parameters { get; init; }
 
         /// <summary>
         ///     Gets the generic arguments of the method this data reflects.
         /// </summary>
-        public ReadOnlyList<Type> GenericArguments { get; }
+        public ReadOnlyList<Type> GenericArguments { get; init; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="MethodData"/> class 

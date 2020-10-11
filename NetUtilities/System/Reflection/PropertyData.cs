@@ -14,37 +14,37 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the parameters of the property this data reflects.
         /// </summary>
-        public ReadOnlyList<ParameterInfo> Parameters { get; }
+        public ReadOnlyList<ParameterInfo> Parameters { get; init; }
 
         /// <summary>
         ///     Gets the <see cref="MethodInfo"/> that reflects the getter of this data reflected property.
         /// </summary>
-        public MethodInfo? Getter { get; }
+        public MethodInfo? Getter { get; init; }
 
         /// <summary>
         ///     Gets the <see cref="MethodInfo"/> that reflects the setter of this data reflected property.
         /// </summary>
-        public MethodInfo? Setter { get; }
+        public MethodInfo? Setter { get; init; }
 
         /// <summary>
         ///     Gets the <see cref="Type"/> of the property this data reflects.
         /// </summary>
-        public Type PropertyType { get; }
+        public Type PropertyType { get; init; }
 
         /// <summary>
         ///     Indicates if the property this data reflects returns a nullable type (class, interface or <see cref="Nullable{T}"/>).
         /// </summary>
-        public bool IsNullable { get; }
+        public bool IsNullable { get; init; }
 
         /// <summary>
         ///     Indicates if the property this data reflects is an indexer.
         /// </summary>
-        public bool IsIndexer { get; }
+        public bool IsIndexer { get; init; }
 
         /// <summary>
         ///     Indicates if the property this data reflects is <see langword="static"/>.
         /// </summary>
-        public bool IsStatic { get; }
+        public bool IsStatic { get; init; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="PropertyData"/> class 

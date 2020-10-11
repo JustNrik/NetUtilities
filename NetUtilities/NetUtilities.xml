@@ -938,28 +938,32 @@
         </member>
         <member name="M:System.EventManager`1.#ctor(`0)">
             <summary>
-            Creates an instance of <see cref="T:System.EventManager`1"/> with the instance of the source provided.
+                Creates an instance of <see cref="T:System.EventManager`1"/> with the instance of the source provided.
             </summary>
-            <exception cref="T:System.ArgumentNullException">Thrown when source is <see langword="null"/>.</exception>
-            <param name="source">The source of the events</param>
+            <param name="source">
+                The source of the events.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="source"/> is <see langword="null"/>.
+            </exception>
         </member>
         <member name="M:System.EventManager`1.AddHandlers(System.Object,System.Reflection.BindingFlags)">
             <summary>
-                Adds all the handlers to the methods that have <see cref="T:System.HandlesAttribute"/>
+                Adds all the handlers to the methods that have <see cref="T:System.HandlesAttribute"/>.
             </summary>
             <param name="target">
-                The instance of object that will listen to the events
+                The instance of object that will listen to the events.
             </param>
             <param name="flags">
-                The flags used for <see cref="N:System.Reflection"/> to search the methods that will listen to the events
+                The flags used for <see cref="N:System.Reflection"/> to search the methods that will listen to the events.
             </param>
         </member>
         <member name="M:System.EventManager`1.RemoveHandlers(System.Object)">
             <summary>
-                Removes all handlers to the methods with <see cref="T:System.HandlesAttribute"/>
+                Removes all handlers to the methods with <see cref="T:System.HandlesAttribute"/>.
             </summary>
             <param name="target">
-                The instance of object that is currently listening to the events
+                The instance of object that is currently listening to the events.
             </param>
         </member>
         <member name="P:System.HandlesAttribute.EventInfo">
@@ -1846,6 +1850,17 @@
                 Thrown when source is <see langword="null"/>.
             </exception>
         </member>
+        <member name="M:System.MathExtensions.GetNextPowerOfTwo(System.UInt32)">
+            <summary>
+                Gets the smallest power of 2 that is higher than or equal to the provided value.
+            </summary>
+            <param name="value">
+                The value.
+            </param>
+            <returns>
+                The smallest power of 2 that is higher than or equal to the provided value.
+            </returns>
+        </member>
         <member name="M:System.MathExtensions.IsPowerOf2(System.Int32)">
             <summary>
             Returns a boolean indicating if the provided number is a power of 2.
@@ -2197,14 +2212,75 @@
         <member name="T:System.Reflection.EventData">
             <inheritdoc/>
         </member>
+        <member name="P:System.Reflection.EventData.EventHandlerType">
+            <summary>
+                Gets the <see cref="T:System.Type"/> object of the underlying event-handler delegate associated with this event.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.EventData.IsStatic">
+            <summary>
+                Indicates if the <see langword="event"/> this data reflects to is <see langword="static"/>.
+            </summary>
+        </member>
         <member name="M:System.Reflection.EventData.#ctor(System.Reflection.EventInfo)">
             <summary>
-                Initializes a new instance of <see cref="T:System.Reflection.EventData"/> class 
-                with the provided <see cref="T:System.Reflection.EventInfo"/> and target.
+                Initializes a new instance of <see cref="T:System.Reflection.EventData"/> class with the provided <see cref="T:System.Reflection.EventInfo"/>.
             </summary>
             <param name="event">
                 The event.
             </param>
+        </member>
+        <member name="M:System.Reflection.EventData.AddHandler(System.Object,System.Delegate)">
+            <summary>
+                Adds a handler to the event this data reflects.
+            </summary>
+            <remarks>
+                The <paramref name="instance"/> must be <see langword="null"/> if the event is <see langword="static"/>.<br/>
+                The <paramref name="instance"/> must <b>not</b> be <see langword="null"/> if the event is <b>not</b> <see langword="static"/>.
+            </remarks>
+            <param name="instance">
+                The instance object.
+            </param>
+            <param name="handler">
+                The handler.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="handler"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+                Thrown when one of the arguments couldn't be casted to the respective type.
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="instance"/> is <see langword="null"/> and the event is an instance event. 
+                -- or -- 
+                when the <paramref name="instance"/> is not <see langword="null"/> and the event is <see langword="static"/>.
+            </exception>
+        </member>
+        <member name="M:System.Reflection.EventData.RemoveHandler(System.Object,System.Delegate)">
+            <summary>
+                Removes a handler to the event this data reflects.
+            </summary>
+            <remarks>
+                The <paramref name="instance"/> must be <see langword="null"/> if the event is <see langword="static"/>.<br/>
+                The <paramref name="instance"/> must <b>not</b> be <see langword="null"/> if the event is <b>not</b> <see langword="static"/>.
+            </remarks>
+            <param name="instance">
+                The instance object.
+            </param>
+            <param name="handler">
+                The handler.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="handler"/> is <see langword="null"/>.
+            </exception>
+            <exception cref="T:System.InvalidCastException">
+                Thrown when one of the arguments couldn't be casted to the respective type.
+            </exception>
+            <exception cref="T:System.InvalidOperationException">
+                Thrown when <paramref name="instance"/> is <see langword="null"/> and the event is an instance event. 
+                -- or -- 
+                when the <paramref name="instance"/> is not <see langword="null"/> and the event is <see langword="static"/>.
+            </exception>
         </member>
         <member name="T:System.Reflection.Factory">
             <summary>
@@ -2219,7 +2295,7 @@
         </member>
         <member name="T:System.Reflection.Factory`1">
             <summary>
-                This class is a helper to create instance of objects whose types are only known at runtime.
+                This class is a helper to create instance of objects without the performance loss of <see cref="M:System.Activator.CreateInstance``1"/>.
             </summary>
             <typeparam name="T">
                 The type whose instance will be created.
@@ -2227,7 +2303,7 @@
         </member>
         <member name="M:System.Reflection.Factory`1.CreateInstance">
             <summary>
-                Gets a new instance of a generic type with a parameterless constructor.
+                Gets a new instance of <typeparamref name="T"/>.
                 Performs much better than <see cref="M:System.Activator.CreateInstance``1"/>
             </summary>
         </member>
@@ -2302,6 +2378,17 @@
                 Handy class to map reflection metadata and provide high performance runtime manipulation.
             </summary>
         </member>
+        <member name="P:System.Reflection.Mapper.CustomAttributes">
+            <summary>
+                Contains data related to the type's custom attributes.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper.CustomAttributeDatas">
+            <summary>
+                Contains data related to the type's custom attribute data for assemblies, modules, 
+                types, members and parameters that are loaded into the reflection-only context.
+            </summary>
+        </member>
         <member name="P:System.Reflection.Mapper.Constructors">
             <summary>
                 Contains data related to the type's constructors
@@ -2353,6 +2440,17 @@
             <typeparam name="T">
                 The type.
             </typeparam>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.CustomAttributes">
+            <summary>
+                Contains data related to the <typeparamref name="T"/>'s custom attributes.
+            </summary>
+        </member>
+        <member name="P:System.Reflection.Mapper`1.CustomAttributeDatas">
+            <summary>
+                Contains data related to the <typeparamref name="T"/>'s custom attribute data for assemblies, modules, 
+                types, members and parameters that are loaded into the reflection-only context.
+            </summary>
         </member>
         <member name="P:System.Reflection.Mapper`1.Constructors">
             <summary>
@@ -2428,22 +2526,25 @@
             <summary>
                 Invokes the method this data reflects.
             </summary>
+            <remarks>
+                The <paramref name="instance"/> must be <see langword="null"/> if the method is <see langword="static"/>.<br/>
+                The <paramref name="instance"/> must <b>not</b> be <see langword="null"/> if the method is <b>not</b> <see langword="static"/>.
+            </remarks>
             <param name="instance">
-                The instance object the method will be invoked on. 
-                Must be <see langword="null"/> if the method is <see langword="static"/>.
+                The instance object.
             </param>
             <param name="parameters">
                 The parameters the reflected method requires.
             </param>
+            <exception cref="T:System.InvalidCastException">
+                Thrown when one of the arguments couldn't be casted to the respective type.
+            </exception>
             <exception cref="T:System.InvalidOperationException">
                 Thrown when the instance is <see langword="null"/> and the method is an instance method. 
                 -- or -- 
                 when the instance is not <see langword="null"/> and the method is <see langword="static"/>.
                 -- or -- 
                 when the parameters length doesn't match the method parameters count.
-            </exception>
-            <exception cref="T:System.InvalidCastException">
-                Thrown when one of the arguments couldn't be casted to the respective type.
             </exception>
             <returns>
                 The value the method this data reflects returns. <see langword="null"/> if the return type of the reflected method is <see langword="void"/>.
@@ -2693,12 +2794,10 @@
         </member>
         <member name="M:System.Reflection.ReflectionExtensions.IsUnmanaged``1(``0)">
             <summary>
-                Indicates if the type <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
+                Indicates if <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
             </summary>
             <remarks>
-                This method returns <see langword="true"/> if the type is an <see langword="unmanaged"/> type.
-                <br/>
-                <br/>
+                This method returns <see langword="true"/> if <typeparamref name="T"/> is an <see langword="unmanaged"/> type.
                 An <see langword="unmanaged"/> type meets the following conditions:
                 <list type="bullet">
                     <item>
