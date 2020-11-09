@@ -128,8 +128,8 @@ namespace System.Text
             if (_index > (_span.Length - count))
                 Grow(count);
 
-            _span[index.._index].CopyTo(_span.Slice(index + count));
-            s.AsSpan().CopyTo(_span.Slice(index));
+            _span[index.._index].CopyTo(_span[(index + count)..]);
+            s.AsSpan().CopyTo(_span[index..]);
             _index += count;
         }
 
@@ -171,7 +171,7 @@ namespace System.Text
             if (pos > _span.Length - s.Length)
                 Grow(s.Length);
 
-            s.AsSpan().CopyTo(_span.Slice(pos));
+            s.AsSpan().CopyTo(_span[pos..]);
             _index += s.Length;
         }
 
@@ -210,7 +210,7 @@ namespace System.Text
             if (pos > _span.Length - value.Length)
                 Grow(value.Length);
 
-            value.CopyTo(_span.Slice(_index));
+            value.CopyTo(_span[_index..]);
             _index += value.Length;
         }
 

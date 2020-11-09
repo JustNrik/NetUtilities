@@ -47,6 +47,19 @@ namespace System.Reflection
             => ConstructorCache<T>.Value;
 
         /// <summary>
+        ///     Indicates if <typeparamref name="T"/>'s default value is <see langword="null"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The type.
+        /// </typeparam>
+        /// <returns>
+        ///     <see langword="true"/> if the <typeparamref name="T"/>'s default value is <see langword="null"/>; otherwise, <see langword="false"/>.
+        /// </returns>
+        [MethodImplementation(Inlined)]
+        public static bool IsNullable<T>()
+            => default(T) is null;
+
+        /// <summary>
         ///     Get all types from all assemblies in <see cref="AppDomain.CurrentDomain"/>.
         /// </summary>
         /// <remarks>

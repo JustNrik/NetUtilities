@@ -12,21 +12,13 @@ namespace NetUtilities.Tests.System.Reflection
         [Fact]
         public void Creating_Instances()
         {
-            var x = Factory<int>.CreateInstance();
-            var bar = Factory<Bar>.CreateInstance();
+            var x = Factory.CreateInstance<int>();
+            var bar = Factory.CreateInstance<Bar>();
             var newX = Factory.CreateInstance(typeof(Bar));
 
             Assert.Equal(0, x);
             Assert.NotNull(bar);
             Assert.NotNull(newX);
-        }
-
-        [Fact]
-        public void Singleton_Should_Point_To_The_Same_Object()
-        {
-            var singleton = Factory<Bar>.Shared;
-            var singleton2 = Factory<Bar>.Shared;
-            Assert.Same(singleton, singleton2);
         }
 
         [Fact]
@@ -87,27 +79,6 @@ namespace NetUtilities.Tests.System.Reflection
                 }
             }
             Assert.True(count == 1);
-        }
-
-        [Fact]
-        public void MapperTest_Method_MethodDeclaringTypeOnly()
-        {
-            var fake = new MapperMethodsInheritanceFake();
-            var mapper = new Mapper(fake);
-
-            Assert.True(mapper.MethodsDeclaringTypeOnly.Count == 1);
-            Assert.Equal("DoNothing", mapper.MethodsDeclaringTypeOnly[0].Member.Name);
-        }
-
-        [Fact]
-        public void MapperTest_Method_MethodExcludingObjectMembers()
-        {
-            var fake = new MapperMethodsInheritanceFake();
-            var mapper = new Mapper(fake);
-
-            Assert.True(mapper.MethodsExcludingObjectBaseMembers.Count == 2);
-            Assert.Equal("DoNothing", mapper.MethodsExcludingObjectBaseMembers[0].Member.Name);
-            Assert.Equal("SumTest", mapper.MethodsExcludingObjectBaseMembers[1].Member.Name);
         }
 
         [Fact]

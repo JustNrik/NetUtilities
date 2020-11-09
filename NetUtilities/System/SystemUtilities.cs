@@ -415,12 +415,12 @@ namespace System
 
         private static class EnumHelper<TEnum> where TEnum : unmanaged, Enum
         {
-            private static readonly bool _isFlag = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null;
+            private static readonly bool _isFlag = Mapper<TEnum>.CustomAttributes.Exists(x => x is FlagsAttribute);
 
             public static TEnum[] Values { get; } = Enum.GetValues<TEnum>()
                 .Where(x =>
                 {
-                    var value = Unsafe.As<TEnum, long>(ref x);
+                    var value = Unsafe.As<TEnum, ulong>(ref x);
                     return (value & (value - 1)) == 0 && value != 0;
                 }).ToArray();
 

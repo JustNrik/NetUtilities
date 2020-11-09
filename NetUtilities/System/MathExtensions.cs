@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Numerics;
+using System.Runtime.CompilerServices;
 using NetUtilities;
 using static System.Math;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
@@ -174,6 +175,19 @@ namespace System
 
             return count - result;
         }
+
+        /// <summary>
+        ///     Gets the smallest power of 2 that is higher than or equal to the provided value.
+        /// </summary>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
+        /// <returns>
+        ///     The smallest power of 2 that is higher than or equal to the provided value.
+        /// </returns>
+        [MethodImplementation(Inlined)]
+        public static uint GetNextPowerOfTwo(this uint value)
+            => 1U << (sizeof(uint) * 8 - BitOperations.LeadingZeroCount(value - 1));
 
         [MethodImplementation(Inlined)]
         public static bool IsEven(this int value)

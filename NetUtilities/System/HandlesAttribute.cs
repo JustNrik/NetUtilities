@@ -10,7 +10,7 @@ namespace System
         /// <summary>
         /// The event metadata.
         /// </summary>
-        public EventInfo EventInfo { get; }
+        public EventInfo EventInfo { get; init; }
 
         /// <summary>
         /// Creates an attribute that is used for metadata to gather the needed information for <see cref="EventManager{TSource}"/>
