@@ -12,8 +12,8 @@ namespace NetUtilities.Tests.System.Reflection
         [Fact]
         public void Creating_Instances()
         {
-            var x = Factory<int>.CreateInstance();
-            var bar = Factory<Bar>.CreateInstance();
+            var x = Factory.CreateInstance<int>();
+            var bar = Factory.CreateInstance<Bar>();
             var newX = Factory.CreateInstance(typeof(Bar));
 
             Assert.Equal(0, x);

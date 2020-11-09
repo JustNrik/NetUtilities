@@ -8,8 +8,8 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class MethodData : MemberData<MethodInfo>
     {
-        private readonly Lazy<Action<object?, object?[]>> _action;
-        private readonly Lazy<Func<object?, object[]?, object?>> _func;
+        private readonly Lazy<Action<object?, object?[]?>> _action;
+        private readonly Lazy<Func<object?, object?[]?, object?>> _func;
 
         /// <summary>
         ///     Gets the parameters of the method this data reflects.
@@ -45,7 +45,7 @@ namespace System.Reflection
                 var call = Expression.Call(instance, Member, parameters);
                 var convert = Expression.Convert(call, typeof(object));
 
-                return Expression.Lambda<Func<object?, object?[], object?>>(convert, array).Compile();
+                return Expression.Lambda<Func<object?, object?[]?, object?>>(convert, array).Compile();
             }, true);
             _action = new(() => 
             {
@@ -58,7 +58,7 @@ namespace System.Reflection
                     arg.ParameterType)).ToArray();
                 var call = Expression.Call(instance, Member, parameters);
 
-                return Expression.Lambda<Action<object?, object?[]>>(call, array).Compile();
+                return Expression.Lambda<Action<object?, object?[]?>>(call, array).Compile();
             },true);
         }
 

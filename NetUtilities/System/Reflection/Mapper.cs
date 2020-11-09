@@ -90,7 +90,7 @@ namespace System.Reflection
             _target = type;
             _customAttributes = new(() => _target.GetCustomAttributes().ToReadOnlyList(), true);
             _customAttributeDatas = new(() => _target.CustomAttributes.ToReadOnlyList(), true);
-            _constructors = new(() => _target.GetConstructors(All).Select(x => new ConstructorData(x, _target)).ToReadOnlyList(), true);
+            _constructors = new(() => _target.GetRuntimeConstructors().Select(x => new ConstructorData(x, _target)).ToReadOnlyList(), true);
             _events = new(() => _target.GetRuntimeEvents().Select(x => new EventData(x)).ToReadOnlyList(), true);
             _fields = new(() => _target.GetRuntimeFields().Select(x => new FieldData(x)).ToReadOnlyList(), true);
             _methods = new(() => _target.GetRuntimeMethods().Select(x => new MethodData(x)).ToReadOnlyList(), true);

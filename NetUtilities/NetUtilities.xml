@@ -2293,6 +2293,12 @@
                 Performs much better than <see cref="M:System.Activator.CreateInstance(System.Type)"/>
             </summary>
         </member>
+        <member name="M:System.Reflection.Factory.CreateInstance``1">
+            <inheritdoc cref="M:System.Reflection.Factory`1.CreateInstance"/>
+        </member>
+        <member name="M:System.Reflection.Factory.Clone``1(``0)">
+            <inheritdoc cref="M:System.Reflection.Factory`1.Clone(`0)"/>
+        </member>
         <member name="T:System.Reflection.Factory`1">
             <summary>
                 This class is a helper to create instance of objects without the performance loss of <see cref="M:System.Activator.CreateInstance``1"/>.
@@ -2306,6 +2312,17 @@
                 Gets a new instance of <typeparamref name="T"/>.
                 Performs much better than <see cref="M:System.Activator.CreateInstance``1"/>
             </summary>
+        </member>
+        <member name="M:System.Reflection.Factory`1.Clone(`0)">
+            <summary>
+                Creates a shallow copy of the provided object.
+            </summary>
+            <param name="obj">
+                The object to be cloned.
+            </param>
+            <returns>
+                A shallow copy of the provided object.
+            </returns>
         </member>
         <member name="T:System.Reflection.FieldData">
             <inheritdoc/>
@@ -2821,6 +2838,23 @@
             <returns>
                 <see langword="true"/> if the type is an <see langword="unmanaged"/> type; otherwise, <see langword="false"/>.
             </returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.GetRuntimeConstructors(System.Type)">
+            <summary>
+                Retrieves a collection that represents all methods defined on a specified type.
+            </summary>
+            <param name="type">
+                The type that contains the methods.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="type"/> is <see langword="null"/>.
+            </exception>
+            <returns>
+                A collection of methods for the specified type.
+            </returns>
+        </member>
+        <member name="M:System.Reflection.ReflectionExtensions.Clone``1(``0)">
+            <inheritdoc cref="M:System.Reflection.Factory`1.Clone(`0)"/>
         </member>
         <member name="T:System.Reflection.ReflectionHelper">
             <summary>

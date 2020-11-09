@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using NetUtilities;
@@ -220,9 +221,28 @@ namespace System.Reflection
         /// <returns>
         ///     <see langword="true"/> if the type is an <see langword="unmanaged"/> type; otherwise, <see langword="false"/>.
         /// </returns>
+        [MethodImplementation(Inlined)]
         public static bool IsUnmanaged<T>(this T _)
             => !RuntimeHelpers.IsReferenceOrContainsReferences<T>();
 
+        /// <summary>
+        ///     Retrieves a collection that represents all methods defined on a specified type.
+        /// </summary>
+        /// <param name="type">
+        ///     The type that contains the methods.
+        /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown when <paramref name="type"/> is <see langword="null"/>.
+        /// </exception>
+        /// <returns>
+        ///     A collection of methods for the specified type.
+        /// </returns>
+        public static ConstructorInfo[] GetRuntimeConstructors(this Type type)
+            => Ensure.NotNull(type).GetConstructors(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic);
 
+        /// <inheritdoc cref="Factory{T}.Clone(T)"/>
+        [MethodImplementation(Inlined)]
+        public static T Clone<T>(this T obj)
+            => Factory<T>.Clone(obj);
     }
 }

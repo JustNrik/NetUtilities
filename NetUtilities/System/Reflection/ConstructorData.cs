@@ -51,8 +51,8 @@ namespace System.Reflection
                 return Expression.Lambda<Func<object?[], object>>(convert, array).Compile();
             }, true);
 
+            IsDefault = target.IsValueType || @params.Length == 0;
             Parameters = @params.ToReadOnlyList();
-            IsDefault = target.IsValueType || Parameters.Count == 0;
         }
 
         /// <summary>

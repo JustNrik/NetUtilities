@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
@@ -11,6 +10,8 @@ namespace System.Reflection
     /// </summary>
     public static class Factory
     {
+        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
+
         private static readonly Dictionary<Type, Func<object>> _dict = new();
         private static readonly object _lock = new();
 
@@ -28,6 +29,16 @@ namespace System.Reflection
                 return AddFunc(type);
             }
         }
+
+        /// <inheritdoc cref="Factory{T}.CreateInstance"/>
+        [MethodImplementation(Inlined)]
+        public static T CreateInstance<T>() where T : new()
+            => Factory<T>.CreateInstance();
+
+        /// <inheritdoc cref="Factory{T}.Clone(T)"/>
+        [MethodImplementation(Inlined)]
+        public static T Clone<T>(T obj)
+            => Factory<T>.Clone(obj);
 
         private static Func<object> AddFunc(Type type)
         {
@@ -48,18 +59,27 @@ namespace System.Reflection
     /// <typeparam name="T">
     ///     The type whose instance will be created.
     /// </typeparam>
-    public static class Factory<T> where T : new()
+    internal static class Factory<T>
     {
-        private const MethodImplOptions Inlined = MethodImplOptions.AggressiveInlining;
-
         private static readonly Func<T> _func = Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
+        private static readonly Func<T, T> _clone;
         private static readonly object _lock = new();
+
+        static Factory()
+        {
+            var method = typeof(T).GetMethod(nameof(MemberwiseClone), BindingFlags.NonPublic | BindingFlags.Instance)!;
+            var instance = Expression.Parameter(typeof(T));
+            var call = Expression.Call(instance, method);
+            var cast = Expression.Convert(call, typeof(T));
+            var lambda = Expression.Lambda<Func<T, T>>(cast, instance);
+
+            _clone = lambda.Compile();
+        }
 
         /// <summary>
         ///     Gets a new instance of <typeparamref name="T"/>.
         ///     Performs much better than <see cref="Activator.CreateInstance{T}"/>
         /// </summary>
-        [MethodImplementation(Inlined)]
         public static T CreateInstance()
         {
             lock (_lock)
@@ -69,6 +89,21 @@ namespace System.Reflection
 
                 return _func();
             }
+        }
+
+        /// <summary>
+        ///     Creates a shallow copy of the provided object.
+        /// </summary>
+        /// <param name="obj">
+        ///     The object to be cloned.
+        /// </param>
+        /// <returns>
+        ///     A shallow copy of the provided object.
+        /// </returns>
+        public static T Clone(T obj)
+        {
+            lock (_lock)
+                return _clone(obj);
         }
     }
 }
