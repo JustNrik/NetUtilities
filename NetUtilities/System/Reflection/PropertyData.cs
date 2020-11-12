@@ -8,8 +8,8 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class PropertyData : MemberData<PropertyInfo>
     {
-        private readonly Lazy<Func<object?, object?>>? _get;
-        private readonly Lazy<Action<object?, object?>>? _set;
+        private readonly SlimLazy<Func<object?, object?>>? _get;
+        private readonly SlimLazy<Action<object?, object?>>? _set;
 
         /// <summary>
         ///     Gets the parameters of the property this data reflects.

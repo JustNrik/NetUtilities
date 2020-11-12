@@ -10,16 +10,14 @@ namespace System.Reflection
     /// </summary>
     public sealed class Mapper
     {
-        private const BindingFlags All = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic;
-
         private readonly Type _target;
-        private readonly Lazy<ReadOnlyList<Attribute>> _customAttributes;
-        private readonly Lazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
-        private readonly Lazy<ReadOnlyList<ConstructorData>> _constructors;
-        private readonly Lazy<ReadOnlyList<EventData>> _events;
-        private readonly Lazy<ReadOnlyList<FieldData>> _fields;
-        private readonly Lazy<ReadOnlyList<MethodData>> _methods;
-        private readonly Lazy<ReadOnlyList<PropertyData>> _properties;
+        private readonly SlimLazy<ReadOnlyList<Attribute>> _customAttributes;
+        private readonly SlimLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
+        private readonly SlimLazy<ReadOnlyList<ConstructorData>> _constructors;
+        private readonly SlimLazy<ReadOnlyList<EventData>> _events;
+        private readonly SlimLazy<ReadOnlyList<FieldData>> _fields;
+        private readonly SlimLazy<ReadOnlyList<MethodData>> _methods;
+        private readonly SlimLazy<ReadOnlyList<PropertyData>> _properties;
 
         /// <summary>
         ///     Contains data related to the type's custom attributes.

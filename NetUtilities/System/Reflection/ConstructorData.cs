@@ -10,7 +10,7 @@ namespace System.Reflection
     public class ConstructorData : MemberData<ConstructorInfo>
     {
         private readonly Type _target;
-        private readonly Lazy<Func<object?[], object>> _constructor;
+        private readonly SlimLazy<Func<object?[], object>> _constructor;
 
         /// <summary>
         ///     Gets the parameters of the constructor this data reflects.
@@ -34,9 +34,9 @@ namespace System.Reflection
         /// </param>
         public ConstructorData(ConstructorInfo constructor, Type target) : base(constructor)
         {
-            var @params = constructor.GetParameters();
+            var @params = Ensure.NotNull(constructor).GetParameters();
 
-            _target = target;
+            _target = Ensure.NotNull(target);
             _constructor = new(() => 
             {
                 var array = Expression.Parameter(typeof(object[]));

@@ -11,8 +11,8 @@ namespace System.Reflection
     /// </typeparam>
     public abstract class MemberData<TMember> where TMember : MemberInfo
     {
-        private Lazy<ReadOnlyList<Attribute>> _customAttributes;
-        private Lazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
+        private SlimLazy<ReadOnlyList<Attribute>> _customAttributes;
+        private SlimLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
 
         protected string _memberName;
 

@@ -8,8 +8,8 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class MethodData : MemberData<MethodInfo>
     {
-        private readonly Lazy<Action<object?, object?[]?>> _action;
-        private readonly Lazy<Func<object?, object?[]?, object?>> _func;
+        private readonly SlimLazy<Action<object?, object?[]?>> _action;
+        private readonly SlimLazy<Func<object?, object?[]?, object?>> _func;
 
         /// <summary>
         ///     Gets the parameters of the method this data reflects.
@@ -59,7 +59,7 @@ namespace System.Reflection
                 var call = Expression.Call(instance, Member, parameters);
 
                 return Expression.Lambda<Action<object?, object?[]?>>(call, array).Compile();
-            },true);
+            }, true);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace System.Reflection
                 throw new InvalidOperationException(
                     "The parameters length doesn't match the reflected method parameters count.");
 
-            if (_func.IsValueCreated)
+            if (_func.IsInitialized)
                 return _func.Value(instance, parameters);
 
             _action.Value(instance, parameters);

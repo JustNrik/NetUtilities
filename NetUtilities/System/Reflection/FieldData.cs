@@ -35,6 +35,8 @@ namespace System.Reflection
         /// </param>
         public FieldData(FieldInfo field) : base(field)
         {
+            Ensure.NotNull(field);
+
             FieldType = field.FieldType;
             IsNullable = FieldType.IsClass || FieldType.IsInterface || FieldType.IsNullable();
             IsStatic = field.IsStatic;

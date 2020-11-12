@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Net.WebSockets;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using NetUtilities;
-using SupposedlyUnsafe = System.Runtime.CompilerServices.Unsafe;
 
 namespace System.Collections.Generic
 {
@@ -29,14 +21,6 @@ namespace System.Collections.Generic
             public int Next;
             public TKey Key;
             public TValue Value;
-        }
-
-        private unsafe static class Unsafe
-        {
-            public static bool IsNullRef<T>(ref T source)
-                => SupposedlyUnsafe.AsPointer(ref source) is null;
-            internal static ref T NullRef<T>()
-                => ref SupposedlyUnsafe.AsRef<T>(null);
         }
 
         private const int StartOfFreeList = -3;
@@ -123,7 +107,7 @@ namespace System.Collections.Generic
         }
 
         public Dictionary64(IDictionary<TKey, TValue> dictionary, IEqualityComparer64<TKey>? comparer) :
-            this(dictionary is not null ? dictionary.Count : 0, comparer)
+            this(dictionary?.Count ?? 0, comparer)
         {
             Ensure.NotNull(dictionary);
 

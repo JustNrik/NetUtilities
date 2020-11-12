@@ -2912,6 +2912,104 @@
                 An array containing all types from all assemblies in <see cref="P:System.AppDomain.CurrentDomain"/>.
             </returns>
         </member>
+        <member name="T:System.SlimLazy`1">
+            <summary>
+                A lightweight implementation of <see cref="T:System.Lazy`1"/>, which also provides support for lazy initialization.
+            </summary>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+        </member>
+        <member name="P:System.SlimLazy`1.Value">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.SlimLazy`1.IsInitialized">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.SlimLazy`1.#ctor(`0)">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.SlimLazy`1"/> class with the provided value.
+            </summary>
+            <param name="value">
+                The value.
+            </param>
+        </member>
+        <member name="M:System.SlimLazy`1.#ctor(System.Func{`0},System.Boolean)">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.SlimLazy`1"/> class with the provided factory delegate. 
+                Optionally you can indicate if the initialization should be tread-safe.
+            </summary>
+            <param name="valueFactory">
+                The value factory delegate.
+            </param>
+            <param name="threadSafe">
+                Indicates if the initialization should be thread-safe.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="valueFactory"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="T:System.SlimLazy`2">
+            <summary>
+                A lightweight implementation of <see cref="T:System.Lazy`2"/>, which also provides support for lazy initialization.
+            </summary>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <typeparam name="TState">
+                The state.
+            </typeparam>
+        </member>
+        <member name="P:System.SlimLazy`2.Value">
+            <inheritdoc/>
+        </member>
+        <member name="P:System.SlimLazy`2.IsInitialized">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.SlimLazy`2.#ctor(`0)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.SlimLazy`2"/> class with the provided value.
+            </summary>
+            <param name="value">
+                The Value.
+            </param>
+        </member>
+        <member name="M:System.SlimLazy`2.#ctor(System.Func{`1,`0},`1,System.Boolean)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.SlimLazy`2"/> class with the provided factory delegate and state.
+                Optional you can indicate if the initialization should be thread-safe.
+            </summary>
+            <param name="valueFactory">
+                The value factory delegate.
+            </param>
+            <param name="state">
+                The state.
+            </param>
+            <param name="threadSafe">
+                Indicates if the initialization should be thread-safe.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either <paramref name="valueFactory"/> or <paramref name="state"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="T:System.ILazy`1">
+            <summary>
+                Provides support for lazy initialization.
+            </summary>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+        </member>
+        <member name="P:System.ILazy`1.Value">
+            <summary>
+                Gets the value.
+            </summary>
+        </member>
+        <member name="P:System.ILazy`1.IsInitialized">
+            <summary>
+                Indicates if the value is initialized.
+            </summary>
+        </member>
         <member name="M:System.SystemUtilities.AsString(System.Char[])">
             <summary>
                 Creates a <see cref="T:System.String"/> with the provided array.
