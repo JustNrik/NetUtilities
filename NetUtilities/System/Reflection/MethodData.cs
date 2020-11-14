@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NetUtilities;
 
 namespace System.Reflection
 {
     /// <inheritdoc/>
     public class MethodData : MemberData<MethodInfo>
     {
-        private readonly SlimLazy<Action<object?, object?[]?>> _action;
-        private readonly SlimLazy<Func<object?, object?[]?, object?>> _func;
+        private readonly ConcurrentLazy<Action<object?, object?[]?>> _action;
+        private readonly ConcurrentLazy<Func<object?, object?[]?, object?>> _func;
 
         /// <summary>
         ///     Gets the parameters of the method this data reflects.
@@ -46,8 +45,8 @@ namespace System.Reflection
                 var convert = Expression.Convert(call, typeof(object));
 
                 return Expression.Lambda<Func<object?, object?[]?, object?>>(convert, array).Compile();
-            }, true);
-            _action = new(() => 
+            });
+            _action = new(() =>
             {
                 var instance = Expression.Parameter(typeof(object));
                 var array = Expression.Parameter(typeof(object[]));
@@ -59,7 +58,7 @@ namespace System.Reflection
                 var call = Expression.Call(instance, Member, parameters);
 
                 return Expression.Lambda<Action<object?, object?[]?>>(call, array).Compile();
-            }, true);
+            });
         }
 
         /// <summary>

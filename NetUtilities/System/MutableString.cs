@@ -123,7 +123,7 @@ namespace System
         /// <param name="pattern">The <see cref="Regex"/> pattern to be used</param>
         /// <param name="options">The <see cref="RegexOptions"/> to be used</param>
         /// <returns>A collection of <see cref="Match"/> objects</returns>
-        public MatchCollection this[[RegexPattern]string pattern, RegexOptions options = RegexOptions.None]
+        public MatchCollection this[[RegexPattern] string pattern, RegexOptions options = RegexOptions.None]
             => GetMatches(pattern, options);
 
         /// <summary>
@@ -133,7 +133,7 @@ namespace System
         /// <param name="replacement"/>
         /// <param name="options"/>
         /// <returns/>
-        public string this[[RegexPattern]string pattern, string replacement, RegexOptions options = RegexOptions.None]
+        public string this[[RegexPattern] string pattern, string replacement, RegexOptions options = RegexOptions.None]
         {
             [MethodImplementation(Inlined)]
             [return: NotNull]
@@ -934,15 +934,15 @@ namespace System
         }
         #endregion
         #region Regex
-        public bool ContainsPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        public bool ContainsPattern([RegexPattern] string? pattern, RegexOptions options = RegexOptions.None)
         {
             Ensure.NotNull(pattern);
             return Regex.IsMatch(this, pattern, options);
         }
 
         public MutableString ReplacePattern(
-            [RegexPattern]string pattern,
-            [AllowNull]string replacement,
+            [RegexPattern] string pattern,
+            [AllowNull] string replacement,
             RegexOptions options = RegexOptions.None)
         {
             Ensure.NotNull(pattern);
@@ -960,15 +960,15 @@ namespace System
         }
 
         [MethodImplementation(Inlined)]
-        public Match GetMatch([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        public Match GetMatch([RegexPattern] string? pattern, RegexOptions options = RegexOptions.None)
             => Regex.Match(this, Ensure.NotNull(pattern), options);
 
         [MethodImplementation(Inlined)]
-        public MatchCollection GetMatches([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        public MatchCollection GetMatches([RegexPattern] string? pattern, RegexOptions options = RegexOptions.None)
             => Regex.Matches(this, Ensure.NotNull(pattern), options);
 
         [MethodImplementation(Inlined)]
-        public string[] SplitPattern([RegexPattern]string? pattern, RegexOptions options = RegexOptions.None)
+        public string[] SplitPattern([RegexPattern] string? pattern, RegexOptions options = RegexOptions.None)
             => Regex.Split(this, Ensure.NotNull(pattern), options);
         #endregion
         #region Substring
@@ -1053,7 +1053,7 @@ namespace System
         {
             Ensure.NotNull(chars);
 
-            if (chars.Length == 0) 
+            if (chars.Length == 0)
                 return this;
 
             foreach (var c in chars)
@@ -1083,7 +1083,7 @@ namespace System
         {
             Ensure.NotNull(chars);
 
-            if (chars.Length == 0) 
+            if (chars.Length == 0)
                 return this;
 
             foreach (var c in chars)

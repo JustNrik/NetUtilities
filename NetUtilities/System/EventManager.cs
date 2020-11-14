@@ -16,7 +16,7 @@ namespace System
     /// </typeparam>
     public class EventManager<TSource> where TSource : notnull
     {
-        private readonly Dictionary<object, List<(EventInfo, Delegate)>> _handlers = new ();
+        private readonly Dictionary<object, List<(EventInfo, Delegate)>> _handlers = new();
 
         /// <summary>
         ///     The source of the events

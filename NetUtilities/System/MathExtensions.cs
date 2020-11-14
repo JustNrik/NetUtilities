@@ -1,6 +1,5 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
-using NetUtilities;
 using static System.Math;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 

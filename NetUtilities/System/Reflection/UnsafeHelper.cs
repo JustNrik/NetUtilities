@@ -40,7 +40,7 @@ namespace System.Reflection
                 var intPtr = Expression.Parameter(typeof(IntPtr));
                 var call = Expression.Call(intPtr, typeof(IntPtr).GetMethod(nameof(IntPtr.ToPointer))!);
                 var newSpan = Expression.New(typeof(Span<T>).GetConstructor(new Type[] { typeof(void*), typeof(int) })!, call, Expression.Constant(1));
-                
+
                 func = Expression.Lambda<Hack1337>(newSpan, intPtr).Compile();
             }
 

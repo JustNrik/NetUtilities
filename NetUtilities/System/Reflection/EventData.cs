@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using NetUtilities;
 
 namespace System.Reflection
@@ -8,8 +6,8 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class EventData : MemberData<EventInfo>
     {
-        private readonly Lazy<Action<object?, Delegate>> _add;
-        private readonly Lazy<Action<object?, Delegate>> _remove;
+        private readonly ConcurrentLazy<Action<object?, Delegate>> _add;
+        private readonly ConcurrentLazy<Action<object?, Delegate>> _remove;
 
         /// <summary>
         ///     Gets the <see cref="Type"/> object of the underlying event-handler delegate associated with this event.
@@ -29,7 +27,7 @@ namespace System.Reflection
         /// </param>
         public EventData(EventInfo @event) : base(@event)
         {
-            EventHandlerType = @event.EventHandlerType;
+            EventHandlerType = Ensure.NotNull(@event).EventHandlerType!;
             IsStatic = @event.DeclaringType!.GetRuntimeField(@event.Name)!.IsStatic;
 
             _add = new(() =>
@@ -38,20 +36,20 @@ namespace System.Reflection
                 var handler = Expression.Parameter(typeof(Delegate));
                 var cast = Expression.Convert(instance, @event.DeclaringType!);
                 var delegateCast = Expression.Convert(handler, EventHandlerType!);
-                var call = Expression.Call(cast, @event.AddMethod, delegateCast);
+                var call = Expression.Call(cast, @event.AddMethod!, delegateCast);
                 var lambda = Expression.Lambda<Action<object?, Delegate>>(call, instance, handler);
                 return lambda.Compile();
-            }, true);
+            });
             _remove = new(() =>
             {
                 var instance = Expression.Parameter(typeof(object));
                 var handler = Expression.Parameter(typeof(Delegate));
-                var cast = Expression.Convert(instance, @event.DeclaringType);
+                var cast = Expression.Convert(instance, @event.DeclaringType!);
                 var delegateCast = Expression.Convert(handler, EventHandlerType);
-                var call = Expression.Call(cast, @event.RemoveMethod, delegateCast);
+                var call = Expression.Call(cast, @event.RemoveMethod!, delegateCast);
                 var lambda = Expression.Lambda<Action<object?, Delegate>>(call, instance, handler);
                 return lambda.Compile();
-            }, true);
+            });
         }
 
         private object RaiseEvent(object? instance, params object?[] parameters)

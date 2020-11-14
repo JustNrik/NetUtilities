@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using NetUtilities;
 
 namespace System.Collections.Generic
@@ -105,7 +104,7 @@ namespace System.Collections.Generic
         /// <exception cref="InvalidOperationException">
         ///     Thrown if <see cref="ICollection{T}.IsReadOnly"/> returns true.
         /// </exception>
-        public static void AddOrUpdate<T>(this IList<T> source, [AllowNull]T element)
+        public static void AddOrUpdate<T>(this IList<T> source, [AllowNull] T element)
         {
             Ensure.NotNull(source);
             Ensure.NotReadOnly(source.IsReadOnly, source.GetType().Name);
@@ -298,7 +297,7 @@ namespace System.Collections.Generic
             Ensure.NotOutOfRange((uint)startIndex < array.Length, startIndex);
             Ensure.NotOutOfRange(count <= 0, count);
             Ensure.NotOutOfRange(startIndex + count > array.Length, startIndex + count);
-            
+
             comparer ??= EqualityComparer<T>.Default;
 
             if (sequence.Length > array.Length || array.Length == 0 || sequence.Length == 0)

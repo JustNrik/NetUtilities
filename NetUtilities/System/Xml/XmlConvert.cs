@@ -45,7 +45,7 @@ namespace System.Xml
         /// <exception cref="InvalidOperationException">
         ///     Thrown if the deserialization fails.
         /// </exception>
-        [return: NotNull]
+        [return: MaybeNull]
         public static T DeserializeObject<T>(string input)
         {
             ThrowIfNullOrWhiteSpace(input);

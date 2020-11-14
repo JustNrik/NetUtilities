@@ -1,15 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using NetUtilities;
 
 namespace System.Reflection
 {
     /// <inheritdoc/>
     public class PropertyData : MemberData<PropertyInfo>
     {
-        private readonly SlimLazy<Func<object?, object?>>? _get;
-        private readonly SlimLazy<Action<object?, object?>>? _set;
+        private readonly ConcurrentLazy<Func<object?, object?>>? _get;
+        private readonly ConcurrentLazy<Action<object?, object?>>? _set;
 
         /// <summary>
         ///     Gets the parameters of the property this data reflects.
@@ -73,7 +72,7 @@ namespace System.Reflection
                     var convert = Expression.Convert(prop, typeof(object));
                     var lambda = Expression.Lambda<Func<object?, object?>>(convert, parameter);
                     return lambda.Compile();
-                }, true);
+                });
             }
 
             if (Setter is not null)

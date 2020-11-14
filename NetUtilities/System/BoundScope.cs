@@ -16,7 +16,7 @@ namespace System
             _cts = new CancellationTokenSource();
         }
 
-        private static Action CreateAction<T, TResult>([AllowNull]T obj, MemberInfo? memberInfo, TResult newValue)
+        private static Action CreateAction<T, TResult>([AllowNull] T obj, MemberInfo? memberInfo, TResult newValue)
         {
             TResult oldValue;
 
@@ -28,20 +28,20 @@ namespace System
 
                     if (obj is not null)
                     {
-                        var property = Mapper<T>.Properties.Find(x => x.Member == propertyInfo);
+                        var property = Mapper<T>.Properties.Find(x => x.Member == propertyInfo)!;
 
                         oldValue = (TResult)property.GetValue(obj);
                         property.SetValue(obj, newValue);
                         return () => property.SetValue(obj, oldValue);
                     }
-                    
+
                     oldValue = (TResult)propertyInfo.GetMethod.Invoke(obj, Array.Empty<object>());
                     propertyInfo.SetMethod.Invoke(obj, new object[] { newValue! });
                     return () => propertyInfo.SetMethod.Invoke(obj, new object?[] { oldValue });
                 case FieldInfo fieldInfo:
                     if (obj is not null)
                     {
-                        var field = Mapper<T>.Fields.Find(x => x.Member == fieldInfo);
+                        var field = Mapper<T>.Fields.Find(x => x.Member == fieldInfo)!;
 
                         oldValue = (TResult)field.GetValue(obj);
                         field.SetValue(obj, newValue);

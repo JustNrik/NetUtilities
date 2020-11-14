@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using NetUtilities;
@@ -166,7 +165,7 @@ namespace System.Reflection
         ///     Thrown when <paramref name="type"/> is <see langword="null"/>.
         /// </exception>
         [MethodImplementation(Inlined)]
-        public static bool TryGetCustomAttribute<T>(this Type type, [NotNullWhen(true)]out T? attribute, bool inherited = true)
+        public static bool TryGetCustomAttribute<T>(this Type type, [NotNullWhen(true)] out T? attribute, bool inherited = true)
             where T : Attribute
             => (attribute = Ensure.NotNull(type).GetCustomAttribute<T>(inherited)) is not null;
 

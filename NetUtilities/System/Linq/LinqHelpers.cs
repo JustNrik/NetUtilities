@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using NetUtilities;
@@ -48,7 +45,7 @@ namespace System.Linq
                 yield return (next = func(next, index++));
         }
 
-        public static async IAsyncEnumerable<T> IterateAsync<T>(T seed, Func<T, Task<T>> func, [EnumeratorCancellation]CancellationToken token = default)
+        public static async IAsyncEnumerable<T> IterateAsync<T>(T seed, Func<T, Task<T>> func, [EnumeratorCancellation] CancellationToken token = default)
         {
             var next = seed;
 

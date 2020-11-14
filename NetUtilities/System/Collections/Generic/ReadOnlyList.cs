@@ -147,7 +147,7 @@ namespace System.Collections.Generic
             => FindLastIndex(0, Count, predicate);
 
         /// <inheritdoc cref="List{T}.FindLastIndex(int, Predicate{T})"/>
-        public int FindLastIndex(int startIndex, [NotNull]Predicate<T> predicate)
+        public int FindLastIndex(int startIndex, [NotNull] Predicate<T> predicate)
             => FindLastIndex(startIndex, Count, predicate);
 
         /// <inheritdoc cref="List{T}.FindLastIndex(int, int, Predicate{T})"/>
@@ -159,7 +159,7 @@ namespace System.Collections.Generic
             => _list.BinarySearch(item);
 
         /// <inheritdoc cref="List{T}.BinarySearch(T, IComparer{T})"/>
-        public int BinarySearch([AllowNull]T item, IComparer<T>? comparer)
+        public int BinarySearch([AllowNull] T item, IComparer<T>? comparer)
             => _list.BinarySearch(item, comparer);
 
         /// <inheritdoc cref="List{T}.BinarySearch(int, int, T, IComparer{T})"/>

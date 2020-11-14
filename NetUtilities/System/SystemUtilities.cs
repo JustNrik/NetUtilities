@@ -111,7 +111,7 @@ namespace System
         /// </exception>
         public static string SubstringBetween(this MutableString input, char leftBound, char rightBound, int startIndex = 0, bool includeBounds = false)
         {
-            Ensure.NotNull(input); 
+            Ensure.NotNull(input);
             Ensure.IsInRange(startIndex < input.Length, startIndex);
 
             var start = input.IndexOf(leftBound, startIndex) + 1;

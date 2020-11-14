@@ -6,7 +6,7 @@
     /// <typeparam name="T">
     ///     The type.
     /// </typeparam>
-    public interface ICloneable<T> 
+    public interface ICloneable<T>
     {
         /// <summary>
         ///     Creates a new object that is a copy of the current instance.

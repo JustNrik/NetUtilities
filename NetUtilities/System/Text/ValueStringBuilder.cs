@@ -1,11 +1,6 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace System.Text
 {
@@ -69,7 +64,7 @@ namespace System.Text
             return result;
         }
 
-        public Span<char> RawChars 
+        public Span<char> RawChars
             => _span;
 
         public ReadOnlySpan<char> AsSpan(bool terminate)
@@ -83,13 +78,13 @@ namespace System.Text
             return _span[.._index];
         }
 
-        public ReadOnlySpan<char> AsSpan() 
+        public ReadOnlySpan<char> AsSpan()
             => _span[.._index];
 
-        public ReadOnlySpan<char> AsSpan(int start) 
+        public ReadOnlySpan<char> AsSpan(int start)
             => _span[start.._index];
 
-        public ReadOnlySpan<char> AsSpan(int start, int length) 
+        public ReadOnlySpan<char> AsSpan(int start, int length)
             => _span.Slice(start, length);
 
         public bool TryCopyTo(Span<char> destination, out int charsWritten)

@@ -626,7 +626,7 @@ namespace System
         /// <returns>
         ///     <see langword="true"/> if <paramref name="input"/> was converted successfully; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool TryParse([NotNullWhen(true)]string? input, out Int24 result)
+        public static bool TryParse([NotNullWhen(true)] string? input, out Int24 result)
             => TryParse(input, NumberStyles.Integer, null, out result);
 
         /// <summary>
@@ -677,7 +677,7 @@ namespace System
         /// <returns>
         ///     <see langword="true"/> if <paramref name="input"/> was converted successfully; otherwise, <see langword="false"/>.
         /// </returns>
-        public static bool TryParse([NotNullWhen(true)]string? input, NumberStyles style, IFormatProvider? provider, out Int24 result)
+        public static bool TryParse([NotNullWhen(true)] string? input, NumberStyles style, IFormatProvider? provider, out Int24 result)
             => TryParse((input ?? string.Empty).AsSpan(), style, provider, out result);
 
         /// <summary>

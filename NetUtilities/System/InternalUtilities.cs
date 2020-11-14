@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -12,7 +11,7 @@ namespace NetUtilities
 
         [MethodImplementation(NotInlined)]
         [return: NotNull]
-        public static T NotNull<T>([AllowNull] T obj, [CallerArgumentExpression("obj")] string? name = null)
+        public static T NotNull<T>([NotNull]T obj, [CallerArgumentExpression("obj")] string? name = null)
         {
             if (obj is null)
                 throw new ArgumentNullException(name);
@@ -21,36 +20,36 @@ namespace NetUtilities
         }
 
         public static void NotOutOfRange<T>(
-            [DoesNotReturnIf(false)]bool rangeCondition, T value,
-            [CallerArgumentExpression("rangeCondition")]string? expression = null,
-            [CallerArgumentExpression("value")]string? argumentName = null)
+            [DoesNotReturnIf(false)] bool rangeCondition, T value,
+            [CallerArgumentExpression("rangeCondition")] string? expression = null,
+            [CallerArgumentExpression("value")] string? argumentName = null)
         {
             if (!rangeCondition)
                 throw new ArgumentOutOfRangeException(
                     argumentName, value, $"The expression '{expression}' has a value that doesn't meet the range condition");
         }
 
-        public static void NotReadOnly([DoesNotReturnIf(true)]bool isReadOnly, string typeName)
+        public static void NotReadOnly([DoesNotReturnIf(true)] bool isReadOnly, string typeName)
         {
             if (isReadOnly)
                 throw new InvalidOperationException($"{typeName} is a Read-Only collection");
         }
 
         public static void CanOperate(
-            [DoesNotReturnIf(false)]bool canOperate,
+            [DoesNotReturnIf(false)] bool canOperate,
             string? message = null,
-            [CallerArgumentExpression("canOperate")]string? expression = null)
+            [CallerArgumentExpression("canOperate")] string? expression = null)
         {
             if (!canOperate)
                 throw new InvalidOperationException(message ?? $"The expression '{expression}' is not valid");
         }
 
         public static void IsInRange<T>(
-            [DoesNotReturnIf(false)]bool isInRange,
+            [DoesNotReturnIf(false)] bool isInRange,
             T value,
             string? message = null,
-            [CallerArgumentExpression("isInRange")]string? expression = null,
-            [CallerArgumentExpression("value")]string? valueString = null)
+            [CallerArgumentExpression("isInRange")] string? expression = null,
+            [CallerArgumentExpression("value")] string? valueString = null)
             where T : struct
         {
             if (!isInRange)

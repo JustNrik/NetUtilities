@@ -147,8 +147,8 @@ namespace System.Collections.Locked
         {
             Ensure.NotNull(source);
 
-            _list = keepReference 
-                ? source 
+            _list = keepReference
+                ? source
                 : source.ToList();
         }
 
@@ -164,7 +164,7 @@ namespace System.Collections.Locked
         }
 
         /// <inheritdoc/>
-        public void Add([AllowNull]T item)
+        public void Add([AllowNull] T item)
         {
             lock (_lock)
                 _list.Add(item!);
@@ -178,7 +178,7 @@ namespace System.Collections.Locked
         }
 
         /// <inheritdoc/>
-        public bool Contains([AllowNull]T item)
+        public bool Contains([AllowNull] T item)
         {
             lock (_lock)
                 return _list.Contains(item!);
@@ -204,21 +204,21 @@ namespace System.Collections.Locked
         }
 
         /// <inheritdoc/>
-        public int IndexOf([AllowNull]T item)
+        public int IndexOf([AllowNull] T item)
         {
             lock (_lock)
                 return _list.IndexOf(item!);
         }
 
         /// <inheritdoc/>
-        public void Insert(int index, [AllowNull]T item)
+        public void Insert(int index, [AllowNull] T item)
         {
             lock (_lock)
                 _list.Insert(index, item!);
         }
 
         /// <inheritdoc/>
-        public bool Remove([AllowNull]T item)
+        public bool Remove([AllowNull] T item)
         {
             lock (_lock)
                 return _list.Remove(item!);

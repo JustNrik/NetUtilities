@@ -80,14 +80,14 @@ namespace System.Collections.Generic
         }
 
         public Dictionary64() : this(0, null)
-        { 
+        {
         }
 
-        public Dictionary64(int capacity) : this(capacity, null) 
-        { 
+        public Dictionary64(int capacity) : this(capacity, null)
+        {
         }
 
-        public Dictionary64(IEqualityComparer64<TKey>? comparer) : this(0, comparer) 
+        public Dictionary64(IEqualityComparer64<TKey>? comparer) : this(0, comparer)
         {
         }
 
@@ -103,7 +103,7 @@ namespace System.Collections.Generic
         }
 
         public Dictionary64(IDictionary<TKey, TValue> dictionary) : this(dictionary, null)
-        { 
+        {
         }
 
         public Dictionary64(IDictionary<TKey, TValue> dictionary, IEqualityComparer64<TKey>? comparer) :
@@ -130,8 +130,8 @@ namespace System.Collections.Generic
             }
         }
 
-        public Dictionary64(IEnumerable<KeyValuePair<TKey, TValue>> collection) : this(collection, null) 
-        { 
+        public Dictionary64(IEnumerable<KeyValuePair<TKey, TValue>> collection) : this(collection, null)
+        {
         }
 
         public Dictionary64(IEnumerable<KeyValuePair<TKey, TValue>> collection, IEqualityComparer64<TKey>? comparer) :
@@ -146,7 +146,7 @@ namespace System.Collections.Generic
         public void Add(TKey key, TValue value)
             => TryInsert(key, value, InsertionBehavior.ThrowOnExisting);
 
-        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> keyValuePair) 
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> keyValuePair)
             => Add(keyValuePair.Key, keyValuePair.Value);
 
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> keyValuePair)
@@ -187,7 +187,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public bool ContainsKey(TKey key) 
+        public bool ContainsKey(TKey key)
             => !Unsafe.IsNullRef(ref FindValue(key));
 
         public bool ContainsValue(TValue value)
@@ -253,7 +253,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public Enumerator GetEnumerator() 
+        public Enumerator GetEnumerator()
             => new Enumerator(this, Enumerator.KeyValuePair);
 
         IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() =>
@@ -280,7 +280,7 @@ namespace System.Collections.Generic
                     {
                         // ValueType: Devirtualize with EqualityComparer64<TValue>.Default intrinsic
 
-                        i--; 
+                        i--;
 
                         do
                         {
@@ -306,7 +306,7 @@ namespace System.Collections.Generic
                         // So cache in a local rather than get EqualityComparer per loop iteration
                         var defaultComparer = EqualityComparer64<TKey>.Default;
 
-                        i--; 
+                        i--;
 
                         do
                         {
@@ -333,7 +333,7 @@ namespace System.Collections.Generic
                     var entries = _entries;
                     var collisionCount = 0u;
 
-                    i--; 
+                    i--;
 
                     do
                     {
@@ -356,13 +356,13 @@ namespace System.Collections.Generic
 
             goto ReturnNotFound;
 
-            ConcurrentOperation:
+        ConcurrentOperation:
             Ensure.CanOperate(false, message: "Concurrent operations are not supposed.");
-            ReturnFound:
+        ReturnFound:
             ref TValue value = ref entry.Value;
-            Return:
+        Return:
             return ref value;
-            ReturnNotFound:
+        ReturnNotFound:
             value = ref Unsafe.NullRef<TValue>();
             goto Return;
         }
@@ -569,7 +569,7 @@ namespace System.Collections.Generic
             return GetPrime(newSize);
         }
 
-        private void Resize() 
+        private void Resize()
             => Resize(ExpandPrime(_count), false);
 
         private void Resize(int newSize, bool forceNewHashCodes)
@@ -600,7 +600,7 @@ namespace System.Collections.Generic
                 if (entry.Next >= -1)
                 {
                     ref var bucket = ref GetBucket(entry.HashCode);
-                    entry.Next = bucket - 1; 
+                    entry.Next = bucket - 1;
                     bucket = i + 1;
                 }
             }
@@ -619,7 +619,7 @@ namespace System.Collections.Generic
                 ref var bucket = ref GetBucket(hashCode);
                 var entries = _entries;
                 var last = -1;
-                var i = bucket - 1; 
+                var i = bucket - 1;
 
                 while (i >= 0)
                 {
@@ -675,7 +675,7 @@ namespace System.Collections.Generic
                     if (entry.HashCode == hashCode && (_comparer?.Equals(entry.Key, key) ?? EqualityComparer64<TKey>.Default.Equals(entry.Key, key)))
                     {
                         if (last < 0)
-                            bucket = entry.Next + 1; 
+                            bucket = entry.Next + 1;
                         else
                             entries[last].Next = entry.Next;
 
@@ -720,16 +720,16 @@ namespace System.Collections.Generic
             return false;
         }
 
-        public bool TryAdd(TKey key, TValue value) 
+        public bool TryAdd(TKey key, TValue value)
             => TryInsert(key, value, InsertionBehavior.None);
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly 
+        bool ICollection<KeyValuePair<TKey, TValue>>.IsReadOnly
             => false;
 
-        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int index) 
+        void ICollection<KeyValuePair<TKey, TValue>>.CopyTo(KeyValuePair<TKey, TValue>[] array, int index)
             => CopyTo(array, index);
 
-        IEnumerator IEnumerable.GetEnumerator() 
+        IEnumerator IEnumerable.GetEnumerator()
             => new Enumerator(this, Enumerator.KeyValuePair);
 
         /// <summary>
@@ -767,7 +767,7 @@ namespace System.Collections.Generic
         /// dictionary.Clear();
         /// dictionary.TrimExcess();
         /// </remarks>
-        public void TrimExcess() 
+        public void TrimExcess()
             => TrimExcess(Count);
 
         /// <summary>
@@ -805,7 +805,7 @@ namespace System.Collections.Generic
                     ref var entry = ref entries![count];
                     entry = oldEntries[i];
                     ref var bucket = ref GetBucket(hashCode);
-                    entry.Next = bucket - 1; 
+                    entry.Next = bucket - 1;
                     bucket = count + 1;
                     count++;
                 }
@@ -866,10 +866,10 @@ namespace System.Collections.Generic
                 return false;
             }
 
-            public KeyValuePair<TKey, TValue> Current 
+            public KeyValuePair<TKey, TValue> Current
                 => _current;
 
-            public void Dispose() 
+            public void Dispose()
             {
             }
 
@@ -932,7 +932,7 @@ namespace System.Collections.Generic
                 _dictionary = Ensure.NotNull(dictionary);
             }
 
-            public Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator()
                 => new Enumerator(_dictionary);
 
             public void CopyTo(TKey[] array, int index)
@@ -948,33 +948,33 @@ namespace System.Collections.Generic
                 {
                     var entry = entries![i];
 
-                    if (entry.Next >= -1) 
+                    if (entry.Next >= -1)
                         array[index++] = entry.Key;
                 }
             }
 
-            public int Count 
+            public int Count
                 => _dictionary.Count;
 
-            bool ICollection<TKey>.IsReadOnly 
+            bool ICollection<TKey>.IsReadOnly
                 => true;
 
             void ICollection<TKey>.Add(TKey item)
                 => throw new NotSupportedException();
 
-            void ICollection<TKey>.Clear() 
-                => throw new NotSupportedException(); 
+            void ICollection<TKey>.Clear()
+                => throw new NotSupportedException();
 
-            bool ICollection<TKey>.Contains(TKey item) 
+            bool ICollection<TKey>.Contains(TKey item)
                 => _dictionary.ContainsKey(item);
 
             bool ICollection<TKey>.Remove(TKey item)
                 => throw new NotSupportedException();
 
-            IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator() 
+            IEnumerator<TKey> IEnumerable<TKey>.GetEnumerator()
                 => new Enumerator(_dictionary);
 
-            IEnumerator IEnumerable.GetEnumerator() 
+            IEnumerator IEnumerable.GetEnumerator()
                 => new Enumerator(_dictionary);
 
             void ICollection.CopyTo(Array array, int index)
@@ -1001,7 +1001,7 @@ namespace System.Collections.Generic
                         {
                             var entry = entries![i];
 
-                            if (entry.Next >= -1) 
+                            if (entry.Next >= -1)
                                 objects[index++] = entry.Key;
                         }
                     }
@@ -1012,10 +1012,10 @@ namespace System.Collections.Generic
                 }
             }
 
-            bool ICollection.IsSynchronized 
+            bool ICollection.IsSynchronized
                 => false;
 
-            object ICollection.SyncRoot 
+            object ICollection.SyncRoot
                 => ((ICollection)_dictionary).SyncRoot;
 
             public struct Enumerator : IEnumerator<TKey>, IEnumerator
@@ -1033,7 +1033,7 @@ namespace System.Collections.Generic
                     _currentKey = default;
                 }
 
-                public void Dispose() 
+                public void Dispose()
                 {
                 }
 
@@ -1057,7 +1057,7 @@ namespace System.Collections.Generic
                     return false;
                 }
 
-                public TKey Current 
+                public TKey Current
                     => _currentKey!;
 
                 object? IEnumerator.Current
@@ -1089,7 +1089,7 @@ namespace System.Collections.Generic
                 _dictionary = Ensure.NotNull(dictionary);
             }
 
-            public Enumerator GetEnumerator() 
+            public Enumerator GetEnumerator()
                 => new Enumerator(_dictionary);
 
             public void CopyTo(TValue[] array, int index)
@@ -1110,13 +1110,13 @@ namespace System.Collections.Generic
                 }
             }
 
-            public int Count 
+            public int Count
                 => _dictionary.Count;
 
-            bool ICollection<TValue>.IsReadOnly 
+            bool ICollection<TValue>.IsReadOnly
                 => true;
 
-            void ICollection<TValue>.Add(TValue item) 
+            void ICollection<TValue>.Add(TValue item)
                 => throw new NotSupportedException();
 
             bool ICollection<TValue>.Remove(TValue item)
@@ -1125,13 +1125,13 @@ namespace System.Collections.Generic
             void ICollection<TValue>.Clear()
                 => throw new NotSupportedException();
 
-            bool ICollection<TValue>.Contains(TValue item) 
+            bool ICollection<TValue>.Contains(TValue item)
                 => _dictionary.ContainsValue(item);
 
-            IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator() 
+            IEnumerator<TValue> IEnumerable<TValue>.GetEnumerator()
                 => new Enumerator(_dictionary);
 
-            IEnumerator IEnumerable.GetEnumerator() 
+            IEnumerator IEnumerable.GetEnumerator()
                 => new Enumerator(_dictionary);
 
             void ICollection.CopyTo(Array array, int index)
@@ -1169,10 +1169,10 @@ namespace System.Collections.Generic
                 }
             }
 
-            bool ICollection.IsSynchronized 
+            bool ICollection.IsSynchronized
                 => false;
 
-            object ICollection.SyncRoot 
+            object ICollection.SyncRoot
                 => ((ICollection)_dictionary).SyncRoot;
 
             public struct Enumerator : IEnumerator<TValue>, IEnumerator
@@ -1212,7 +1212,7 @@ namespace System.Collections.Generic
                     return false;
                 }
 
-                public TValue Current 
+                public TValue Current
                     => _currentValue!;
 
                 object? IEnumerator.Current

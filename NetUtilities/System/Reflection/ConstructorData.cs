@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using NetUtilities;
@@ -10,7 +9,7 @@ namespace System.Reflection
     public class ConstructorData : MemberData<ConstructorInfo>
     {
         private readonly Type _target;
-        private readonly SlimLazy<Func<object?[], object>> _constructor;
+        private readonly ConcurrentLazy<Func<object?[], object>> _constructor;
 
         /// <summary>
         ///     Gets the parameters of the constructor this data reflects.
@@ -37,7 +36,7 @@ namespace System.Reflection
             var @params = Ensure.NotNull(constructor).GetParameters();
 
             _target = Ensure.NotNull(target);
-            _constructor = new(() => 
+            _constructor = new(() =>
             {
                 var array = Expression.Parameter(typeof(object[]));
                 var parameters = @params.Select((arg, index) => Expression.Convert(
@@ -49,7 +48,7 @@ namespace System.Reflection
                 var convert = Expression.Convert(@new, typeof(object));
 
                 return Expression.Lambda<Func<object?[], object>>(convert, array).Compile();
-            }, true);
+            });
 
             IsDefault = target.IsValueType || @params.Length == 0;
             Parameters = @params.ToReadOnlyList();

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using NetUtilities;
 
@@ -11,13 +10,13 @@ namespace System.Reflection
     public sealed class Mapper
     {
         private readonly Type _target;
-        private readonly SlimLazy<ReadOnlyList<Attribute>> _customAttributes;
-        private readonly SlimLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
-        private readonly SlimLazy<ReadOnlyList<ConstructorData>> _constructors;
-        private readonly SlimLazy<ReadOnlyList<EventData>> _events;
-        private readonly SlimLazy<ReadOnlyList<FieldData>> _fields;
-        private readonly SlimLazy<ReadOnlyList<MethodData>> _methods;
-        private readonly SlimLazy<ReadOnlyList<PropertyData>> _properties;
+        private readonly ConcurrentLazy<ReadOnlyList<Attribute>> _customAttributes;
+        private readonly ConcurrentLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
+        private readonly ConcurrentLazy<ReadOnlyList<ConstructorData>> _constructors;
+        private readonly ConcurrentLazy<ReadOnlyList<EventData>> _events;
+        private readonly ConcurrentLazy<ReadOnlyList<FieldData>> _fields;
+        private readonly ConcurrentLazy<ReadOnlyList<MethodData>> _methods;
+        private readonly ConcurrentLazy<ReadOnlyList<PropertyData>> _properties;
 
         /// <summary>
         ///     Contains data related to the type's custom attributes.
@@ -86,13 +85,13 @@ namespace System.Reflection
             Ensure.NotNull(type);
 
             _target = type;
-            _customAttributes = new(() => _target.GetCustomAttributes().ToReadOnlyList(), true);
-            _customAttributeDatas = new(() => _target.CustomAttributes.ToReadOnlyList(), true);
-            _constructors = new(() => _target.GetRuntimeConstructors().Select(x => new ConstructorData(x, _target)).ToReadOnlyList(), true);
-            _events = new(() => _target.GetRuntimeEvents().Select(x => new EventData(x)).ToReadOnlyList(), true);
-            _fields = new(() => _target.GetRuntimeFields().Select(x => new FieldData(x)).ToReadOnlyList(), true);
-            _methods = new(() => _target.GetRuntimeMethods().Select(x => new MethodData(x)).ToReadOnlyList(), true);
-            _properties = new(() => _target.GetRuntimeProperties().Select(x => new PropertyData(x)).ToReadOnlyList(), true);
+            _customAttributes = new(() => _target.GetCustomAttributes().ToReadOnlyList());
+            _customAttributeDatas = new(() => _target.CustomAttributes.ToReadOnlyList());
+            _constructors = new(() => _target.GetRuntimeConstructors().Select(x => new ConstructorData(x, _target)).ToReadOnlyList());
+            _events = new(() => _target.GetRuntimeEvents().Select(x => new EventData(x)).ToReadOnlyList());
+            _fields = new(() => _target.GetRuntimeFields().Select(x => new FieldData(x)).ToReadOnlyList());
+            _methods = new(() => _target.GetRuntimeMethods().Select(x => new MethodData(x)).ToReadOnlyList());
+            _properties = new(() => _target.GetRuntimeProperties().Select(x => new PropertyData(x)).ToReadOnlyList());
         }
     }
 
@@ -102,7 +101,7 @@ namespace System.Reflection
     /// <typeparam name="T">
     ///     The type.
     /// </typeparam>
-    public static class Mapper<T> 
+    public static class Mapper<T>
     {
         private static readonly Mapper _mapper = new Mapper(typeof(T));
 
@@ -122,31 +121,31 @@ namespace System.Reflection
         /// <summary>
         ///     Gets the <see cref="ConstructorData"/> for all constructors of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<ConstructorData> Constructors 
+        public static ReadOnlyList<ConstructorData> Constructors
             => _mapper.Constructors;
 
         /// <summary>
         ///     Gets the <see cref="EventData"/> for all events of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<EventData> Events 
+        public static ReadOnlyList<EventData> Events
             => _mapper.Events;
 
         /// <summary>
         ///     Gets the <see cref="FieldData"/> for all fields of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<FieldData> Fields 
+        public static ReadOnlyList<FieldData> Fields
             => _mapper.Fields;
 
         /// <summary>
         ///     Gets the <see cref="MethodData"/> for all methods of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<MethodData> Methods 
+        public static ReadOnlyList<MethodData> Methods
             => _mapper.Methods;
 
         /// <summary>
         ///     Gets the <see cref="PropertyData"/> for all properties of <typeparamref name="T"/>.
         /// </summary>
-        public static ReadOnlyList<PropertyData> Properties 
+        public static ReadOnlyList<PropertyData> Properties
             => _mapper.Properties;
     }
 }

@@ -846,6 +846,23 @@
         <member name="M:System.Collections.Locked.LockedList`1.Enumerator.Dispose">
             <inheritdoc/>
         </member>
+        <member name="T:System.EventHandler`2">
+            <summary>
+                Represents the method that will handle an event of <typeparamref name="TEventArgs"/> data from <typeparamref name="TSender"/>.
+            </summary>
+            <typeparam name="TSender">
+                The sender type.
+            </typeparam>
+            <typeparam name="TEventArgs">
+                The event data type.
+            </typeparam>
+            <param name="sender">
+                The sender.
+            </param>
+            <param name="eventArgs">
+                The event data.
+            </param>
+        </member>
         <member name="T:System.Diagnostics.ProcessExtensions">
             <summary>
                 Utility class for <see cref="T:System.Diagnostics.Process"/>
@@ -2920,6 +2937,16 @@
                 The type.
             </typeparam>
         </member>
+        <member name="F:System.SlimLazy`1._value">
+            <summary>
+                The value.
+            </summary>
+        </member>
+        <member name="F:System.SlimLazy`1._valueFactory">
+            <summary>
+                The factory delegate.
+            </summary>
+        </member>
         <member name="P:System.SlimLazy`1.Value">
             <inheritdoc/>
         </member>
@@ -2934,16 +2961,42 @@
                 The value.
             </param>
         </member>
-        <member name="M:System.SlimLazy`1.#ctor(System.Func{`0},System.Boolean)">
+        <member name="M:System.SlimLazy`1.#ctor(System.Func{`0})">
             <summary>
                 Initializes a new instance of the <see cref="T:System.SlimLazy`1"/> class with the provided factory delegate. 
-                Optionally you can indicate if the initialization should be tread-safe.
             </summary>
             <param name="valueFactory">
                 The value factory delegate.
             </param>
-            <param name="threadSafe">
-                Indicates if the initialization should be thread-safe.
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when <paramref name="valueFactory"/> is <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="T:System.ConcurrentLazy`1">
+            <summary>
+                A thread-safe lightweight implementation of <see cref="T:System.Lazy`1"/>, which also provides support for lazy initialization.
+            </summary>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+        </member>
+        <member name="P:System.ConcurrentLazy`1.Value">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.ConcurrentLazy`1.#ctor(`0)">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.ConcurrentLazy`1"/> class with the provided value.
+            </summary>
+            <param name="value">
+                The value.
+            </param>
+        </member>
+        <member name="M:System.ConcurrentLazy`1.#ctor(System.Func{`0})">
+            <summary>
+                Initializes a new instance of the <see cref="T:System.ConcurrentLazy`1"/> class with the provided factory delegate. 
+            </summary>
+            <param name="valueFactory">
+                The value factory delegate.
             </param>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when <paramref name="valueFactory"/> is <see langword="null"/>.
@@ -2960,6 +3013,21 @@
                 The state.
             </typeparam>
         </member>
+        <member name="F:System.SlimLazy`2._value">
+            <summary>
+                The value.
+            </summary>
+        </member>
+        <member name="F:System.SlimLazy`2._valueFactory">
+            <summary>
+                The value factory delegate.
+            </summary>
+        </member>
+        <member name="F:System.SlimLazy`2._state">
+            <summary>
+                The factory delegate arguments.
+            </summary>
+        </member>
         <member name="P:System.SlimLazy`2.Value">
             <inheritdoc/>
         </member>
@@ -2974,10 +3042,9 @@
                 The Value.
             </param>
         </member>
-        <member name="M:System.SlimLazy`2.#ctor(System.Func{`1,`0},`1,System.Boolean)">
+        <member name="M:System.SlimLazy`2.#ctor(System.Func{`1,`0},`1)">
             <summary>
                 Initializes a new instance of <see cref="T:System.SlimLazy`2"/> class with the provided factory delegate and state.
-                Optional you can indicate if the initialization should be thread-safe.
             </summary>
             <param name="valueFactory">
                 The value factory delegate.
@@ -2985,8 +3052,41 @@
             <param name="state">
                 The state.
             </param>
-            <param name="threadSafe">
-                Indicates if the initialization should be thread-safe.
+            <exception cref="T:System.ArgumentNullException">
+                Thrown when either <paramref name="valueFactory"/> or <paramref name="state"/> are <see langword="null"/>.
+            </exception>
+        </member>
+        <member name="T:System.ConcurrentSlimLazy`2">
+            <summary>
+                A lightweight implementation of <see cref="T:System.Lazy`2"/>, which also provides support for lazy initialization.
+            </summary>
+            <typeparam name="T">
+                The type.
+            </typeparam>
+            <typeparam name="TState">
+                The state.
+            </typeparam>
+        </member>
+        <member name="P:System.ConcurrentSlimLazy`2.Value">
+            <inheritdoc/>
+        </member>
+        <member name="M:System.ConcurrentSlimLazy`2.#ctor(`0)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.ConcurrentSlimLazy`2"/> class with the provided value.
+            </summary>
+            <param name="value">
+                The Value.
+            </param>
+        </member>
+        <member name="M:System.ConcurrentSlimLazy`2.#ctor(System.Func{`1,`0},`1)">
+            <summary>
+                Initializes a new instance of <see cref="T:System.ConcurrentSlimLazy`2"/> class with the provided factory delegate and state.
+            </summary>
+            <param name="valueFactory">
+                The value factory delegate.
+            </param>
+            <param name="state">
+                The state.
             </param>
             <exception cref="T:System.ArgumentNullException">
                 Thrown when either <paramref name="valueFactory"/> or <paramref name="state"/> are <see langword="null"/>.

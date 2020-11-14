@@ -11,8 +11,8 @@ namespace System.Reflection
     /// </typeparam>
     public abstract class MemberData<TMember> where TMember : MemberInfo
     {
-        private SlimLazy<ReadOnlyList<Attribute>> _customAttributes;
-        private SlimLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
+        private ConcurrentLazy<ReadOnlyList<Attribute>> _customAttributes;
+        private ConcurrentLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
 
         protected string _memberName;
 
@@ -36,8 +36,8 @@ namespace System.Reflection
         protected MemberData(TMember member)
         {
             Member = member;
-            _customAttributes = new(() => Member.GetCustomAttributes().ToReadOnlyList(), true);
-            _customAttributeDatas = new(() => Member.CustomAttributes.ToReadOnlyList(), true);
+            _customAttributes = new(() => Member.GetCustomAttributes().ToReadOnlyList());
+            _customAttributeDatas = new(() => Member.CustomAttributes.ToReadOnlyList());
         }
     }
 }

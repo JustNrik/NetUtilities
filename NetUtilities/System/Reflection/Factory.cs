@@ -46,7 +46,7 @@ namespace System.Reflection
                 throw new InvalidOperationException($"The type {type.FullName} does not contain a public parameterless constructor.");
 
             var func = Expression.Lambda<Func<object>>(Expression.Convert(Expression.New(type), typeof(object))).Compile();
-            
+
             _dict.Add(type, func);
             return func;
 
