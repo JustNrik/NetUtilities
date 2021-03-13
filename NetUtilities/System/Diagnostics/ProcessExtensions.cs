@@ -77,8 +77,8 @@ namespace System.Diagnostics
             options.Executing = false;
             
             // cleanup the code here.
-            var ret = process.StartInfo.RedirectStandardError ? process.StandardError.ReadToEnd() : string.Empty;
-            ret += process.StartInfo.RedirectStandardOutput ? process.StandardOutput.ReadToEnd() : string.Empty;
+            var ret = process.StartInfo.RedirectStandardOutput ? process.StandardOutput.ReadToEnd() : string.Empty;
+            ret += process.StartInfo.RedirectStandardError ? process.StandardError.ReadToEnd() : string.Empty;
             if (options.WaitForProcessExit)
                 process.WaitForExit();
 
