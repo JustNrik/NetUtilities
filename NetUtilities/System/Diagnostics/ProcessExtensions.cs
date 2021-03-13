@@ -73,17 +73,12 @@ namespace System.Diagnostics
         /// </returns>
         public static string Shell(this Process process, ProcessOptions options)
         {
-            var ret = string.Empty;
-
             process.Start();
             options.Executing = false;
-
-            if (process.StartInfo.RedirectStandardError)
-                ret = process.StandardError.ReadToEnd();
-
-            if (process.StartInfo.RedirectStandardOutput)
-                ret = process.StandardOutput.ReadToEnd();
-
+            
+            // cleanup the code here.
+            var ret = process.StartInfo.RedirectStandardError ? process.StandardError.ReadToEnd() : string.Empty;
+            ret += process.StartInfo.RedirectStandardOutput ? process.StandardOutput.ReadToEnd() : string.Empty;
             if (options.WaitForProcessExit)
                 process.WaitForExit();
 
