@@ -22,13 +22,19 @@ namespace System.IO
 
             // false if they are not equal or if capacity is 0.
             int len = ms.GetBuffer().Length;
-            bool changeCapacity = len != capacity || capacity == 0;
+            bool changeCapacity = len != capacity;
             Array.Clear(ms.GetBuffer(), 0, len);
             ms.Position = 0;
             ms.SetLength(0);
             if (changeCapacity)
             {
-                ms.Capacity = capacity;
+                ms.Capacity = 0;
+                
+                // avoid setting to the same value twice.
+                if (capacity != 0)
+                {
+                    ms.Capacity = capacity;
+                }
             }
         }
     }
