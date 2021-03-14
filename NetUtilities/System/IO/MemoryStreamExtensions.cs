@@ -20,16 +20,21 @@ namespace System.IO
                 throw new ArgumentNullException(nameof(ms));
             }
 
+            if (capacity < 0)
+            {
+                throw new IndexOutOfRangeException("capacity must not be negative.");
+            }
+
             // false if they are not equal or if capacity is 0.
-            int len = ms.GetBuffer().Length;
-            bool changeCapacity = len != capacity;
+            var len = ms.GetBuffer().Length;
+            var changeCapacity = len != capacity;
             Array.Clear(ms.GetBuffer(), 0, len);
             ms.Position = 0;
             ms.SetLength(0);
             if (changeCapacity)
             {
                 ms.Capacity = 0;
-                
+
                 // avoid setting to the same value twice.
                 if (capacity != 0)
                 {
