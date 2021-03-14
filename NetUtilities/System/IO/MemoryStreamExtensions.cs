@@ -31,15 +31,12 @@ namespace System.IO
             Array.Clear(ms.GetBuffer(), 0, len);
             ms.Position = 0;
             ms.SetLength(0);
-            if (changeCapacity)
-            {
-                ms.Capacity = 0;
+            ms.Capacity = 0;
 
-                // avoid setting to the same value twice.
-                if (capacity != 0)
-                {
-                    ms.Capacity = capacity;
-                }
+            // avoid setting to the same value twice.
+            if (changeCapacity && capacity != 0)
+            {
+                ms.Capacity = capacity;
             }
         }
     }
