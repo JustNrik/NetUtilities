@@ -21,8 +21,9 @@ namespace System.IO
             }
 
             // false if they are not equal or if capacity is 0.
-            bool changeCapacity = ms.GetBuffer().Length != capacity || capacity == 0;
-            Array.Clear(ms.GetBuffer(), 0, ms.GetBuffer().Length);
+            int len = ms.GetBuffer().Length;
+            bool changeCapacity = len != capacity || capacity == 0;
+            Array.Clear(ms.GetBuffer(), 0, len);
             ms.Position = 0;
             ms.SetLength(0);
             if (changeCapacity)
