@@ -13,18 +13,22 @@ namespace System.IO
         /// <param name="ms">
         /// The input <see cref="MemoryStream"/>.
         /// </param>
-        public static void Clear(this MemoryStream ms)
+        public static void Clear(this MemoryStream ms, int capacity)
         {
             if (ms == null)
             {
                 throw new ArgumentNullException(nameof(ms));
             }
 
-            var buffer = ms.GetBuffer();
-            Array.Clear(buffer, 0, buffer.Length);
+            // false if they are not equal or if capacity is 0.
+            bool changeCapacity = ms.GetBuffer().Length != capacity || capacity == 0;
+            Array.Clear(ms.GetBuffer(), 0, ms.GetBuffer().Length);
             ms.Position = 0;
             ms.SetLength(0);
-            ms.Capacity = 0; // <<< this one ******
+            if (changeCapacity)
+            {
+                ms.Capacity = capacity;
+            }
         }
     }
 }
