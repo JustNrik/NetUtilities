@@ -25,7 +25,6 @@ namespace System.IO
                 throw new IndexOutOfRangeException("capacity must not be negative.");
             }
 
-            // false if they are not equal or if capacity is 0.
             var len = ms.GetBuffer().Length;
             var changeCapacity = len != capacity;
             Array.Clear(ms.GetBuffer(), 0, len);
