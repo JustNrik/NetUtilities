@@ -16,6 +16,8 @@ namespace System.IO
         /// <param name="capacity">
         /// The capacity to set the capacity of the stream to.
         /// </param>
+        /// <exception cref="ArgumentNullException">When the input <see cref="MemoryStream"/> is <see langword="null"/>.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">When capacity is negative.</exception>
         public static void Clear(this MemoryStream ms, int capacity)
         {
             if (ms == null)
