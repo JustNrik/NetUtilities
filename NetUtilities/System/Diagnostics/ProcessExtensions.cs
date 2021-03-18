@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Text;
 
 namespace System.Diagnostics
 {
@@ -73,21 +74,21 @@ namespace System.Diagnostics
         /// </returns>
         public static string Shell(this Process process, ProcessOptions options)
         {
-            var ret = string.Empty;
-
+            var ret = new StringBuilder();
             process.Start();
             options.Executing = false;
 
-            if (process.StartInfo.RedirectStandardError)
-                ret = process.StandardError.ReadToEnd();
-
+            // cleanup the code here.
             if (process.StartInfo.RedirectStandardOutput)
-                ret = process.StandardOutput.ReadToEnd();
+                ret.Append(process.StandardOutput.ReadToEnd());
+
+            if (process.StartInfo.RedirectStandardError)
+                ret.Append(process.StandardError.ReadToEnd());
 
             if (options.WaitForProcessExit)
                 process.WaitForExit();
 
-            return ret;
+            return ret.ToString();
         }
     }
 }
