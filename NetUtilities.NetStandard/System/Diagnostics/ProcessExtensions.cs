@@ -7,7 +7,7 @@ namespace System.Diagnostics
     ///     Utility class for <see cref="Process"/>
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public static partial class ProcessExtensions
+    public static class ProcessExtensions
     {
         /// <summary>
         ///     Extension for a Shell() function that allows overloading of the working directory variable.
@@ -44,7 +44,7 @@ namespace System.Diagnostics
         ///     The options for which to also include for the <see cref="Process"/> component.
         /// </param>
         /// <returns>
-        ///     <see cref="string.Empty"/>, process stdout data or process stderr data.
+        ///     <see cref="string.Empty"/>, process stdout data and/or process stderr data.
         /// </returns>
         public static string Shell(this Process process, string fileName, string arguments, bool redirectStandardOutput, bool redirectStandardError, bool useShellExecute, bool createNoWindow, ProcessWindowStyle windowStyle, string workingDirectory, ProcessOptions options)
         {
@@ -70,25 +70,67 @@ namespace System.Diagnostics
         ///     The options for which to also include for the <see cref="Process"/> component.
         /// </param>
         /// <returns>
-        ///     <see cref="string.Empty"/>, process stdout data or process stderr data.
+        ///     <see cref="string.Empty"/>, process stdout data and/or process stderr data.
         /// </returns>
         public static string Shell(this Process process, ProcessOptions options)
         {
-            var ret = new StringBuilder();
+            StringBuilder stdout = null;
+            StringBuilder stderr = null;
+            process.OutputDataReceived += (_, e) =>
+            {
+                if (e.Data is null)
+                {
+                    return;
+                }
+
+                if (stdout is null)
+                {
+                    stdout = new StringBuilder();
+                }
+                else
+                {
+                    stdout.AppendLine();
+                }
+
+                stdout.Append(e.Data);
+            };
+
+            process.ErrorDataReceived += (_, e) =>
+            {
+                if (e.Data is null)
+                {
+                    return;
+                }
+
+                if (stderr is null)
+                {
+                    stderr = new StringBuilder();
+                }
+                else
+                {
+                    stderr.AppendLine();
+                }
+
+                stderr.Append(e.Data);
+            };
             process.Start();
             options.Executing = false;
-
-            // cleanup the code here.
-            if (process.StartInfo.RedirectStandardOutput)
-                ret.Append(process.StandardOutput.ReadToEnd());
-
             if (process.StartInfo.RedirectStandardError)
-                ret.Append(process.StandardError.ReadToEnd());
+                process.BeginErrorReadLine();
+
+            if (process.StartInfo.RedirectStandardOutput)
+                process.BeginOutputReadLine();
 
             if (options.WaitForProcessExit)
                 process.WaitForExit();
 
-            return ret.ToString();
+            if (process.StartInfo.RedirectStandardOutput
+                && process.StartInfo.RedirectStandardError)
+            {
+                stdout.Append(stderr);
+            }
+
+            return stdout.ToString();
         }
     }
 }
