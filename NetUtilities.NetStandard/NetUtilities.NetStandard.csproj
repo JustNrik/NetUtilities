@@ -1,8 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <Nullable>enable</Nullable>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <RootNamespace></RootNamespace>
     <LangVersion>preview</LangVersion>
     <!-- Embed debugging symbols. -->
@@ -11,16 +12,11 @@
     <!-- Was under Configuration specific groups. -->
     <Optimize>true</Optimize>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <!-- <DocumentationFile>NetUtilities.xml</DocumentationFile> -->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="../NetUtilities.NetStandard/NetUtilities.NetStandard.csproj" />
-  </ItemGroup>
 
 </Project>

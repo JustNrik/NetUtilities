@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# MacOS Adds these when opening the repository directories within Finder.
+.DS_Store
