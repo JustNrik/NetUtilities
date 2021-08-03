@@ -71,8 +71,8 @@ namespace NetUtilities.Tests.System
         public void MutableString_Split()
         {
             var mutableString = new MutableString("this is| at| test| for split!");
-            Assert.True(mutableString.Split('|').Count() == 4);
-            Assert.True(mutableString.Split("t|").Count() == 3);
+            Assert.True(mutableString.Split('|').Length == 4);
+            Assert.True(mutableString.Split("t|").Length == 3);
         }
 
 

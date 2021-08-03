@@ -9,7 +9,7 @@ namespace System.Reflection
         public static T PointerToStructure<T>(IntPtr pointer) where T : unmanaged
             => Unsafe.ReadUnaligned<T>(ref IntPtr<T>.GetByteReference(pointer));
 
-        public static void StructureToPointer<T>(in IntPtr destination, T value) where T : unmanaged
+        public static void StructureToPointer<T>(IntPtr destination, T value) where T : unmanaged
             => Unsafe.WriteUnaligned(ref IntPtr<T>.GetByteReference(destination), value);
 
         public static ref byte GetByteReference<T>(IntPtr pointer) where T : unmanaged
@@ -21,7 +21,7 @@ namespace System.Reflection
         public static T PointerToStructure<T>(UIntPtr pointer) where T : unmanaged
             => Unsafe.ReadUnaligned<T>(ref UIntPtr<T>.GetByteReference(pointer));
 
-        public static void StructureToPointer<T>(in UIntPtr destination, T value) where T : unmanaged
+        public static void StructureToPointer<T>(UIntPtr destination, T value) where T : unmanaged
             => Unsafe.WriteUnaligned(ref UIntPtr<T>.GetByteReference(destination), value);
 
         public static ref byte GetByteReference<T>(UIntPtr pointer) where T : unmanaged

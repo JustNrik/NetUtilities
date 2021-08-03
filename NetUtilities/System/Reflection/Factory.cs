@@ -35,11 +35,6 @@ namespace System.Reflection
         public static T CreateInstance<T>() where T : new()
             => Factory<T>.CreateInstance();
 
-        /// <inheritdoc cref="Factory{T}.Clone(T)"/>
-        [MethodImplementation(Inlined)]
-        public static T Clone<T>(T obj)
-            => Factory<T>.Clone(obj);
-
         private static Func<object> AddFunc(Type type)
         {
             if (!type.HasDefaultConstructor())
@@ -62,19 +57,7 @@ namespace System.Reflection
     internal static class Factory<T>
     {
         private static readonly Func<T> _func = Expression.Lambda<Func<T>>(Expression.New(typeof(T))).Compile();
-        private static readonly Func<T, T> _clone;
         private static readonly object _lock = new();
-
-        static Factory()
-        {
-            var method = typeof(T).GetMethod(nameof(MemberwiseClone), BindingFlags.NonPublic | BindingFlags.Instance)!;
-            var instance = Expression.Parameter(typeof(T));
-            var call = Expression.Call(instance, method);
-            var cast = Expression.Convert(call, typeof(T));
-            var lambda = Expression.Lambda<Func<T, T>>(cast, instance);
-
-            _clone = lambda.Compile();
-        }
 
         /// <summary>
         ///     Gets a new instance of <typeparamref name="T"/>.
@@ -89,21 +72,6 @@ namespace System.Reflection
 
                 return _func();
             }
-        }
-
-        /// <summary>
-        ///     Creates a shallow copy of the provided object.
-        /// </summary>
-        /// <param name="obj">
-        ///     The object to be cloned.
-        /// </param>
-        /// <returns>
-        ///     A shallow copy of the provided object.
-        /// </returns>
-        public static T Clone(T obj)
-        {
-            lock (_lock)
-                return _clone(obj);
         }
     }
 }

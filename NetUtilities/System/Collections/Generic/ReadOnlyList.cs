@@ -7,10 +7,12 @@ namespace System.Collections.Generic
     /// <summary>
     /// A true readonly generic list which provides most of <see cref="List{T}"/> methods.
     /// </summary>
-    /// <typeparam name="T">The generic type of this instance</typeparam>
+    /// <typeparam name="T">
+    ///     The generic type of this instance
+    /// </typeparam>
     public sealed class ReadOnlyList<T> : IReadOnlyList<T>
     {
-        internal static readonly ReadOnlyList<T> Empty = new ReadOnlyList<T>(Array.Empty<T>());
+        internal static readonly ReadOnlyList<T> Empty = new(Array.Empty<T>());
 
         private readonly List<T> _list;
 
@@ -18,7 +20,7 @@ namespace System.Collections.Generic
         public T this[int index]
             => _list[index];
 
-        /// <inheritdoc/>
+        /// <inheritdoc cref="this[int]"/>
         public T this[Index index]
             => _list[index.GetOffset(Count)];
 
@@ -159,7 +161,7 @@ namespace System.Collections.Generic
             => _list.BinarySearch(item);
 
         /// <inheritdoc cref="List{T}.BinarySearch(T, IComparer{T})"/>
-        public int BinarySearch([AllowNull] T item, IComparer<T>? comparer)
+        public int BinarySearch(T item, IComparer<T>? comparer)
             => _list.BinarySearch(item, comparer);
 
         /// <inheritdoc cref="List{T}.BinarySearch(int, int, T, IComparer{T})"/>
@@ -187,7 +189,7 @@ namespace System.Collections.Generic
 
         /// <inheritdoc cref="List{T}.GetRange(int, int)"/>
         public ReadOnlyList<T> GetRange(int startIndex, int count)
-            => GetRange(startIndex..count);
+            => GetRange(startIndex..(startIndex + count + 1));
 
         /// <summary>
         ///     Creates a shallow copy of a range of elements in the source <see cref="ReadOnlyList{T}"/>.
@@ -207,7 +209,7 @@ namespace System.Collections.Generic
         public ReadOnlyList<T> GetRange(Range range)
         {
             var (offset, length) = range.GetOffsetAndLength(Count);
-            return new ReadOnlyList<T>(_list.GetRange(offset, length));
+            return new(_list.GetRange(offset, length));
         }
 
         /// <inheritdoc cref="List{T}.Exists(Predicate{T})"/>
@@ -222,4 +224,8 @@ namespace System.Collections.Generic
         public void ForEach(Action<T> action)
             => _list.ForEach(Ensure.NotNull(action));
     }
+}
+
+internal static class ReadOnlyList
+{
 }

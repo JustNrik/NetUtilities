@@ -12,7 +12,7 @@ namespace System.Collections.Locked
         where TKey : notnull
     {
         private readonly Dictionary<TKey, TValue> _dictionary;
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
         /// <inheritdoc/>
         public TValue this[TKey key]

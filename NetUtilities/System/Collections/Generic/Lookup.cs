@@ -105,7 +105,7 @@ namespace System.Collections.Generic
 
         /// <inheritdoc/>
         public LookupEnumerator GetEnumerator()
-            => new LookupEnumerator(_lookup);
+            => new(_lookup);
 
         /// <inheritdoc/>
         public bool Remove(TKey key)

@@ -7,13 +7,13 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class PropertyData : MemberData<PropertyInfo>
     {
-        private readonly ConcurrentLazy<Func<object?, object?>>? _get;
-        private readonly ConcurrentLazy<Action<object?, object?>>? _set;
+        private readonly ConcurrentLazy<Func<object?, object?[]?, object?>, (ParameterInfo[], MethodInfo)>? _get;
+        private readonly ConcurrentLazy<Action<object?, object?[]?>, MethodInfo>? _set;
 
         /// <summary>
         ///     Gets the parameters of the property this data reflects.
         /// </summary>
-        public ReadOnlyList<ParameterInfo> Parameters { get; init; }
+        public ReadOnlyList<ParameterInfo> IndexParameters { get; init; }
 
         /// <summary>
         ///     Gets the <see cref="MethodInfo"/> that reflects the getter of this data reflected property.
@@ -31,7 +31,8 @@ namespace System.Reflection
         public Type PropertyType { get; init; }
 
         /// <summary>
-        ///     Indicates if the property this data reflects returns a nullable type (class, interface or <see cref="Nullable{T}"/>).
+        ///     Indicates if the property this data reflects returns a nullable type
+        ///     (<see langword="class"/>, <see langword="interface"/> or <see cref="Nullable{T}"/>).
         /// </summary>
         public bool IsNullable { get; init; }
 
@@ -54,40 +55,52 @@ namespace System.Reflection
         /// </param>
         public PropertyData(PropertyInfo property) : base(property)
         {
+            var parameters = property.GetIndexParameters();
             PropertyType = property.PropertyType;
-            Parameters = property.GetIndexParameters().ToReadOnlyList();
-            Getter = property.GetGetMethod(false) ?? property.GetGetMethod(true);
-            Setter = property.GetSetMethod(false) ?? property.GetSetMethod(true);
-            IsIndexer = Parameters.Count > 0;
+            IndexParameters = parameters.ToReadOnlyList();
+            Getter = property.GetGetMethod(true);
+            Setter = property.GetSetMethod(true);
+            IsIndexer = IndexParameters.Count > 0;
             IsNullable = PropertyType.IsClass || PropertyType.IsInterface || PropertyType.IsNullable();
-            IsStatic = PropertyType.IsAbstract && PropertyType.IsSealed;
+            IsStatic = PropertyType.IsStatic();
 
             if (Getter is not null)
             {
-                _get = new(() =>
+                _get = new(static args =>
                 {
-                    var parameter = Expression.Parameter(typeof(object));
-                    var cast = Expression.Convert(parameter, property.DeclaringType!); // will be null if it's a module property, cba to handle it
-                    var prop = Expression.Property(cast, property.Name);
-                    var convert = Expression.Convert(prop, typeof(object));
-                    var lambda = Expression.Lambda<Func<object?, object?>>(convert, parameter);
-                    return lambda.Compile();
-                });
+                    var (parameters, method) = args;
+                    var instance = Expression.Parameter(typeof(object));
+                    var array = Expression.Parameter(typeof(object[]));
+                    var indexes = parameters
+                        .Select((arg, index) => Expression.Convert(
+                            Expression.ArrayIndex(array, Expression.Constant(index)),
+                            arg.ParameterType))
+                        .ToArray();
+                    var call = Expression.Call(
+                        method.IsStatic ? null : Expression.Convert(instance, method.DeclaringType!),
+                        method,
+                        indexes.Length == 0 ? null : indexes);
+                    var convert = Expression.Convert(call, typeof(object));
+                    return Expression.Lambda<Func<object?, object?[]?, object?>>(convert, array).Compile();
+                }, (parameters, Getter));
             }
 
             if (Setter is not null)
             {
-                _set = new(() =>
+                _set = new(static setter =>
                 {
+                    var parameters = setter.GetParameters();
                     var instance = Expression.Parameter(typeof(object));
-                    var value = Expression.Parameter(typeof(object));
-                    var convertInstance = Expression.Convert(instance, property.DeclaringType!);
-                    var convertValue = Expression.Convert(value, property.PropertyType);
-                    var prop = Expression.Property(convertInstance, property.Name);
-                    var assign = Expression.Assign(prop, convertValue);
-                    var lambda = Expression.Lambda<Action<object?, object?>>(assign, instance, value);
-                    return lambda.Compile();
-                });
+                    var array = Expression.Parameter(typeof(object[]));
+                    var indexes = parameters.Select((arg, index) => Expression.Convert(
+                        Expression.ArrayIndex(array, Expression.Constant(index)),
+                        arg.ParameterType));
+                    var call = Expression.Call(
+                        setter.IsStatic ? null : Expression.Convert(instance, setter.DeclaringType!),
+                        setter,
+                        indexes);
+                    return Expression.Lambda<Action<object?, object?[]?>>(call, array).Compile();
+                }, Setter);
             }
         }
 
@@ -111,7 +124,7 @@ namespace System.Reflection
         /// <returns>
         ///     The value of the property this data reflects.
         /// </returns>
-        public object? GetValue(object? instance)
+        public object? GetValue(object? instance, params object?[]? parameters)
         {
             if (_get is null)
                 throw new InvalidOperationException(
@@ -125,11 +138,11 @@ namespace System.Reflection
                 throw new InvalidOperationException(
                     $"The instance must be null because {Member.DeclaringType}.{Member.Name} is a static field.");
 
-            return _get.Value(instance);
+            return _get.Value(instance, parameters);
         }
 
         /// <summary>
-        ///     Gets the value of the property this data reflects given the instance. 
+        ///     Sets the value of the property this data reflects given the instance. 
         /// </summary>
         /// <remarks>
         ///     The <paramref name="instance"/> must be <see langword="null"/> if the property is <see langword="static"/>.<br/>
@@ -143,17 +156,20 @@ namespace System.Reflection
         ///     The value.
         /// </param>
         /// <exception cref="InvalidOperationException">
-        ///     Thrown when the property has no getter. 
+        ///     Thrown when the property has no setter. 
         ///     -- or --
         ///     when the instance is <see langword="null"/> but the property is not <see langword="static"/>.
         ///     -- or --
         ///     when the instance is not <see langword="null"/> but the property is <see langword="static"/>.
         /// </exception>
-        public void SetValue(object? instance, object? value)
+        public void SetValue(object? instance, params object?[] parameters)
         {
             if (_set is null)
                 throw new InvalidOperationException(
-                    $"The property {Member.DeclaringType}.{Member.Name} doesn't have a getter.");
+                    $"The property {Member.DeclaringType}.{Member.Name} doesn't have a setter.");
+
+            if (parameters is null or { Length: 0 })
+                throw new InvalidOperationException("You must provide at least one parameter.");
 
             if (instance is null && !IsStatic)
                 throw new InvalidOperationException(
@@ -163,11 +179,11 @@ namespace System.Reflection
                 throw new InvalidOperationException(
                     $"The instance must be null because {Member.DeclaringType}.{Member.Name} is a static field.");
 
-            if (value is null && !IsNullable)
+            if (parameters.Length == 1 && parameters[0] is null && !IsNullable)
                 throw new InvalidOperationException(
                     $"The value cannot be null because {Member.DeclaringType}.{Member.Name} is of type {PropertyType.Name}, which is not a nullable type (class, interface or Nullable<{PropertyType.Name}>)");
 
-            _set.Value(instance, value);
+            _set.Value(instance, parameters);
         }
     }
 }

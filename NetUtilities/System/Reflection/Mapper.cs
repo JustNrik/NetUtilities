@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using NetUtilities;
 
 namespace System.Reflection
@@ -7,56 +8,57 @@ namespace System.Reflection
     /// <summary>
     ///     Handy class to map reflection metadata and provide high performance runtime manipulation.
     /// </summary>
+    // Supported only on windows until we figure out why it doesn't work on MacOS. Need to test in linux as well?
+    [SupportedOSPlatform("windows")]
     public sealed class Mapper
     {
-        private readonly Type _target;
-        private readonly ConcurrentLazy<ReadOnlyList<Attribute>> _customAttributes;
-        private readonly ConcurrentLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
-        private readonly ConcurrentLazy<ReadOnlyList<ConstructorData>> _constructors;
-        private readonly ConcurrentLazy<ReadOnlyList<EventData>> _events;
-        private readonly ConcurrentLazy<ReadOnlyList<FieldData>> _fields;
-        private readonly ConcurrentLazy<ReadOnlyList<MethodData>> _methods;
-        private readonly ConcurrentLazy<ReadOnlyList<PropertyData>> _properties;
+        private readonly ConcurrentLazy<ReadOnlyList<Attribute>, Type> _attributes;
+        private readonly ConcurrentLazy<ReadOnlyList<CustomAttributeData>, Type> _customAttributeDatas;
+        private readonly ConcurrentLazy<ReadOnlyList<ConstructorData>, Type> _constructors;
+        private readonly ConcurrentLazy<ReadOnlyList<EventData>, Type> _events;
+        private readonly ConcurrentLazy<ReadOnlyList<FieldData>, Type> _fields;
+        private readonly ConcurrentLazy<ReadOnlyList<MethodData>, Type> _methods;
+        private readonly ConcurrentLazy<ReadOnlyList<PropertyData>, Type> _properties;
 
         /// <summary>
-        ///     Contains data related to the type's custom attributes.
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="Attribute"/>&gt; that contains data related to the type's custom attributes.
         /// </summary>
-        public ReadOnlyList<Attribute> CustomAttributes
-            => _customAttributes.Value;
+        public ReadOnlyList<Attribute> Attributes
+            => _attributes.Value;
 
         /// <summary>
-        ///     Contains data related to the type's custom attribute data for assemblies, modules, 
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="CustomAttributeData"/>&gt; that contains data related to the type's custom attribute data for assemblies, modules, 
         ///     types, members and parameters that are loaded into the reflection-only context.
         /// </summary>
         public ReadOnlyList<CustomAttributeData> CustomAttributeDatas
             => _customAttributeDatas.Value;
 
         /// <summary>
-        ///     Contains data related to the type's constructors
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="ConstructorData"/>&gt; that contains data related to the type's constructors
         /// </summary>
         public ReadOnlyList<ConstructorData> Constructors
             => _constructors.Value;
 
         /// <summary>
-        ///     Contains data related to the type's events
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="EventData"/>&gt; that contains data related to the type's events
         /// </summary>
         public ReadOnlyList<EventData> Events
             => _events.Value;
 
         /// <summary>
-        ///     Contains data related to the type's fields
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="FieldData"/>&gt; that contains data related to the type's fields
         /// </summary>
         public ReadOnlyList<FieldData> Fields
             => _fields.Value;
 
         /// <summary>
-        ///     Contains data related to the type's methods
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="MethodData"/>&gt; that contains data related to the type's methods
         /// </summary>
         public ReadOnlyList<MethodData> Methods
             => _methods.Value;
 
         /// <summary>
-        ///     Contains data related to the type's properties
+        ///     Gets a <see cref="ReadOnlyList"/>&lt;<see cref="PropertyData"/>&gt; that contains data related to the type's properties
         /// </summary>
         public ReadOnlyList<PropertyData> Properties
             => _properties.Value;
@@ -65,7 +67,7 @@ namespace System.Reflection
         ///     Initializes a new instance of <see cref="Mapper"/> class with the provided instance object.
         /// </summary>
         /// <param name="object">
-        ///     The object.
+        ///     The object whose's type is to be mapped.
         /// </param>
         /// <exception cref="ArgumentNullException">
         ///     Thrown if <paramref name="object"/> is <see langword="null"/>.
@@ -78,20 +80,20 @@ namespace System.Reflection
         ///     Initializes a new instance of <see cref="Mapper"/> class with the provided type.
         /// </summary>
         /// <param name="type">
-        ///     The type.
+        ///     The type to be mapped.
         /// </param>
+        /// <exception cref="ArgumentNullException">
+        ///     Thrown if <paramref name="type"/> is <see langword="null"/>
+        /// </exception>
         public Mapper(Type type)
         {
-            Ensure.NotNull(type);
-
-            _target = type;
-            _customAttributes = new(() => _target.GetCustomAttributes().ToReadOnlyList());
-            _customAttributeDatas = new(() => _target.CustomAttributes.ToReadOnlyList());
-            _constructors = new(() => _target.GetRuntimeConstructors().Select(x => new ConstructorData(x, _target)).ToReadOnlyList());
-            _events = new(() => _target.GetRuntimeEvents().Select(x => new EventData(x)).ToReadOnlyList());
-            _fields = new(() => _target.GetRuntimeFields().Select(x => new FieldData(x)).ToReadOnlyList());
-            _methods = new(() => _target.GetRuntimeMethods().Select(x => new MethodData(x)).ToReadOnlyList());
-            _properties = new(() => _target.GetRuntimeProperties().Select(x => new PropertyData(x)).ToReadOnlyList());
+            _attributes = new(static type => type.GetCustomAttributes().ToReadOnlyList(), type);
+            _customAttributeDatas = new(static type => type.CustomAttributes.ToReadOnlyList(), type);
+            _constructors = new(static type => type.GetRuntimeConstructors().Select(x => new ConstructorData(x)).ToReadOnlyList(), type);
+            _events = new(static type => type.GetRuntimeEvents().Select(x => new EventData(x)).ToReadOnlyList(), type);
+            _fields = new(static type => type.GetRuntimeFields().Select(x => new FieldData(x)).ToReadOnlyList(), type);
+            _methods = new(static type => type.GetRuntimeMethods().Select(x => new MethodData(x)).ToReadOnlyList(), type);
+            _properties = new(static type => type.GetRuntimeProperties().Select(x => new PropertyData(x)).ToReadOnlyList(), type);
         }
     }
 
@@ -99,52 +101,39 @@ namespace System.Reflection
     ///     Handy class to map reflection metadata and provide high performance runtime manipulation.
     /// </summary>
     /// <typeparam name="T">
-    ///     The type.
+    ///     The type to be mapped.
     /// </typeparam>
+    // Supported only on windows until we figure out why it doesn't work on MacOS. Need to test in linux as well?
+    [SupportedOSPlatform("windows")]
     public static class Mapper<T>
     {
-        private static readonly Mapper _mapper = new Mapper(typeof(T));
+        private static readonly Mapper _mapper = new(typeof(T));
 
-        /// <summary>
-        ///     Contains data related to the <typeparamref name="T"/>'s custom attributes.
-        /// </summary>
-        public static ReadOnlyList<Attribute> CustomAttributes
-            => _mapper.CustomAttributes;
+        /// <inheritdoc cref="Mapper.Attributes"/>
+        public static ReadOnlyList<Attribute> Attributes
+            => _mapper.Attributes;
 
-        /// <summary>
-        ///     Contains data related to the <typeparamref name="T"/>'s custom attribute data for assemblies, modules, 
-        ///     types, members and parameters that are loaded into the reflection-only context.
-        /// </summary>
+        /// <inheritdoc cref="Mapper.CustomAttributeDatas"/>
         public static ReadOnlyList<CustomAttributeData> CustomAttributeDatas
             => _mapper.CustomAttributeDatas;
 
-        /// <summary>
-        ///     Gets the <see cref="ConstructorData"/> for all constructors of <typeparamref name="T"/>.
-        /// </summary>
+        /// <inheritdoc cref="Mapper.Constructors"/>
         public static ReadOnlyList<ConstructorData> Constructors
             => _mapper.Constructors;
 
-        /// <summary>
-        ///     Gets the <see cref="EventData"/> for all events of <typeparamref name="T"/>.
-        /// </summary>
+        /// <inheritdoc cref="Mapper.Events"/>
         public static ReadOnlyList<EventData> Events
             => _mapper.Events;
 
-        /// <summary>
-        ///     Gets the <see cref="FieldData"/> for all fields of <typeparamref name="T"/>.
-        /// </summary>
+        /// <inheritdoc cref="Mapper.Fields"/>
         public static ReadOnlyList<FieldData> Fields
             => _mapper.Fields;
 
-        /// <summary>
-        ///     Gets the <see cref="MethodData"/> for all methods of <typeparamref name="T"/>.
-        /// </summary>
+        /// <inheritdoc cref="Mapper.Methods"/>
         public static ReadOnlyList<MethodData> Methods
             => _mapper.Methods;
 
-        /// <summary>
-        ///     Gets the <see cref="PropertyData"/> for all properties of <typeparamref name="T"/>.
-        /// </summary>
+        /// <inheritdoc cref="Mapper.Properties"/>
         public static ReadOnlyList<PropertyData> Properties
             => _mapper.Properties;
     }

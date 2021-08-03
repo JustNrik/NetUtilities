@@ -73,12 +73,12 @@ namespace System.Reflection
 
         private static class ConstructorCache<T>
         {
-            public static bool Value = Mapper<T>.Constructors.Any(ctor => ctor.IsDefault);
+            public static bool Value = typeof(T).GetConstructor(Type.EmptyTypes) is not null;
         }
 
         private static class ConstructorCache
         {
-            private static readonly Dictionary<Type, bool> _cache = new Dictionary<Type, bool>();
+            private static readonly Dictionary<Type, bool> _cache = new();
 
             public static bool GetOrAddFor(Type type)
             {

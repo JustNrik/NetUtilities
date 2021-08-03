@@ -28,27 +28,23 @@ namespace System
 
                     if (obj is not null)
                     {
-                        var property = Mapper<T>.Properties.Find(x => x.Member == propertyInfo)!;
-
-                        oldValue = (TResult)property.GetValue(obj);
-                        property.SetValue(obj, newValue);
-                        return () => property.SetValue(obj, oldValue);
+                        oldValue = (TResult)propertyInfo.GetValue(obj)!;
+                        propertyInfo.SetValue(obj, newValue);
+                        return () => propertyInfo.SetValue(obj, oldValue);
                     }
 
-                    oldValue = (TResult)propertyInfo.GetMethod.Invoke(obj, Array.Empty<object>());
+                    oldValue = (TResult)propertyInfo.GetMethod.Invoke(obj, Array.Empty<object>())!;
                     propertyInfo.SetMethod.Invoke(obj, new object[] { newValue! });
                     return () => propertyInfo.SetMethod.Invoke(obj, new object?[] { oldValue });
                 case FieldInfo fieldInfo:
                     if (obj is not null)
                     {
-                        var field = Mapper<T>.Fields.Find(x => x.Member == fieldInfo)!;
-
-                        oldValue = (TResult)field.GetValue(obj);
-                        field.SetValue(obj, newValue);
-                        return () => field.SetValue(obj, oldValue);
+                        oldValue = (TResult)fieldInfo.GetValue(obj)!;
+                        fieldInfo.SetValue(obj, newValue);
+                        return () => fieldInfo.SetValue(obj, oldValue);
                     }
 
-                    oldValue = (TResult)fieldInfo.GetValue(obj);
+                    oldValue = (TResult)fieldInfo.GetValue(obj)!;
                     fieldInfo.SetValue(obj, newValue);
                     return () => fieldInfo.SetValue(obj, oldValue);
                 default:

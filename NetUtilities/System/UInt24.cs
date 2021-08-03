@@ -17,12 +17,12 @@ namespace System
         /// <summary>
         ///     Represents the largest possible value of <see cref="UInt24"/>. This field is constant.
         /// </summary>
-        public const uint MaxValue = 16777215;
+        public static readonly UInt24 MaxValue = (UInt24)16777215;
 
         /// <summary>
         ///     Represents the smallest possible value of <see cref="UInt24"/>. This field is constant.
         /// </summary>
-        public const uint MinValue = 0;
+        public static readonly UInt24 MinValue = (UInt24)0;
 
         /// <summary>
         ///     Initializes a new instance of <see cref="UInt24"/> to the value of the specified <see cref="Int24"/>.
@@ -219,7 +219,7 @@ namespace System
         /// <param name="value">
         ///      The array to convert into a <see cref="UInt24"/>.
         /// </param>
-        public UInt24(byte[] bytes, int startIndex) : this(new ReadOnlySpan<byte>(bytes, startIndex, 3))
+        public UInt24(byte[] bytes, int startIndex, int length) : this(new ReadOnlySpan<byte>(bytes, startIndex, length))
         {
         }
 
@@ -275,7 +275,7 @@ namespace System
             => _value.CompareTo(other._value);
 
 
-        int IComparable.CompareTo(object obj)
+        int IComparable.CompareTo(object? obj)
             => _value.CompareTo(obj);
 
         public string ToString(string? format, IFormatProvider? formatProvider)
@@ -321,7 +321,7 @@ namespace System
             => Convert.ToString(_value, provider);
 
         object IConvertible.ToType(Type conversionType, IFormatProvider? provider)
-            => throw new NotSupportedException();
+            => ((IConvertible)_value).ToType(conversionType, provider);
 
         ushort IConvertible.ToUInt16(IFormatProvider? provider)
             => Convert.ToUInt16(_value, provider);
@@ -375,65 +375,65 @@ namespace System
         public static bool operator <=(uint left, UInt24 right)
             => left <= right._value;
         public static UInt24 operator &(UInt24 left, UInt24 right)
-            => new UInt24(left._value & right._value);
+            => new(left._value & right._value);
         public static UInt24 operator &(UInt24 left, uint right)
-            => new UInt24(left._value & right);
+            => new(left._value & right);
         public static UInt24 operator &(uint left, UInt24 right)
-            => new UInt24(left & right._value);
+            => new(left & right._value);
         public static UInt24 operator |(UInt24 left, UInt24 right)
-            => new UInt24(left._value | right._value);
+            => new(left._value | right._value);
         public static UInt24 operator |(UInt24 left, uint right)
-            => new UInt24((left._value | right) & MaxValue);
+            => new((left._value | right) & MaxValue);
         public static UInt24 operator |(uint left, UInt24 right)
-            => new UInt24((left | right._value) & MaxValue);
+            => new((left | right._value) & MaxValue);
         public static UInt24 operator ^(UInt24 left, UInt24 right)
-            => new UInt24(left._value ^ right._value);
+            => new(left._value ^ right._value);
         public static UInt24 operator ^(UInt24 left, uint right)
-            => new UInt24((left._value ^ right) & MaxValue);
+            => new((left._value ^ right) & MaxValue);
         public static UInt24 operator ^(uint left, UInt24 right)
-            => new UInt24((left ^ right._value) & MaxValue);
+            => new((left ^ right._value) & MaxValue);
         public static UInt24 operator <<(UInt24 left, int right)
-            => new UInt24((left._value << right) & MaxValue);
+            => new((left._value << right) & MaxValue);
         public static UInt24 operator >>(UInt24 left, int right)
-            => new UInt24(left._value >> right);
+            => new(left._value >> right);
         public static UInt24 operator ~(UInt24 uInt24)
-            => new UInt24(~uInt24._value & MaxValue);
+            => new(~uInt24._value & MaxValue);
         public static UInt24 operator ++(UInt24 uInt24)
-            => new UInt24(uInt24._value + 1);
+            => new(uInt24._value + 1);
         public static UInt24 operator --(UInt24 uInt24)
-            => new UInt24(uInt24._value - 1);
+            => new(uInt24._value - 1);
         public static UInt24 operator +(UInt24 uInt24)
-            => new UInt24(uInt24._value);
+            => new(uInt24._value);
         public static UInt24 operator +(UInt24 left, UInt24 right)
-            => new UInt24(left._value + right._value);
+            => new(left._value + right._value);
         public static UInt24 operator +(UInt24 left, uint right)
-            => new UInt24(left._value + right);
+            => new(left._value + right);
         public static UInt24 operator +(uint left, UInt24 right)
-            => new UInt24(left + right._value);
+            => new(left + right._value);
         public static UInt24 operator -(UInt24 left, UInt24 right)
-            => new UInt24(left._value - right._value);
+            => new(left._value - right._value);
         public static UInt24 operator -(UInt24 left, uint right)
-            => new UInt24(left._value - right);
+            => new(left._value - right);
         public static UInt24 operator -(uint left, UInt24 right)
-            => new UInt24(left - right._value);
+            => new(left - right._value);
         public static UInt24 operator /(UInt24 left, UInt24 right)
-            => new UInt24(left._value / right._value);
+            => new(left._value / right._value);
         public static UInt24 operator /(UInt24 left, uint right)
-            => new UInt24(left._value / right);
+            => new(left._value / right);
         public static UInt24 operator /(uint left, UInt24 right)
-            => new UInt24(left / right._value);
+            => new(left / right._value);
         public static UInt24 operator *(UInt24 left, UInt24 right)
-            => new UInt24(left._value * right._value);
+            => new(left._value * right._value);
         public static UInt24 operator *(UInt24 left, uint right)
-            => new UInt24(left._value * right);
+            => new(left._value * right);
         public static UInt24 operator *(uint left, UInt24 right)
-            => new UInt24(left * right._value);
+            => new(left * right._value);
         public static UInt24 operator %(UInt24 left, UInt24 right)
-            => new UInt24(left._value % right._value);
+            => new(left._value % right._value);
         public static UInt24 operator %(uint left, UInt24 right)
-            => new UInt24(left % right._value);
+            => new(left % right._value);
         public static UInt24 operator %(UInt24 left, uint right)
-            => new UInt24(left._value % right);
+            => new(left._value % right);
         #endregion
 
         #region casts
@@ -461,15 +461,15 @@ namespace System
             => (ushort)uInt24._value;
         // narrowing casts to UInt24
         public static explicit operator UInt24(Int24 int24)
-            => new UInt24(int24);
+            => new(int24);
         public static explicit operator UInt24(int int32)
-            => new UInt24(int32);
+            => new(int32);
         public static explicit operator UInt24(uint uInt32)
-            => new UInt24(uInt32);
+            => new(uInt32);
         public static explicit operator UInt24(long int64)
-            => new UInt24(int64);
+            => new(int64);
         public static explicit operator UInt24(ulong uInt64)
-            => new UInt24(uInt64);
+            => new(uInt64);
         #endregion
 
         #region Static methods

@@ -134,7 +134,7 @@ namespace System.Linq
         /// </exception>
         public static ReadOnlyDictionary<TKey, TValue> ToReadOnly<TKey, TValue>(this IDictionary<TKey, TValue> source)
             where TKey : notnull
-            => new ReadOnlyDictionary<TKey, TValue>(Ensure.NotNull(source));
+            => new(Ensure.NotNull(source));
 
         /// <summary>
         ///     Creates as <see cref="ReadOnlyList{T}"/> from the sequence provided.
@@ -151,6 +151,6 @@ namespace System.Linq
         ///     Thrown when source is <see langword="null"/>.
         /// </exception>
         public static ReadOnlyList<T> ToReadOnlyList<T>(this IEnumerable<T> source)
-            => new ReadOnlyList<T>(Ensure.NotNull(source));
+            => new(Ensure.NotNull(source));
     }
 }

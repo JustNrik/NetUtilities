@@ -10,8 +10,9 @@ namespace System.Collections.Generic
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class GenericCollectionExtensions
     {
-        private static class ZeroArray<T>
+        private static class ZeroArray<T> where T : struct
         {
+            // Array with a single zeroed item.
             public static readonly T[] Value = { default };
         }
 
@@ -334,16 +335,14 @@ namespace System.Collections.Generic
                 }
 
                 if (j == m)
-                {
                     return i - j;
-                }
 
                 else if (i < n && !comparer.Equals(sequence[j], array[i]))
                 {
                     if (j != 0)
                         j = lps[j - 1];
                     else
-                        i = i + 1;
+                        i++;
                 }
             }
 

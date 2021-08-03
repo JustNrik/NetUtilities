@@ -5,8 +5,10 @@ using NetUtilities;
 
 namespace System.Xml
 {
-    public static class XmlConvert
+    public static class XmlConvert<T> 
     {
+        private static readonly XmlSerializer _serializer = new(typeof(T));
+
         /// <summary>
         ///     Serializes the object into XML Format
         /// </summary>
@@ -22,12 +24,12 @@ namespace System.Xml
         /// <exception cref="ArgumentNullException">
         ///     Thrown if the object is <see langword="null"/>.
         /// </exception>
-        public static string SerializeObject<T>(T obj) where T : notnull
+        public static string SerializeObject(T obj)
         {
             using var stringWriter = new StringWriter();
-            var serializer = new XmlSerializer(typeof(T));
-            serializer.Serialize(stringWriter, Ensure.NotNull(obj));
-            return stringWriter.ToString();
+            _serializer.Serialize(stringWriter, Ensure.NotNull(obj));
+            var ret = stringWriter.ToString();
+            return ret;
         }
 
         /// <summary>
@@ -45,20 +47,14 @@ namespace System.Xml
         /// <exception cref="InvalidOperationException">
         ///     Thrown if the deserialization fails.
         /// </exception>
-        [return: MaybeNull]
-        public static T DeserializeObject<T>(string input)
-        {
-            ThrowIfNullOrWhiteSpace(input);
-
-            using var stringReader = new StringReader(input);
-            var serializer = new XmlSerializer(typeof(T));
-            return (T)serializer.Deserialize(stringReader);
-        }
-
-        private static void ThrowIfNullOrWhiteSpace(string input)
+        public static T? DeserializeObject(string input)
         {
             if (string.IsNullOrWhiteSpace(input))
                 throw new InvalidOperationException("The input is not deserializable, it's null, empty or consists only of white-spaces");
+
+            using var stringReader = new StringReader(input);
+            var ret = (T?)_serializer.Deserialize(stringReader);
+            return ret;
         }
     }
 }

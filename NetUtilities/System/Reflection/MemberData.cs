@@ -9,12 +9,11 @@ namespace System.Reflection
     /// <typeparam name="TMember">
     ///     The <see cref="MemberInfo"/> type.
     /// </typeparam>
-    public abstract class MemberData<TMember> where TMember : MemberInfo
+    public abstract class MemberData<TMember>
+        where TMember : MemberInfo
     {
-        private ConcurrentLazy<ReadOnlyList<Attribute>> _customAttributes;
-        private ConcurrentLazy<ReadOnlyList<CustomAttributeData>> _customAttributeDatas;
-
-        protected string _memberName;
+        private readonly ConcurrentLazy<ReadOnlyList<Attribute>, TMember> _customAttributes;
+        private readonly ConcurrentLazy<ReadOnlyList<CustomAttributeData>, TMember> _customAttributeDatas;
 
         /// <summary>
         ///     Gets the <see cref="MemberInfo"/> for this class.
@@ -33,11 +32,19 @@ namespace System.Reflection
         public ReadOnlyList<CustomAttributeData> CustomAttributeDatas
             => _customAttributeDatas.Value;
 
+        /// <summary>
+        ///     Initializes a new instance of <see cref="MemberData{TMember}"/> <see langword="class"/> 
+        ///     with the provided <typeparamref name="TMember"/> value.
+        /// </summary>
+        /// <param name="member">
+        ///     The member.
+        /// </param>
         protected MemberData(TMember member)
         {
+            _customAttributes = new(static member => member.GetCustomAttributes().ToReadOnlyList(), member);
+            _customAttributeDatas = new(static member => member.CustomAttributes.ToReadOnlyList(), member);
+
             Member = member;
-            _customAttributes = new(() => Member.GetCustomAttributes().ToReadOnlyList());
-            _customAttributeDatas = new(() => Member.CustomAttributes.ToReadOnlyList());
         }
     }
 }

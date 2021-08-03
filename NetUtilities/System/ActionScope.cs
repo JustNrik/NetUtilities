@@ -27,7 +27,7 @@ namespace System
         ///     Thrown when either <paramref name="startAction"/> or <paramref name="undoAction"/> are <see langword="null"/>.
         /// </exception>
         public static ActionScope Create(Action startAction, Action undoAction)
-            => new ActionScope(startAction, undoAction);
+            => new(startAction, undoAction);
 
         private ActionScope(Action startAction, Action undoAction)
         {
@@ -88,7 +88,7 @@ namespace System
         ///     Thrown when <paramref name="state"/>, <paramref name="startAction"/> or <paramref name="undoAction"/> are <see langword="null"/>.
         /// </exception>
         public static ActionScope<TState> Create(TState state, Action<TState> startAction, Action<TState> undoAction)
-            => new ActionScope<TState>(state, startAction, undoAction);
+            => new(state, startAction, undoAction);
 
         private ActionScope(TState state, Action<TState> startAction, Action<TState> undoAction)
         {

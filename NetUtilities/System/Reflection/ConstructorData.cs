@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using NetUtilities;
@@ -8,8 +9,7 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class ConstructorData : MemberData<ConstructorInfo>
     {
-        private readonly Type _target;
-        private readonly ConcurrentLazy<Func<object?[], object>> _constructor;
+        private readonly ConcurrentLazy<Func<object?[], object>, (ParameterInfo[], ConstructorInfo)>? _constructor;
 
         /// <summary>
         ///     Gets the parameters of the constructor this data reflects.
@@ -17,13 +17,31 @@ namespace System.Reflection
         public ReadOnlyList<ParameterInfo> Parameters { get; init; }
 
         /// <summary>
+        ///     Gets the type that declared this constructor.
+        /// </summary>
+        /// <remarks>
+        ///     This property will return <see langword="null"/> when:
+        ///     <list type="number">
+        ///         <item>
+        ///             The constructor was retrieved from <see cref="Module"/>.
+        ///         </item>
+        ///         <item>
+        ///             The constructor was declared in a <see langword="Module"/> (Visual Basic .NET).
+        ///         </item>
+        ///     </list>
+        /// </remarks>
+        public Type? DeclaringType { get; init; }
+
+        /// <summary>
         ///     Indicates if this constructor data reflects the default constructor.
         /// </summary>
-        public bool IsDefault { get; init; }
+        [MemberNotNullWhen(false, nameof(_constructor))]
+        public bool IsDefault 
+            => Parameters.Count == 0;
 
         /// <summary>
         ///     Initializes a new instance of <see cref="ConstructorData"/> class 
-        ///     with the provided <see cref="ConstructorInfo"/> and <see cref="Type"/>.
+        ///     with the provided <see cref="ConstructorInfo"/>.
         /// </summary>
         /// <param name="constructor">
         ///     The constructor.
@@ -31,27 +49,33 @@ namespace System.Reflection
         /// <param name="target">
         ///     The target.
         /// </param>
-        public ConstructorData(ConstructorInfo constructor, Type target) : base(constructor)
+        public ConstructorData(ConstructorInfo constructor) : base(constructor)
         {
-            var @params = Ensure.NotNull(constructor).GetParameters();
+            Ensure.NotNull(constructor);
 
-            _target = Ensure.NotNull(target);
-            _constructor = new(() =>
+            var parameters = constructor.GetParameters();
+
+            DeclaringType = constructor.DeclaringType;
+            Parameters = parameters.ToReadOnlyList();
+
+            // Nothing to do if the type is a module, abstract or the constructor is a default constructor.
+            if (DeclaringType is null or { IsAbstract: true } || Parameters.Count == 0)
+                return; 
+
+            _constructor = new(static args =>
             {
+                var (parameterInfos, member) = args;
                 var array = Expression.Parameter(typeof(object[]));
-                var parameters = @params.Select((arg, index) => Expression.Convert(
+                var indexes = parameterInfos.Select((parameter, index) => Expression.Convert(
                     Expression.ArrayIndex(
                         array,
                         Expression.Constant(index)),
-                    arg.ParameterType)).ToArray();
-                var @new = Expression.New(Member, parameters);
+                    parameter.ParameterType));
+                var @new = Expression.New(member, indexes);
                 var convert = Expression.Convert(@new, typeof(object));
 
                 return Expression.Lambda<Func<object?[], object>>(convert, array).Compile();
-            });
-
-            IsDefault = target.IsValueType || @params.Length == 0;
-            Parameters = @params.ToReadOnlyList();
+            }, (parameters, Member));
         }
 
         /// <summary>
@@ -67,15 +91,18 @@ namespace System.Reflection
         /// </returns>
         public object CreateInstance()
         {
-            if (_target.IsAbstract)
-                throw new InvalidOperationException(
-                    $"You cannot create an instance of an {(_target.IsSealed ? "static" : "abstract")} type.");
+            if (DeclaringType is null)
+                throw new InvalidOperationException("Cannot create an instance of an unknown type or a Module");
 
-            if (Parameters.Count > 0)
+            if (DeclaringType.IsAbstract)
                 throw new InvalidOperationException(
-                    $"This constructor {_target.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
+                    $"You cannot create an instance of an {(DeclaringType.IsSealed ? "static" : "abstract")} class.");
 
-            return Factory.CreateInstance(_target);
+            if (!IsDefault)
+                throw new InvalidOperationException(
+                    $"This constructor {DeclaringType.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
+
+            return Factory.CreateInstance(DeclaringType);
         }
 
         /// <summary>
@@ -96,20 +123,23 @@ namespace System.Reflection
         /// <returns>
         ///     An instance of the type this constructor belongs to.
         /// </returns>
-        public object CreateInstance(params object?[] args)
+        public object CreateInstance(params object?[]? args)
         {
             if (args is null or { Length: 0 })
                 return CreateInstance();
 
-            if (_target.IsAbstract)
+            if (DeclaringType is null)
+                throw new InvalidOperationException("Cannot create an instance of an unknown type or a Module.");
+
+            if (DeclaringType.IsAbstract)
                 throw new InvalidOperationException(
-                    $"You cannot create an instance of an {(_target.IsSealed ? "static" : "abstract")} type.");
+                    $"You cannot create an instance of an {(DeclaringType.IsSealed ? "static" : "abstract")} type.");
 
             if (Parameters.Count != args.Length)
                 throw new InvalidOperationException(
-                    $"This constructor {_target.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
+                    $"This constructor {DeclaringType.Name}({string.Join(", ", Parameters.Select(x => x.ParameterType.Name))}) requires these parameters to be used.");
 
-            return _constructor.Value(args);
+            return _constructor!.Value(args);
         }
     }
 }

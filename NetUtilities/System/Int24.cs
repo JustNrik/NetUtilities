@@ -18,12 +18,12 @@ namespace System
         /// <summary>
         ///     Represents the largest possible value of an <see cref="Int24"/>. This field is constant.
         /// </summary>
-        public const int MaxValue = 8388607;
+        public static readonly Int24 MaxValue = (Int24)8388607;
 
         /// <summary>
         ///     Represents the smallest possible value of <see cref="Int24"/>. This field is constant.
         /// </summary>
-        public const int MinValue = -8388608;
+        public static readonly Int24 MinValue = (Int24)(-8388608);
 
         /// <summary>
         ///     Initializes a new instance of <see cref="Int24"/> to the value of the specified <see cref="UInt24"/>.
@@ -87,7 +87,7 @@ namespace System
         /// </param>
         public Int24(ulong value)
         {
-            if (value > MaxValue)
+            if (value > (ulong)MaxValue)
                 throw new ArgumentOutOfRangeException($"The value must be between {MinValue} and {MaxValue}");
 
             _value = (int)value;
@@ -115,7 +115,7 @@ namespace System
         /// </param>
         public Int24(nint value)
         {
-            if ((nuint)value > MaxValue)
+            if ((nuint)value > (nuint)MaxValue)
                 throw new ArgumentOutOfRangeException($"The value must be between {MinValue} and {MaxValue}");
 
             _value = (int)value;
@@ -132,7 +132,7 @@ namespace System
         /// </param>
         public Int24(nuint value)
         {
-            if (value > MaxValue)
+            if (value > (nuint)MaxValue)
                 throw new ArgumentOutOfRangeException($"The value must be between {MinValue} and {MaxValue}");
 
             _value = (int)value;
@@ -182,7 +182,7 @@ namespace System
         /// </param>
         public Int24(long value)
         {
-            if ((ulong)value > MaxValue)
+            if ((ulong)value > (ulong)MaxValue)
                 throw new ArgumentOutOfRangeException($"The value must be between {MinValue} and {MaxValue}");
 
             _value = (int)value;
@@ -256,7 +256,7 @@ namespace System
         public override int GetHashCode()
             => _value;
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj is Int24 i24 ? Equals(i24) : _value.Equals(obj);
         #endregion
 
@@ -267,61 +267,61 @@ namespace System
         public int CompareTo(Int24 other)
             => _value.CompareTo(other._value);
 
-        int IComparable.CompareTo(object obj)
+        int IComparable.CompareTo(object? obj)
             => _value.CompareTo(obj);
 
-        public string ToString(string format, IFormatProvider formatProvider)
+        public string ToString(string? format, IFormatProvider? formatProvider)
             => _value.ToString(format, formatProvider);
 
         TypeCode IConvertible.GetTypeCode()
             => TypeCode.Int32;
 
-        bool IConvertible.ToBoolean(IFormatProvider provider)
+        bool IConvertible.ToBoolean(IFormatProvider? provider)
             => Convert.ToBoolean(_value, provider);
 
-        byte IConvertible.ToByte(IFormatProvider provider)
+        byte IConvertible.ToByte(IFormatProvider? provider)
             => Convert.ToByte(_value, provider);
 
-        char IConvertible.ToChar(IFormatProvider provider)
+        char IConvertible.ToChar(IFormatProvider? provider)
             => Convert.ToChar(_value, provider);
 
-        DateTime IConvertible.ToDateTime(IFormatProvider provider)
+        DateTime IConvertible.ToDateTime(IFormatProvider? provider)
             => Convert.ToDateTime(_value, provider);
 
-        decimal IConvertible.ToDecimal(IFormatProvider provider)
+        decimal IConvertible.ToDecimal(IFormatProvider? provider)
             => Convert.ToDecimal(_value, provider);
 
-        double IConvertible.ToDouble(IFormatProvider provider)
+        double IConvertible.ToDouble(IFormatProvider? provider)
             => Convert.ToDouble(_value, provider);
 
-        short IConvertible.ToInt16(IFormatProvider provider)
+        short IConvertible.ToInt16(IFormatProvider? provider)
             => Convert.ToInt16(_value, provider);
 
-        int IConvertible.ToInt32(IFormatProvider provider)
+        int IConvertible.ToInt32(IFormatProvider? provider)
             => Convert.ToInt32(_value, provider);
 
-        long IConvertible.ToInt64(IFormatProvider provider)
+        long IConvertible.ToInt64(IFormatProvider? provider)
             => Convert.ToInt64(_value, provider);
 
-        sbyte IConvertible.ToSByte(IFormatProvider provider)
+        sbyte IConvertible.ToSByte(IFormatProvider? provider)
             => Convert.ToSByte(_value, provider);
 
-        float IConvertible.ToSingle(IFormatProvider provider)
+        float IConvertible.ToSingle(IFormatProvider? provider)
             => Convert.ToSingle(_value, provider);
 
-        string IConvertible.ToString(IFormatProvider provider)
+        string IConvertible.ToString(IFormatProvider? provider)
             => Convert.ToString(_value, provider);
 
-        object IConvertible.ToType(Type conversionType, IFormatProvider provider)
+        object IConvertible.ToType(Type conversionType, IFormatProvider? provider)
             => ((IConvertible)_value).ToType(conversionType, provider);
 
-        ushort IConvertible.ToUInt16(IFormatProvider provider)
+        ushort IConvertible.ToUInt16(IFormatProvider? provider)
             => Convert.ToUInt16(_value, provider);
 
-        uint IConvertible.ToUInt32(IFormatProvider provider)
+        uint IConvertible.ToUInt32(IFormatProvider? provider)
             => Convert.ToUInt32(_value, provider);
 
-        ulong IConvertible.ToUInt64(IFormatProvider provider)
+        ulong IConvertible.ToUInt64(IFormatProvider? provider)
             => Convert.ToUInt64(_value, provider);
         #endregion
 
@@ -372,71 +372,71 @@ namespace System
 
         // bitwise
         public static Int24 operator &(Int24 left, Int24 right)
-            => new Int24(left._value & right._value);
+            => new(left._value & right._value);
         public static Int24 operator &(Int24 left, int right)
-            => new Int24(left._value & right);
+            => new(left._value & right);
         public static Int24 operator &(int left, Int24 right)
-            => new Int24(left & right._value);
+            => new(left & right._value);
         public static Int24 operator |(Int24 left, Int24 right)
-            => new Int24(left._value | right._value);
+            => new(left._value | right._value);
         public static Int24 operator |(Int24 left, int right)
-            => new Int24(left._value | right);
+            => new(left._value | right);
         public static Int24 operator |(int left, Int24 right)
-            => new Int24(left | right._value);
+            => new(left | right._value);
         public static Int24 operator ^(Int24 left, Int24 right)
-            => new Int24(left._value ^ right._value);
+            => new(left._value ^ right._value);
         public static Int24 operator ^(Int24 left, int right)
-            => new Int24((left._value ^ right) & Mask);
+            => new((left._value ^ right) & Mask);
         public static Int24 operator ^(int left, Int24 right)
-            => new Int24((left ^ right._value) & Mask);
+            => new((left ^ right._value) & Mask);
         public static Int24 operator <<(Int24 left, int right)
-            => new Int24((left._value << right) & Mask);
+            => new((left._value << right) & Mask);
         public static Int24 operator >>(Int24 left, int right)
-            => new Int24(left._value >> right);
+            => new(left._value >> right);
         public static Int24 operator ~(Int24 int24)
-            => new Int24(~int24._value & MaxValue);
+            => new(~int24._value & MaxValue);
 
         // unary arithmetic
         public static Int24 operator ++(Int24 int24)
-            => new Int24(int24._value + 1);
+            => new(int24._value + 1);
         public static Int24 operator --(Int24 int24)
-            => new Int24(int24._value - 1);
+            => new(int24._value - 1);
         public static Int24 operator +(Int24 int24)
             => int24;
         public static Int24 operator -(Int24 int24)
-            => new Int24(-int24._value);
+            => new(-int24._value);
 
         // binary arithmetic
         public static Int24 operator +(Int24 left, Int24 right)
-            => new Int24(left._value + right._value);
+            => new(left._value + right._value);
         public static Int24 operator +(Int24 left, int right)
-            => new Int24(left._value + right);
+            => new(left._value + right);
         public static Int24 operator +(int left, Int24 right)
-            => new Int24(left + right._value);
+            => new(left + right._value);
         public static Int24 operator -(Int24 left, Int24 right)
-            => new Int24(left._value - right._value);
+            => new(left._value - right._value);
         public static Int24 operator -(Int24 left, int right)
-            => new Int24(left._value - right);
+            => new(left._value - right);
         public static Int24 operator -(int left, Int24 right)
-            => new Int24(left - right._value);
+            => new(left - right._value);
         public static Int24 operator /(Int24 left, Int24 right)
-            => new Int24(left._value / right._value);
+            => new(left._value / right._value);
         public static Int24 operator /(Int24 left, int right)
-            => new Int24(left._value / right);
+            => new(left._value / right);
         public static Int24 operator /(int left, Int24 right)
-            => new Int24(left / right._value);
+            => new(left / right._value);
         public static Int24 operator *(Int24 left, Int24 right)
-            => new Int24(left._value * right._value);
+            => new(left._value * right._value);
         public static Int24 operator *(Int24 left, int right)
-            => new Int24(left._value * right);
+            => new(left._value * right);
         public static Int24 operator *(int left, Int24 right)
-            => new Int24(left * right._value);
+            => new(left * right._value);
         public static Int24 operator %(Int24 left, Int24 right)
-            => new Int24(left._value % right._value);
+            => new(left._value % right._value);
         public static Int24 operator %(int left, Int24 right)
-            => new Int24(left % right._value);
+            => new(left % right._value);
         public static Int24 operator %(Int24 left, int right)
-            => new Int24(left._value % right);
+            => new(left._value % right);
         #endregion
 
         #region casts
@@ -464,19 +464,19 @@ namespace System
             => (nuint)int24._value;
         // narrowing casts to Int24
         public static explicit operator Int24(UInt24 uInt24)
-            => new Int24(uInt24);
+            => new(uInt24);
         public static explicit operator Int24(int int32)
-            => new Int24(int32);
+            => new(int32);
         public static explicit operator Int24(uint uInt32)
-            => new Int24((int)uInt32);
+            => new((int)uInt32);
         public static explicit operator Int24(long int64)
-            => new Int24((int)int64);
+            => new((int)int64);
         public static explicit operator Int24(ulong uInt64)
-            => new Int24((int)uInt64);
+            => new((int)uInt64);
         public static explicit operator Int24(nint intPtr)
-            => new Int24(intPtr);
+            => new(intPtr);
         public static explicit operator Int24(nuint uIntPtr)
-            => new Int24(uIntPtr);
+            => new(uIntPtr);
         #endregion
 
         #region Static methods

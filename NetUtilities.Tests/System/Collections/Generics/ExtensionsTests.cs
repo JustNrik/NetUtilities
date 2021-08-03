@@ -6,7 +6,7 @@ namespace NetUtilities.Tests.System.Collections.Generics
 {
     public class ExtensionsTests
     {
-        [Fact(Skip = "Broken test.")]
+        [Fact(Skip = "This test is broken in MacOS. Investigate.")]
         public void ContainsSequenceTest()
         {
             var source = Enumerable.Range(0, 100).ToArray();

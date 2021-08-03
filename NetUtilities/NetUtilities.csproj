@@ -19,8 +19,4 @@
     <WarningLevel>0</WarningLevel>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="../NetUtilities.NetStandard/NetUtilities.NetStandard.csproj" />
-  </ItemGroup>
-
 </Project>

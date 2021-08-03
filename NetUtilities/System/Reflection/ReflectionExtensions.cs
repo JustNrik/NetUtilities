@@ -238,10 +238,5 @@ namespace System.Reflection
         /// </returns>
         public static ConstructorInfo[] GetRuntimeConstructors(this Type type)
             => Ensure.NotNull(type).GetConstructors(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.NonPublic);
-
-        /// <inheritdoc cref="Factory{T}.Clone(T)"/>
-        [MethodImplementation(Inlined)]
-        public static T Clone<T>(this T obj)
-            => Factory<T>.Clone(obj);
     }
 }

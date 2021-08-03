@@ -6,8 +6,8 @@ namespace System.Reflection
     /// <inheritdoc/>
     public class FieldData : MemberData<FieldInfo>
     {
-        private readonly Func<object?, object?> _get;
-        private readonly Action<object?, object?> _set;
+        private readonly ConcurrentLazy<Func<object?, object?>, FieldInfo> _get;
+        private readonly ConcurrentLazy<Action<object?, object?>, FieldInfo> _set;
 
         /// <summary>
         ///     Gets the type of the field this data reflects.
@@ -40,23 +40,28 @@ namespace System.Reflection
             IsNullable = FieldType.IsClass || FieldType.IsInterface || FieldType.IsNullable();
             IsStatic = field.IsStatic;
 
-            var parameter = Expression.Parameter(typeof(object));
-            var cast = Expression.Convert(parameter, FieldType.DeclaringType!); // will be null if it's a module property, cba to handle it
-            var prop = Expression.Field(cast, FieldType.Name);
-            var convert = Expression.Convert(prop, typeof(object));
-            var lambda = Expression.Lambda<Func<object?, object?>>(convert, parameter);
+            _get = new(static field =>
+            {
+                var instance = Expression.Parameter(typeof(object));
+                var cast = Expression.Convert(instance, field.DeclaringType!); 
+                var fieldAccess = Expression.Field(field.IsStatic ? null : cast, field);
+                var lambda = Expression.Lambda<Func<object?, object?>>(fieldAccess, instance);
 
-            _get = lambda.Compile();
+                return lambda.Compile();
+            }, field);
 
-            var instance = Expression.Parameter(typeof(object));
-            var value = Expression.Parameter(typeof(object));
-            var convertInstance = Expression.Convert(instance, FieldType.DeclaringType!);
-            var convertValue = Expression.Convert(value, FieldType);
-            var prop2 = Expression.Field(convertInstance, FieldType.Name);
-            var assign = Expression.Assign(prop2, convertValue);
-            var lambda2 = Expression.Lambda<Action<object?, object?>>(assign, instance, value);
+            _set = new(static field =>
+            {
+                var instance = Expression.Parameter(typeof(object));
+                var value = Expression.Parameter(typeof(object));
+                var castInstance = Expression.Convert(instance, field.DeclaringType!);
+                var castValue = Expression.Convert(value, field.FieldType);
+                var fieldAccess = Expression.Field(field.IsStatic ? null : castInstance, field);
+                var assign = Expression.Assign(fieldAccess, castValue);
+                var lambda = Expression.Lambda<Action<object?, object?>>(assign, instance, value);
 
-            _set = lambda2.Compile();
+                return lambda.Compile();
+            }, field);
         }
 
         /// <summary>
@@ -86,11 +91,11 @@ namespace System.Reflection
                 throw new InvalidOperationException(
                     $"The instance must be null because {Member.DeclaringType}.{Member.Name} is a static field.");
 
-            return _get(instance);
+            return _get.Value(instance);
         }
 
         /// <summary>
-        ///     Gets the value of the field reflected in the instance and value provided.
+        ///     Sets the value of the field reflected in the instance and value provided.
         /// </summary>
         /// <remarks>
         ///     The <paramref name="instance"/> must be <see langword="null"/> if the field is <see langword="static"/>.<br/>
@@ -120,7 +125,7 @@ namespace System.Reflection
                 throw new InvalidOperationException(
                     $"The value cannot be null because {Member.DeclaringType}.{Member.Name} is of type {FieldType.Name}, which is not a nullable type (class, interface or Nullable<{FieldType.Name}>)");
 
-            _set(instance, value);
+            _set.Value(instance, value);
         }
     }
 }

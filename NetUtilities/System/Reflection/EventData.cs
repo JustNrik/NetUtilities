@@ -25,18 +25,18 @@ namespace System.Reflection
         /// <param name="event">
         ///     The event.
         /// </param>
-        public EventData(EventInfo @event) : base(@event)
+        public EventData(EventInfo eventInfo) : base(eventInfo)
         {
-            EventHandlerType = Ensure.NotNull(@event).EventHandlerType!;
-            IsStatic = @event.DeclaringType!.GetRuntimeField(@event.Name)!.IsStatic;
+            EventHandlerType = Ensure.NotNull(eventInfo).EventHandlerType!;
+            IsStatic = eventInfo.DeclaringType!.GetRuntimeField(eventInfo.Name)!.IsStatic;
 
             _add = new(() =>
             {
                 var instance = Expression.Parameter(typeof(object));
                 var handler = Expression.Parameter(typeof(Delegate));
-                var cast = Expression.Convert(instance, @event.DeclaringType!);
+                var cast = Expression.Convert(instance, eventInfo.DeclaringType!);
                 var delegateCast = Expression.Convert(handler, EventHandlerType!);
-                var call = Expression.Call(cast, @event.AddMethod!, delegateCast);
+                var call = Expression.Call(cast, eventInfo.AddMethod!, delegateCast);
                 var lambda = Expression.Lambda<Action<object?, Delegate>>(call, instance, handler);
                 return lambda.Compile();
             });

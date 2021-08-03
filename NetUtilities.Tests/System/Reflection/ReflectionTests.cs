@@ -107,7 +107,7 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.True(method.Parameters[1].Name == "y");
         }
 
-        [Fact(Skip = "Broken Test.")]
+        [Fact(Skip = "This test is broken in MacOS. Investigate.")]
         public void MapperTest_Field_FieldCount()
         {
             var fake = new MapperFieldsFake();
@@ -116,7 +116,7 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.True(mapper.Fields.Count == 2);
         }
 
-        [Fact(Skip = "Broken Test.")]
+        [Fact(Skip = "This test is broken in MacOS. Investigate.")]
         public void MapperTest_Field_FieldInfo()
         {
             var fake = new MapperFieldsFake();
@@ -130,7 +130,7 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.Equal("_stringField", mapper.Fields[1].Member.Name);
         }
 
-        [Fact(Skip = "Broken Test.")]
+        [Fact(Skip = "This test is broken in MacOS. Investigate.")]
         public void MapperTest_Field_FieldValue()
         {
             var fake = new MapperFieldsFake();
@@ -140,7 +140,7 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.Equal("test", mapper.Fields[1].Member.GetValue(fake));
         }
 
-        [Fact(Skip = "Broken Test.")]
+        [Fact(Skip = "This test is broken in MacOS. Investigate.")]
         public void MapperTest_Event_EventCount()
         {
             var fake = new MapperEventFake();
@@ -149,7 +149,7 @@ namespace NetUtilities.Tests.System.Reflection
             Assert.True(mapper.Events.Count == 1);
         }
 
-        [Fact(Skip = "Broken Test.")]
+        [Fact(Skip = "This test is broken in MacOS. Investigate.")]
         public void MapperTest_Event_EventDetails()
         {
             var fake = new MapperEventFake();
