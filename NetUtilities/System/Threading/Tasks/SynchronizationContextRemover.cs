@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using NetUtilities;
 
@@ -14,6 +15,7 @@ namespace System.Threading.Tasks
         ///     Indicates if <see cref="SynchronizationContext.Current"/> is <see langword="null"/>.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [SuppressMessage("Performance", "CA1822:Marcar miembros como static", Justification = "Interface implementation")]
         public bool IsCompleted
             => SynchronizationContext.Current is null;
 
@@ -50,6 +52,7 @@ namespace System.Threading.Tasks
         ///     This method does nothing.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [SuppressMessage("Performance", "CA1822:Marcar miembros como static", Justification = "Interface implementation")]
         public void GetResult()
         {
         }

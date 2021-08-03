@@ -44,9 +44,9 @@ namespace System.Reflection
             {
                 var instance = Expression.Parameter(typeof(object));
                 var handler = Expression.Parameter(typeof(Delegate));
-                var cast = Expression.Convert(instance, @event.DeclaringType!);
+                var cast = Expression.Convert(instance, eventInfo.DeclaringType!);
                 var delegateCast = Expression.Convert(handler, EventHandlerType);
-                var call = Expression.Call(cast, @event.RemoveMethod!, delegateCast);
+                var call = Expression.Call(cast, eventInfo.RemoveMethod!, delegateCast);
                 var lambda = Expression.Lambda<Action<object?, Delegate>>(call, instance, handler);
                 return lambda.Compile();
             });
@@ -54,7 +54,7 @@ namespace System.Reflection
 
         private object RaiseEvent(object? instance, params object?[] parameters)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>

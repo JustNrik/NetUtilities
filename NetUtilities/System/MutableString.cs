@@ -193,19 +193,21 @@ namespace System
         IEnumerator IEnumerable.GetEnumerator()
             => new MutableStringEnumerator(this);
 
-        int IComparable.CompareTo(object obj)
+        int IComparable.CompareTo(object? obj)
             => obj switch
             {
                 string str => ((IComparable<string>)this).CompareTo(str),
                 MutableString mutable => ((IComparable<string>)this).CompareTo(mutable),
+#pragma warning disable CA2208 
                 _ => throw new ArgumentException(nameof(obj))
+#pragma warning restore CA2208 
             };
 
-        int IComparable<string>.CompareTo(string other)
+        int IComparable<string>.CompareTo(string? other)
             => ToString().CompareTo(other);
 
-        int IComparable<MutableString>.CompareTo(MutableString other)
-            => ((IComparable<string>)this).CompareTo(other);
+        int IComparable<MutableString>.CompareTo(MutableString? other)
+            => ((IComparable<string>)this).CompareTo(other?.ToString());
 
         void ICollection<char>.Add(char item)
             => Append(item);
@@ -269,19 +271,19 @@ namespace System
             => mutableString.ToString();
 
         public static implicit operator MutableString(string value)
-            => new MutableString(value);
+            => new(value);
 
         public static implicit operator ReadOnlySpan<char>(MutableString mutable)
             => mutable.ToString();
 
         public static explicit operator Span<char>(MutableString mutable)
-            => new Span<char>(mutable.ToCharArray());
+            => new(mutable.ToCharArray());
 
         public static explicit operator ReadOnlyMemory<char>(MutableString mutable)
-            => new ReadOnlyMemory<char>(mutable.ToCharArray());
+            => new(mutable.ToCharArray());
 
         public static explicit operator Memory<char>(MutableString mutable)
-            => new Memory<char>(mutable.ToCharArray());
+            => new(mutable.ToCharArray());
         #endregion
         #region instace methods
         #region override from System.Object
@@ -296,7 +298,7 @@ namespace System
             return _current;
         }
 
-        public override bool Equals(object obj)
+        public override bool Equals(object? obj)
             => obj switch
             {
                 MutableString mutable => Equals(mutable),
@@ -404,11 +406,11 @@ namespace System
         }
         #endregion
         #region Equals
-        public bool Equals(string other)
-            => other?.Equals(this) ?? false;
+        public bool Equals(string? other)
+            => ToString() == other;
 
-        public bool Equals(MutableString other)
-            => ((string)other)?.Equals(this) ?? false;
+        public bool Equals(MutableString? other)
+            => Equals(other?.ToString());
         #endregion
         #region Insert
         public MutableString Insert(int index, object? value)
@@ -418,7 +420,7 @@ namespace System
             return this;
         }
 
-        public MutableString Insert(int index, string? value)
+        public MutableString Insert(int index, string value)
         {
             _builder.Insert(index, value);
             _isModified = true;
@@ -439,7 +441,7 @@ namespace System
             return this;
         }
 
-        public MutableString Insert(int index, string? value, int count)
+        public MutableString Insert(int index, string value, int count)
         {
             _builder.Insert(index, value, count);
             _isModified = true;
@@ -534,7 +536,7 @@ namespace System
             return _isModified;
         }
 
-        public bool TryRemove(string? item)
+        public bool TryRemove(string item)
         {
             Remove(item);
             return _isModified;
@@ -558,16 +560,16 @@ namespace System
             return this;
         }
 
-        public MutableString Replace(string? oldStr, string? newStr)
+        public MutableString Replace(string oldStr, string newStr)
             => Replace(oldStr, newStr, 0, _builder.Length);
 
-        public MutableString Replace(string? oldStr, string? newStr, Range range)
+        public MutableString Replace(string oldStr, string newStr, Range range)
         {
             var (startIndex, count) = range.GetOffsetAndLength(Length);
             return Replace(oldStr, newStr, startIndex, count);
         }
 
-        public MutableString Replace(string? oldStr, string? newStr, int startIndex, int count)
+        public MutableString Replace(string oldStr, string? newStr, int startIndex, int count)
         {
             EnsureRange(startIndex, count);
             _builder.Replace(oldStr, newStr, startIndex, count);
@@ -615,7 +617,7 @@ namespace System
             => this;
 
         public void CopyTo(char[]? array, int arrayIndex)
-            => ((ICollection)this).CopyTo(array, arrayIndex);
+            => ((ICollection)this).CopyTo(array!, arrayIndex);
         #endregion
         #region Contains
         public bool Contains(char item)
@@ -643,16 +645,16 @@ namespace System
             return false;
         }
 
-        public bool Contains(string? item)
+        public bool Contains(string item)
             => IndexOf(item, 0, Length) != -1;
 
-        public bool Contains(string? item, int startIndex)
+        public bool Contains(string item, int startIndex)
             => IndexOf(item, startIndex, Length - startIndex) != -1;
 
-        public bool Contains(string? item, int startIndex, int count)
+        public bool Contains(string item, int startIndex, int count)
             => IndexOf(item, startIndex, count) != -1;
 
-        public bool Contains(string? item, Range range)
+        public bool Contains(string item, Range range)
             => IndexOf(item, range) != -1;
 
         /// <summary>
@@ -717,19 +719,19 @@ namespace System
             return -1;
         }
 
-        public int IndexOf(string? item)
+        public int IndexOf(string item)
             => IndexOf(item, 0, Length);
 
-        public int IndexOf(string? item, int startIndex)
+        public int IndexOf(string item, int startIndex)
             => IndexOf(item, startIndex, Length - startIndex);
 
-        public int IndexOf(string? item, Range range)
+        public int IndexOf(string item, Range range)
         {
             var (startIndex, count) = range.GetOffsetAndLength(Length);
             return IndexOf(item, startIndex, count);
         }
 
-        public int IndexOf(string? item, int startIndex, int count)
+        public int IndexOf(string item, int startIndex, int count)
             => ((string)this).IndexOf(item, startIndex, count);
 
         public int[] IndexesOf(char item)
@@ -748,7 +750,8 @@ namespace System
         {
             EnsureRange(startIndex, count);
 
-            if (count == 0) return new int[0];
+            if (count == 0)
+                return Array.Empty<int>();
 
             var currentIndex = IndexOf(value, startIndex, count);
             var result = new List<int>(Length);
@@ -842,7 +845,7 @@ namespace System
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public Range? RangeOf(string? input)
+        public Range? RangeOf(string input)
         {
             if (input is null || input.Length == 0) return null;
             var startIndex = input.Length == 1 ? IndexOf(input[0]) : IndexOf(input);
@@ -857,7 +860,7 @@ namespace System
         public bool EndsWith(char value)
             => value == this[Length - 1];
 
-        public bool StartsWith(string? value)
+        public bool StartsWith(string value)
         {
             if (value is null || value.Length > Length) return false;
             if (value.Length == 0) return Length == 0;
@@ -872,7 +875,7 @@ namespace System
             return true;
         }
 
-        public bool EndsWith(string? value)
+        public bool EndsWith(string value)
         {
             if (value is null || value.Length > Length)
                 return false;
@@ -1099,8 +1102,8 @@ namespace System
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static bool IsNullOrEmpty(MutableString? input)
-            => input is null || input.Length == 0;
+        public static bool IsNullOrEmpty([NotNullWhen(false)]MutableString? input)
+            => input is null or { Length: 0 };
 
         /// <summary>
         /// Returns true if the <see cref="MutableString"/> is null, empty or consists only of white-spaces characters.
@@ -1181,7 +1184,7 @@ namespace System
             }
 
             MutableStringEnumerator ICloneable<MutableStringEnumerator>.Clone()
-                => new MutableStringEnumerator(this);
+                => new(this);
         }
     }
 }

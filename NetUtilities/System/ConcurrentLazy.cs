@@ -104,7 +104,7 @@
         /// <param name="value">
         ///     The Value.
         /// </param>
-        public ConcurrentSlimLazy(T value) : base(value)
+        public ConcurrentLazy(T value) : base(value)
         {
         }
 
@@ -120,7 +120,7 @@
         /// <exception cref="ArgumentNullException">
         ///     Thrown when either <paramref name="valueFactory"/> or <paramref name="state"/> are <see langword="null"/>.
         /// </exception>
-        public ConcurrentSlimLazy(Func<TState, T> valueFactory, TState state) : base(valueFactory, state)
+        public ConcurrentLazy(Func<TState, T> valueFactory, TState state) : base(valueFactory, state)
         {
         }
     }
