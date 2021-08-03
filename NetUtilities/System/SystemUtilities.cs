@@ -415,7 +415,7 @@ namespace System
 
         private static class EnumHelper<TEnum> where TEnum : unmanaged, Enum
         {
-            private static readonly bool _isFlag = Mapper<TEnum>.CustomAttributes.Exists(x => x is FlagsAttribute);
+            private static readonly bool _isFlag = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null;
 
             public static TEnum[] Values { get; } = Enum.GetValues<TEnum>()
                 .Where(x =>
