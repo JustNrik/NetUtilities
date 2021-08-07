@@ -14,8 +14,8 @@
         T Value { get; }
 
         /// <summary>
-        ///     Indicates if the value is initialized.
+        ///     Indicates if the value is created.
         /// </summary>
-        bool IsInitialized { get; }
+        bool IsValueCreated { get; }
     }
 }

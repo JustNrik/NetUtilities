@@ -26,11 +26,11 @@ namespace System
         {
             get
             {
-                if (!IsInitialized)
+                if (!IsValueCreated)
                 {
                     _value = _valueFactory();
                     _valueFactory = null;
-                    IsInitialized = true;
+                    IsValueCreated = true;
                 }
 
                 return _value;
@@ -40,7 +40,7 @@ namespace System
         /// <inheritdoc/>
         [MemberNotNullWhen(false, nameof(_valueFactory))]
         [MemberNotNullWhen(true, nameof(_value))]
-        public virtual bool IsInitialized { get; protected set; }
+        public virtual bool IsValueCreated { get; protected set; }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="SlimLazy{T}"/> class with the provided value.
@@ -51,7 +51,7 @@ namespace System
         public SlimLazy(T value)
         {
             _value = value;
-            IsInitialized = true;
+            IsValueCreated = true;
         }
 
         /// <summary>
@@ -94,18 +94,19 @@ namespace System
         /// <summary>
         ///     The factory delegate arguments.
         /// </summary>
-        protected readonly TState? _state;
+        protected TState? _state;
 
         /// <inheritdoc/>
         public virtual T Value
         {
             get
             {
-                if (!IsInitialized)
+                if (!IsValueCreated)
                 {
                     _value = _valueFactory(_state);
                     _valueFactory = null;
-                    IsInitialized = true;
+                    _state = default;
+                    IsValueCreated = true;
                 }
 
                 return _value;
@@ -116,7 +117,7 @@ namespace System
         [MemberNotNullWhen(false, nameof(_valueFactory))]
         [MemberNotNullWhen(false, nameof(_state))]
         [MemberNotNullWhen(true, nameof(_value))]
-        public virtual bool IsInitialized { get; protected set; }
+        public virtual bool IsValueCreated { get; protected set; }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="SlimLazy{T, TState}"/> class with the provided value.
@@ -127,7 +128,7 @@ namespace System
         public SlimLazy(T value)
         {
             _value = value;
-            IsInitialized = true;
+            IsValueCreated = true;
         }
 
         /// <summary>

@@ -21,17 +21,17 @@
         }
 
         /// <inheritdoc/>
-        public override bool IsInitialized 
+        public override bool IsValueCreated 
         {
             get 
             {
                 lock (_lock)
-                    return base.IsInitialized;
+                    return base.IsValueCreated;
             } 
             protected set
             {
                 lock (_lock)
-                    base.IsInitialized = value;
+                    base.IsValueCreated = value;
             }
         }
 
@@ -84,17 +84,17 @@
         }
 
         /// <inheritdoc/>
-        public override bool IsInitialized
+        public override bool IsValueCreated
         {
             get
             {
                 lock (_lock)
-                    return base.IsInitialized;
+                    return base.IsValueCreated;
             }
             protected set
             {
                 lock (_lock)
-                    base.IsInitialized = value;
+                    base.IsValueCreated = value;
             }
         }
 
