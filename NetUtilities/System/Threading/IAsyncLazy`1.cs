@@ -17,11 +17,12 @@ namespace System.Threading
         /// </summary>
         void StartTask();
         /// <summary>
-        ///     Gets the underlaying <see cref="Tasks.Task{TResult}"/>'s <see cref="TaskAwaiter{TResult}"/>.
+        ///     Gets the underlaying <see cref="Tasks.Task{TResult}"/>'s <see cref="TaskAwaiter{TResult}"/> 
+        ///     wrapped in a <see cref="ValueTaskAwaiter{TResult}"/>.
         /// </summary>
         /// <returns>
-        ///     The <see cref="TaskAwaiter{TResult}"/> of the underlying task.
+        ///     The <see cref="ValueTaskAwaiter{TResult}"/> of the underlying task.
         /// </returns>
-        TaskAwaiter<T> GetAwaiter();
+        ValueTaskAwaiter<T> GetAwaiter();
     }
 }
