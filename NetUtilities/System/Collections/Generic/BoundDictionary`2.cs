@@ -54,12 +54,6 @@ namespace System.Collections.Generic
         public bool IsReadOnly 
             => _dictionary.IsReadOnly;
 
-        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys 
-            => _dictionary.Keys;
-
-        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values 
-            => _dictionary.Values;
-
         public BoundDictionary(Func<TValue, TKey> keySelector)
         {
             Ensure.NotNull(keySelector);
@@ -181,30 +175,8 @@ namespace System.Collections.Generic
             }
         }
 
-        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
-        {
-            unsafe
-            {
-                var (key, value) = item;
-                
-                Ensure.NotNull(key);
-                Ensure.NotNull(value);
-
-                var valueKey = _keySelector(value);
-                var comparer = _comparer ?? EqualityComparer<TKey>.Default;
-
-                if (!comparer.Equals(key, valueKey))
-                    throw new InvalidOperationException("The key doesn't match the value's key");
-
-                _dictionary.Add(key, value);
-            }
-        }
-
         public void Clear() 
             => _dictionary.Clear();
-
-        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item) 
-            => _dictionary.Contains(item);
 
         public bool Contains(TValue value)
         {
@@ -236,16 +208,50 @@ namespace System.Collections.Generic
         public bool Remove(TKey key) 
             => _dictionary.Remove(key);
 
+        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
+            => _dictionary.TryGetValue(key, out value);
+
+        IEnumerable<TKey> IReadOnlyDictionary<TKey, TValue>.Keys
+            => _dictionary.Keys;
+
+        IEnumerable<TValue> IReadOnlyDictionary<TKey, TValue>.Values
+            => _dictionary.Values;
+
+        void ICollection<KeyValuePair<TKey, TValue>>.Add(KeyValuePair<TKey, TValue> item)
+        {
+            unsafe
+            {
+                var (key, value) = item;
+
+                Ensure.NotNull(key);
+                Ensure.NotNull(value);
+
+                var valueKey = _keySelector(value);
+                var comparer = _comparer ?? EqualityComparer<TKey>.Default;
+
+                if (!comparer.Equals(key, valueKey))
+                    throw new InvalidOperationException("The key doesn't match the value's key");
+
+                _dictionary.Add(key, value);
+            }
+        }
+
+        bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
+            => _dictionary.Contains(item);
+
         bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) 
             => _dictionary.Remove(item);
 
-        public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value) 
-            => _dictionary.TryGetValue(key, out value);
-
         IEnumerator IEnumerable.GetEnumerator() 
             => ((IEnumerable)_dictionary).GetEnumerator();
-        bool IReadOnlyDictionary<TKey, TValue>.ContainsKey(TKey key) => throw new NotImplementedException();
-        bool IReadOnlyDictionary<TKey, TValue>.TryGetValue(TKey key, out TValue value) => throw new NotImplementedException();
-        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator() => throw new NotImplementedException();
+
+        bool IReadOnlyDictionary<TKey, TValue>.ContainsKey(TKey key)
+            => ContainsKey(key);
+
+        bool IReadOnlyDictionary<TKey, TValue>.TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
+            => TryGetValue(key, out value);
+
+        IEnumerator<KeyValuePair<TKey, TValue>> IEnumerable<KeyValuePair<TKey, TValue>>.GetEnumerator()
+            => GetEnumerator();
     }
 }
