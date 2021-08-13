@@ -23,7 +23,8 @@ namespace System.IO
         /// <returns>
         ///     A value of type <typeparamref name="T"/>.
         /// </returns>
-        public static T Read<T>(this Stream stream) where T : unmanaged
+        public static T Read<T>(this Stream stream) 
+            where T : unmanaged
         {
             Span<byte> span = stackalloc byte[Unsafe.SizeOf<T>()];
 
@@ -44,9 +45,30 @@ namespace System.IO
         /// <param name="value">
         ///     The value.
         /// </param>
-        public static void Write<T>(this Stream stream, T value) where T : unmanaged
+        public static void Write<T>(this Stream stream, T value) 
+            where T : unmanaged
         {
             var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1));
+            stream.Write(span);
+        }
+
+        /// <summary>
+        ///     Writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+        ///     This is equal to the size of <typeparamref name="T"/> multiplied by the length of <paramref name="values"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        ///     The type of the value to be written
+        /// </typeparam>
+        /// <param name="stream">
+        ///     The stream.
+        /// </param>
+        /// <param name="values">
+        ///     The values.
+        /// </param>
+        public static void Write<T>(this Stream stream, T[] values) 
+            where T : unmanaged
+        {
+            var span = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref values[0], values.Length));
             stream.Write(span);
         }
     }

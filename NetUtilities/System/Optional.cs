@@ -1,8 +1,17 @@
-﻿using System.Collections.Generic;
-using NetUtilities;
+﻿using NetUtilities;
 
 namespace System
 {
+    /// <summary>
+    ///     Represents a 3-states nullable value. 
+    /// </summary>
+    /// <remarks>
+    ///     These 3 states are useful if you want to distinguish whether
+    ///     <see langword="null"/> is intentional.
+    /// </remarks>
+    /// <typeparam name="T">
+    ///     The underlying type of the <see cref="Optional{T}"/>.
+    /// </typeparam>
     public readonly struct Optional<T> : IEquatable<Optional<T>>, IEquatable<T>
     {
         private static readonly IEqualityComparer<T> _comparer = EqualityComparer<T>.Default;
@@ -10,43 +19,99 @@ namespace System
         private readonly T _value;
         private readonly bool _hasValue;
 
-        public static Optional<T> Empty => default;
+        /// <summary>
+        ///     Returns a empty instance of <see cref="Optional{T}"/>
+        /// </summary>
+        public static Optional<T> Empty 
+            => default;
 
-        public T Value => _hasValue ? _value : throw new InvalidOperationException("FFS");
+        /// <summary>
+        ///     Gets the value of this <see cref="Optional{T}"/>.
+        /// </summary>
+        /// <exception cref="InvalidOperationException">
+        ///     Thrown when this optional doesn't have a value.
+        /// </exception>
+        public T Value 
+            => _hasValue 
+            ? _value 
+            : throw new InvalidOperationException("The optional has no value.");
 
-        public bool HasValue => _hasValue;
+        /// <summary>
+        ///     Indicates if this <see cref="Optional{T}"/> has a value.
+        /// </summary>
+        public bool HasValue 
+            => _hasValue;
 
+        /// <summary>
+        ///     Initializes a new instance of <see cref="Optional{T}"/> <see langword="struct"/>
+        ///     with the provided <paramref name="value"/>.
+        /// </summary>
+        /// <param name="value">
+        ///     The value.
+        /// </param>
         public Optional(T value)
         {
             _value = value;
             _hasValue = true;
         }
 
+        /// <inheritdoc/>
         public override bool Equals(object? obj)
-            => obj is Optional<T> optional && Equals(optional)
-            || obj is T value && Equals(value);
+            => obj switch
+            {
+                Optional<T> optional => Equals(optional),
+                T value => Equals(value),
+                IEquatable<Optional<T>> optionalEquatable => optionalEquatable.Equals(this),
+                IEquatable<T> equatable => _hasValue && equatable.Equals(_value),
+                _ => false
+            };
 
+        /// <inheritdoc/>
         public override int GetHashCode()
-            => _value?.GetHashCode() ?? 0;
+        {
+            if (typeof(T).IsValueType)
+                return EqualityComparer<T>.Default.GetHashCode(_value!);
 
+            return _value is null 
+                ? 0 
+                : _comparer.GetHashCode(_value);
+        }
+
+        /// <inheritdoc/>
         public override string? ToString()
-            => _value?.ToString();
+            => _hasValue
+            ? _value?.ToString() // intentional null return
+            : string.Empty;
 
+        /// <inheritdoc/>
         public bool Equals(Optional<T> optional)
         {
             if (!_hasValue)
                 return !optional._hasValue;
 
+            if (!optional._hasValue)
+                return false;
+
+            if (typeof(T).IsValueType) // JIT Optimizes this for value types
+                return EqualityComparer<T>.Default.Equals(_value, optional._value);
+
             return _comparer.Equals(_value, optional._value);
         }
 
+        /// <inheritdoc/>
         public bool Equals(T? value)
         {
-            if (!_hasValue) // explicitly disallowing struct == null being true.
-                return default(T) is not null && _comparer.Equals(value, default(T));
+            if (_hasValue)
+                return false;
+
+            if (typeof(T).IsValueType)
+                return EqualityComparer<T>.Default.Equals(_value, value);
 
             return _comparer.Equals(_value, value);
         }
+
+        public T GetValueOrDefault()
+            => _value;
 
         public T OrDefault()
             => _value;
@@ -91,28 +156,21 @@ namespace System
         }
 
         public static bool operator ==(Optional<T> left, Optional<T> right)
-        {
-            if (!left._hasValue)
-                return !right._hasValue;
-
-            return right._hasValue && left.Equals(right);
-        }
+            => left.Equals(right);
 
         public static bool operator !=(Optional<T> left, Optional<T> right)
-        {
-            if (!left._hasValue)
-                return right._hasValue;
-
-            return !right._hasValue || !left.Equals(right);
-        }
+            => !left.Equals(right);
 
         public static implicit operator Optional<T>(T value)
-            => new Optional<T>(value);
+            => new(value);
+
+        public static explicit operator T(Optional<T> optional)
+            => optional.Value; // intentional, it will throw if it has no value
     }
 
     public static class Optional
     {
         public static Optional<T> Of<T>(T value)
-            => new Optional<T>(value);
+            => new(value);
     }
 }

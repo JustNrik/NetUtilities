@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using NetUtilities;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -23,7 +24,7 @@ namespace System
         ///     A new <see cref="string"/> built from the array provided.
         /// </returns>
         public static string AsString(this char[]? charArray)
-            => new string(charArray);
+            => new(charArray);
 
         /// <summary>
         ///     Creates a <see cref="string"/> with the provided span.
@@ -35,7 +36,7 @@ namespace System
         ///     A new <see cref="string"/> build from the span provided.
         /// </returns>
         public static string AsString(this ReadOnlySpan<char> charSpan)
-            => new string(charSpan);
+            => new(charSpan);
 
         /// <summary>
         ///     Returns the substring between two <see cref="char"/> delimiters. Optionally, you can include them into the result.
@@ -68,12 +69,12 @@ namespace System
 
             var start = input.IndexOf(leftBound, startIndex) + 1;
 
-            if (start is 0)
+            if (start == 0)
                 return string.Empty;
 
             var end = input.IndexOf(rightBound, start);
 
-            if (end is -1 || start > end)
+            if (end == -1 || start > end)
                 return string.Empty;
 
             if (includeBounds)
@@ -116,12 +117,12 @@ namespace System
 
             var start = input.IndexOf(leftBound, startIndex) + 1;
 
-            if (start is 0)
+            if (start == 0)
                 return string.Empty;
 
             var end = input.IndexOf(rightBound, start);
 
-            if (end is -1 || start > end)
+            if (end == -1 || start > end)
                 return string.Empty;
 
             if (includeBounds)
@@ -155,21 +156,21 @@ namespace System
         {
             Ensure.NotNull(input);
 
-            if (count is 0)
+            if (count == 0)
                 return ReadOnlyList<int>.Empty;
 
             var currentIndex = input.IndexOf(value, startIndex, count);
 
-            if (currentIndex is -1)
+            if (currentIndex == -1)
                 return ReadOnlyList<int>.Empty;
 
             var result = new List<int>();
 
             do
                 result.Add(currentIndex);
-            while ((currentIndex = input.IndexOf(value, currentIndex + 1)) is not -1);
+            while ((currentIndex = input.IndexOf(value, currentIndex + 1)) != -1);
 
-            return new ReadOnlyList<int>(result, true);
+            return new(result, true);
         }
 
         /// <summary>
@@ -182,7 +183,7 @@ namespace System
         ///     A <see cref="MutableString"/>.
         /// </returns>
         public static MutableString ToMutable(this string value)
-            => new MutableString(value);
+            => new(value);
 
         /// <summary>
         ///     Returns a new <see cref="string"/> with the reversed characters.
@@ -212,9 +213,6 @@ namespace System
         /// </param>
         /// <param name="other">
         ///     The string to look for similarities.
-        /// </param>
-        /// <param name="comparison">
-        ///     The comparison to be used to determine if they are alike.
         /// </param>
         /// <returns>
         ///     <see langword="true"/> if the strings are similar (case-insensitive); otherwise, <see langword="false"/>.
@@ -413,14 +411,18 @@ namespace System
             return span[..length].ToArray();
         }
 
-        private static class EnumHelper<TEnum> where TEnum : unmanaged, Enum
+        private static class EnumHelper<TEnum> 
+            where TEnum : unmanaged, Enum
         {
             private static readonly bool _isFlag = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null;
 
             public static TEnum[] Values { get; } = Enum.GetValues<TEnum>()
                 .Where(x =>
                 {
-                    var value = Unsafe.As<TEnum, ulong>(ref x);
+                    var value = default(ulong);
+                    var bytes = MemoryMarshal.AsBytes(MemoryMarshal.CreateSpan(ref value, 1));
+
+                    Unsafe.WriteUnaligned(ref bytes[0], x);
                     return (value & (value - 1)) == 0 && value != 0;
                 }).ToArray();
 

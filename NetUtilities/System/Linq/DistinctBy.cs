@@ -26,12 +26,12 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException">
         ///     Thrown when either the source or the selector are <see langword="null"/>.
         /// </exception>
-        public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector)
         {
             Ensure.NotNull(source);
             Ensure.NotNull(selector);
 
-            return DistinctIterator(source, selector, EqualityComparer<TKey>.Default);
+            return DistinctByIterator(source, selector, EqualityComparer<TKey>.Default);
         }
 
         /// <summary>
@@ -56,15 +56,15 @@ namespace System.Linq
         /// <exception cref="ArgumentNullException">
         ///     Thrown when either the source or the selector are <see langword="null"/>.
         /// </exception>
-        public static IEnumerable<TSource> Distinct<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey> comparer)
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey> comparer)
         {
             Ensure.NotNull(source);
             Ensure.NotNull(selector);
 
-            return DistinctIterator(source, selector, comparer);
+            return DistinctByIterator(source, selector, comparer);
         }
 
-        private static IEnumerable<TSource> DistinctIterator<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey> comparer)
+        private static IEnumerable<TSource> DistinctByIterator<TSource, TKey>(IEnumerable<TSource> source, Func<TSource, TKey> selector, IEqualityComparer<TKey> comparer)
         {
             var keys = new HashSet<TKey>(comparer);
             foreach (var item in source)

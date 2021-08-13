@@ -34,8 +34,8 @@ namespace System.IO
         /// <summary>
         ///     Initializes an instance of <see cref="ValueStringReader"/> <see langword="struct"/> with the provided <see cref="string"/>.
         /// </summary>
-        /// <param name="span">
-        ///     The span to read.
+        /// <param name="reference">
+        ///     The string to read.
         /// </param>
         public ValueStringReader(string reference) : this()
         {

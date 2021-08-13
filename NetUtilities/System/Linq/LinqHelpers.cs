@@ -13,7 +13,7 @@ namespace System.Linq
             var next = seed;
 
             while (true)
-                yield return (next = func(next));
+                yield return next = func(next);
         }
 
         public static IEnumerable<T> Iterate<T>(T seed, int limit, Func<T, T> func)
@@ -22,7 +22,7 @@ namespace System.Linq
             var index = 0;
 
             while (index++ < limit)
-                yield return (next = func(next));
+                yield return next = func(next);
         }
 
         public static IEnumerable<T> Iterate<T>(T seed, Func<T, int, T> func)
@@ -31,7 +31,7 @@ namespace System.Linq
             var index = 0;
 
             while (true)
-                yield return (next = func(next, index++));
+                yield return next = func(next, index++);
         }
 
         public static IEnumerable<T> Iterate<T>(T seed, int limit, Func<T, int, T> func)
@@ -42,7 +42,7 @@ namespace System.Linq
             var index = 0;
 
             while (index < limit)
-                yield return (next = func(next, index++));
+                yield return next = func(next, index++);
         }
 
         public static async IAsyncEnumerable<T> IterateAsync<T>(T seed, Func<T, Task<T>> func, [EnumeratorCancellation] CancellationToken token = default)
@@ -52,7 +52,7 @@ namespace System.Linq
             await new SynchronizationContextRemover();
 
             while (!token.IsCancellationRequested)
-                yield return (next = await func(next));
+                yield return next = await func(next);
         }
 
         public static async IAsyncEnumerable<T> IterateAsync<T>(T seed, Func<T, int, Task<T>> func, [EnumeratorCancellation] CancellationToken token = default)
@@ -63,7 +63,7 @@ namespace System.Linq
             await new SynchronizationContextRemover();
 
             while (!token.IsCancellationRequested)
-                yield return (next = await func(next, index++));
+                yield return next = await func(next, index++);
         }
     }
 }

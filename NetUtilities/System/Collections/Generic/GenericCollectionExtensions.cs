@@ -64,20 +64,26 @@ namespace System.Collections.Generic
         ///     The source.
         /// </param>
         /// <param name="iterations">
-        ///     The amount of iterations to perform.
+        ///     The amount of iterations to perform. The default amount is 4.
         /// </param>
-        public static void Shuffle<T>(this IList<T> source, byte iterations = 4)
+        /// <param name="random">
+        ///     The random instance to be used.
+        ///     The default instance will be <see cref="Random.Shared"/> if <see langword="null"/> is provided.
+        /// </param>
+        public static void Shuffle<T>(this IList<T> source, byte iterations = 4, Random? random = null)
         {
             Ensure.NotNull(source);
 
             if (source.Count < 2)
                 return;
 
+            random ??= Random.Shared;
+
             for (var count = 0; count < iterations; count++)
             {
                 for (var index = 0; index < source.Count; index++)
                 {
-                    var nextIndex = Randomizer.Shared.Next(source.Count);
+                    var nextIndex = random.Next(source.Count);
                     var next = source[nextIndex];
                     var current = source[index];
 
@@ -286,6 +292,20 @@ namespace System.Collections.Generic
             }
 
             return false;
+        }
+
+        public static T EnqueueDequeue<T>(this Queue<T> queue, T item)
+        {
+            queue.Enqueue(item);
+            return queue.Dequeue();
+        }
+
+        public static T PopPush<T>(this Stack<T> stack, T item)
+        {
+            var poped = stack.Pop();
+
+            stack.Push(item);
+            return poped;
         }
 
         public static int FindSequenceIndex<T>(this T[] array, T[] sequence, int startIndex, IEqualityComparer<T>? comparer = null)

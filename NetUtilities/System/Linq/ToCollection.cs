@@ -73,9 +73,6 @@ namespace System.Linq
         /// <param name="source">
         ///     The sequence.
         /// </param>
-        /// <param name="comparer">
-        ///     The comparer.
-        /// </param>
         /// <returns>
         ///     A <see cref="Dictionary{TKey, TValue}"/> with the given sequence.
         /// </returns>
