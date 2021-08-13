@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -411,7 +409,7 @@ namespace System
             return span[..length].ToArray();
         }
 
-        private static class EnumHelper<TEnum> 
+        private static class EnumHelper<TEnum>
             where TEnum : unmanaged, Enum
         {
             private static readonly bool _isFlag = typeof(TEnum).GetCustomAttribute<FlagsAttribute>() is not null;

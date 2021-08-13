@@ -21,9 +21,9 @@ namespace System.Collections.Generic
         private readonly IEqualityComparer<TKey>? _comparer;
         private unsafe readonly delegate*<TValue, TKey> _keySelector;
 
-        public TValue this[TKey key] 
+        public TValue this[TKey key]
         {
-            get => _dictionary[key]; 
+            get => _dictionary[key];
             set
             {
                 unsafe
@@ -42,16 +42,16 @@ namespace System.Collections.Generic
             }
         }
 
-        public ICollection<TKey> Keys 
+        public ICollection<TKey> Keys
             => _dictionary.Keys;
 
-        public ICollection<TValue> Values 
+        public ICollection<TValue> Values
             => _dictionary.Values;
 
-        public int Count 
+        public int Count
             => _dictionary.Count;
 
-        public bool IsReadOnly 
+        public bool IsReadOnly
             => _dictionary.IsReadOnly;
 
         public BoundDictionary(Func<TValue, TKey> keySelector)
@@ -175,7 +175,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public void Clear() 
+        public void Clear()
             => _dictionary.Clear();
 
         public bool Contains(TValue value)
@@ -187,13 +187,13 @@ namespace System.Collections.Generic
             }
         }
 
-        public bool ContainsKey(TKey key) 
+        public bool ContainsKey(TKey key)
             => _dictionary.ContainsKey(key);
 
-        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex) 
+        public void CopyTo(KeyValuePair<TKey, TValue>[] array, int arrayIndex)
             => _dictionary.CopyTo(array, arrayIndex);
 
-        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator() 
+        public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
             => _dictionary.GetEnumerator();
 
         public bool Remove(TValue value)
@@ -205,7 +205,7 @@ namespace System.Collections.Generic
             }
         }
 
-        public bool Remove(TKey key) 
+        public bool Remove(TKey key)
             => _dictionary.Remove(key);
 
         public bool TryGetValue(TKey key, [MaybeNullWhen(false)] out TValue value)
@@ -239,10 +239,10 @@ namespace System.Collections.Generic
         bool ICollection<KeyValuePair<TKey, TValue>>.Contains(KeyValuePair<TKey, TValue> item)
             => _dictionary.Contains(item);
 
-        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item) 
+        bool ICollection<KeyValuePair<TKey, TValue>>.Remove(KeyValuePair<TKey, TValue> item)
             => _dictionary.Remove(item);
 
-        IEnumerator IEnumerable.GetEnumerator() 
+        IEnumerator IEnumerable.GetEnumerator()
             => ((IEnumerable)_dictionary).GetEnumerator();
 
         bool IReadOnlyDictionary<TKey, TValue>.ContainsKey(TKey key)

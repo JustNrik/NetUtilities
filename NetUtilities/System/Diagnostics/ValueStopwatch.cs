@@ -5,7 +5,7 @@
         private static readonly decimal TimestampToTicks = TimeSpan.TicksPerSecond / (decimal)Stopwatch.Frequency;
         private readonly long _startTimestamp;
 
-        public bool IsActive 
+        public bool IsActive
             => _startTimestamp != 0;
 
         /* Some day...

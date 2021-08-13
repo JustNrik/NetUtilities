@@ -4,9 +4,9 @@ using NetUtilities;
 
 namespace System
 {
-    public static class RandomExtensions 
+    public static class RandomExtensions
     {
-        public static T Next<T>(this Random random) 
+        public static T Next<T>(this Random random)
             where T : unmanaged
         {
             Ensure.NotNull(random);

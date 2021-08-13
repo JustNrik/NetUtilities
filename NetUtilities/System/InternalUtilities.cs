@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using MethodImplementation = System.Runtime.CompilerServices.MethodImplAttribute;
 
@@ -11,7 +10,7 @@ namespace NetUtilities
 
         [MethodImplementation(NotInlined)]
         [return: NotNull]
-        public static T NotNull<T>([NotNull]T obj, [CallerArgumentExpression("obj")] string? name = null)
+        public static T NotNull<T>([NotNull] T obj, [CallerArgumentExpression("obj")] string? name = null)
         {
             if (obj is null)
                 throw new ArgumentNullException(name);

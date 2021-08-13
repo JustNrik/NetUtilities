@@ -21,13 +21,13 @@
         }
 
         /// <inheritdoc/>
-        public override bool IsValueCreated 
+        public override bool IsValueCreated
         {
-            get 
+            get
             {
                 lock (_lock)
                     return base.IsValueCreated;
-            } 
+            }
             protected set
             {
                 lock (_lock)

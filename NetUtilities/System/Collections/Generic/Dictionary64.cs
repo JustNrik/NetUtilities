@@ -46,9 +46,9 @@ namespace System.Collections.Generic
         private ValueCollection? _values;
 
         public IEqualityComparer64<TKey> Comparer
-    => _comparer is null
-    ? EqualityComparer64<TKey>.Default
-    : _comparer;
+            => _comparer is null
+            ? EqualityComparer64<TKey>.Default
+            : _comparer;
 
         public int Count
             => _count - _freeCount;
@@ -356,13 +356,13 @@ namespace System.Collections.Generic
 
             goto ReturnNotFound;
 
-        ConcurrentOperation:
+            ConcurrentOperation:
             Ensure.CanOperate(false, message: "Concurrent operations are not supposed.");
-        ReturnFound:
+            ReturnFound:
             ref TValue value = ref entry.Value;
-        Return:
+            Return:
             return ref value;
-        ReturnNotFound:
+            ReturnNotFound:
             value = ref Unsafe.NullRef<TValue>();
             goto Return;
         }

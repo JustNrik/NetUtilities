@@ -6,7 +6,7 @@ namespace System.Collections.Generic
     {
         private readonly Queue<T> _queue;
 
-        public int Count 
+        public int Count
             => _queue.Count;
 
         public CyclingQueue()
@@ -41,7 +41,7 @@ namespace System.Collections.Generic
         public T Peek()
             => _queue.Peek();
 
-        public bool TryDequeue([MaybeNullWhen(false)]out T value)
+        public bool TryDequeue([MaybeNullWhen(false)] out T value)
         {
             var dequeued = _queue.TryDequeue(out value);
 
@@ -60,10 +60,10 @@ namespace System.Collections.Generic
         public Queue<T>.Enumerator GetEnumerator()
             => _queue.GetEnumerator();
 
-        IEnumerator<T> IEnumerable<T>.GetEnumerator() 
+        IEnumerator<T> IEnumerable<T>.GetEnumerator()
             => _queue.GetEnumerator();
 
-        IEnumerator IEnumerable.GetEnumerator() 
+        IEnumerator IEnumerable.GetEnumerator()
             => _queue.GetEnumerator();
     }
 }

@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace System.Collections.Generic
-{ 
+{
     public class EqualityComparer64<T> : IEqualityComparer64<T>
     {
         public static EqualityComparer64<T> Default { get; } = new EqualityComparer64<T>();

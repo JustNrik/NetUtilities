@@ -43,7 +43,7 @@ namespace System.Reflection
             _get = new(static field =>
             {
                 var instance = Expression.Parameter(typeof(object));
-                var cast = Expression.Convert(instance, field.DeclaringType!); 
+                var cast = Expression.Convert(instance, field.DeclaringType!);
                 var fieldAccess = Expression.Field(field.IsStatic ? null : cast, field);
                 var lambda = Expression.Lambda<Func<object?, object?>>(fieldAccess, instance);
 

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace System.Reflection
 {
@@ -46,12 +44,12 @@ namespace System.Reflection
                             Expression.Constant(index)),
                         arg.ParameterType)).ToArray();
                     var call = Expression.Call(
-                        method.IsStatic 
-                            ? null 
-                            : Expression.Convert(instance, method.DeclaringType!), 
+                        method.IsStatic
+                            ? null
+                            : Expression.Convert(instance, method.DeclaringType!),
                         method,
-                        indexes.Length == 0 
-                            ? null 
+                        indexes.Length == 0
+                            ? null
                             : indexes);
                     return Expression.Lambda<Action<object?, object?[]?>>(call, array).Compile();
                 }, (parameters, Member));
@@ -69,12 +67,12 @@ namespace System.Reflection
                             Expression.Constant(index)),
                         arg.ParameterType)).ToArray();
                     var call = Expression.Call(
-                        method.IsStatic 
-                            ? null 
+                        method.IsStatic
+                            ? null
                             : Expression.Convert(instance, method.DeclaringType!),
                         method,
-                        indexes.Length == 0 
-                            ? null 
+                        indexes.Length == 0
+                            ? null
                             : indexes);
                     var convert = Expression.Convert(call, typeof(object));
 

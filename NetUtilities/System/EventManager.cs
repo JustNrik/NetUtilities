@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using NetUtilities;
 
 namespace System
@@ -57,16 +55,16 @@ namespace System
                 .Where(metadata => metadata.Events.Length > 0);
 
             foreach (var metadata in metadatas)
-            foreach (var eventInfo in metadata.Events)
-            {
-                var handler = metadata.Method.CreateDelegate(eventInfo.EventHandlerType!, target);
-                eventInfo.AddEventHandler(Source, handler);
+                foreach (var eventInfo in metadata.Events)
+                {
+                    var handler = metadata.Method.CreateDelegate(eventInfo.EventHandlerType!, target);
+                    eventInfo.AddEventHandler(Source, handler);
 
-                if (_handlers.TryGetValue(target, out var list))
-                    list.Add((eventInfo, handler));
-                else
-                    _handlers.Add(target, new List<(EventInfo, Delegate)>() { (eventInfo, handler) });
-            }
+                    if (_handlers.TryGetValue(target, out var list))
+                        list.Add((eventInfo, handler));
+                    else
+                        _handlers.Add(target, new List<(EventInfo, Delegate)>() { (eventInfo, handler) });
+                }
         }
 
         /// <summary>
@@ -77,7 +75,7 @@ namespace System
         /// </param>
         public virtual void RemoveHandlers(object target)
         {
-            if (!_handlers.TryGetValue(target, out var list)) 
+            if (!_handlers.TryGetValue(target, out var list))
                 return;
 
             foreach (var (eventInfo, handler) in list)

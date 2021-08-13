@@ -1,11 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using NetUtilities;
 
 namespace System.Xml
 {
-    public static class XmlConvert<T> 
+    public static class XmlConvert<T>
     {
         private static readonly XmlSerializer _serializer = new(typeof(T));
 

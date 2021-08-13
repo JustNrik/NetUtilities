@@ -75,14 +75,14 @@ namespace System.Collections.Synchronized
         public bool TryPeek([MaybeNullWhen(false)] out T value)
         {
             lock (_queue)
-                return  _queue.TryPeek(out value);
-            
+                return _queue.TryPeek(out value);
+
         }
 
         public void TrimExcess()
         {
             lock (_queue)
-                _queue.TrimExcess(); 
+                _queue.TrimExcess();
         }
 
         public Queue<T>.Enumerator GetEnumerator()

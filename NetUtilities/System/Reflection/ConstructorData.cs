@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq.Expressions;
 using NetUtilities;
 
@@ -36,7 +34,7 @@ namespace System.Reflection
         ///     Indicates if this constructor data reflects the default constructor.
         /// </summary>
         [MemberNotNullWhen(false, nameof(_constructor))]
-        public bool IsDefault 
+        public bool IsDefault
             => Parameters.Count == 0;
 
         /// <summary>
@@ -60,7 +58,7 @@ namespace System.Reflection
 
             // Nothing to do if the type is a module, abstract or the constructor is a default constructor.
             if (DeclaringType is null or { IsAbstract: true } || Parameters.Count == 0)
-                return; 
+                return;
 
             _constructor = new(static args =>
             {

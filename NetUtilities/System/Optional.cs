@@ -22,7 +22,7 @@ namespace System
         /// <summary>
         ///     Returns a empty instance of <see cref="Optional{T}"/>
         /// </summary>
-        public static Optional<T> Empty 
+        public static Optional<T> Empty
             => default;
 
         /// <summary>
@@ -31,15 +31,15 @@ namespace System
         /// <exception cref="InvalidOperationException">
         ///     Thrown when this optional doesn't have a value.
         /// </exception>
-        public T Value 
-            => _hasValue 
-            ? _value 
+        public T Value
+            => _hasValue
+            ? _value
             : throw new InvalidOperationException("The optional has no value.");
 
         /// <summary>
         ///     Indicates if this <see cref="Optional{T}"/> has a value.
         /// </summary>
-        public bool HasValue 
+        public bool HasValue
             => _hasValue;
 
         /// <summary>
@@ -72,8 +72,8 @@ namespace System
             if (typeof(T).IsValueType)
                 return EqualityComparer<T>.Default.GetHashCode(_value!);
 
-            return _value is null 
-                ? 0 
+            return _value is null
+                ? 0
                 : _comparer.GetHashCode(_value);
         }
 

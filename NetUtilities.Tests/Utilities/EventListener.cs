@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace NetUtilities.Tests.Utilities
+﻿namespace NetUtilities.Tests.Utilities
 {
     public sealed class EventListener
     {

@@ -1,5 +1,4 @@
-﻿using System;
-using NetUtilities.Tests.Utilities;
+﻿using NetUtilities.Tests.Utilities;
 using Xunit;
 
 namespace NetUtilities.Tests.System

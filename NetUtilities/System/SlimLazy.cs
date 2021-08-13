@@ -78,7 +78,7 @@ namespace System
     /// <typeparam name="TState">
     ///     The state.
     /// </typeparam>
-    public class SlimLazy<T, TState> : ILazy<T> 
+    public class SlimLazy<T, TState> : ILazy<T>
         where TState : notnull
     {
         /// <summary>

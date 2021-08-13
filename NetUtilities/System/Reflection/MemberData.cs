@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-
-namespace System.Reflection
+﻿namespace System.Reflection
 {
     /// <summary>
     ///     Contains rich data and provides helper methods for a <typeparamref name="TMember"/>.

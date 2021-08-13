@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using System.Reflection;
 using Xunit;
 using static NetUtilities.Tests.System.Reflection.MapperEventFake;
@@ -220,7 +218,7 @@ namespace NetUtilities.Tests.System.Reflection
     public class MapperFieldsFake
     {
         public int _intField = 3;
-        private static string _stringField = "test";
+        private static readonly string _stringField = "test";
     }
 
     public class MapperEventFake

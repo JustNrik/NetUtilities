@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NetUtilities;
+﻿using NetUtilities;
 
 namespace System.Linq
 {
