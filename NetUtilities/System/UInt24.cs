@@ -10,7 +10,7 @@ namespace System
     ///     Represents a 24-bit unsigned integer
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 3 /* Size 3 will cut off LSB. Depending on machine endianness, this might be very much undesirable. */, Pack = 1)]
-    public readonly struct UInt24 : IEquatable<UInt24>, IComparable<UInt24>, IConvertible, IComparable, IFormattable
+    public readonly struct UInt24 : IEquatable<UInt24>, IComparable<UInt24>, IConvertible, IComparable, IFormattable, ISpanFormattable//, IUnsignedNumber<UInt24>, IUnaryNegationOperators<UInt24, int>
     {
         internal readonly uint _value;
 
@@ -713,6 +713,10 @@ namespace System
             result = default;
             return false;
         }
+
+        /// <inheritdoc/>
+        public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider) 
+            => _value.TryFormat(destination, out charsWritten, format, provider);
         #endregion
     }
 }

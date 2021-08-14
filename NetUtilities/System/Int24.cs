@@ -10,7 +10,7 @@ namespace System
     ///     Represents a 24-bit signed integer
     /// </summary>
     [StructLayout(LayoutKind.Sequential, Size = 3 /* Size 3 will cut off LSB. Depending on machine endianness, this might be very much undesirable. */, Pack = 1)]
-    public readonly struct Int24 : IEquatable<Int24>, IComparable<Int24>, IConvertible, IComparable, IFormattable
+    public readonly struct Int24 : IEquatable<Int24>, IComparable<Int24>, IConvertible, IComparable, IFormattable, ISpanFormattable//, ISignedNumber<Int24>
     {
         internal readonly int _value;
         private const int Mask = 0xFFFFFF;
@@ -720,6 +720,10 @@ namespace System
             result = default;
             return false;
         }
+
+        /// <inheritdoc/>
+        public bool TryFormat(Span<char> destination, out int charsWritten, ReadOnlySpan<char> format, IFormatProvider? provider)
+            => _value.TryFormat(destination, out charsWritten, format, provider);
         #endregion
     }
 }

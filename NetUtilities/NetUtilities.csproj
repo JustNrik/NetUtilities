@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
 		<Nullable>enable</Nullable>
+		<RequiresPreviewFeatures>true</RequiresPreviewFeatures>
 		<RootNamespace></RootNamespace>
 		<LangVersion>preview</LangVersion>
 		<DebugType>embedded</DebugType>
