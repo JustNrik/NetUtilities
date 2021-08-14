@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
+﻿using System.Runtime.CompilerServices;
 using NetUtilities;
 
 namespace System.Threading
@@ -7,9 +6,13 @@ namespace System.Threading
     /// <inheritdoc cref="IAsyncLazy{T}"/>
     public sealed class AsyncLazy<T, TState> : IAsyncLazy<T>
     {
-        private T? _value;
+        private const int NotStarted = 0;
+        private const int Running = 1;
+
+        private volatile int _status;
+
+        private readonly ManualResetValueTaskSource<T> _promise;
         private TState? _state;
-        private Task<T>? _task;
         private Func<TState, Task<T>>? _factory;
 
         /// <summary>
@@ -25,16 +28,20 @@ namespace System.Threading
             get
             {
                 if (IsValueCreated)
-                    return _value;
+                    return _promise.UnsafeGetResult();
 
                 throw new InvalidOperationException("The value is not created yet.");
             }
         }
 
-        [MemberNotNullWhen(true, nameof(_value))]
-        [MemberNotNullWhen(false, nameof(_task))]
-        [MemberNotNullWhen(false, nameof(_state))]
-        public bool IsValueCreated { get; private set; }
+        /// <inheritdoc/>
+        public bool IsValueCreated
+            => _promise.IsCompletedSuccessfully;
+
+        private AsyncLazy()
+        {
+            _promise = new();
+        }
 
         /// <summary>
         ///     Initializes a new instance of <see cref="AsyncLazy{T}"/> class with the provided value.
@@ -42,11 +49,9 @@ namespace System.Threading
         /// <param name="value">
         ///     The value.
         /// </param>
-        public AsyncLazy(T value)
+        public AsyncLazy(T value) : this()
         {
-            _value = value;
-
-            IsValueCreated = true;
+            _promise.SetResult(value);
         }
 
         /// <summary>
@@ -56,69 +61,56 @@ namespace System.Threading
         /// <param name="factory">
         ///     The factory delegate.
         /// </param>
-        public AsyncLazy(Func<TState, Task<T>> factory, TState state)
-        {
-            Ensure.NotNull(factory);
-            Ensure.NotNull(state);
-
-            _factory = factory;
-            _state = state;
+        public AsyncLazy(Func<TState, Task<T>> factory, TState state) : this()
+        { 
+            _factory = Ensure.NotNull(factory);
+            _state = Ensure.NotNull(state);
         }
 
-        private static T Continuation(Task<T> task, object? obj)
+        private async void RunTask(Task<T> task)
         {
-            var lazy = (AsyncLazy<T, TState>)obj!;
-            lazy.IsValueCreated = true;
-            lazy._value = task.GetAwaiter().GetResult();
-            lazy._task = null;
-            return lazy._value;
+            if (Interlocked.CompareExchange(ref _status, Running, NotStarted) == Running)
+                return;
+
+            try
+            {
+                var result = await task;
+                _promise.TrySetResult(result);
+            }
+            catch (Exception e)
+            {
+                _promise.SetException(e);
+            }
         }
 
+        /// <inheritdoc/>
         public void StartTask()
         {
             if (IsValueCreated)
                 return;
 
-            if (_factory is not null)
-            {
-                _task = _factory(_state);
-                _factory = null;
-                _state = default;
+            var factory = Interlocked.Exchange(ref _factory, null);
 
-                if (_task.IsCompleted) // could have completed synchronously
-                {
-                    var value = _task.GetAwaiter().GetResult(); // unwrapping exceptions
+            if (factory is null)
+                return;
 
-                    IsValueCreated = true;
-                    _value = value;
-                    _task = null;
-                    return;
-                }
-            }
+            var task = factory(_state!);
+            _state = default;
 
-            if (_task.Status == TaskStatus.Created)
-                _task.Start();
+            if (task is null)
+                throw new Exception("The task factory returned a null task.");
 
-            _task = _task.ContinueWith(Continuation, this, TaskContinuationOptions.ExecuteSynchronously);
+            RunTask(task);
         }
 
+        /// <inheritdoc/>
         public ValueTaskAwaiter<T> GetAwaiter()
         {
             if (IsValueCreated)
-                return new ValueTask<T>(_value).GetAwaiter();
+                return new ValueTask<T>(_promise.UnsafeGetResult()).GetAwaiter();
 
-            if (_factory is not null)
-            {
-                _task = _factory(_state);
-                _factory = null;
-                _state = default;
-            }
-
-            if (_task.Status == TaskStatus.Created)
-                _task.Start();
-
-            _task = _task.ContinueWith(Continuation, this, TaskContinuationOptions.ExecuteSynchronously);
-            return new ValueTask<T>(_task).GetAwaiter();
+            StartTask();
+            return new ValueTask<T>(_promise, _promise.Version).GetAwaiter();
         }
     }
 }
