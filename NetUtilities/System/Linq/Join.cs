@@ -23,7 +23,6 @@ namespace System.Linq
         public static string Join(this IEnumerable<string> source, string? separator = null)
             => string.Join(separator ?? string.Empty, Ensure.NotNull(source));
 
-
         /// <summary>
         ///     Joins the sequence of chars into a single string.
         /// </summary>

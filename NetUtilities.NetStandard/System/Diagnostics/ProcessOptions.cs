@@ -7,7 +7,7 @@ namespace System.Diagnostics
     public sealed class ProcessOptions
     {
         /// <summary>
-        ///     Instucts the <see cref="Process" /> to wait until the executed process terminates.
+        ///     Instructs the <see cref="Process" /> to wait until the executed process terminates.
         /// </summary>
         public bool WaitForProcessExit { get; set; }
 

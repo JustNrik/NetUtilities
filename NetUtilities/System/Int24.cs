@@ -695,7 +695,7 @@ namespace System
         ///     An object that supplies culture-specific information about the format of <paramref name="span"/>.
         /// </param>
         /// <param name="result">
-        ///     When this method returns, contains the 24-bit signed integer value equivalent of the number contained in <paramref name="input"/>, 
+        ///     When this method returns, contains the 24-bit signed integer value equivalent of the number contained in <paramref name="span"/>, 
         ///     if the conversion succeeded, or zero if the conversion failed. 
         ///     The conversion fails if the <paramref name="span"/> parameter is <see langword="null"/> or <see cref="string.Empty"/>, is not of the correct format, 
         ///     or represents a number less than <see cref="Int24.MinValue"/> or greater than <see cref="Int24.MaxValue"/>. This parameter is passed uninitialized;

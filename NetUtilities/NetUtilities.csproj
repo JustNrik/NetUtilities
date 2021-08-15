@@ -12,11 +12,41 @@
     <Optimize>true</Optimize>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <!-- <DocumentationFile>NetUtilities.xml</DocumentationFile> -->
+    <DefineConstants Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">DEBUG;TRACE</DefineConstants>
+    <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">0</WarningLevel>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <WarningLevel>0</WarningLevel>
-  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../NetUtilities.NetStandard/Jetbrains/Annotations/RegexPatternAttribute.cs">
+      <Link>Jetbrains/Annotations/RegexPatternAttribute.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/Collections/Generic/IEquatable64.cs">
+      <Link>System/Collections/Generic/IEquatable64.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/Diagnostics/ProcessOptions.cs">
+      <Link>System/Diagnostics/ProcessOptions.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/Diagnostics/ProcessExtensions.cs">
+      <Link>System/Diagnostics/ProcessExtensions.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/IO/MemoryStreamExtensions.cs">
+      <Link>System/IO/MemoryStreamExtensions.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/Utilities/ConsoleUtilities.cs">
+      <Link>System/Utilities/ConsoleUtilities.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/Delegates.cs">
+      <Link>System/Delegates.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/EventNotFoundException.cs">
+      <Link>System/EventNotFoundException.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/ICloneable.cs">
+      <Link>System/ICloneable.cs</Link>
+    </Compile>
+    <Compile Include="../NetUtilities.NetStandard/System/ILazy.cs">
+      <Link>System/ILazy.cs</Link>
+    </Compile>
+  </ItemGroup>
 
 </Project>

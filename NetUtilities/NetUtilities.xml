@@ -929,7 +929,7 @@
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.WaitForProcessExit">
             <summary>
-                Instucts the <see cref="T:System.Diagnostics.Process" /> to wait until the executed process terminates.
+                Instructs the <see cref="T:System.Diagnostics.Process" /> to wait until the executed process terminates.
             </summary>
         </member>
         <member name="P:System.Diagnostics.ProcessOptions.Executing">

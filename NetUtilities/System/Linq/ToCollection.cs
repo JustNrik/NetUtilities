@@ -29,7 +29,6 @@ namespace System.Linq
             where TKey : notnull
             => Ensure.NotNull(source).ToDictionary(x => x.Key, x => x.Value);
 
-
         /// <summary>
         ///     Turns an sequence of <see cref="KeyValuePair{TKey, TValue}"/> 
         ///     into a <see cref="Dictionary{TKey, TValue}"/> using the key and value of the pair 
@@ -59,7 +58,6 @@ namespace System.Linq
             where TKey : notnull
             => Ensure.NotNull(source).ToDictionary(x => x.Key, x => x.Value, Ensure.NotNull(comparer));
 
-
         /// <summary>
         ///     Turns an sequence of <see cref="ValueTuple{TKey, TValue}"/> 
         ///     into a <see cref="Dictionary{TKey, TValue}"/> using the key and value of the pair.
@@ -85,7 +83,6 @@ namespace System.Linq
         public static Dictionary<TKey, TValue> ToDictionary<TKey, TValue>(this IEnumerable<(TKey Key, TValue Value)> source)
            where TKey : notnull
             => Ensure.NotNull(source).ToDictionary(x => x.Key, x => x.Value);
-
 
         /// <summary>
         ///     Turns an sequence of <see cref="ValueTuple{TKey, TValue}"/> 
